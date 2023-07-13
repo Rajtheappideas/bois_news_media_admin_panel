@@ -12,6 +12,7 @@ import Settings from "../components/Home/Settings";
 import Orders from "../components/Home/Orders";
 import Magazine from "../components/Home/Magazine";
 import { Helmet } from "react-helmet";
+import Profile from "../components/Home/Profile";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -19,7 +20,7 @@ const Home = () => {
 
   return (
     <>
-      <Helmet title={`Bois Mega News | ${activeComponent}`} />
+      <Helmet title={`${activeComponent} | Bois Mega News`} />
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar
           setActiveComponent={setActiveComponent}
@@ -36,6 +37,7 @@ const Home = () => {
             openSidebar={openSidebar}
             setOpenSidebar={setOpenSidebar}
             activeComponent={activeComponent}
+            setActiveComponent={setActiveComponent}
           />
 
           {activeComponent === "dashboard" && (
@@ -50,6 +52,7 @@ const Home = () => {
           {activeComponent === "magazine" && <Magazine />}
           {activeComponent === "orders" && <Orders />}
           {activeComponent === "settings" && <Settings />}
+          {activeComponent === "profile" && <Profile />}
         </section>
       </div>
     </>

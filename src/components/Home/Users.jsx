@@ -3,8 +3,8 @@ import Search from "../Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import AddNewUser from "../UsersManageMent/AddNewUser";
-import EditUserDetails from "../UsersManageMent/EditUserDetails";
+import AddNewUser from "../Users/AddNewUser";
+import EditUserDetails from "../Users/EditUserDetails";
 
 const Users = () => {
   const [showUserDetail, setShowUserDetail] = useState(false);
@@ -41,11 +41,7 @@ const Users = () => {
               <Search />
             </div>
             <div>
-              <select
-                name="filter"
-                id="filter"
-                className="md:mr-5 mr-3 font-semibold md:h-12 h-10 md:w-32 w-28 p-2 shadow-md rounded-md bg-white"
-              >
+              <select name="filter" id="filter" className="filter_dropdown">
                 <option value="newest">Newest</option>
                 <option value="oldest">Oldest</option>
               </select>
@@ -65,7 +61,7 @@ const Users = () => {
                   <th className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 h-4 w-4"
                     />
                     <span>ID</span>
                   </th>
@@ -82,7 +78,7 @@ const Users = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">#415</span>
                   </td>
@@ -127,7 +123,7 @@ const Users = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">#415</span>
                   </td>
@@ -172,7 +168,7 @@ const Users = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">#415</span>
                   </td>
@@ -217,7 +213,7 @@ const Users = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">#415</span>
                   </td>
@@ -262,7 +258,7 @@ const Users = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">#415</span>
                   </td>
@@ -307,7 +303,7 @@ const Users = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">#415</span>
                   </td>
@@ -352,7 +348,7 @@ const Users = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">#415</span>
                   </td>
@@ -397,7 +393,7 @@ const Users = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">#415</span>
                   </td>

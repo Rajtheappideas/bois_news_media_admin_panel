@@ -2,26 +2,32 @@ import React from "react";
 import { BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
-const AddNewSubscirber = ({ setShowAddNewSubscriber }) => {
+const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
   return (
     <div className="w-full lg:space-y-5 space-y-3">
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Add new subscriber
+          Subscriber Detail
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
             className="gray_button"
-            onClick={() => setShowAddNewSubscriber(false)}
+            onClick={() => setShowEditSubscriberDetails(false)}
           >
             Cancel
           </button>
           <button
             className="green_button"
-            onClick={() => setShowAddNewSubscriber(false)}
+            onClick={() => setShowEditSubscriberDetails(false)}
           >
             Save
+          </button>
+          <button
+            className="red_button"
+            onClick={() => setShowEditSubscriberDetails(false)}
+          >
+            Delete
           </button>
         </div>
       </div>
@@ -422,9 +428,6 @@ const AddNewSubscirber = ({ setShowAddNewSubscriber }) => {
         {/* Magazine distribution */}
         <div className="font-bold text-black md:text-xl flex flex-wrap w-full flex-row items-center justify-between gap-2">
           <p>Magazine distribution</p>
-          <button className="border text-base text-textColor border-textColor rounded-md p-1 hover:bg-textColor/30 transition hover:text-black">
-            + Add new
-          </button>
         </div>
         <div className="shadow-sm outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
           <table className="border-none outline-none w-full overflow-scroll">
@@ -589,4 +592,4 @@ const AddNewSubscirber = ({ setShowAddNewSubscriber }) => {
   );
 };
 
-export default AddNewSubscirber;
+export default EditSubscriberDetails;

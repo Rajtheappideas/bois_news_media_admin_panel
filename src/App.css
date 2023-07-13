@@ -45,20 +45,26 @@ body::-webkit-scrollbar-thumb {
   width: 2px;
   border-radius: 10px;
 }
+
+
+.filter_dropdown{
+  @apply md:mr-5 mr-3 font-semibold h-10 md:w-32 w-28 p-2 shadow-md rounded-md bg-white
+}
+
 .gray_button {
-  @apply bg-buttonGray text-white font-medium text-center md:w-32 w-24 md:h-12 h-10 rounded-lg p-2 hover:bg-buttonGray/80 active:scale-95 transition;
+  @apply bg-buttonGray text-white font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-buttonGray/80 active:scale-95 transition;
 }
 
 .green_button {
-  @apply bg-buttonGreen text-white font-medium text-center md:w-32 w-24 md:h-12 h-10 rounded-lg p-2 hover:bg-buttonGreen/80 active:scale-95 transition;
+  @apply bg-buttonGreen text-white font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-buttonGreen/80 active:scale-95 transition;
 }
 
 .red_button {
-  @apply bg-buttonRed text-white font-medium text-center md:w-32 w-24 md:h-12 h-10 rounded-lg p-2 hover:bg-buttonRed/80 active:scale-95 transition;
+  @apply bg-buttonRed text-white font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-buttonRed/80 active:scale-95 transition;
 }
 
 .blue_button {
-  @apply bg-primaryBlue text-white font-medium text-center md:w-32 w-24 md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition;
+  @apply bg-primaryBlue text-white font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition;
 }
 
 .input_field{

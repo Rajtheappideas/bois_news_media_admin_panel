@@ -4,7 +4,12 @@ import { CiBellOn } from "react-icons/ci";
 import { FaUserAlt } from "react-icons/fa";
 import { BsChevronDown } from "react-icons/bs";
 
-const Header = ({ openSidebar, setOpenSidebar, activeComponent }) => {
+const Header = ({
+  openSidebar,
+  setOpenSidebar,
+  activeComponent,
+  setActiveComponent,
+}) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
@@ -59,11 +64,15 @@ const Header = ({ openSidebar, setOpenSidebar, activeComponent }) => {
           className="md:text-2xl text-xl"
         />
         <p className="font-bold lg:text-2xl text-textBlack md:text-xl text-sm capitalize">
-          {activeComponent} <br className="md:hidden block" /> {activeComponent !== "dashboard" && "management"}
+          {activeComponent} <br className="md:hidden block" />{" "}
+          {activeComponent !== "dashboard" &&
+            activeComponent !== "profile" &&
+            "management"}
         </p>
       </div>
       {/* right side profile */}
       <div className="flex items-center md:gap-x-5 gap-x-1 relative">
+        {/* notification butn */}
         <button ref={notificationRef}>
           <CiBellOn
             onClick={() =>
@@ -104,6 +113,7 @@ const Header = ({ openSidebar, setOpenSidebar, activeComponent }) => {
             </div>
           </div>
         </button>
+        {/* profile btn & div */}
         <div
           ref={profileRef}
           onClick={() => setShowProfileDropdown(!showProfileDropdown)}
@@ -119,7 +129,10 @@ const Header = ({ openSidebar, setOpenSidebar, activeComponent }) => {
             } absolute md:top-10 top-7 md:left-10 left-5 shadow-2xl rounded-md p-2 z-10 md:min-w-[10rem] min-w-[7rem]`}
           >
             <p
-              onClick={() => setShowProfileDropdown(false)}
+              onClick={() => {
+                setActiveComponent("profile");
+                setShowProfileDropdown(false);
+              }}
               className="hover:font-semibold duration-300 w-full p-1 rounded-md transition cursor-pointer"
             >
               Profile

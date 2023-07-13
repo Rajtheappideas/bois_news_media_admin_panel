@@ -1,16 +1,23 @@
-import React, { useState } from "react";
-import EditSubscriberDetails from "../SubscriberManagement/EditSubscriberDetails";
-import AddNewSubscirber from "../SubscriberManagement/AddNewSubscirber";
+import React, { useEffect, useState } from "react";
+import EditSubscriberDetails from "../Subscriber/EditSubscriberDetails";
+import AddNewSubscirber from "../Subscriber/AddNewSubscirber";
 import Search from "../Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import AddMagazineDistribution from "../Subscriber/AddMagazineDistribution";
 
 const Subscribers = () => {
   const [showEditSubscriberDetails, setShowEditSubscriberDetails] =
     useState(false);
   const [showAddNewSubscriber, setShowAddNewSubscriber] = useState(false);
+  const [showMagazineDistrutionPopup, setShowMagazineDistrutionPopup] =
+    useState(false);
   const [pageNumber, setPageNumber] = useState(0);
+
+  const handleClosePopup = () => {
+    setShowMagazineDistrutionPopup(false);
+  };
 
   // pagination logic
   const usersPerPage = 8;
@@ -26,15 +33,32 @@ const Subscribers = () => {
   //   setPageNumber(selected);
   // };
 
+  useEffect(() => {
+    if (showMagazineDistrutionPopup) {
+      window.document.body.style.overflow = "hidden";
+    } else {
+      window.document.body.style.overflow = "unset";
+    }
+  }, [showMagazineDistrutionPopup]);
+
   return (
     <>
+      {showMagazineDistrutionPopup && (
+        <AddMagazineDistribution
+          showMagazineDistrutionPopup={showMagazineDistrutionPopup}
+          handleClosePopup={handleClosePopup}
+        />
+      )}
       {showEditSubscriberDetails && !showAddNewSubscriber && (
         <EditSubscriberDetails
           setShowEditSubscriberDetails={setShowEditSubscriberDetails}
         />
       )}
       {!showEditSubscriberDetails && showAddNewSubscriber && (
-        <AddNewSubscirber setShowAddNewSubscriber={setShowAddNewSubscriber} />
+        <AddNewSubscirber
+          setShowMagazineDistrutionPopup={setShowMagazineDistrutionPopup}
+          setShowAddNewSubscriber={setShowAddNewSubscriber}
+        />
       )}
       {!showEditSubscriberDetails && !showAddNewSubscriber && (
         <div className="lg:space-y-5 space-y-3 w-full">
@@ -66,7 +90,7 @@ const Subscribers = () => {
                   <th className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span>ID</span>
                   </th>
@@ -82,7 +106,7 @@ const Subscribers = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">4145</span>
                   </td>
@@ -127,7 +151,7 @@ const Subscribers = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">4145</span>
                   </td>
@@ -172,7 +196,7 @@ const Subscribers = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">4145</span>
                   </td>
@@ -217,7 +241,7 @@ const Subscribers = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">4145</span>
                   </td>
@@ -262,7 +286,7 @@ const Subscribers = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">4145</span>
                   </td>
@@ -307,7 +331,7 @@ const Subscribers = () => {
                   <td className="p-4 whitespace-nowrap">
                     <input
                       type="checkbox"
-                      className="rounded-lg inline-block mr-2"
+                      className="rounded-lg inline-block mr-2 w-4 h-4"
                     />
                     <span className="font-bold text-left">4145</span>
                   </td>

@@ -1,53 +1,37 @@
 import React from "react";
-import { HiPencil } from "react-icons/hi";
 
-const EditUserDetails = ({ setShowUserDetail }) => {
+const AddNewPartner = ({ setShowAddnewPartner }) => {
   return (
     <div className="w-full lg:space-y-5 space-y-3">
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
-        <p className="font-semibold text-left lg:text-xl text-lg">Edit User</p>
+        <p className="font-semibold text-left lg:text-xl text-lg">
+          Add new partner
+        </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
             className="gray_button"
-            onClick={() => setShowUserDetail(false)}
+            onClick={() => setShowAddnewPartner(false)}
           >
             Cancel
           </button>
           <button
             className="green_button"
-            onClick={() => setShowUserDetail(false)}
+            onClick={() => setShowAddnewPartner(false)}
           >
             Save
-          </button>
-          <button
-            className="red_button"
-            onClick={() => setShowUserDetail(false)}
-          >
-            Delete
           </button>
         </div>
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-        <div className="relative md:w-24 w-20 block">
-          <img
-            src={require("../../assets/images/profile.png")}
-            alt="profile"
-            className="rounded-full md:h-24 md:w-24 w-20 h-20"
-          />
-          <HiPencil
-            role="button"
-            className="text-3xl absolute bottom-0 right-0 rounded-full bg-green-600 text-white h-8 w-8 p-1"
-          />
-        </div>
-        <p className="font-bold text-black md:text-xl">Personal Details</p>
+        <p className="font-bold text-black md:text-xl">Basic Info</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
           <div className="w-full space-y-2">
             <label htmlFor="name" className="Label">
-              User name
+              Name
             </label>
             <input
               type="text"
@@ -55,21 +39,75 @@ const EditUserDetails = ({ setShowUserDetail }) => {
               className="input_field"
             />
           </div>
-          {/* role */}
+          {/* industry */}
           <div className="w-full space-y-2">
-            <label htmlFor="role" className="Label">
-              Role
+            <label htmlFor="industry" className="Label">
+              industry
             </label>
             <select className="input_field">
-              <option value="Editor">Editor</option>
-              <option value="Admin">Admin</option>
-              <option value="Viewer">Viewer</option>
+              <option value="option1">option1</option>
+              <option value="option2">option2</option>
+              <option value="option3">option3</option>
             </select>
           </div>
-          {/* company */}
+          {/* website */}
           <div className="w-full space-y-2">
-            <label htmlFor="company" className="Label">
-              company
+            <label htmlFor="website" className="Label">
+              website
+            </label>
+            <input
+              type="text"
+              placeholder="Type here..."
+              className="input_field"
+            />
+          </div>
+        </div>
+        <hr className="my-1" />
+        {/* contact info */}
+        <p className="font-bold text-black md:text-xl">Contact Info</p>
+        <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
+          {/* email */}
+          <div className="w-full space-y-2">
+            <label htmlFor="email" className="Label">
+              email
+            </label>
+            <input
+              type="email"
+              placeholder="Type here..."
+              className="input_field"
+            />
+          </div>
+          {/* mobile number */}
+          <div className="w-full space-y-2">
+            <label htmlFor="mobile_number" className="Label">
+              mobile number
+            </label>
+            <select className="input_field">
+              <option value="option1">option1</option>
+              <option value="option2">option2</option>
+              <option value="option3">option3</option>
+            </select>
+          </div>
+          {/* office number */}
+          <div className="w-full space-y-2">
+            <label htmlFor="office_number" className="Label">
+              office number
+            </label>
+            <input
+              type="text"
+              placeholder="Type here..."
+              className="input_field"
+            />
+          </div>
+        </div>
+        <hr className="my-1" />
+        {/*address */}
+        <p className="font-bold text-black md:text-xl">Address</p>
+        <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
+          {/*contact name */}
+          <div className="w-full space-y-2">
+            <label htmlFor="contact_name" className="Label">
+              Contact Name
             </label>
             <input
               type="text"
@@ -99,18 +137,12 @@ const EditUserDetails = ({ setShowUserDetail }) => {
               className="input_field"
             />
           </div>
-        </div>
-        <hr className="my-1" />
-        {/* address */}
-        <p className="font-bold text-black md:text-xl">Address</p>
-        <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
-          {/*company address */}
+          {/* company address */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="company_address" className="Label">
-              Company address
+              company address
             </label>
             <textarea
-              type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
             />
@@ -156,4 +188,4 @@ const EditUserDetails = ({ setShowUserDetail }) => {
   );
 };
 
-export default EditUserDetails;
+export default AddNewPartner;
