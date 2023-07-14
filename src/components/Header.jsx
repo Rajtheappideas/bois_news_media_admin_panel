@@ -3,6 +3,9 @@ import { HiMenuAlt2 } from "react-icons/hi";
 import { CiBellOn } from "react-icons/ci";
 import { FaUserAlt } from "react-icons/fa";
 import { BsChevronDown } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { handleLogout } from "../redux/AuthSlice";
+import { toast } from "react-hot-toast";
 
 const Header = ({
   openSidebar,
@@ -14,8 +17,12 @@ const Header = ({
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
 
+  const { loading } = useSelector((state) => state.user);
+
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   // for profile dropdown
   useEffect(() => {
@@ -137,9 +144,19 @@ const Header = ({
             >
               Profile
             </p>
-            <p className="text-red-500 w-full p-1 rounded-md hover:font-semibold transition cursor-pointer">
-              Logout
-            </p>
+            <button
+              disabled={loading}
+              onClick={() => {
+                toast.loading("Logout...");
+                setTimeout(() => {
+                  toast.remove();
+                  dispatch(handleLogout());
+                }, 2000);
+              }}
+              className="text-red-500 text-left w-full p-1 rounded-md hover:font-semibold transition cursor-pointer"
+            >
+              {loading ? "..." : "Logout"}
+            </button>
           </div>
         </div>
       </div>

@@ -8,12 +8,12 @@
   scrollbar-width: none;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
 }
 
 .scrollbar::-webkit-scrollbar {
@@ -46,9 +46,12 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 
+.filter_dropdown {
+  @apply md:mr-5 mr-3 font-semibold h-10 md:w-32 w-28 p-2 shadow-md rounded-md bg-white;
+}
 
-.filter_dropdown{
-  @apply md:mr-5 mr-3 font-semibold h-10 md:w-32 w-28 p-2 shadow-md rounded-md bg-white
+.error {
+  @apply text-red-600 font-medium text-sm;
 }
 
 .gray_button {
@@ -67,10 +70,10 @@ body::-webkit-scrollbar-thumb {
   @apply bg-primaryBlue text-white font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition;
 }
 
-.input_field{
-  @apply outline-none w-full rounded-md border border-gray-300 p-3 focus:border-gray-400 focus:border-2
+.input_field {
+  @apply outline-none w-full rounded-md border border-gray-300 p-2.5 focus:border-gray-400 focus:border-2;
 }
 
-.Label{
-  @apply text-textColor/60 font-medium block capitalize
+.Label {
+  @apply text-textColor/60 font-medium block capitalize md:text-base text-sm;
 }
