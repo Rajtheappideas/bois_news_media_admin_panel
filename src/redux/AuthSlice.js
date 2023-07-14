@@ -214,6 +214,8 @@ const UserSlice = createSlice({
       state.error = null;
       state.role = null;
       state.token = null;
+      state.verifyToken = null;
+      state.email = null;
     });
     builder.addCase(handleResetPassword.rejected, (state, { payload }) => {
       state.loading = false;

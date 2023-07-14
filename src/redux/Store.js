@@ -5,7 +5,7 @@ const store = configureStore({
   reducer: { user: AuthSlice },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
-  devTools: process.env.NODE_ENV === "development" ? true : false,
+  devTools: false,
 });
 
 export default store;

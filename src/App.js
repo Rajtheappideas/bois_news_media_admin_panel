@@ -16,7 +16,6 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 
-console.log(process.env.NODE_ENV);
 function App() {
   return (
     <BrowserRouter>
