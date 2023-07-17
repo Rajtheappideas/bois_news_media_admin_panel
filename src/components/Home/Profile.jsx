@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import EditProfile from "../Profile/EditProfile";
 import { useSelector } from "react-redux";
 import BaseUrl from "../../BaseUrl";
+import { FaUserCircle } from "react-icons/fa";
 
 const Profile = () => {
   const [showProfileEdit, setShowProfileEdit] = useState(false);
@@ -29,15 +30,19 @@ const Profile = () => {
           {/* main div */}
           <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
             <div className="relative md:w-24 w-20 block">
-              <img
-                src={
-                  user?.profile !== null && user?.profile !== undefined
-                    ? BaseUrl.concat(user?.profile)
-                    : require("../../assets/images/profile.png")
-                }
-                alt="profile"
-                className="rounded-full border md:h-24 md:w-24 w-20 h-20"
-              />
+              {user?.profile !== null && user?.profile !== undefined ? (
+                <img
+                  src={BaseUrl.concat(user?.profile)}
+                  alt="profile"
+                  className="rounded-full border md:h-24 md:w-24 w-20 h-20"
+                />
+              ) : (
+                <FaUserCircle
+                  size={30}
+                  color="lightgray"
+                  className="h-full w-full"
+                />
+              )}
             </div>
             <p className="font-bold text-black md:text-xl">Personal Details</p>
             {/* personal details */}

@@ -14,6 +14,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { FaUserCircle } from "react-icons/fa";
 
 const EditProfile = ({ setShowProfileEdit }) => {
   const [prevImage, setPrevImage] = useState(null);
@@ -163,7 +164,6 @@ const EditProfile = ({ setShowProfileEdit }) => {
             type="submit"
             disabled={loading}
             className={`green_button  ${loading && "cursor-not-allowed"} `}
-            // onClick={() => setShowProfileEdit(false)}
           >
             {loading ? "Saving..." : "Save"}
           </button>
@@ -172,15 +172,19 @@ const EditProfile = ({ setShowProfileEdit }) => {
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
         <div className="relative md:w-24 w-20 block">
-          <img
-            src={
-              prevImage ??
-              Baseurl.concat(profile) ??
-              require("../../assets/images/profile.png")
-            }
-            alt="profile"
-            className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
-          />
+          {prevImage !== null && prevImage !== undefined ? (
+            <img
+              src={prevImage ?? Baseurl.concat(profile)}
+              alt="profile"
+              className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
+            />
+          ) : (
+            <FaUserCircle
+              size={30}
+              color="lightgray"
+              className="h-full w-full"
+            />
+          )}
           <input
             type="file"
             className="text-3xl cursor-pointer opacity-0 z-10 absolute bottom-0 right-0 rounded-full bg-red-600 text-white h-8 w-8 p-1"

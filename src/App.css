@@ -67,7 +67,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .blue_button {
-  @apply bg-primaryBlue text-white font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition;
+  @apply bg-primaryBlue text-white font-medium text-center md:min-w-[128px] min-w-[6rem] h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition;
 }
 
 .input_field {
