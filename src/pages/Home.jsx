@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import Dashboard from "../components/Home/Dashboard";
@@ -13,14 +13,23 @@ import Orders from "../components/Home/Orders";
 import Magazine from "../components/Home/Magazine";
 import { Helmet } from "react-helmet";
 import Profile from "../components/Home/Profile";
+import ChangePassword from "../components/ChangePassword";
+import useAbortApiCall from "../hooks/useAbortApiCall";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
   const [openSidebar, setOpenSidebar] = useState(false);
 
+  const { abortApiCall } = useAbortApiCall();
+
+  useEffect(() => {
+    return () => {
+      abortApiCall();
+    };
+  }, []);
   return (
     <>
-      <Helmet title={`${activeComponent} | Bois Mega News`} />
+      <Helmet title={`${activeComponent} | Bois News Media`} />
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar
           setActiveComponent={setActiveComponent}
@@ -53,6 +62,7 @@ const Home = () => {
           {activeComponent === "orders" && <Orders />}
           {activeComponent === "settings" && <Settings />}
           {activeComponent === "profile" && <Profile />}
+          {activeComponent === "change password" && <ChangePassword />}
         </section>
       </div>
     </>

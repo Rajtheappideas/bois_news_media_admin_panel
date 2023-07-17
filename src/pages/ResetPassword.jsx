@@ -17,11 +17,9 @@ const ResetPassword = () => {
   const [showSuccessComponent, setShowSuccessComponent] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, user, verifyToken, email } = useSelector(
-    (state) => state.user
+  const { loading, user, verifyToken, email, error } = useSelector(
+    (state) => state.root.user
   );
-
-  const localStorageData = JSON.parse(window.localStorage.getItem("user"));
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,7 +51,7 @@ const ResetPassword = () => {
   });
 
   const onSubmit = (data) => {
-    const { email, password } = data;
+    const { password } = data;
     const response = dispatch(
       handleResetPassword({
         email,
@@ -76,7 +74,7 @@ const ResetPassword = () => {
   };
 
   useEffect(() => {
-    if (localStorageData !== null && user !== null) {
+    if (user !== null) {
       toast("You already logged in.", { duration: 3000 });
       navigate("/");
     }
@@ -87,7 +85,7 @@ const ResetPassword = () => {
 
   return (
     <>
-      <Helmet title="Reset-password | Bois Mega News" />
+      <Helmet title="Reset-password | Bois News Media" />
 
       <div
         style={{
@@ -100,15 +98,23 @@ const ResetPassword = () => {
         {showSuccessComponent ? (
           <Success />
         ) : (
-          <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:px-5 md:py-5 px-4 py-2 flex items-center flex-col mx-auto xl:w-3/12 lg:w-5/12 md:w-1/2 w-11/12 h-auto gap-y-2">
+          <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:px-5 md:py-5 px-4 py-4 flex items-center flex-col mx-auto xl:w-3/12 lg:w-5/12 md:w-1/2 w-11/12 h-auto gap-y-2">
             {/* logo */}
             <div className="md:my-3 my-2">
-              <Link to="/">Logo</Link>
+              <Link to="/">
+                {" "}
+                <img
+                  src={require("../assets/images/logo.png")}
+                  className="w-20 h-fit object-contain object-center"
+                />
+              </Link>
             </div>
             {/* title */}
             <p className="font-bold text-textBlack text-center md:text-lg">
               Reset password
             </p>
+            {error !== null && <span className="error">{error?.message}</span>}
+
             {/* form  */}
             <form
               className="lg:space-y-3 space-y-1 w-full"
@@ -138,12 +144,12 @@ const ResetPassword = () => {
                   {showPassword ? (
                     <BsEyeFill
                       size={24}
-                      className="absolute top-11 cursor-pointer right-3 text-gray-400"
+                      className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
                     />
                   ) : (
                     <BsEyeSlashFill
                       size={24}
-                      className="absolute top-11 cursor-pointer right-3 text-gray-400"
+                      className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
                     />
                   )}
                 </button>
@@ -170,7 +176,9 @@ const ResetPassword = () => {
               {/* butons */}
               <button
                 type="submit"
-                className="bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full"
+                className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full ${
+                  loading && "cursor-not-allowed"
+                } `}
                 disabled={loading}
               >
                 {loading ? "Submitting..." : "Submit"}

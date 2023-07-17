@@ -10,7 +10,7 @@ import OTPVerify from "../components/OTPVerify";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { handleForgotPassword } from "../redux/AuthSlice";
+import { handleForgotPassword, handleStoreUserEmail } from "../redux/AuthSlice";
 
 const ForgotPassword = () => {
   const [showOtpComponent, setShowOtpComponent] = useState(false);
@@ -19,16 +19,14 @@ const ForgotPassword = () => {
     email: yup.string().email().required("Email is required!!!").trim(),
   });
 
-  const { loading, user } = useSelector((state) => state.user);
+  const { loading, user, error } = useSelector((state) => state.root.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
-  const localStorageData = JSON.parse(window.localStorage.getItem("user"));
-
-  const {
+const {
     register,
     handleSubmit,
     formState: { errors },
@@ -51,6 +49,7 @@ const ForgotPassword = () => {
         if (res?.payload?.status === "success") {
           toast.success("Check your mails.", { duration: 4000 });
           console.log("OTP=>", res.payload?.otp);
+          dispatch(handleStoreUserEmail(getValues("email")));
           setShowOtpComponent(true);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -60,7 +59,7 @@ const ForgotPassword = () => {
   };
 
   useEffect(() => {
-    if (localStorageData !== null && user !== null) {
+    if (user !== null) {
       toast("You already logged in.", { duration: 3000 });
       navigate("/");
     }
@@ -71,7 +70,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <Helmet title="Forgot-password | Bois Mega News" />
+      <Helmet title="Forgot-password | Bois News Media" />
 
       <div
         style={{
@@ -84,15 +83,23 @@ const ForgotPassword = () => {
         {showOtpComponent ? (
           <OTPVerify email={getValues("email")} />
         ) : (
-          <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:px-5 md:py-5 px-4 py-2 flex items-center flex-col mx-auto xl:w-3/12 lg:w-5/12 md:w-1/2 w-11/12 h-auto gap-y-2">
+          <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:px-5 md:py-5 px-4 py-4 flex items-center flex-col mx-auto xl:w-3/12 lg:w-5/12 md:w-1/2 w-11/12 h-auto gap-y-2">
             {/* logo */}
             <div className="md:my-3 my-2">
-              <Link to="/">Logo</Link>
+              <Link to="/">
+                {" "}
+                <img
+                  src={require("../assets/images/logo.png")}
+                  className="w-20 h-fit object-contain object-center"
+                />
+              </Link>
             </div>
             {/* title */}
             <p className="font-bold text-textBlack text-center md:text-lg">
               Forgot password
             </p>
+            {error !== null && <span className="error">{error?.message}</span>}
+
             {/* form  */}
             <form
               className="lg:space-y-3 space-y-1 w-full"
@@ -119,7 +126,9 @@ const ForgotPassword = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full"
+                className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full ${
+                  loading && "cursor-not-allowed"
+                } `}
               >
                 {loading ? "Submitting..." : "Submit"}
               </button>

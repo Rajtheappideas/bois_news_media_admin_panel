@@ -8,6 +8,7 @@ import loading from "./assets/animations/loading.json";
 import React, { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import PrivateRoute from "./pages/PrivateRoute";
+import { useSelector } from "react-redux";
 
 const Home = lazy(() => import("./pages/Home"));
 const SignIn = lazy(() => import("./pages/SignIn"));
@@ -19,7 +20,7 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 function App() {
   return (
     <BrowserRouter>
-      <Toaster toastOptions={{ duration: 3000 }} position="top-center" />
+      <Toaster toastOptions={{ duration: 4000 }} position="top-center" />
       <ErrorBoundary
         FallbackComponent={ErrorFallback}
         onReset={() => {

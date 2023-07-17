@@ -11,19 +11,16 @@ import useAbortApiCall from "../hooks/useAbortApiCall";
 import { handleLoginUser } from "../redux/AuthSlice";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
-// import useAbortApiCall from "../hooks/useAbortApiCall";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, user } = useSelector((state) => state.user);
+  const { loading, user, error } = useSelector((state) => state.root.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
-
-  const localStorageData = JSON.parse(window.localStorage.getItem("user"));
 
   const signinSchema = yup.object({
     email: yup.string().email().required("Email is required!!!").trim(),
@@ -49,31 +46,23 @@ const SignIn = () => {
       })
     );
     if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          toast.success("Sign in Successfully.", { duration: 2000 });
-          window.localStorage.setItem(
-            "user",
-            JSON.stringify(res?.payload?.user)
-          );
-          window.localStorage.setItem(
-            "token",
-            JSON.stringify(res?.payload?.token)
-          );
-          window.localStorage.setItem(
-            "role",
-            JSON.stringify(res?.payload?.user?.role)
-          );
-          navigate("/");
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+      response
+        .then((res) => {
+          if (res?.payload?.status === "success") {
+            toast.success("Sign in Successfully.", { duration: 2000 });
+            navigate("/");
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err.payload);
+        });
     }
   };
 
   useEffect(() => {
-    if (localStorageData !== null && user !== null) {
+    if (user !== null) {
       toast("You already logged in.", { duration: 3000 });
       navigate("/");
     }
@@ -84,7 +73,7 @@ const SignIn = () => {
 
   return (
     <>
-      <Helmet title="Sign-in | Bois Mega News" />
+      <Helmet title="Sign-in | Bois News Media" />
       <div
         style={{
           background: `url(${bgImage})`,
@@ -93,15 +82,21 @@ const SignIn = () => {
         }}
         className="w-full custom_scrollbar flex overflow-x-hidden items-center justify-center relative min-h-screen"
       >
-        <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:px-5 md:py-5 px-4 py-2 flex items-center flex-col mx-auto xl:w-3/12 lg:w-5/12 md:w-1/2 w-11/12 h-auto gap-y-2">
+        <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:px-5 md:py-5 px-4 py-4 flex items-center flex-col mx-auto xl:w-3/12 lg:w-5/12 md:w-1/2 w-11/12 h-auto gap-y-2">
           {/* logo */}
           <div className="md:my-5 my-3">
-            <Link to="/">Logo</Link>
+            <Link to="/">
+              <img
+                src={require("../assets/images/logo.png")}
+                className="w-20 h-fit object-contain object-center"
+              />
+            </Link>
           </div>
           {/* title */}
           <p className="font-bold text-textBlack text-center md:text-lg">
             Sign in your account
           </p>
+          {error !== null && <span className="error">{error?.message}</span>}
           {/* form  */}
           <form
             className="lg:space-y-3 space-y-1 w-full"
@@ -147,12 +142,12 @@ const SignIn = () => {
                 {showPassword ? (
                   <BsEyeFill
                     size={24}
-                    className="absolute top-10 cursor-pointer right-3 text-gray-400"
+                    className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
                   />
                 ) : (
                   <BsEyeSlashFill
                     size={24}
-                    className="absolute top-10 cursor-pointer right-3 text-gray-400"
+                    className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
                   />
                 )}
               </button>
@@ -160,7 +155,9 @@ const SignIn = () => {
             {/* butons */}
             <button
               type="submit"
-              className="bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full"
+              className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full  ${
+                loading && "cursor-not-allowed"
+              }`}
               disabled={loading}
             >
               {loading ? "Logging in..." : "Login"}

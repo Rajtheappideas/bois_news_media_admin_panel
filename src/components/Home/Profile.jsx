@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { HiPencil } from "react-icons/hi";
 import EditProfile from "../Profile/EditProfile";
+import { useSelector } from "react-redux";
+import BaseUrl from "../../BaseUrl";
 
 const Profile = () => {
   const [showProfileEdit, setShowProfileEdit] = useState(false);
+
+  const { user, loading } = useSelector((state) => state.root.user);
 
   return (
     <>
@@ -27,9 +30,13 @@ const Profile = () => {
           <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
             <div className="relative md:w-24 w-20 block">
               <img
-                src={require("../../assets/images/profile.png")}
+                src={
+                  user?.profile !== null && user?.profile !== undefined
+                    ? BaseUrl.concat(user?.profile)
+                    : require("../../assets/images/profile.png")
+                }
                 alt="profile"
-                className="rounded-full md:h-24 md:w-24 w-20 h-20"
+                className="rounded-full border md:h-24 md:w-24 w-20 h-20"
               />
             </div>
             <p className="font-bold text-black md:text-xl">Personal Details</p>
@@ -40,28 +47,36 @@ const Profile = () => {
                 <label htmlFor="name" className="Label">
                   name
                 </label>
-                <p className="text-textBlack font-medium">Jordan Nico</p>
+                <p className="text-textBlack font-medium capitalize">
+                  {user?.name ?? "-"}
+                </p>
               </div>
               {/* company */}
               <div className="w-full space-y-2">
                 <label htmlFor="company" className="Label">
                   company
                 </label>
-                <p className="text-textBlack font-medium">Barry Tech</p>
+                <p className="text-textBlack font-medium capitalize">
+                  {user?.company ?? "-"}
+                </p>
               </div>
               {/* email */}
               <div className="w-full space-y-2">
                 <label htmlFor="email" className="Label">
                   email
                 </label>
-                <p className="text-textBlack font-medium">marilynworkman6@mai.com</p>
+                <p className="text-textBlack font-medium">
+                  {user?.email ?? "-"}{" "}
+                </p>
               </div>
               {/* phone */}
               <div className="w-full space-y-2">
                 <label htmlFor="phone" className="Label">
                   phone
                 </label>
-                <p className="text-textBlack font-medium">+1 1234567899</p>
+                <p className="text-textBlack font-medium">
+                  {user?.phone ?? "-"}
+                </p>
               </div>
             </div>
             <hr className="my-1" />
@@ -73,28 +88,37 @@ const Profile = () => {
                 <label htmlFor="address" className="Label">
                   address
                 </label>
-                <p className="text-textBlack font-medium">Wolstraat 70,1000 Brussel</p>
+                <p className="text-textBlack font-medium">
+                  {user?.address ?? "-"}{" "}
+                </p>
               </div>
               {/* city */}
               <div className="w-full space-y-2">
                 <label htmlFor="city" className="Label">
                   city
                 </label>
-                <p className="text-textBlack font-medium">Florida</p>
+                <p className="text-textBlack font-medium capitalize">
+                  {" "}
+                  {user?.city ?? "-"}
+                </p>
               </div>
               {/* country */}
               <div className="w-full space-y-2">
                 <label htmlFor="country" className="Label">
                   country
                 </label>
-                <p className="text-textBlack font-medium">United states</p>
+                <p className="text-textBlack font-medium capitalize">
+                  {user?.country ?? "-"}
+                </p>
               </div>
               {/* zipcode */}
               <div className="w-full space-y-2">
                 <label htmlFor="zipcode" className="Label">
                   zipcode
                 </label>
-                <p className="text-textBlack font-medium">48075</p>
+                <p className="text-textBlack font-medium">
+                  {user?.zipCode ?? "-"}
+                </p>
               </div>
             </div>
           </div>

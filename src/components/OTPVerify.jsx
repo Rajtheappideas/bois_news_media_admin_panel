@@ -2,8 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-// import { handleForgotPassword, handleVerifyOtp } from "../../redux/UserSlice";
-import { useRef } from "react";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAbortApiCall from "../hooks/useAbortApiCall";
@@ -20,7 +18,7 @@ const OTPVerify = ({ email }) => {
   });
   const [resendOtpLoading, setResendOtpLoading] = useState(false);
 
-  const { user, loading } = useSelector((state) => state.user);
+  const { error, loading } = useSelector((state) => state.root.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -72,13 +70,8 @@ const OTPVerify = ({ email }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          window.localStorage.setItem(
-            "verify_token",
-            res?.payload?.verifyToken
-          );
-          window.localStorage.setItem("email", email);
-          navigate("/reset-password");
           toast.success("OTP verified successfully.", { duration: 2000 });
+          navigate("/reset-password");
           resetValues();
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -133,7 +126,13 @@ const OTPVerify = ({ email }) => {
     <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:p-6 p-3 flex items-center flex-col mx-auto xl:w-4/12 lg:w-5/12 md:w-1/2 w-10/12 h-auto gap-y-2">
       {/* logo */}
       <div className="md:my-3 my-2">
-        <Link to="/">Logo</Link>
+        <Link to="/">
+          <img
+            src={require("../assets/images/logo.png")}
+            className="w-20 h-fit object-contain object-center"
+            alt="logo"
+          />
+        </Link>
       </div>
       {/* title */}
       <div className="space-y-2 text-center">
@@ -144,16 +143,18 @@ const OTPVerify = ({ email }) => {
           Check your email for the OTP
         </p>
       </div>
+      {error !== null && <span className="error">{error?.message}</span>}
+
       {/* form  */}
       <form
         className="md:space-y-5 space-y-2 w-full text-center"
         onSubmit={(e) => handleSubmitVerfiyOtp(e)}
       >
         {/* otp boxes */}
-        <div className="flex w-full items-center justify-center gap-3">
+        <div className="flex w-full items-center justify-center md:gap-3 gap-1">
           <input
             type="number"
-            className="rounded-lg border font-bold border-textColor h-12 w-12 outline-none text-center"
+            className="otp_Field"
             onChange={(e) => {
               handleOnChange(
                 "stepOne",
@@ -174,7 +175,7 @@ const OTPVerify = ({ email }) => {
           />
           <input
             type="number"
-            className="rounded-lg border font-bold border-textColor h-12 w-12 outline-none text-center"
+            className="otp_Field"
             onChange={(e) =>
               handleOnChange(
                 "stepTwo",
@@ -195,7 +196,7 @@ const OTPVerify = ({ email }) => {
           />
           <input
             type="number"
-            className="rounded-lg border font-bold border-textColor h-12 w-12 outline-none text-center"
+            className="otp_Field"
             onChange={(e) =>
               handleOnChange(
                 "stepThree",
@@ -216,7 +217,7 @@ const OTPVerify = ({ email }) => {
           />
           <input
             type="number"
-            className="rounded-lg border font-bold border-textColor h-12 w-12 outline-none text-center"
+            className="otp_Field"
             onChange={(e) =>
               handleOnChange(
                 "stepFour",
@@ -237,7 +238,7 @@ const OTPVerify = ({ email }) => {
           />
           <input
             type="number"
-            className="rounded-lg border font-bold border-textColor h-12 w-12 outline-none text-center"
+            className="otp_Field"
             onChange={(e) =>
               handleOnChange(
                 "stepFive",
@@ -258,7 +259,7 @@ const OTPVerify = ({ email }) => {
           />
           <input
             type="number"
-            className="rounded-lg border font-bold border-textColor h-12 w-12 outline-none text-center"
+            className="otp_Field"
             onChange={(e) =>
               handleOnChange(
                 "stepSix",
@@ -293,7 +294,8 @@ const OTPVerify = ({ email }) => {
         <button
           type="submit"
           disabled={loading || resendOtpLoading}
-          className="bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full"
+          className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full 
+          ${loading && "cursor-not-allowed"}`}
         >
           {loading && !resendOtpLoading ? "Verifying..." : "Continue"}
         </button>

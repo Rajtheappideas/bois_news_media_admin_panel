@@ -52,16 +52,19 @@ const Sidebar = ({
 
   return (
     <div
-    className={` ${
-      openSidebar ? "xl:w-2/12 lg:w-1/5" : "lg:w-[10%]"
-    } h-auto capitalize`}
-  >
+      className={` ${
+        openSidebar ? "xl:w-2/12 lg:w-1/5" : "lg:w-[10%]"
+      } h-auto capitalize`}
+    >
       {/* for desktop */}
       <div
         className={`min-h-screen w-full xl:px-6 lg:px-3 lg:block hidden py-3`}
       >
         <p className="my-3 xl:text-4xl text-2xl font-semibold text-center">
-          Logo
+          <img
+            src={require("../assets/images/logo.png")}
+            className="w-20 h-fit object-contain object-center"
+          />
         </p>
         <ul className="w-full space-y-3 text-sm ">
           {sidebarList.map((list) => (
@@ -103,7 +106,10 @@ const Sidebar = ({
         } px-4 transition duration-300 ease-in-out lg:hidden block py-3 shadow-xl`}
       >
         <p className="my-3 xl:text-4xl text-2xl font-semibold text-center">
-          Logo
+          <img
+            src={require("../assets/images/logo.png")}
+            className="w-20 h-fit object-contain object-center"
+          />
           <HiOutlineXMark
             onClick={() => setOpenSidebar(false)}
             role="button"

@@ -13,6 +13,7 @@ export const handleRegisterUser = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
   }
@@ -29,6 +30,7 @@ export const handleLoginUser = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
   }
@@ -45,6 +47,7 @@ export const handleVerifyOtp = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
   }
@@ -63,6 +66,7 @@ export const handleUserLogout = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
   }
@@ -79,6 +83,7 @@ export const handleForgotPassword = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
   }
@@ -95,6 +100,71 @@ export const handleResetPassword = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleChangePassword = createAsyncThunk(
+  "user/handleChangePassword",
+  async ({ oldPassword, newPassword, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await PostUrl("change-password", {
+        data: { oldPassword, newPassword },
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleEditProfile = createAsyncThunk(
+  "user/handleEditProfile",
+  async (
+    {
+      name,
+      phone,
+      company,
+      address,
+      city,
+      country,
+      zipCode,
+      profile,
+      token,
+      signal,
+    },
+    { rejectWithValue }
+  ) => {
+    const data = new FormData();
+    data.append("name", name);
+    data.append("phone", phone);
+    data.append("company", company);
+    data.append("zipCode", zipCode);
+    data.append("profile", profile);
+    data.append("address", address);
+    data.append("city", city);
+    data.append("country", country);
+    try {
+      signal.current = new AbortController();
+      const response = await PostUrl("profile", {
+        data: data,
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+          "Content-Type": "mulitpart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
   }
@@ -104,21 +174,12 @@ const initialState = {
   loading: false,
   error: null,
   success: false,
-  user: window.localStorage.getItem("user")
-    ? JSON.parse(window.localStorage.getItem("user"))
-    : null,
-  role: window.localStorage.getItem("role")
-    ? JSON.parse(window.localStorage.getItem("role"))
-    : null,
-  token: window.localStorage.getItem("token")
-    ? JSON.parse(window.localStorage.getItem("token"))
-    : null,
-  verifyToken: window.localStorage.getItem("verify_token")
-    ? window.localStorage.getItem("verify_token")
-    : null,
-  email: window.localStorage.getItem("email")
-    ? JSON.parse(window.localStorage.getItem("email"))
-    : null,
+  user: null,
+  role: null,
+  token: null,
+  verifyToken: null,
+  email: null,
+  language: null,
 };
 
 const UserSlice = createSlice({
@@ -128,10 +189,12 @@ const UserSlice = createSlice({
     handleLogout: (state) => {
       state.loading = true;
       state.user = null;
-      window.localStorage.clear();
-      window.location.href = window.location.origin;
+      window.location.href = window.location.origin.concat("/sign-in");
       toast.success("Logout Successfully.", { duration: 3000 });
       state.loading = false;
+    },
+    handleStoreUserEmail: (state, { payload }) => {
+      state.email = payload;
     },
   },
   extraReducers: (builder) => {
@@ -153,7 +216,7 @@ const UserSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.user = null;
-      state.error = payload;
+      state.error = payload ?? null;
       state.role = null;
       state.token = null;
     });
@@ -175,7 +238,7 @@ const UserSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.user = null;
-      state.error = payload;
+      state.error = payload ?? null;
       state.role = null;
       state.token = null;
     });
@@ -197,7 +260,7 @@ const UserSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.user = null;
-      state.error = payload;
+      state.error = payload ?? null;
       state.role = null;
       state.token = null;
     });
@@ -221,9 +284,30 @@ const UserSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.user = null;
-      state.error = payload;
+      state.error = payload ?? null;
       state.role = null;
       state.token = null;
+    });
+    // handle password
+    builder.addCase(handleChangePassword.pending, (state, {}) => {
+      state.loading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleChangePassword.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.error = null;
+      state.user = null;
+      state.role = null;
+      state.token = null;
+      state.verifyToken = null;
+      state.email = null;
+    });
+    builder.addCase(handleChangePassword.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.success = false;
+      state.error = payload ?? null;
     });
     // verfiy otp
     builder.addCase(handleVerifyOtp.pending, (state, {}) => {
@@ -236,7 +320,6 @@ const UserSlice = createSlice({
       state.success = true;
       state.error = null;
       state.user = null;
-      state.error = null;
       state.role = null;
       state.token = null;
       state.verifyToken = payload?.verifyToken;
@@ -244,7 +327,7 @@ const UserSlice = createSlice({
     builder.addCase(handleVerifyOtp.rejected, (state, { payload }) => {
       state.loading = false;
       state.success = false;
-      state.error = payload;
+      state.error = payload ?? null;
     });
     // log out
     builder.addCase(handleUserLogout.pending, (state, {}) => {
@@ -259,18 +342,39 @@ const UserSlice = createSlice({
       state.user = null;
       state.role = null;
       state.token = null;
+      state.verifyToken = null;
+      state.email = null;
     });
     builder.addCase(handleUserLogout.rejected, (state, { payload }) => {
       state.loading = false;
       state.success = false;
-      state.error = payload;
+      state.error = payload ?? null;
       state.user = null;
       state.role = null;
       state.token = null;
+      state.verifyToken = null;
+      state.email = null;
+    });
+    // log out
+    builder.addCase(handleEditProfile.pending, (state, {}) => {
+      state.loading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleEditProfile.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.error = null;
+      state.user = payload?.user;
+    });
+    builder.addCase(handleEditProfile.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.success = false;
+      state.error = payload ?? null;
     });
   },
 });
 
-export const { handleLogout } = UserSlice.actions;
+export const { handleLogout, handleStoreUserEmail } = UserSlice.actions;
 
 export default UserSlice.reducer;

@@ -14,12 +14,10 @@ import { toast } from "react-hot-toast";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, user } = useSelector((state) => state.user);
+  const { loading, user, error } = useSelector((state) => state.root.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const localStorageData = JSON.parse(window.localStorage.getItem("user"));
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
@@ -40,7 +38,6 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm({
     shouldFocusError: true,
     resolver: yupResolver(signupSchema),
@@ -61,18 +58,6 @@ const SignUp = () => {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success("Sign up Successfully.", { duration: 2000 });
-          window.localStorage.setItem(
-            "user",
-            JSON.stringify(res?.payload?.user)
-          );
-          window.localStorage.setItem(
-            "token",
-            JSON.stringify(res?.payload?.token)
-          );
-          window.localStorage.setItem(
-            "role",
-            JSON.stringify(res?.payload?.user?.role)
-          );
           navigate("/");
         } else if (res?.payload?.status === "Error") {
           toast.error(res?.payload?.message);
@@ -82,7 +67,7 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    if (localStorageData !== null && user !== null) {
+    if (user !== null) {
       toast.success("You already logged in.");
       navigate("/");
     }
@@ -93,7 +78,7 @@ const SignUp = () => {
 
   return (
     <>
-      <Helmet title="Sign-up | Bois Mega News" />
+      <Helmet title="Sign-up | Bois News Media" />
       <div
         style={{
           background: `url(${bgImage})`,
@@ -102,15 +87,24 @@ const SignUp = () => {
         }}
         className="w-full custom_scrollbar flex overflow-x-hidden items-center justify-center relative min-h-screen overflow-y-scroll"
       >
-        <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:px-5 md:py-5 px-4 py-2 flex items-center flex-col mx-auto xl:w-3/12 lg:w-5/12 md:w-1/2 w-11/12 h-auto gap-y-1">
+        <section className="bg-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl md:px-5 md:py-5 px-4 py-4 flex items-center flex-col mx-auto xl:w-3/12 lg:w-5/12 md:w-1/2 w-11/12 h-auto gap-y-1">
           {/* logo */}
           <div className="md:my-3 my-1">
-            <Link to="/">Logo</Link>
+            <Link to="/">
+              {" "}
+              <img
+                src={require("../assets/images/logo.png")}
+                className="w-20 h-fit object-contain object-center"
+              />
+            </Link>
           </div>
           {/* title */}
           <p className="font-bold text-textBlack text-center md:text-lg">
             Sign in your account
           </p>
+
+          {error !== null && <span className="error">{error?.message}</span>}
+
           {/* form  */}
           <form
             className="lg:space-y-2 space-y-1 w-full"
@@ -216,12 +210,12 @@ const SignUp = () => {
                 {showPassword ? (
                   <BsEyeFill
                     size={24}
-                    className="absolute top-10 cursor-pointer right-3 text-gray-400"
+                    className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
                   />
                 ) : (
                   <BsEyeSlashFill
                     size={24}
-                    className="absolute top-10 cursor-pointer right-3 text-gray-400"
+                    className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
                   />
                 )}
               </button>
@@ -230,7 +224,8 @@ const SignUp = () => {
             <button
               type="submit"
               disabled={loading}
-              className="bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full"
+              className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full 
+              ${loading && "cursor-not-allowed"}`}
             >
               {loading ? "Signing up..." : "Sign up"}
             </button>

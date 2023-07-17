@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.root.user);
 
   const navigate = useNavigate();
   useEffect(() => {

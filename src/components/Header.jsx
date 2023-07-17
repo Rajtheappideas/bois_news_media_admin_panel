@@ -17,7 +17,7 @@ const Header = ({
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
 
-  const { loading } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.root.user);
 
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
@@ -145,15 +145,25 @@ const Header = ({
               Profile
             </p>
             <button
+              onClick={() => {
+                setActiveComponent("change password");
+              }}
+              className="text-textBlack text-left w-full p-1 rounded-md hover:font-semibold transition cursor-pointer"
+            >
+              Change Password
+            </button>
+            <button
               disabled={loading}
               onClick={() => {
                 toast.loading("Logout...");
                 setTimeout(() => {
                   toast.remove();
                   dispatch(handleLogout());
-                }, 2000);
+                }, 1000);
               }}
-              className="text-red-500 text-left w-full p-1 rounded-md hover:font-semibold transition cursor-pointer"
+              className={`text-red-500 text-left w-full p-1 rounded-md hover:font-semibold transition ${
+                loading && "cursor-not-allowed"
+              } `}
             >
               {loading ? "..." : "Logout"}
             </button>

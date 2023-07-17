@@ -31,7 +31,7 @@ const Success = () => {
         <p className="font-bold text-textBlack text-center md:text-lg">
           Verification success{" "}
         </p>
-        <p className="font-normal text-textColor text-center md:text-lg">
+        <p className="font-normal text-textColor text-center md:text-lg w-9/12">
           Verification is success and now you can proceed{" "}
         </p>
         <button
