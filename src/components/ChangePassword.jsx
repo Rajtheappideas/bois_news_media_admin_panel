@@ -14,7 +14,7 @@ const ChangePassword = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setshowNewPassword] = useState(false);
 
-  const { loading, token } = useSelector((state) => state.root.user);
+  const { loading, token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

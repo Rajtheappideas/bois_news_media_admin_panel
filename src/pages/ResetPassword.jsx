@@ -18,7 +18,7 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { loading, user, verifyToken, email, error } = useSelector(
-    (state) => state.root.user
+    (state) => state.root.auth
   );
 
   const dispatch = useDispatch();

@@ -14,7 +14,7 @@ import { toast } from "react-hot-toast";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, user, error } = useSelector((state) => state.root.user);
+  const { loading, user, error } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const SignUp = () => {
         if (res?.payload?.status === "success") {
           toast.success("Sign up Successfully.", { duration: 2000 });
           navigate("/");
-        } else if (res?.payload?.status === "Error") {
+        } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
         }
       });

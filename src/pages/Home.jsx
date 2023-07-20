@@ -15,14 +15,21 @@ import { Helmet } from "react-helmet";
 import Profile from "../components/Home/Profile";
 import ChangePassword from "../components/ChangePassword";
 import useAbortApiCall from "../hooks/useAbortApiCall";
+import { useDispatch, useSelector } from "react-redux";
+import { handleGetAllUsers } from "../redux/UserSlice";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
   const [openSidebar, setOpenSidebar] = useState(false);
 
-  const { abortApiCall } = useAbortApiCall();
+  const { token } = useSelector((state) => state.root.auth);
+
+  const { abortApiCall, AbortControllerRef } = useAbortApiCall();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(handleGetAllUsers({ token, signal: AbortControllerRef }));
     return () => {
       abortApiCall();
     };

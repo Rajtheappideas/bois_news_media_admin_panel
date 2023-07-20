@@ -18,7 +18,7 @@ const OTPVerify = ({ email }) => {
   });
   const [resendOtpLoading, setResendOtpLoading] = useState(false);
 
-  const { error, loading } = useSelector((state) => state.root.user);
+  const { error, loading } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

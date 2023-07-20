@@ -16,6 +16,10 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
 .scrollbar::-webkit-scrollbar {
   width: 0.5em !important;
   height: 10px;
@@ -80,4 +84,8 @@ body::-webkit-scrollbar-thumb {
 
 .otp_Field {
   @apply rounded-lg border font-bold md:text-base text-sm border-textColor md:h-12 md:w-12 h-8 w-8 outline-none text-center;
+}
+
+.data_not_found_And_Loading {
+  @apply text-center md:text-2xl text-lg font-semibold py-2;
 }

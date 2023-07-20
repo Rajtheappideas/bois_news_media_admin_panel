@@ -15,7 +15,7 @@ import { useEffect } from "react";
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, user, error } = useSelector((state) => state.root.user);
+  const { loading, user, error } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

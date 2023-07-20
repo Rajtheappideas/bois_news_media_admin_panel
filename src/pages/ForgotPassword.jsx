@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     email: yup.string().email().required("Email is required!!!").trim(),
   });
 
-  const { loading, user, error } = useSelector((state) => state.root.user);
+  const { loading, user, error } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

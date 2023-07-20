@@ -2,7 +2,6 @@ import React from "react";
 import { HiPencil } from "react-icons/hi";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -20,14 +19,11 @@ const EditProfile = ({ setShowProfileEdit }) => {
   const [prevImage, setPrevImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
-  const { loading, user, error, token } = useSelector(
-    (state) => state.root.user
-  );
+  const { loading, user, token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
+  const { AbortControllerRef } = useAbortApiCall();
 
   const {
     name,
@@ -99,7 +95,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
 
   const onSubmit = (data) => {
     const { name, phone, company, address, city, country, zipCode } = data;
-    if (!isPossiblePhoneNumber(phone) && !isValidPhoneNumber(phone)) {
+    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.error("Phone is invalid");
       return true;
     }
@@ -172,10 +168,10 @@ const EditProfile = ({ setShowProfileEdit }) => {
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
         <div className="relative md:w-24 w-20 block">
-          {prevImage !== null && prevImage !== undefined ? (
+          {profile !== null && profile !== undefined ? (
             <img
               src={prevImage ?? Baseurl.concat(profile)}
-              alt="profile"
+              alt={name}
               className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
             />
           ) : (
@@ -248,7 +244,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
               phone
             </label>
             <PhoneInput
-              country={"fr"}
+              country={"us"}
               // {...register("phone")}
               onChange={(value) => {
                 setValue("phone", "+".concat(value));

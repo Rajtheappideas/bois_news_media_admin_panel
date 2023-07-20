@@ -159,7 +159,7 @@ export const handleEditProfile = createAsyncThunk(
         signal: signal.current.signal,
         headers: {
           Authorization: token,
-          "Content-Type": "mulitpart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       });
       return response.data;

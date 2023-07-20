@@ -17,7 +17,7 @@ const Header = ({
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
 
-  const { loading } = useSelector((state) => state.root.user);
+  const { loading } = useSelector((state) => state.root.auth);
 
   const profileRef = useRef(null);
   const notificationRef = useRef(null);

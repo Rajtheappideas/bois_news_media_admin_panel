@@ -7,7 +7,7 @@ import { FaUserCircle } from "react-icons/fa";
 const Profile = () => {
   const [showProfileEdit, setShowProfileEdit] = useState(false);
 
-  const { user, loading } = useSelector((state) => state.root.user);
+  const { user, loading } = useSelector((state) => state.root.auth);
 
   return (
     <>
