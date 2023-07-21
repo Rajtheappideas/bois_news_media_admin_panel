@@ -20,7 +20,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
   const [prevImage, setPrevImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
-  const { postLoading } = useSelector((state) => state.root.users);
+  const { addNewUserLoading } = useSelector((state) => state.root.users);
   const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
@@ -179,19 +179,23 @@ const AddNewUser = ({ setShowAddNewUser }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className={`gray_button ${postLoading && "cursor-not-allowed"}`}
+            className={`gray_button ${
+              addNewUserLoading && "cursor-not-allowed"
+            }`}
             onClick={() => setShowAddNewUser(false)}
-            disabled={postLoading}
+            disabled={addNewUserLoading}
             type="reset"
           >
             Cancel
           </button>
           <button
-            className={`green_button ${postLoading && "cursor-not-allowed"}`}
+            className={`green_button ${
+              addNewUserLoading && "cursor-not-allowed"
+            }`}
             type="submit"
-            disabled={postLoading}
+            disabled={addNewUserLoading}
           >
-            {postLoading ? "Submitting..." : "Submit"}
+            {addNewUserLoading ? "Submitting..." : "Submit"}
           </button>
         </div>
       </div>
@@ -296,7 +300,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
               name="phone"
               control={control}
               rules={{
-                validate: (value) => isValidPhoneNumber(value) || "asdasd",
+                validate: (value) => isValidPhoneNumber(value),
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput

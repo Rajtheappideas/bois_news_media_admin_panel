@@ -113,7 +113,7 @@ const ResetPassword = () => {
             <p className="font-bold text-textBlack text-center md:text-lg">
               Reset password
             </p>
-            {error !== null && <span className="error">{error?.message}</span>}
+            {/* {error !== null && <span className="error">{error?.message}</span>} */}
 
             {/* form  */}
             <form

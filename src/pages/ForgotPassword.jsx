@@ -98,7 +98,7 @@ const {
             <p className="font-bold text-textBlack text-center md:text-lg">
               Forgot password
             </p>
-            {error !== null && <span className="error">{error?.message}</span>}
+            {/* {error !== null && <span className="error">{error?.message}</span>} */}
 
             {/* form  */}
             <form

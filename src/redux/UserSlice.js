@@ -71,6 +71,72 @@ export const handleAddNewUser = createAsyncThunk(
   }
 );
 
+export const handleEditUser = createAsyncThunk(
+  "user/handleEditUser",
+  async (
+    {
+      role,
+      name,
+      profile,
+      phone,
+      company,
+      address,
+      city,
+      zipCode,
+      country,
+      id,
+      token,
+      signal,
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      signal.current = new AbortController();
+      const response = await PostUrl(`user/${id}`, {
+        data: {
+          role,
+          name,
+          profile,
+          phone,
+          company,
+          address,
+          city,
+          zipCode,
+          country,
+        },
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleDeleteUSER = createAsyncThunk(
+  "user/handleDeleteUSER",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`user/delete/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 const initialState = {
   loading: false,
   error: null,
@@ -78,7 +144,9 @@ const initialState = {
   users: [],
   filterType: "newest",
   singleUser: null,
-  postLoading: false,
+  addNewUserLoading: false,
+  deleteUserLoading: false,
+  EditUserLoading: false,
 };
 
 const UserSlice = createSlice({
@@ -127,18 +195,53 @@ const UserSlice = createSlice({
     });
     // add new user
     builder.addCase(handleAddNewUser.pending, (state, {}) => {
-      state.postLoading = true;
+      state.addNewUserLoading = true;
       state.success = false;
       state.error = null;
     });
     builder.addCase(handleAddNewUser.fulfilled, (state, { payload }) => {
-      state.postLoading = false;
+      state.addNewUserLoading = false;
       state.success = true;
       state.error = null;
       state.users = [payload?.user, ...state.users];
     });
     builder.addCase(handleAddNewUser.rejected, (state, { payload }) => {
-      state.postLoading = false;
+      state.addNewUserLoading = false;
+      state.success = false;
+      state.error = payload ?? null;
+    });
+    // edit user
+    builder.addCase(handleEditUser.pending, (state, {}) => {
+      state.EditUserLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleEditUser.fulfilled, (state, { payload }) => {
+      state.EditUserLoading = false;
+      state.success = true;
+      state.error = null;
+      state.users = state.users.map((user) =>
+        user?._id === payload?.user?._id ? payload?.user : user
+      );
+    });
+    builder.addCase(handleEditUser.rejected, (state, { payload }) => {
+      state.EditUserLoading = false;
+      state.success = false;
+      state.error = payload ?? null;
+    });
+    // delete user
+    builder.addCase(handleDeleteUSER.pending, (state, {}) => {
+      state.deleteUserLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleDeleteUSER.fulfilled, (state, { payload }) => {
+      state.deleteUserLoading = false;
+      state.success = true;
+      state.error = null;
+    });
+    builder.addCase(handleDeleteUSER.rejected, (state, { payload }) => {
+      state.deleteUserLoading = false;
       state.success = false;
       state.error = payload ?? null;
     });

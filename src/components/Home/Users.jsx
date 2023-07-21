@@ -3,23 +3,34 @@ import Search from "../Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { BsEye } from "react-icons/bs";
 import AddNewUser from "../Users/AddNewUser";
 import EditUserDetails from "../Users/EditUserDetails";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import {
+  handleDeleteUSER,
   handleDeleteUser,
   handleFindUser,
   handlerFilterUsers,
 } from "../../redux/UserSlice";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
+import { toast } from "react-hot-toast";
+import ShowUsersDetailsOnly from "../Users/ShowUsersDetailsOnly";
 
 const Users = () => {
   const [showUserDetail, setShowUserDetail] = useState(false);
   const [showAddNewUser, setShowAddNewUser] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const [editUserId, setEditUserId] = useState(null);
+  const [showUserDetailsOnly, setShowUserDetailsOnly] = useState(false);
 
-  const { users, loading } = useSelector((state) => state.root.users);
+  const { users, loading, addNewUserLoading, deleteUserLoading } = useSelector(
+    (state) => state.root.users
+  );
+  const { token, role } = useSelector((state) => state.root.auth);
+
+  const { AbortControllerRef } = useAbortApiCall();
 
   const dispatch = useDispatch();
 
@@ -36,19 +47,40 @@ const Users = () => {
     setPageNumber(selected);
   };
 
+  const handleDeleteruser = (id) => {
+    dispatch(handleDeleteUser(id));
+    const response = dispatch(
+      handleDeleteUSER({ id, token, signal: AbortControllerRef })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.success("User Delete Successfully.");
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
+  };
+
   return (
     <>
-      {showUserDetail && !showAddNewUser && (
+      {showUserDetail && !showAddNewUser && !showUserDetailsOnly && (
         <EditUserDetails
           setEditUserId={setEditUserId}
           editUserId={editUserId}
           setShowUserDetail={setShowUserDetail}
         />
       )}
-      {!showUserDetail && showAddNewUser && (
+      {!showUserDetail && !showUserDetailsOnly && showAddNewUser && (
         <AddNewUser setShowAddNewUser={setShowAddNewUser} />
       )}
-      {!showUserDetail && !showAddNewUser && (
+
+      {!showUserDetail && !showAddNewUser && showUserDetailsOnly && (
+        <ShowUsersDetailsOnly setShowUserDetailsOnly={setShowUserDetailsOnly} />
+      )}
+
+      {!showUserDetail && !showAddNewUser && !showUserDetailsOnly && (
         <div className="lg:space-y-5 space-y-3 w-full">
           {/* search + buttons */}
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
@@ -112,14 +144,12 @@ const Users = () => {
                       <td className="p-4 whitespace-nowrap">
                         <input
                           type="checkbox"
-                          id={user?._id}
-                          name="userId"
+                          id={user?.userId}
                           className="rounded-lg inline-block mr-2 w-4 h-4"
                         />
-                        <label htmlFor={user?._id}>
+                        <label htmlFor={user?.userId}>
                           <span className="font-bold text-center cursor-pointer">
-                            {/* #{user?._id} */}
-                            #324
+                            #{user?.userId}
                           </span>
                         </label>
                       </td>
@@ -137,31 +167,59 @@ const Users = () => {
                       </td>
                       <td className="text-center p-4">{user?.role ?? "-"}</td>
                       <td className="flex items-center justify-start p-4">
-                        <button
-                          onClick={() => {
-                            setShowUserDetail(true);
-                            dispatch(handleFindUser(user?._id));
-                          }}
-                          type="button"
-                          className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                        >
-                          <BiPencil
-                            color="gray"
-                            size={30}
-                            className="inline-block mr-1"
-                          />
-                        </button>
-                        <button
-                          type="button"
-                          className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                          onClick={() => dispatch(handleDeleteUser(user?._id))}
-                        >
-                          <RiDeleteBin6Line
-                            color="red"
-                            size={30}
-                            className="inline-block"
-                          />
-                        </button>
+                        {role === "admin" || role === "editor" ? (
+                          <button
+                            onClick={() => {
+                              setShowUserDetail(true);
+                              dispatch(handleFindUser(user?._id));
+                            }}
+                            disabled={deleteUserLoading || loading}
+                            type="button"
+                            className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
+                          >
+                            <BiPencil
+                              color="gray"
+                              size={30}
+                              className="inline-block mr-1"
+                            />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setShowUserDetailsOnly(true);
+                              dispatch(handleFindUser(user?._id));
+                            }}
+                            disabled={deleteUserLoading || loading}
+                            type="button"
+                            className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
+                          >
+                            <BsEye
+                              color="gray"
+                              size={30}
+                              className="inline-block mr-1"
+                            />
+                          </button>
+                        )}
+                        {role === "admin" && (
+                          <button
+                            type="button"
+                            className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
+                            onClick={() => handleDeleteruser(user?._id)}
+                            disabled={
+                              addNewUserLoading || deleteUserLoading || loading
+                            }
+                          >
+                            {deleteUserLoading ? (
+                              "..."
+                            ) : (
+                              <RiDeleteBin6Line
+                                color="red"
+                                size={30}
+                                className="inline-block"
+                              />
+                            )}
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

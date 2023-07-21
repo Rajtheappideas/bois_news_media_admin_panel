@@ -143,7 +143,7 @@ const OTPVerify = ({ email }) => {
           Check your email for the OTP
         </p>
       </div>
-      {error !== null && <span className="error">{error?.message}</span>}
+      {/* {error !== null && <span className="error">{error?.message}</span>} */}
 
       {/* form  */}
       <form

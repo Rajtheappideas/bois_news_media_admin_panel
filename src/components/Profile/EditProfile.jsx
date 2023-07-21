@@ -2,7 +2,7 @@ import React from "react";
 import { HiPencil } from "react-icons/hi";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { handleEditProfile } from "../../redux/AuthSlice";
@@ -76,6 +76,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
     formState: { errors },
     setValue,
     getValues,
+    control,
   } = useForm({
     shouldFocusError: true,
     resolver: yupResolver(profileSchema),
@@ -114,18 +115,14 @@ const EditProfile = ({ setShowProfileEdit }) => {
       })
     );
     if (response) {
-      response
-        .then((res) => {
-          if (res?.payload?.status === "success") {
-            toast.success("Profile upadated.", { duration: 2000 });
-            setShowProfileEdit(false);
-          } else if (res?.payload?.status === "error") {
-            toast.error(res?.payload?.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err.payload);
-        });
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.success("Profile upadated.", { duration: 2000 });
+          setShowProfileEdit(false);
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
     }
   };
 
@@ -168,9 +165,15 @@ const EditProfile = ({ setShowProfileEdit }) => {
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
         <div className="relative md:w-24 w-20 block">
-          {profile !== null && profile !== undefined ? (
+          {prevImage !== null ? (
             <img
-              src={prevImage ?? Baseurl.concat(profile)}
+              src={prevImage}
+              alt={name}
+              className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
+            />
+          ) : profile !== null && profile !== undefined ? (
+            <img
+              src={Baseurl.concat(profile)}
               alt={name}
               className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
             />
@@ -243,31 +246,39 @@ const EditProfile = ({ setShowProfileEdit }) => {
             <label htmlFor="phone" className="Label">
               phone
             </label>
-            <PhoneInput
-              country={"us"}
-              // {...register("phone")}
-              onChange={(value) => {
-                setValue("phone", "+".concat(value));
+            <Controller
+              name="phone"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
               }}
-              value={getValues("phone")}
-              countryCodeEditable={false}
-              enableSearch={true}
-              inputProps={{
-                name: "phone",
-              }}
-              inputStyle={{
-                width: "100%",
-                background: "#FFFFFF",
-                padding: "22px 0 22px 50px",
-                borderRadius: "5px",
-                fontSize: "1rem",
-              }}
-              dropdownStyle={{
-                background: "white",
-                color: "#13216e",
-                fontWeight: "600",
-                padding: "0px 0px 0px 10px",
-              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("phone", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  value={getValues("phone")}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
 
             <span role="alert" className="error">

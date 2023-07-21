@@ -103,7 +103,7 @@ const SignUp = () => {
             Sign in your account
           </p>
 
-          {error !== null && <span className="error">{error?.message}</span>}
+          {/* {error !== null && <span className="error">{error?.message}</span>} */}
 
           {/* form  */}
           <form

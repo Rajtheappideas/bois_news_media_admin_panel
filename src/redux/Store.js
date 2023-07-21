@@ -3,16 +3,18 @@ import AuthSlice from "./AuthSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore, FLUSH, REHYDRATE } from "redux-persist";
 import UserSlice from "./UserSlice";
+import SubscriberSlice from "./SubscriberSlice";
 
 const rootPersistConfig = {
   key: "root",
   storage,
-  blacklist: ["users"],
+  blacklist: ["users", "subscribers"],
 };
 
 const rootReducer = combineReducers({
   auth: AuthSlice,
   users: UserSlice,
+  subscribers: SubscriberSlice,
 });
 
 const persisteRoot = persistReducer(rootPersistConfig, rootReducer);

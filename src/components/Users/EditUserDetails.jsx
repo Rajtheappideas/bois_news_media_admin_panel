@@ -10,13 +10,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { handleEditProfile } from "../../redux/AuthSlice";
 import { toast } from "react-hot-toast";
 import { FaUserCircle } from "react-icons/fa";
-import { handleFindUser } from "../../redux/UserSlice";
+import {
+  handleDeleteUSER,
+  handleDeleteUser,
+  handleEditUser,
+  handleFindUser,
+} from "../../redux/UserSlice";
 
 const EditUserDetails = ({ setShowUserDetail }) => {
-  const { singleUser } = useSelector((state) => state.root.users);
+  const { singleUser, EditUserLoading, deleteUserLoading } = useSelector(
+    (state) => state.root.users
+  );
   const { token } = useSelector((state) => state.root.auth);
 
   const [prevImage, setPrevImage] = useState(null);
@@ -39,10 +45,10 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     role,
   } = singleUser;
 
-  const profileSchema = yup.object({
+  const editUserSchema = yup.object({
     name: yup
       .string()
-      .required("Name is required!!!")
+      .required("Name is required")
       .trim()
       .max(60, "Max character limit reached")
       .min(3, "minimum three character required")
@@ -51,25 +57,43 @@ const EditUserDetails = ({ setShowUserDetail }) => {
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         "Name can only contain Latin letters."
       ),
-    phone: yup.string().required("phone is required!!!").trim(),
-    address: yup.string().max(200, "Maximum character limit reached"),
-    city: yup.string().max(40, "Maximum character limit reached").trim(),
-    zipcode: yup
+    address: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .required("address is required")
+      .trim(""),
+    zipCode: yup
       .string()
       .max(6, "max 6 number allowed")
-      .min(5, "min 5 number required!!!"),
+      .min(5, "min 5 number required")
+      .required("zipcode is required")
+      .trim(""),
     city: yup
       .string()
+      .max(40, "Maximum character limit reached")
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         "city can only contain Latin letters."
-      ),
+      )
+      .required("city is required")
+      .trim(""),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         "country can only contain Latin letters."
-      ),
+      )
+      .required("country is required")
+      .trim(""),
+    phone: yup.string().required("phone is required"),
+    role: yup.string().required("role is required."),
+    profile: yup
+      .mixed()
+      .required("Image is required.")
+      .test(profileImage !== null, "Image is required", () => {
+        return true;
+      }),
+    company: yup.string().required("Company is required."),
   });
 
   const {
@@ -81,7 +105,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     control,
   } = useForm({
     shouldFocusError: true,
-    resolver: yupResolver(profileSchema),
+    resolver: yupResolver(editUserSchema),
     reValidateMode: "onChange",
     defaultValues: {
       name: name || "",
@@ -91,44 +115,43 @@ const EditUserDetails = ({ setShowUserDetail }) => {
       city: city || "",
       country: country || "",
       zipCode: zipCode || "",
-      profile: profile || "",
+      profile: profile || profileImage,
       company: company || "",
       role: role || "",
     },
   });
 
   const onSubmit = (data) => {
-    const { name, phone, company, address, city, country, zipcode } = data;
+    const { name, phone, company, address, city, country, zipCode, role } =
+      data;
     if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.error("Phone is invalid");
       return true;
     }
     const response = dispatch(
-      handleEditProfile({
+      handleEditUser({
+        role,
         name,
+        profile: profileImage ?? profile,
         phone,
         company,
         address,
         city,
-        country,
         zipCode,
-        profile: profileImage ?? profile,
+        country,
+        id: singleUser?._id,
         token,
         signal: AbortControllerRef,
       })
     );
     if (response) {
-      response
-        .then((res) => {
-          if (res?.payload?.status === "success") {
-            toast.success("User upadated.", { duration: 2000 });
-          } else if (res?.payload?.status === "error") {
-            toast.error(res?.payload?.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err.payload);
-        });
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.success("User upadated successfully.", { duration: 2000 });
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
     }
   };
 
@@ -138,6 +161,23 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     const file = e.target.files[0];
     setPrevImage(URL.createObjectURL(file));
     setProfileImage(file);
+  };
+
+  const handleDeleteruser = (id) => {
+    dispatch(handleDeleteUser(id));
+    const response = dispatch(
+      handleDeleteUSER({ id, token, signal: AbortControllerRef })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.success("User Delete Successfully.");
+          setShowUserDetail(false);
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
   };
 
   return (
@@ -150,33 +190,51 @@ const EditUserDetails = ({ setShowUserDetail }) => {
         <p className="font-semibold text-left lg:text-xl text-lg">Edit User</p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className="gray_button"
+            className={`gray_button  ${
+              deleteUserLoading || (EditUserLoading && "cursor-not-allowed")
+            }`}
             type="button"
             onClick={() => {
               setShowUserDetail(false);
               dispatch(handleFindUser(""));
             }}
+            disabled={deleteUserLoading || EditUserLoading}
           >
             Cancel
           </button>
-          <button className="green_button" type="submit">
-            Save
+          <button
+            disabled={deleteUserLoading || EditUserLoading}
+            className={`green_button  ${
+              EditUserLoading && "cursor-not-allowed"
+            }`}
+            type="submit"
+          >
+            {EditUserLoading ? "Saving..." : "Save"}
           </button>
           <button
-            className="red_button"
+            className={`red_button  ${
+              deleteUserLoading && "cursor-not-allowed"
+            }`}
             type="button"
-            onClick={() => setShowUserDetail(false)}
+            onClick={() => handleDeleteruser(singleUser?._id)}
+            disabled={deleteUserLoading || EditUserLoading}
           >
-            Delete
+            {deleteUserLoading ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
         <div className="relative md:w-24 w-20 block">
-          {profile !== null && profile !== undefined ? (
+          {prevImage !== null ? (
             <img
-              src={prevImage ?? BaseUrl.concat(profile)}
+              src={prevImage}
+              alt={name}
+              className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
+            />
+          ) : profile !== null && profile !== undefined ? (
+            <img
+              src={BaseUrl.concat(profile)}
               alt={name}
               className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
             />
@@ -199,6 +257,9 @@ const EditUserDetails = ({ setShowUserDetail }) => {
             className="text-3xl absolute z-0 bottom-0 right-0 rounded-full bg-green-600 text-white h-8 w-8 p-1"
           />
         </div>
+        <span className="error">
+          {profileImage === null && errors?.profile?.message}
+        </span>
         <p className="font-bold text-black md:text-xl">Personal Details</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
@@ -253,8 +314,9 @@ const EditUserDetails = ({ setShowUserDetail }) => {
             </label>
             <input
               type="email"
+              disabled
               placeholder="Type here..."
-              className="input_field"
+              className="input_field cursor-not-allowed"
               {...register("email")}
             />
             <span role="alert" className="error">
@@ -270,7 +332,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
               name="phone"
               control={control}
               rules={{
-                validate: (value) => isValidPhoneNumber(value) || "asdasd",
+                validate: (value) => isValidPhoneNumber(value),
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput
@@ -300,6 +362,9 @@ const EditUserDetails = ({ setShowUserDetail }) => {
                 />
               )}
             />
+            <span role="alert" className="error">
+              {errors?.phone?.message}
+            </span>
           </div>
         </div>
         <hr className="my-1" />

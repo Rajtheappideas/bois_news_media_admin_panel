@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.defaults.baseURL =
-  "https://boisnewsmedia.onrender.com/api";
+  "https://boisnewsmedia.onrender.com";
 
 export const PostUrl = axios.create({
   baseURL: "https://boisnewsmedia.onrender.com/api/admin",

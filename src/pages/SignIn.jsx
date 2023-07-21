@@ -96,7 +96,7 @@ const SignIn = () => {
           <p className="font-bold text-textBlack text-center md:text-lg">
             Sign in your account
           </p>
-          {error !== null && <span className="error">{error?.message}</span>}
+          {/* {error !== null && <span className="error">{error?.message}</span>} */}
           {/* form  */}
           <form
             className="lg:space-y-3 space-y-1 w-full"
