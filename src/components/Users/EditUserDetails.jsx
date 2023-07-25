@@ -149,6 +149,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success("User upadated successfully.", { duration: 2000 });
+          setShowUserDetail(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
         }

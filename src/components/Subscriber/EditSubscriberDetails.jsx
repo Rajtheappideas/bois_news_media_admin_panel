@@ -349,6 +349,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         if (res?.payload?.status === "success") {
           dispatch(handleDeleteSubscriber(id));
           toast.success("Subscriber Deleted Successfully.");
+          setShowEditSubscriberDetails(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
         }
@@ -394,7 +395,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
                 (editLoading || deleteLoading) && "cursor-not-allowed"
               }`}
               disabled={deleteLoading || editLoading}
-              onClick={() => dispatch(handleDeletesubscriber(false))}
+              onClick={() => handleDeletesubscriber(_id)}
             >
               {deleteLoading ? "Deleting..." : "Delete"}
             </button>
