@@ -147,6 +147,7 @@ const initialState = {
   addNewUserLoading: false,
   deleteUserLoading: false,
   EditUserLoading: false,
+  deleteUserID: null,
 };
 
 const UserSlice = createSlice({
@@ -172,6 +173,9 @@ const UserSlice = createSlice({
       if (findUser) {
         state.users = findUser;
       }
+    },
+    handleChangeDeleteID: (state, { payload }) => {
+      state.deleteUserID = payload;
     },
   },
   extraReducers: (builder) => {
@@ -239,16 +243,22 @@ const UserSlice = createSlice({
       state.deleteUserLoading = false;
       state.success = true;
       state.error = null;
+      state.deleteUserID = null;
     });
     builder.addCase(handleDeleteUSER.rejected, (state, { payload }) => {
       state.deleteUserLoading = false;
       state.success = false;
       state.error = payload ?? null;
+      state.deleteUserID = null;
     });
   },
 });
 
-export const { handlerFilterUsers, handleFindUser, handleDeleteUser } =
-  UserSlice.actions;
+export const {
+  handlerFilterUsers,
+  handleFindUser,
+  handleDeleteUser,
+  handleChangeDeleteID,
+} = UserSlice.actions;
 
 export default UserSlice.reducer;

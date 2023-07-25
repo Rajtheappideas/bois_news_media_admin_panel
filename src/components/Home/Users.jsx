@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import {
   handleDeleteUSER,
-  handleDeleteUser,
+  handleChangeDeleteID,
   handleFindUser,
   handlerFilterUsers,
+  handleDeleteUser,
 } from "../../redux/UserSlice";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
@@ -25,9 +26,8 @@ const Users = () => {
   const [editUserId, setEditUserId] = useState(null);
   const [showUserDetailsOnly, setShowUserDetailsOnly] = useState(false);
 
-  const { users, loading, addNewUserLoading, deleteUserLoading } = useSelector(
-    (state) => state.root.users
-  );
+  const { users, loading, addNewUserLoading, deleteUserLoading, deleteUserID } =
+    useSelector((state) => state.root.users);
   const { token, role } = useSelector((state) => state.root.auth);
 
   const { AbortControllerRef } = useAbortApiCall();
@@ -48,13 +48,15 @@ const Users = () => {
   };
 
   const handleDeleteruser = (id) => {
-    dispatch(handleDeleteUser(id));
+    dispatch(handleChangeDeleteID(id));
+
     const response = dispatch(
       handleDeleteUSER({ id, token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
+          dispatch(handleDeleteUser(id));
           toast.success("User Delete Successfully.");
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -209,7 +211,7 @@ const Users = () => {
                               addNewUserLoading || deleteUserLoading || loading
                             }
                           >
-                            {deleteUserLoading ? (
+                            {deleteUserLoading && user?._id === deleteUserID ? (
                               "..."
                             ) : (
                               <RiDeleteBin6Line

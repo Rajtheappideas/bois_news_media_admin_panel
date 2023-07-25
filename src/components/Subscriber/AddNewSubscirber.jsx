@@ -1,13 +1,341 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
+import { toast } from "react-hot-toast";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import {
+  isPossiblePhoneNumber,
+  isValidPhoneNumber,
+} from "react-phone-number-input";
+import { Controller, useForm } from "react-hook-form";
+import { handleAddNewSubscriber } from "../../redux/SubscriberSlice";
 
 const AddNewSubscirber = ({
   setShowAddNewSubscriber,
   setShowMagazineDistrutionPopup,
 }) => {
+  const { addNewSubscriberLoading } = useSelector(
+    (state) => state.root.subscribers
+  );
+  const { token } = useSelector((state) => state.root.auth);
+
+  const dispatch = useDispatch();
+
+  const { AbortControllerRef } = useAbortApiCall();
+
+  const addNewSubscirberSchema = yup.object({
+    fname: yup
+      .string()
+      .required("FirstName is required")
+      .trim()
+      .max(60, "Max character limit reached")
+      .min(3, "minimum three character required")
+      .typeError("Only characters allowed")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "FirstName can only contain Latin letters."
+      ),
+    lname: yup
+      .string()
+      .required("LastName is required")
+      .trim()
+      .max(60, "Max character limit reached")
+      .min(3, "minimum three character required")
+      .typeError("Only characters allowed")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "LastName can only contain Latin letters."
+      ),
+    civility: yup
+      .string()
+      .required("Civility is required")
+      .trim()
+      .max(60, "Max character limit reached")
+      .min(3, "minimum three character required")
+      .typeError("Only characters allowed")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "Civility can only contain Latin letters."
+      ),
+    title: yup.string().trim().max(60, "Max character limit reached"),
+    email: yup.string().email().required("email is required.").trim(),
+    phone: yup.string().required("phone is required"),
+    mobile: yup.string(),
+    company: yup.string().max(60, "Max character limit reached"),
+    address1: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .required("address1 is required")
+      .trim(""),
+    address2: yup.string().max(200, "Maximum character limit reached").trim(""),
+    address3: yup.string().max(200, "Maximum character limit reached").trim(""),
+    zipCode: yup
+      .string()
+      .max(6, "max 6 number allowed")
+      .min(5, "min 5 number required")
+      .required("zipcode is required")
+      .trim(""),
+    city: yup
+      .string()
+      .max(40, "Maximum character limit reached")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "city can only contain Latin letters."
+      )
+      .required("city is required")
+      .trim(""),
+    province: yup
+      .string()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "province can only contain Latin letters."
+      )
+      .trim(""),
+    country: yup
+      .string()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "country can only contain Latin letters."
+      )
+      .required("country is required")
+      .trim(""),
+    baddress1: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .trim(""),
+    baddress2: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .trim(""),
+    baddress3: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .trim(""),
+    bzipCode: yup.string().max(6, "max 6 number allowed").trim(""),
+    bcity: yup
+      .string()
+      .max(40, "Maximum character limit reached")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "city can only contain Latin letters."
+      )
+      .trim(""),
+    bprovince: yup
+      .string()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "province can only contain Latin letters."
+      )
+      .trim(""),
+    bcountry: yup
+      .string()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "country can only contain Latin letters."
+      )
+      .trim(""),
+
+    sameAsAbove: yup.boolean(),
+    thirdPartyPayer: yup.string(""),
+    accountingContact: yup
+      .string("")
+      .max(60, "Max character limit reached")
+      .typeError("Only characters allowed")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "accountContactName can only contain Latin letters."
+      ),
+    accountingEmail: yup.string().email(),
+    accountingPhone: yup.string(),
+    VATnumber: yup.string().max(30, "max 30 numbers"),
+    VATcode: yup.string(),
+    clientCode: yup.string(),
+    companyRegNum: yup.string(),
+    companyWebsite: yup.string(),
+    activityDomain: yup.string(),
+    contactOrigin: yup.string(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    getValues,
+    control,
+    watch,
+  } = useForm({
+    shouldFocusError: true,
+    reValidateMode: "onChange",
+    mode: "onChange",
+    resolver: yupResolver(addNewSubscirberSchema),
+    defaultValues: {
+      sameAsAbove: false,
+      address1: "",
+      baddress1: "",
+    },
+  });
+
+  const onSubmit = (data) => {
+    const {
+      fname,
+      lname,
+      email,
+      phone,
+      company,
+      address1,
+      address2,
+      address3,
+      baddress1,
+      baddress2,
+      baddress3,
+      city,
+      bcity,
+      zipCode,
+      bzipCode,
+      province,
+      country,
+      bcountry,
+      bprovince,
+      civility,
+      mobile,
+      title,
+      thirdPartyPayer,
+      accountingContact,
+      accountingEmail,
+      accountingPhone,
+      VATcode,
+      VATnumber,
+      companyRegNum,
+      companyWebsite,
+      activityDomain,
+      contactOrigin,
+      clientCode,
+    } = data;
+    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+      toast.remove();
+      toast.error("Phone is invalid");
+      return true;
+    } else if (
+      (getValues("mobile") !== "" && !isPossiblePhoneNumber(phone)) ||
+      !isValidPhoneNumber(phone)
+    ) {
+      toast.remove();
+      toast.error("Phone is invalid");
+      return true;
+    }
+    const response = dispatch(
+      handleAddNewSubscriber({
+        fname,
+        lname,
+        email,
+        title,
+        company,
+        civility,
+        phone,
+        mobile,
+        address1,
+        address2,
+        address3,
+        zipCode,
+        city,
+        province,
+        country,
+        baddress1,
+        baddress2,
+        baddress3,
+        bzipCode,
+        bcity,
+        bprovince,
+        bcountry,
+        thirdPartyPayer,
+        accountingContact,
+        accountingEmail,
+        accountingPhone,
+        VATcode,
+        VATnumber,
+        companyRegNum,
+        companyWebsite,
+        activityDomain,
+        contactOrigin,
+        clientCode,
+        token,
+        signal: AbortControllerRef,
+      })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.success("Subscriber added Successfully.", { duration: 2000 });
+          setShowAddNewSubscriber(false);
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
+  };
+
+  const watchAddress1 = watch("address1", getValues("address1"));
+  const watchAddress2 = watch("address2", getValues("address2"));
+  const watchAddress3 = watch("address3", getValues("address3"));
+  const watchCity = watch("city", getValues("city"));
+  const watchCountry = watch("country", getValues("country"));
+  const watchProvince = watch("province", getValues("province"));
+  const watchzipCode = watch("zipCode", getValues("zipCode"));
+  const sameAsAbove = watch("sameAsAbove", getValues("sameAsAbove"));
+
+  const onChange = (event) => {
+    if (event.target.checked) {
+      setValue("baddress1", watchAddress1);
+      setValue("baddress2", watchAddress2);
+      setValue("baddress3", watchAddress3);
+      setValue("bcity", watchCity);
+      setValue("bzipCode", watchzipCode);
+      setValue("bcountry", watchCountry);
+      setValue("bprovince", watchProvince);
+    } else {
+      setValue("baddress1", "");
+      setValue("baddress2", "");
+      setValue("baddress3", "");
+      setValue("bcity", "");
+      setValue("bzipCode", "");
+      setValue("bcountry", "");
+      setValue("bprovince", "");
+      setValue("sameAsAbove", false);
+    }
+  };
+
+  useEffect(() => {
+    if (getValues("sameAsAbove")) {
+      setValue("baddress1", watchAddress1);
+      setValue("baddress2", watchAddress2);
+      setValue("baddress3", watchAddress3);
+      setValue("bcity", watchCity);
+      setValue("bzipCode", watchzipCode);
+      setValue("bcountry", watchCountry);
+      setValue("bprovince", watchProvince);
+    }
+  }, [
+    watchAddress1,
+    watchAddress2,
+    watchAddress3,
+    watchCity,
+    watchCountry,
+    watchzipCode,
+    watchProvince,
+    sameAsAbove,
+  ]);
+
   return (
-    <div className="w-full lg:space-y-5 space-y-3">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full lg:space-y-5 space-y-3"
+    >
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
@@ -15,16 +343,20 @@ const AddNewSubscirber = ({
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className="gray_button"
+            className={`gray_button ${
+              addNewSubscriberLoading && "cursor-not-allowed"
+            }`}
             onClick={() => setShowAddNewSubscriber(false)}
           >
             Cancel
           </button>
           <button
-            className="green_button"
-            onClick={() => setShowAddNewSubscriber(false)}
+            className={`green_button ${
+              addNewSubscriberLoading && "cursor-not-allowed"
+            }`}
+            type="submit"
           >
-            Save
+            {addNewSubscriberLoading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
@@ -35,14 +367,16 @@ const AddNewSubscirber = ({
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* first name */}
           <div className="w-full space-y-2">
-            <label htmlFor="firstname" className="Label">
+            <label htmlFor="fname" className="Label">
               first name
             </label>
             <input
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("fname")}
             />
+            <span className="error">{errors?.fname?.message}</span>
           </div>
           {/* last  name */}
           <div className="w-full space-y-2">
@@ -53,7 +387,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("lname")}
             />
+            <span className="error">{errors?.lname?.message}</span>
           </div>
           {/* title */}
           <div className="w-full space-y-2">
@@ -64,7 +400,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("title")}
             />
+            <span className="error">{errors?.title?.message}</span>
           </div>
           {/* company */}
           <div className="w-full space-y-2">
@@ -75,7 +413,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("company")}
             />
+            <span className="error">{errors?.company?.message}</span>
           </div>
           {/* civility */}
           <div className="w-full space-y-2">
@@ -86,7 +426,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("civility")}
             />
+            <span className="error">{errors?.civility?.message}</span>
           </div>
           {/* email */}
           <div className="w-full space-y-2">
@@ -97,29 +439,89 @@ const AddNewSubscirber = ({
               type="email"
               placeholder="Type here..."
               className="input_field"
+              {...register("email")}
             />
+            <span className="error">{errors?.email?.message}</span>
           </div>
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
               phone
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
+            <Controller
+              name="phone"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("phone", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
+            <span className="error">{errors?.phone?.message}</span>
           </div>
           {/*mobile phone */}
           <div className="w-full space-y-2">
-            <label htmlFor="mobilephone" className="Label">
+            <label htmlFor="mobile" className="Label">
               mobile phone
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
+            <Controller
+              name="mobile"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("mobile", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
+            <span className="error">{errors?.mobile?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -135,7 +537,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address1")}
             />
+            <span className="error">{errors?.address1?.message}</span>
           </div>
           {/*address 2 */}
           <div className="w-full col-span-full space-y-2">
@@ -146,7 +550,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address2")}
             />
+            <span className="error">{errors?.address2?.message}</span>
           </div>
           {/*address 3 */}
           <div className="w-full col-span-full space-y-2">
@@ -157,7 +563,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address3")}
             />
+            <span className="error">{errors?.address3?.message}</span>
           </div>
           {/* postal code */}
           <div className="w-full space-y-2">
@@ -170,7 +578,9 @@ const AddNewSubscirber = ({
               className="input_field"
               maxLength={6}
               minLength={6}
+              {...register("zipCode")}
             />
+            <span className="error">{errors?.zipCode?.message}</span>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
@@ -181,7 +591,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("city")}
             />
+            <span className="error">{errors?.city?.message}</span>
           </div>
           {/* province */}
           <div className="w-full space-y-2">
@@ -192,7 +604,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("province")}
             />
+            <span className="error">{errors?.province?.message}</span>
           </div>
           {/* country */}
           <div className="w-full space-y-2">
@@ -203,10 +617,20 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("country")}
             />
+            <span className="error">{errors?.country?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
+        {/* same as above */}
+        <input
+          type="checkbox"
+          id="sameasabove"
+          {...register("sameAsAbove")}
+          onChange={onChange}
+        />{" "}
+        <label htmlFor="sameasabove">same as above</label>
         {/*billing address */}
         <p className="font-bold text-black md:text-xl">Billing Address</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
@@ -219,6 +643,8 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("baddress1")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/*address 2 */}
@@ -230,6 +656,8 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("baddress2")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/*address 3 */}
@@ -241,6 +669,8 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("baddress3")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/* postal code */}
@@ -254,6 +684,8 @@ const AddNewSubscirber = ({
               className="input_field"
               maxLength={6}
               minLength={6}
+              {...register("bzipCode")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/* city */}
@@ -265,6 +697,8 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("bcity")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/* province */}
@@ -276,6 +710,8 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("bprovince")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/* country */}
@@ -287,6 +723,8 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("bcountry")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
         </div>
@@ -295,10 +733,10 @@ const AddNewSubscirber = ({
         <p className="font-bold text-black md:text-xl">Third-Party Payer</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           <div className="w-full space-y-2">
-            <label htmlFor="third_payer" className="Label">
-              Select Third-Party Payer
+            <label htmlFor="thirdPartyPayer" className="Label">
+              select third-Party Payer
             </label>
-            <select name="third_payer" className="input_field">
+            <select {...register("thirdPartyPayer")} className="input_field">
               <option value="payer1">Payer 1</option>
               <option value="payer2">Payer 2</option>
               <option value="payer3">Payer 3</option>
@@ -319,7 +757,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("accountingContact")}
             />
+            <span className="error">{errors?.accountingContact?.message}</span>
           </div>
           {/* Accounting email*/}
           <div className="w-full space-y-2">
@@ -330,17 +770,47 @@ const AddNewSubscirber = ({
               type="email"
               placeholder="Type here..."
               className="input_field"
+              {...register("accountingEmail")}
             />
+            <span className="error">{errors?.accountingEmail?.message}</span>
           </div>
           {/* Accounting phone */}
           <div className="w-full space-y-2">
             <label htmlFor="accounting_phone" className="Label">
               Accounting phone{" "}
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
+            <Controller
+              name="accountingPhone"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("accountingPhone", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
           </div>
           {/* VAT Number */}
@@ -352,18 +822,30 @@ const AddNewSubscirber = ({
               type="number"
               placeholder="Type here..."
               className="input_field"
+              {...register("VATnumber")}
             />
           </div>
           {/* VAT Code */}
           <div className="w-full space-y-2">
-            <label htmlFor="VAT_code" className="Label">
+            <label htmlFor="VATcode" className="Label">
               VAT Code
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
+            <select
+              {...register("VATcode")}
+              name="VATcode"
               className="input_field"
-            />
+            >
+              <option value="0">Invoice VAT amount</option>
+              <option value="1">Metropolitan France</option>
+              <option value="2">
+                Tax-free invoicing - Reverse charge, Intra-Community delivery
+                Article 262 Ter of the CGI
+              </option>
+              <option value="3">
+                EU without VAT number. EU private individual Client code Code
+                Client Optionnal{" "}
+              </option>
+            </select>
           </div>
           {/* Client code */}
           <div className="w-full space-y-2">
@@ -374,7 +856,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("clientCode")}
             />
+            <span className="error">{errors?.clientCode?.message}</span>
           </div>
           {/* Company registration number */}
           <div className="w-full space-y-2">
@@ -385,7 +869,9 @@ const AddNewSubscirber = ({
               type="number"
               placeholder="Type here..."
               className="input_field"
+              {...register("companyRegNum")}
             />
+            <span className="error">{errors?.companyRegNum?.message}</span>
           </div>
           {/*Company website */}
           <div className="w-full space-y-2">
@@ -396,7 +882,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("companyWebsite")}
             />
+            <span className="error">{errors?.companyWebsite?.message}</span>
           </div>
           {/* Activity domain */}
           <div className="w-full space-y-2">
@@ -407,7 +895,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("activityDomain")}
             />
+            <span className="error">{errors?.activityDomain?.message}</span>
           </div>
           {/* Contact origin */}
           <div className="w-full space-y-2">
@@ -418,7 +908,9 @@ const AddNewSubscirber = ({
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("contactOrigin")}
             />
+            <span className="error">{errors?.contactOrigin?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -591,7 +1083,7 @@ const AddNewSubscirber = ({
           </table>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

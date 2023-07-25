@@ -13,6 +13,7 @@ import * as yup from "yup";
 import { toast } from "react-hot-toast";
 import { FaUserCircle } from "react-icons/fa";
 import {
+  handleChangeDeleteID,
   handleDeleteUSER,
   handleDeleteUser,
   handleEditUser,
@@ -23,7 +24,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
   const { singleUser, EditUserLoading, deleteUserLoading } = useSelector(
     (state) => state.root.users
   );
-  const { token } = useSelector((state) => state.root.auth);
+  const { token, role: userRole } = useSelector((state) => state.root.auth);
 
   const [prevImage, setPrevImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
@@ -164,13 +165,15 @@ const EditUserDetails = ({ setShowUserDetail }) => {
   };
 
   const handleDeleteruser = (id) => {
-    dispatch(handleDeleteUser(id));
+    dispatch(handleChangeDeleteID(id));
     const response = dispatch(
       handleDeleteUSER({ id, token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
+          dispatch(handleDeleteUser(id));
+
           toast.success("User Delete Successfully.");
           setShowUserDetail(false);
         } else if (res?.payload?.status === "error") {
@@ -211,16 +214,18 @@ const EditUserDetails = ({ setShowUserDetail }) => {
           >
             {EditUserLoading ? "Saving..." : "Save"}
           </button>
-          <button
-            className={`red_button  ${
-              deleteUserLoading && "cursor-not-allowed"
-            }`}
-            type="button"
-            onClick={() => handleDeleteruser(singleUser?._id)}
-            disabled={deleteUserLoading || EditUserLoading}
-          >
-            {deleteUserLoading ? "Deleting..." : "Delete"}
-          </button>
+          {userRole === "admin" && (
+            <button
+              className={`red_button  ${
+                deleteUserLoading && "cursor-not-allowed"
+              }`}
+              type="button"
+              onClick={() => handleDeleteruser(singleUser?._id)}
+              disabled={deleteUserLoading || EditUserLoading}
+            >
+              {deleteUserLoading ? "Deleting..." : "Delete"}
+            </button>
+          )}
         </div>
       </div>
       {/* main div */}
@@ -251,6 +256,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
             {...register("profile", {
               onChange: (e) => handleImageUpload(e),
             })}
+            accept="image/*"
           />
           <HiPencil
             role="button"

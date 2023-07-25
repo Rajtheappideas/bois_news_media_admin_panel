@@ -1,6 +1,46 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { handleFindSubscriber } from "../../redux/SubscriberSlice";
 
 const ShowSubscriberDetails = ({ setShowSubscriberDetails }) => {
+  const { singleSucriber } = useSelector((state) => state.root.subscribers);
+
+  const dispatch = useDispatch();
+
+  const {
+    fname,
+    lname,
+    company,
+    phone,
+    mobile,
+    thirdPartyPayer,
+    title,
+    email,
+    civility,
+    shippingAddress: {
+      address1,
+      address2,
+      address3,
+      city,
+      country,
+      province,
+      zipCode,
+    },
+    billingAddress,
+    billingSupplement: {
+      VATcode,
+      VATnumber,
+      accountingContact,
+      accountingEmail,
+      accountingPhone,
+      activityDomain,
+      clientCode,
+      companyRegNum,
+      companyWebsite,
+      contactOrigin,
+    },
+  } = singleSucriber;
+
   return (
     <div className="w-full lg:space-y-5 space-y-3">
       {/* title + buttons */}
@@ -11,7 +51,10 @@ const ShowSubscriberDetails = ({ setShowSubscriberDetails }) => {
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
             className="gray_button"
-            onClick={() => setShowSubscriberDetails(false)}
+            onClick={() => {
+              setShowSubscriberDetails(false);
+              dispatch(handleFindSubscriber(""));
+            }}
           >
             Cancel
           </button>
@@ -27,88 +70,56 @@ const ShowSubscriberDetails = ({ setShowSubscriberDetails }) => {
             <label htmlFor="firstname" className="Label">
               first name
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{fname}</p>
           </div>
           {/* last  name */}
           <div className="w-full space-y-2">
             <label htmlFor="lastname" className="Label">
               last name
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{lname}</p>
           </div>
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
               title
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{title}</p>
           </div>
           {/* company */}
           <div className="w-full space-y-2">
             <label htmlFor="company" className="Label">
               company
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{company !== "" ? company : "-"}</p>
           </div>
           {/* civility */}
           <div className="w-full space-y-2">
             <label htmlFor="civility" className="Label">
               civility
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{civility ?? "-"}</p>
           </div>
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
               email
             </label>
-            <input
-              type="email"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{email}</p>
           </div>
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
               phone
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{phone}</p>
           </div>
           {/*mobile phone */}
           <div className="w-full space-y-2">
             <label htmlFor="mobilephone" className="Label">
               mobile phone
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{mobile ?? "-"}</p>
           </div>
         </div>
         <hr className="my-1" />
@@ -120,79 +131,49 @@ const ShowSubscriberDetails = ({ setShowSubscriberDetails }) => {
             <label htmlFor="address1" className="Label">
               address 1
             </label>
-            <textarea
-              type="text"
-              placeholder="Type here..."
-              className="input_field min-h-[5rem] max-h-[15rem]"
-            />
+            <p className="font-semibold">{address1}</p>
           </div>
           {/*address 2 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address2" className="Label">
               address 2
             </label>
-            <textarea
-              type="text"
-              placeholder="Type here..."
-              className="input_field min-h-[5rem] max-h-[15rem]"
-            />
+            <p className="font-semibold">{address2}</p>
           </div>
           {/*address 3 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address3" className="Label">
               address 3
             </label>
-            <textarea
-              type="text"
-              placeholder="Type here..."
-              className="input_field min-h-[5rem] max-h-[15rem]"
-            />
+            <p className="font-semibold">{address3}</p>
           </div>
           {/* postal code */}
           <div className="w-full space-y-2">
             <label htmlFor="postalcode" className="Label">
               Postal code
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-              maxLength={6}
-              minLength={6}
-            />
+            <p className="font-semibold">{zipCode}</p>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
               city
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{city}</p>
           </div>
           {/* province */}
           <div className="w-full space-y-2">
             <label htmlFor="province" className="Label">
               province
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{province}</p>
           </div>
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
               country
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{country}</p>
           </div>
         </div>
         <hr className="my-1" />
@@ -204,79 +185,63 @@ const ShowSubscriberDetails = ({ setShowSubscriberDetails }) => {
             <label htmlFor="address1" className="Label">
               address 1
             </label>
-            <textarea
-              type="text"
-              placeholder="Type here..."
-              className="input_field min-h-[5rem] max-h-[15rem]"
-            />
+            <p className="font-semibold">
+              {billingAddress?.address1 !== "" ? billingAddress?.address1 : "-"}
+            </p>
           </div>
           {/*address 2 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address2" className="Label">
               address 2
             </label>
-            <textarea
-              type="text"
-              placeholder="Type here..."
-              className="input_field min-h-[5rem] max-h-[15rem]"
-            />
+            <p className="font-semibold">
+              {billingAddress?.address2 !== "" ? billingAddress?.address2 : "-"}
+            </p>
           </div>
           {/*address 3 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address3" className="Label">
               address 3
             </label>
-            <textarea
-              type="text"
-              placeholder="Type here..."
-              className="input_field min-h-[5rem] max-h-[15rem]"
-            />
+            <p className="font-semibold">
+              {billingAddress?.address3 !== "" ? billingAddress?.address3 : "-"}
+            </p>
           </div>
           {/* postal code */}
           <div className="w-full space-y-2">
             <label htmlFor="postalcode" className="Label">
               Postal code
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-              maxLength={6}
-              minLength={6}
-            />
+            <p className="font-semibold">
+              {billingAddress?.zipCode !== "" ? billingAddress?.zipCode : "-"}
+            </p>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
               city
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">
+              {billingAddress?.city !== "" ? billingAddress?.city : "-"}
+            </p>
           </div>
           {/* province */}
           <div className="w-full space-y-2">
             <label htmlFor="province" className="Label">
               province
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">
+              {billingAddress?.province !== "" ? billingAddress?.province : "-"}
+            </p>
           </div>
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
               country
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">
+              {billingAddress?.country !== "" ? billingAddress?.country : "-"}
+            </p>
           </div>
         </div>
         <hr className="my-1" />
@@ -287,12 +252,7 @@ const ShowSubscriberDetails = ({ setShowSubscriberDetails }) => {
             <label htmlFor="third_payer" className="Label">
               Select Third-Party Payer
             </label>
-            <select name="third_payer" className="input_field">
-              <option value="payer1">Payer 1</option>
-              <option value="payer2">Payer 2</option>
-              <option value="payer3">Payer 3</option>
-              <option value="payer4">Payer 4</option>
-            </select>
+            <p className="font-semibold">{thirdPartyPayer ?? "-"}</p>
           </div>
         </div>
         <hr className="my-1" />
@@ -304,110 +264,70 @@ const ShowSubscriberDetails = ({ setShowSubscriberDetails }) => {
             <label htmlFor="account_contact_name" className="Label">
               Accounting contact (name)
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{accountingContact ?? "-"}</p>
           </div>
           {/* Accounting email*/}
           <div className="w-full space-y-2">
             <label htmlFor="accounting_email" className="Label">
               Accounting email
             </label>
-            <input
-              type="email"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{accountingEmail ?? "-"}</p>
           </div>
           {/* Accounting phone */}
           <div className="w-full space-y-2">
             <label htmlFor="accounting_phone" className="Label">
               Accounting phone{" "}
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{accountingPhone ?? "-"}</p>
           </div>
           {/* VAT Number */}
           <div className="w-full space-y-2">
             <label htmlFor="VAT_number" className="Label">
               VAT Number{" "}
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{VATnumber ?? "-"}</p>
           </div>
           {/* VAT Code */}
           <div className="w-full space-y-2">
             <label htmlFor="VAT_code" className="Label">
               VAT Code
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{VATcode ?? "-"}</p>
           </div>
           {/* Client code */}
           <div className="w-full space-y-2">
             <label htmlFor="client_code" className="Label">
               Client code
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{clientCode ?? "-"}</p>
           </div>
           {/* Company registration number */}
           <div className="w-full space-y-2">
             <label htmlFor="company_registration_number" className="Label">
               Company registration number
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{companyRegNum ?? "-"}</p>
           </div>
           {/*Company website */}
           <div className="w-full space-y-2">
             <label htmlFor="company_website" className="Label">
               Company website
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{companyWebsite ?? "-"}</p>
           </div>
           {/* Activity domain */}
           <div className="w-full space-y-2">
             <label htmlFor="activity_domain" className="Label">
               Activity domain{" "}
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{activityDomain ?? "-"}</p>
           </div>
           {/* Contact origin */}
           <div className="w-full space-y-2">
             <label htmlFor="contact_origin" className="Label">
               Contact origin{" "}
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
-              className="input_field"
-            />
+            <p className="font-semibold">{contactOrigin ?? "-"}</p>
           </div>
         </div>
         <hr className="my-1" />

@@ -1,10 +1,366 @@
 import React from "react";
 import { BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
+import { toast } from "react-hot-toast";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import {
+  isPossiblePhoneNumber,
+  isValidPhoneNumber,
+} from "react-phone-number-input";
+import { Controller, useForm } from "react-hook-form";
+import {
+  handleChangeDeleteID,
+  handleDeleteSUBSCRIBER,
+  handleDeleteSubscriber,
+  handleEditSubscriber,
+  handleFindSubscriber,
+} from "../../redux/SubscriberSlice";
 
 const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
+  const { editLoading, deleteLoading, singleSucriber } = useSelector(
+    (state) => state.root.subscribers
+  );
+  const { token, role } = useSelector((state) => state.root.auth);
+
+  const dispatch = useDispatch();
+
+  const { AbortControllerRef } = useAbortApiCall();
+
+  const {
+    fname,
+    lname,
+    company,
+    phone,
+    mobile,
+    thirdPartyPayer,
+    title,
+    email,
+    civility,
+    shippingAddress: {
+      address1,
+      address2,
+      address3,
+      city,
+      country,
+      province,
+      zipCode,
+    },
+    billingAddress,
+    billingSupplement,
+    _id,
+  } = singleSucriber;
+
+  const EditSubscirberSchema = yup.object({
+    fname: yup
+      .string()
+      .required("FirstName is required")
+      .trim()
+      .max(60, "Max character limit reached")
+      .min(3, "minimum three character required")
+      .typeError("Only characters allowed")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "FirstName can only contain Latin letters."
+      ),
+    lname: yup
+      .string()
+      .required("LastName is required")
+      .trim()
+      .max(60, "Max character limit reached")
+      .min(3, "minimum three character required")
+      .typeError("Only characters allowed")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "LastName can only contain Latin letters."
+      ),
+    civility: yup
+      .string()
+      .required("Civility is required")
+      .trim()
+      .max(60, "Max character limit reached")
+      .min(3, "minimum three character required")
+      .typeError("Only characters allowed")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "Civility can only contain Latin letters."
+      ),
+    title: yup.string().trim().max(60, "Max character limit reached"),
+    email: yup.string().email().required("email is required.").trim(),
+    phone: yup.string().required("phone is required"),
+    mobile: yup.string(),
+    company: yup.string().max(60, "Max character limit reached"),
+    address1: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .required("address1 is required")
+      .trim(""),
+    address2: yup.string().max(200, "Maximum character limit reached").trim(""),
+    address3: yup.string().max(200, "Maximum character limit reached").trim(""),
+    zipCode: yup
+      .string()
+      .max(6, "max 6 number allowed")
+      .min(5, "min 5 number required")
+      .required("zipcode is required")
+      .trim(""),
+    city: yup
+      .string()
+      .max(40, "Maximum character limit reached")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "city can only contain Latin letters."
+      )
+      .required("city is required")
+      .trim(""),
+    province: yup
+      .string()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "province can only contain Latin letters."
+      )
+      .trim(""),
+    country: yup
+      .string()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "country can only contain Latin letters."
+      )
+      .required("country is required")
+      .trim(""),
+    baddress1: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .trim(""),
+    baddress2: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .trim(""),
+    baddress3: yup
+      .string()
+      .max(200, "Maximum character limit reached")
+      .trim(""),
+    bzipCode: yup.string().max(6, "max 6 number allowed").trim(""),
+    bcity: yup
+      .string()
+      .max(40, "Maximum character limit reached")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "city can only contain Latin letters."
+      )
+      .trim(""),
+    bprovince: yup
+      .string()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "province can only contain Latin letters."
+      )
+      .trim(""),
+    bcountry: yup
+      .string()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "country can only contain Latin letters."
+      )
+      .trim(""),
+
+    sameAsAbove: yup.boolean(),
+    thirdPartyPayer: yup.string(""),
+    accountingContact: yup
+      .string("")
+      .max(60, "Max character limit reached")
+      .typeError("Only characters allowed")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "accountContactName can only contain Latin letters."
+      ),
+    accountingEmail: yup.string().email(),
+    accountingPhone: yup.string(),
+    VATnumber: yup.string().max(30, "max 30 numbers"),
+    VATcode: yup.string(),
+    clientCode: yup.string(),
+    companyRegNum: yup.string(),
+    companyWebsite: yup.string(),
+    activityDomain: yup.string(),
+    contactOrigin: yup.string(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    getValues,
+    control,
+    watch,
+  } = useForm({
+    shouldFocusError: true,
+    reValidateMode: "onChange",
+    mode: "onChange",
+    resolver: yupResolver(EditSubscirberSchema),
+    defaultValues: {
+      sameAsAbove: false,
+      fname,
+      lname,
+      company,
+      phone,
+      mobile,
+      thirdPartyPayer,
+      title,
+      email,
+      civility,
+      address1,
+      address2,
+      address3,
+      city,
+      country,
+      province,
+      zipCode,
+      baddress1: billingAddress?.address1,
+      baddress2: billingAddress?.address2,
+      baddress3: billingAddress?.address3,
+      bcity: billingAddress?.city,
+      bcountry: billingAddress?.country,
+      bprovince: billingAddress?.province,
+      bzipCode: billingAddress?.zipCode,
+      VATcode: billingSupplement?.VATcode,
+      VATnumber: billingSupplement?.VATnumber,
+      accountingContact: billingSupplement?.accountingContact,
+      accountingEmail: billingSupplement?.accountingEmail,
+      accountingPhone: billingSupplement?.accountingPhone,
+      activityDomain: billingSupplement?.activityDomain,
+      clientCode: billingSupplement?.clientCode,
+      companyRegNum: billingSupplement?.companyRegNum,
+      companyWebsite: billingSupplement?.companyWebsite,
+      contactOrigin: billingSupplement?.contactOrigin,
+    },
+  });
+
+  const onSubmit = (data) => {
+    const {
+      fname,
+      lname,
+      email,
+      phone,
+      company,
+      address1,
+      address2,
+      address3,
+      baddress1,
+      baddress2,
+      baddress3,
+      city,
+      bcity,
+      zipCode,
+      bzipCode,
+      province,
+      country,
+      bcountry,
+      bprovince,
+      civility,
+      mobile,
+      title,
+      thirdPartyPayer,
+      accountingContact,
+      accountingEmail,
+      accountingPhone,
+      VATcode,
+      VATnumber,
+      companyRegNum,
+      companyWebsite,
+      activityDomain,
+      contactOrigin,
+      clientCode,
+    } = data;
+    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+      toast.remove();
+      toast.error("Phone is invalid");
+      return true;
+    } else if (
+      (getValues("mobile") !== "" && !isPossiblePhoneNumber(phone)) ||
+      !isValidPhoneNumber(phone)
+    ) {
+      toast.remove();
+      toast.error("Phone is invalid");
+      return true;
+    }
+    const response = dispatch(
+      handleEditSubscriber({
+        fname,
+        lname,
+        email,
+        title,
+        company,
+        civility,
+        phone,
+        mobile,
+        address1,
+        address2,
+        address3,
+        zipCode,
+        city,
+        province,
+        country,
+        baddress1,
+        baddress2,
+        baddress3,
+        bzipCode,
+        bcity,
+        bprovince,
+        bcountry,
+        thirdPartyPayer,
+        accountingContact,
+        accountingEmail,
+        accountingPhone,
+        VATcode,
+        VATnumber,
+        companyRegNum,
+        companyWebsite,
+        activityDomain,
+        contactOrigin,
+        clientCode,
+        id: _id,
+        token,
+        signal: AbortControllerRef,
+      })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.success("Subscriber added Successfully.", { duration: 2000 });
+          setShowEditSubscriberDetails(false);
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
+  };
+
+  const handleDeletesubscriber = (id) => {
+    dispatch(handleChangeDeleteID(id));
+    const response = dispatch(
+      handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          dispatch(handleDeleteSubscriber(id));
+          toast.success("Subscriber Deleted Successfully.");
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
+  };
+
   return (
-    <div className="w-full lg:space-y-5 space-y-3">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full lg:space-y-5 space-y-3"
+    >
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
@@ -12,23 +368,37 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className="gray_button"
-            onClick={() => setShowEditSubscriberDetails(false)}
+            className={`gray_button ${
+              (editLoading || deleteLoading) && "cursor-not-allowed"
+            }`}
+            onClick={() => {
+              setShowEditSubscriberDetails(false);
+              dispatch(handleFindSubscriber(""));
+            }}
+            disabled={deleteLoading || editLoading}
           >
             Cancel
           </button>
           <button
-            className="green_button"
-            onClick={() => setShowEditSubscriberDetails(false)}
+            className={`green_button ${
+              (editLoading || deleteLoading) && "cursor-not-allowed"
+            } `}
+            disabled={deleteLoading || editLoading}
+            type="submit"
           >
-            Save
+            {editLoading ? "Saving..." : "Save"}
           </button>
-          <button
-            className="red_button"
-            onClick={() => setShowEditSubscriberDetails(false)}
-          >
-            Delete
-          </button>
+          {role === "admin" && (
+            <button
+              className={`red_button ${
+                (editLoading || deleteLoading) && "cursor-not-allowed"
+              }`}
+              disabled={deleteLoading || editLoading}
+              onClick={() => dispatch(handleDeletesubscriber(false))}
+            >
+              {deleteLoading ? "Deleting..." : "Delete"}
+            </button>
+          )}
         </div>
       </div>
       {/* main div */}
@@ -38,14 +408,16 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* first name */}
           <div className="w-full space-y-2">
-            <label htmlFor="firstname" className="Label">
+            <label htmlFor="fname" className="Label">
               first name
             </label>
             <input
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("fname")}
             />
+            <span className="error">{errors?.fname?.message}</span>
           </div>
           {/* last  name */}
           <div className="w-full space-y-2">
@@ -56,7 +428,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("lname")}
             />
+            <span className="error">{errors?.lname?.message}</span>
           </div>
           {/* title */}
           <div className="w-full space-y-2">
@@ -67,7 +441,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("title")}
             />
+            <span className="error">{errors?.title?.message}</span>
           </div>
           {/* company */}
           <div className="w-full space-y-2">
@@ -78,7 +454,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("company")}
             />
+            <span className="error">{errors?.company?.message}</span>
           </div>
           {/* civility */}
           <div className="w-full space-y-2">
@@ -89,7 +467,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("civility")}
             />
+            <span className="error">{errors?.civility?.message}</span>
           </div>
           {/* email */}
           <div className="w-full space-y-2">
@@ -100,29 +480,91 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="email"
               placeholder="Type here..."
               className="input_field"
+              {...register("email")}
             />
+            <span className="error">{errors?.email?.message}</span>
           </div>
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
               phone
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
+            <Controller
+              name="phone"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("phone", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  value={getValues("phone")}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
+            <span className="error">{errors?.phone?.message}</span>
           </div>
           {/*mobile phone */}
           <div className="w-full space-y-2">
-            <label htmlFor="mobilephone" className="Label">
+            <label htmlFor="mobile" className="Label">
               mobile phone
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
+            <Controller
+              name="mobile"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("mobile", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  value={getValues("mobile")}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
+            <span className="error">{errors?.mobile?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -138,7 +580,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address1")}
             />
+            <span className="error">{errors?.address1?.message}</span>
           </div>
           {/*address 2 */}
           <div className="w-full col-span-full space-y-2">
@@ -149,7 +593,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address2")}
             />
+            <span className="error">{errors?.address2?.message}</span>
           </div>
           {/*address 3 */}
           <div className="w-full col-span-full space-y-2">
@@ -160,7 +606,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address3")}
             />
+            <span className="error">{errors?.address3?.message}</span>
           </div>
           {/* postal code */}
           <div className="w-full space-y-2">
@@ -173,7 +621,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               className="input_field"
               maxLength={6}
               minLength={6}
+              {...register("zipCode")}
             />
+            <span className="error">{errors?.zipCode?.message}</span>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
@@ -184,7 +634,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("city")}
             />
+            <span className="error">{errors?.city?.message}</span>
           </div>
           {/* province */}
           <div className="w-full space-y-2">
@@ -195,7 +647,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("province")}
             />
+            <span className="error">{errors?.province?.message}</span>
           </div>
           {/* country */}
           <div className="w-full space-y-2">
@@ -206,7 +660,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("country")}
             />
+            <span className="error">{errors?.country?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -222,6 +678,8 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("baddress1")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/*address 2 */}
@@ -233,6 +691,8 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("baddress2")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/*address 3 */}
@@ -244,6 +704,8 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("baddress3")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/* postal code */}
@@ -257,6 +719,8 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               className="input_field"
               maxLength={6}
               minLength={6}
+              {...register("bzipCode")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/* city */}
@@ -268,6 +732,8 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("bcity")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/* province */}
@@ -279,6 +745,8 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("bprovince")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
           {/* country */}
@@ -290,6 +758,8 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("bcountry")}
+              disabled={getValues("sameAsAbove")}
             />
           </div>
         </div>
@@ -298,10 +768,10 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         <p className="font-bold text-black md:text-xl">Third-Party Payer</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           <div className="w-full space-y-2">
-            <label htmlFor="third_payer" className="Label">
-              Select Third-Party Payer
+            <label htmlFor="thirdPartyPayer" className="Label">
+              select third-Party Payer
             </label>
-            <select name="third_payer" className="input_field">
+            <select {...register("thirdPartyPayer")} className="input_field">
               <option value="payer1">Payer 1</option>
               <option value="payer2">Payer 2</option>
               <option value="payer3">Payer 3</option>
@@ -322,7 +792,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("accountingContact")}
             />
+            <span className="error">{errors?.accountingContact?.message}</span>
           </div>
           {/* Accounting email*/}
           <div className="w-full space-y-2">
@@ -333,17 +805,48 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="email"
               placeholder="Type here..."
               className="input_field"
+              {...register("accountingEmail")}
             />
+            <span className="error">{errors?.accountingEmail?.message}</span>
           </div>
           {/* Accounting phone */}
           <div className="w-full space-y-2">
             <label htmlFor="accounting_phone" className="Label">
               Accounting phone{" "}
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
+            <Controller
+              name="accountingPhone"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("accountingPhone", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  value={getValues("accountingPhone")}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
           </div>
           {/* VAT Number */}
@@ -355,18 +858,30 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="number"
               placeholder="Type here..."
               className="input_field"
+              {...register("VATnumber")}
             />
           </div>
           {/* VAT Code */}
           <div className="w-full space-y-2">
-            <label htmlFor="VAT_code" className="Label">
+            <label htmlFor="VATcode" className="Label">
               VAT Code
             </label>
-            <input
-              type="text"
-              placeholder="Type here..."
+            <select
+              {...register("VATcode")}
+              name="VATcode"
               className="input_field"
-            />
+            >
+              <option value="0">Invoice VAT amount</option>
+              <option value="1">Metropolitan France</option>
+              <option value="2">
+                Tax-free invoicing - Reverse charge, Intra-Community delivery
+                Article 262 Ter of the CGI
+              </option>
+              <option value="3">
+                EU without VAT number. EU private individual Client code Code
+                Client Optionnal{" "}
+              </option>
+            </select>
           </div>
           {/* Client code */}
           <div className="w-full space-y-2">
@@ -377,7 +892,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("clientCode")}
             />
+            <span className="error">{errors?.clientCode?.message}</span>
           </div>
           {/* Company registration number */}
           <div className="w-full space-y-2">
@@ -388,7 +905,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="number"
               placeholder="Type here..."
               className="input_field"
+              {...register("companyRegNum")}
             />
+            <span className="error">{errors?.companyRegNum?.message}</span>
           </div>
           {/*Company website */}
           <div className="w-full space-y-2">
@@ -399,7 +918,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("companyWebsite")}
             />
+            <span className="error">{errors?.companyWebsite?.message}</span>
           </div>
           {/* Activity domain */}
           <div className="w-full space-y-2">
@@ -410,7 +931,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("activityDomain")}
             />
+            <span className="error">{errors?.activityDomain?.message}</span>
           </div>
           {/* Contact origin */}
           <div className="w-full space-y-2">
@@ -421,7 +944,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("contactOrigin")}
             />
+            <span className="error">{errors?.contactOrigin?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -588,7 +1113,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           </table>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

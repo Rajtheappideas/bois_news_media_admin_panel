@@ -22,6 +22,7 @@ const AddMagazineDistribution = ({
   }, [handleClickOutside]);
 
   function handleClickOutside() {
+    console.log(":Asdsad");
     handleClosePopup();
   }
 
@@ -105,7 +106,7 @@ const AddMagazineDistribution = ({
             </div>
             <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
               <label htmlFor="renewal_date" className="Label">
-                Sub state
+                Renewal state
               </label>
               <input
                 type="date"
