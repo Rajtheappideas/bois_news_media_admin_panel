@@ -1,8 +1,173 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
+import { toast } from "react-hot-toast";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import {
+  isPossiblePhoneNumber,
+  isValidPhoneNumber,
+} from "react-phone-number-input";
+import { handleAddNewProspect } from "../../redux/ProspectSlice";
 
 const AddNewProspect = ({ setShowAddNewProspect }) => {
+  const { addNewProspectLoading } = useSelector((state) => state.root.users);
+  const { token } = useSelector((state) => state.root.auth);
+
+  const dispatch = useDispatch();
+
+  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
+
+  const addNewProspectSchema = yup.object(
+    {
+      name: yup
+        .string()
+        .required("Name is required")
+        .trim()
+        .max(60, "Max character limit reached")
+        .min(3, "minimum three character required")
+        .typeError("Only characters allowed")
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          "Name can only contain Latin letters."
+        ),
+      baddress: yup
+        .string()
+        .max(200, "Maximum character limit reached")
+        .required("address is required")
+        .trim(""),
+      bzipCode: yup
+        .string()
+        .max(6, "max 6 number allowed")
+        .min(5, "min 5 number required")
+        .required("zipcode is required")
+        .trim(""),
+      bcity: yup
+        .string()
+        .max(40, "Maximum character limit reached")
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          "city can only contain Latin letters."
+        )
+        .required("city is required")
+        .trim(""),
+      bcountry: yup
+        .string()
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          "country can only contain Latin letters."
+        )
+        .required("country is required")
+        .trim(""),
+      officeNumber: yup
+        .string()
+        .required("office Number is required")
+        .max(15, "maximum 15 numbers!!!"),
+      mobile: yup.string().required("mobile is required"),
+      bphone: yup.string().required("phone is required"),
+      email: yup.string().email().required("email is required.").trim(),
+      bemail: yup.string().email().required("email is required.").trim(),
+      contactName: yup.string().required("contact name is required."),
+      industry: yup.string().required("industry is required."),
+      website: yup.string(),
+    },
+    [["website", "website"]]
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    getValues,
+    control,
+  } = useForm({
+    shouldFocusError: true,
+    reValidateMode: "onChange",
+    mode: "onChange",
+    resolver: yupResolver(addNewProspectSchema),
+    defaultValues: {},
+  });
+
+  const onSubmit = (data) => {
+    const {
+      name,
+      industry,
+      website,
+      email,
+      mobile,
+      officeNumber,
+      contactName,
+      bemail,
+      bphone,
+      baddress,
+      bcity,
+      bcountry,
+      bzipCode,
+    } = data;
+    if (!isPossiblePhoneNumber(bphone) || !isValidPhoneNumber(bphone)) {
+      toast.remove();
+      toast.error("Phone is invalid");
+      return true;
+    } else if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
+      toast.remove();
+      toast.error("mobile phone is invalid");
+      return true;
+    } else if (
+      website !== "" &&
+      !/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_-]+=[a-zA-Z0-9-%-_]+&?)?$/.test(
+        website
+      )
+    ) {
+      toast.remove();
+      toast.error("Enter Valid URL!!!");
+      return true;
+    }
+    const response = dispatch(
+      handleAddNewProspect({
+        name,
+        industry,
+        website,
+        email,
+        mobile,
+        officeNumber,
+        contactName,
+        bemail,
+        bphone,
+        baddress,
+        bcity,
+        bcountry,
+        bzipCode,
+        token,
+        signal: AbortControllerRef,
+      })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.success("Prospect added Successfully.", { duration: 2000 });
+          setShowAddNewProspect(false);
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      abortApiCall();
+    };
+  }, []);
+
   return (
-    <div className="w-full lg:space-y-5 space-y-3">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full lg:space-y-5 space-y-3"
+    >
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
@@ -12,14 +177,16 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           <button
             className="gray_button"
             onClick={() => setShowAddNewProspect(false)}
+            disabled={addNewProspectLoading}
           >
             Cancel
           </button>
           <button
+            type="submit"
             className="green_button"
-            onClick={() => setShowAddNewProspect(false)}
+            disabled={addNewProspectLoading}
           >
-            Save
+            {addNewProspectLoading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
@@ -37,18 +204,26 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("name")}
             />
+            <span className="error">{errors?.name?.message}</span>
           </div>
           {/* industry */}
           <div className="w-full space-y-2">
             <label htmlFor="industry" className="Label">
               industry
             </label>
-            <select className="input_field">
+            <select
+              itemRef={register("industry", { required: true })}
+              {...register("industry", { required: true })}
+              className="input_field"
+            >
+              <option label="select industry"></option>
               <option value="option1">option1</option>
               <option value="option2">option2</option>
               <option value="option3">option3</option>
             </select>
+            <span className="error">{errors?.industry?.message}</span>
           </div>
           {/* website */}
           <div className="w-full space-y-2">
@@ -59,7 +234,9 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("website")}
             />
+            <span className="error">{errors?.website?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -75,18 +252,49 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="email"
               placeholder="Type here..."
               className="input_field"
+              {...register("email")}
             />
+            <span className="error">{errors?.email?.message}</span>
           </div>
           {/* mobile number */}
           <div className="w-full space-y-2">
             <label htmlFor="mobile_number" className="Label">
               mobile number
             </label>
-            <select className="input_field">
-              <option value="option1">option1</option>
-              <option value="option2">option2</option>
-              <option value="option3">option3</option>
-            </select>
+            <Controller
+              name="mobile"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("mobile", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
+            />
+            <span className="error">{errors?.mobile?.message}</span>
           </div>
           {/* office number */}
           <div className="w-full space-y-2">
@@ -94,10 +302,12 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               office number
             </label>
             <input
-              type="text"
+              type="number"
               placeholder="Type here..."
               className="input_field"
+              {...register("officeNumber")}
             />
+            <span className="error">{errors?.officeNumber?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -113,7 +323,9 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("contactName")}
             />
+            <span className="error">{errors?.contactName?.message}</span>
           </div>
           {/* email */}
           <div className="w-full space-y-2">
@@ -124,18 +336,49 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="email"
               placeholder="Type here..."
               className="input_field"
+              {...register("bemail")}
             />
+            <span className="error">{errors?.bemail?.message}</span>
           </div>
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
               phone
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
+            <Controller
+              name="bphone"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("bphone", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
+            <span className="error">{errors?.bphone?.message}</span>
           </div>
           {/* company address */}
           <div className="w-full col-span-full space-y-2">
@@ -145,7 +388,9 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
             <textarea
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("baddress")}
             />
+            <span className="error">{errors?.baddress?.message}</span>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
@@ -156,7 +401,9 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("bcity")}
             />
+            <span className="error">{errors?.bcity?.message}</span>
           </div>
           {/* country */}
           <div className="w-full space-y-2">
@@ -167,7 +414,9 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("bcountry")}
             />
+            <span className="error">{errors?.bcountry?.message}</span>
           </div>
           {/* zipcode */}
           <div className="w-full space-y-2">
@@ -180,11 +429,13 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               className="input_field"
               maxLength={6}
               minLength={6}
+              {...register("bzipCode")}
             />
+            <span className="error">{errors?.bzipCode?.message}</span>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

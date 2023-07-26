@@ -121,41 +121,44 @@ const ResetPassword = () => {
               onSubmit={handleSubmit(onSubmit)}
             >
               {/* new password */}
-              <div className="space-y-1 relative">
+              <div className="space-y-1 ">
                 <label
                   className="label block font-semibold text-left text-lg"
                   htmlFor="password"
                 >
                   New password
                 </label>{" "}
-                <input
-                  {...register("password")}
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  className="input_field"
-                />
+                <div className="relative h-auto">
+                  <input
+                    {...register("password")}
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className="input_field"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <BsEyeFill
+                        size={24}
+                        className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
+                      />
+                    ) : (
+                      <BsEyeSlashFill
+                        size={24}
+                        className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
+                      />
+                    )}
+                  </button>
+                </div>
                 <span role="alert" className="error">
                   {errors?.password?.message}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <BsEyeFill
-                      size={24}
-                      className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
-                    />
-                  ) : (
-                    <BsEyeSlashFill
-                      size={24}
-                      className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
-                    />
-                  )}
-                </button>
               </div>
               {/* confirm password */}
-              <div className="space-y-1 relative">
+              <div className="space-y-1">
                 <label
                   className="label block font-semibold text-left text-lg"
                   htmlFor="confirm_password"
@@ -171,18 +174,17 @@ const ResetPassword = () => {
                 <span role="alert" className="error">
                   {errors?.confirmPassword?.message}
                 </span>
+                {/* butons */}
+                <button
+                  type="submit"
+                  className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full ${
+                    loading && "cursor-not-allowed"
+                  } `}
+                  disabled={loading}
+                >
+                  {loading ? "Submitting..." : "Submit"}
+                </button>
               </div>
-
-              {/* butons */}
-              <button
-                type="submit"
-                className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full ${
-                  loading && "cursor-not-allowed"
-                } `}
-                disabled={loading}
-              >
-                {loading ? "Submitting..." : "Submit"}
-              </button>
             </form>
           </section>
         )}

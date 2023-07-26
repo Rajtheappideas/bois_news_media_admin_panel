@@ -40,9 +40,9 @@ const Users = () => {
   let displayUsers = [];
   if (!loading) {
     displayUsers =
-      users.length > 0 && users.slice(pageVisited, usersPerPage + pageVisited);
+      users?.length > 0 && users.slice(pageVisited, usersPerPage + pageVisited);
   }
-  const pageCount = Math.ceil(users.length / usersPerPage);
+  const pageCount = Math.ceil(users?.length / usersPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
@@ -57,7 +57,7 @@ const Users = () => {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           dispatch(handleDeleteUser(id));
-          toast.success("User Delete Successfully.");
+          toast.success("User Deleted Successfully.");
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
         }
@@ -124,11 +124,11 @@ const Users = () => {
                       <span>ID</span>
                     </label>
                   </th>
-                  <th className="p-4">Joining Date</th>
-                  <th className="p-4">Name</th>
-                  <th className="p-4">Email</th>
-                  <th className="p-4">Phone</th>
-                  <th className="p-4">Role</th>
+                  <th className="p-4 text-left">Joining Date</th>
+                  <th className="p-4 text-left">Name</th>
+                  <th className="p-4 text-left">Email</th>
+                  <th className="p-4 text-left">Phone</th>
+                  <th className="p-4 text-left">Role</th>
                   <th className="p-4">Action</th>
                 </tr>
               </thead>
@@ -155,20 +155,20 @@ const Users = () => {
                           </span>
                         </label>
                       </td>
-                      <td className="text-center p-4 whitespace-nowrap">
+                      <td className="text-left p-4 whitespace-nowrap">
                         {moment(user?.date).format("LL")}
                       </td>
-                      <td className="text-center p-4 whitespace-nowrap">
+                      <td className="text-left p-4 whitespace-nowrap">
                         {user?.name ?? "-"}
                       </td>
-                      <td className="text-center p-4 whitespace-nowrap">
+                      <td className="text-left p-4 whitespace-nowrap">
                         {user?.email ?? "-"}
                       </td>
-                      <td className="text-center p-4 whitespace-nowrap">
+                      <td className="text-left p-4 whitespace-nowrap">
                         {user?.phone ?? "-"}
                       </td>
-                      <td className="text-center p-4">{user?.role ?? "-"}</td>
-                      <td className="flex items-center justify-start p-4">
+                      <td className="text-left p-4">{user?.role ?? "-"}</td>
+                      <td className="flex items-center justify-center p-4">
                         {role === "admin" || role === "editor" ? (
                           <button
                             onClick={() => {
@@ -237,10 +237,10 @@ const Users = () => {
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
               Showing{" "}
-              {(pageNumber + 1) * usersPerPage > users.length
-                ? users.length
+              {(pageNumber + 1) * usersPerPage > users?.length ?? "-"
+                ? users?.length ?? "-"
                 : (pageNumber + 1) * usersPerPage}{" "}
-              from {users.length} users
+              from {users?.length ?? "-"} users
             </p>
             <ReactPaginate
               onPageChange={changePage}

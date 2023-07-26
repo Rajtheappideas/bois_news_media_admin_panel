@@ -4,8 +4,16 @@ import { FaRegHandshake } from "react-icons/fa";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 const Dashboard = ({ setActiveComponent }) => {
+  const { users, loading } = useSelector((state) => state.root.users);
+  const { subscribers } = useSelector((state) => state.root.subscribers);
+  const { prospects } = useSelector((state) => state.root.prospects);
+  const { partners } = useSelector((state) => state.root.partners);
+  const { orders } = useSelector((state) => state.root.orders);
+  const { magazines } = useSelector((state) => state.root.magazines);
+
   return (
     <div className=" w-full grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 justify-items-stretch items-center place-items-start md:gap-5 gap-3">
       {/* users */}
@@ -19,7 +27,9 @@ const Dashboard = ({ setActiveComponent }) => {
           </p>
           <p className="font-normal text-lg">Users</p>
         </div>
-        <div className="text-2xl font-semibold">12</div>
+        <div className="text-2xl font-semibold">
+          {loading ? "-" : users?.length > 0 ? users?.length : "00"}
+        </div>
       </div>
       {/* subscribers */}
       <div
@@ -32,7 +42,10 @@ const Dashboard = ({ setActiveComponent }) => {
           </p>
           <p className="font-normal text-lg">Subscribers</p>
         </div>
-        <div className="text-2xl font-semibold">100</div>
+        <div className="text-2xl font-semibold">
+          {" "}
+          {loading ? "-" : subscribers?.length > 0 ? subscribers?.length : "00"}
+        </div>
       </div>
       {/* prospect */}
       <div
@@ -45,7 +58,9 @@ const Dashboard = ({ setActiveComponent }) => {
           </p>
           <p className="font-normal text-lg">Prospect</p>
         </div>
-        <div className="text-2xl font-semibold">4</div>
+        <div className="text-2xl font-semibold">
+          {loading ? "-" : prospects?.length > 0 ? prospects?.length : "00"}
+        </div>
       </div>
       {/* partners */}
       <div
@@ -58,7 +73,9 @@ const Dashboard = ({ setActiveComponent }) => {
           </p>
           <p className="font-normal text-lg">Partners</p>
         </div>
-        <div className="text-2xl font-semibold">8</div>
+        <div className="text-2xl font-semibold">
+          {loading ? "-" : partners?.length > 0 ? partners?.length : "00"}
+        </div>
       </div>
       {/* magazine */}
       <div
@@ -71,7 +88,10 @@ const Dashboard = ({ setActiveComponent }) => {
           </p>
           <p className="font-normal text-lg">Magazine</p>
         </div>
-        <div className="text-2xl font-semibold">120</div>
+        <div className="text-2xl font-semibold">
+          {" "}
+          {loading ? "-" : magazines?.length > 0 ? magazines?.length : "00"}
+        </div>
       </div>
       {/* orders */}
       <div
@@ -84,7 +104,10 @@ const Dashboard = ({ setActiveComponent }) => {
           </p>
           <p className="font-normal text-lg">Orders</p>
         </div>
-        <div className="text-2xl font-semibold">68</div>
+        <div className="text-2xl font-semibold">
+          {" "}
+          {loading ? "-" : orders?.length > 0 ? orders?.length : "00"}
+        </div>
       </div>
     </div>
   );

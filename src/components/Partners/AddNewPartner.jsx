@@ -1,8 +1,173 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
+import { toast } from "react-hot-toast";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import {
+  isPossiblePhoneNumber,
+  isValidPhoneNumber,
+} from "react-phone-number-input";
+import { handleAddNewPartner } from "../../redux/PartnerSlice";
 
 const AddNewPartner = ({ setShowAddnewPartner }) => {
+  const { addNewPartnerLoading } = useSelector((state) => state.root.users);
+  const { token } = useSelector((state) => state.root.auth);
+
+  const dispatch = useDispatch();
+
+  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
+
+  const addNewPartnerSchema = yup.object(
+    {
+      name: yup
+        .string()
+        .required("Name is required")
+        .trim()
+        .max(60, "Max character limit reached")
+        .min(3, "minimum three character required")
+        .typeError("Only characters allowed")
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          "Name can only contain Latin letters."
+        ),
+      companyAddress: yup
+        .string()
+        .max(200, "Maximum character limit reached")
+        .required("address is required")
+        .trim(""),
+      zipCode: yup
+        .string()
+        .max(6, "max 6 number allowed")
+        .min(5, "min 5 number required")
+        .required("zipcode is required")
+        .trim(""),
+      city: yup
+        .string()
+        .max(40, "Maximum character limit reached")
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          "city can only contain Latin letters."
+        )
+        .required("city is required")
+        .trim(""),
+      country: yup
+        .string()
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          "country can only contain Latin letters."
+        )
+        .required("country is required")
+        .trim(""),
+      officeNumber: yup
+        .string()
+        .required("office Number is required")
+        .max(15, "maximum 15 numbers!!!"),
+      mobile: yup.string().required("mobile phone is required"),
+      phone: yup.string().required("phone is required"),
+      email: yup.string().email().required("email is required.").trim(),
+      aemail: yup.string().email().required("email is required.").trim(),
+      contactName: yup.string().required("contact name is required."),
+      industry: yup.string().required("industry is required."),
+      website: yup.string(),
+    },
+    [["website", "website"]]
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    getValues,
+    control,
+  } = useForm({
+    shouldFocusError: true,
+    reValidateMode: "onChange",
+    mode: "onChange",
+    resolver: yupResolver(addNewPartnerSchema),
+    defaultValues: {},
+  });
+
+  const onSubmit = (data) => {
+    const {
+      name,
+      industry,
+      website,
+      email,
+      mobile,
+      officeNumber,
+      contactName,
+      aemail,
+      phone,
+      companyAddress,
+      city,
+      country,
+      zipCode,
+    } = data;
+    if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
+      toast.remove();
+      toast.error("mobiel phone is invalid");
+      return true;
+    } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+      toast.remove();
+      toast.error("Phone is invalid");
+      return true;
+    } else if (
+      website !== "" &&
+      !/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_-]+=[a-zA-Z0-9-%-_]+&?)?$/.test(
+        website
+      )
+    ) {
+      toast.remove();
+      toast.error("Enter Valid URL!!!");
+      return true;
+    }
+    const response = dispatch(
+      handleAddNewPartner({
+        name,
+        industry,
+        website,
+        email,
+        mobile,
+        officeNumber,
+        contactName,
+        aemail,
+        phone,
+        companyAddress,
+        city,
+        country,
+        zipCode,
+        token,
+        signal: AbortControllerRef,
+      })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.success("Partner added Successfully.", { duration: 2000 });
+          setShowAddnewPartner(false);
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      abortApiCall();
+    };
+  }, []);
+
   return (
-    <div className="w-full lg:space-y-5 space-y-3">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full lg:space-y-5 space-y-3"
+    >
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
@@ -10,16 +175,23 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className="gray_button"
+            className={`gray_button ${
+              addNewPartnerLoading && "cursor-not-allowed"
+            } `}
             onClick={() => setShowAddnewPartner(false)}
+            disabled={addNewPartnerLoading}
+            type="button"
           >
             Cancel
           </button>
           <button
-            className="green_button"
-            onClick={() => setShowAddnewPartner(false)}
+            className={`green_button ${
+              addNewPartnerLoading && "cursor-not-allowed"
+            } `}
+            type="submit"
+            disabled={addNewPartnerLoading}
           >
-            Save
+            {addNewPartnerLoading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
@@ -37,18 +209,26 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("name")}
             />
+            <span className="error">{errors?.name?.message}</span>
           </div>
           {/* industry */}
           <div className="w-full space-y-2">
             <label htmlFor="industry" className="Label">
               industry
             </label>
-            <select className="input_field">
+            <select
+              itemRef={register("industry", { required: true })}
+              {...register("industry", { required: true })}
+              className="input_field"
+            >
+              <option label="select industry"></option>
               <option value="option1">option1</option>
               <option value="option2">option2</option>
               <option value="option3">option3</option>
             </select>
+            <span className="error">{errors?.industry?.message}</span>
           </div>
           {/* website */}
           <div className="w-full space-y-2">
@@ -59,7 +239,9 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("website")}
             />
+            <span className="error">{errors?.website?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -75,18 +257,49 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               type="email"
               placeholder="Type here..."
               className="input_field"
+              {...register("email")}
             />
+            <span className="error">{errors?.email?.message}</span>
           </div>
           {/* mobile number */}
           <div className="w-full space-y-2">
             <label htmlFor="mobile_number" className="Label">
               mobile number
             </label>
-            <select className="input_field">
-              <option value="option1">option1</option>
-              <option value="option2">option2</option>
-              <option value="option3">option3</option>
-            </select>
+            <Controller
+              name="mobile"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("mobile", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
+            />
+            <span className="error">{errors?.mobile?.message}</span>
           </div>
           {/* office number */}
           <div className="w-full space-y-2">
@@ -94,10 +307,12 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               office number
             </label>
             <input
-              type="text"
+              type="number"
               placeholder="Type here..."
               className="input_field"
+              {...register("officeNumber")}
             />
+            <span className="error">{errors?.officeNumber?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -113,7 +328,9 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("contactName")}
             />
+            <span className="error">{errors?.contactName?.message}</span>
           </div>
           {/* email */}
           <div className="w-full space-y-2">
@@ -124,18 +341,49 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               type="email"
               placeholder="Type here..."
               className="input_field"
+              {...register("aemail")}
             />
+            <span className="error">{errors?.aemail?.message}</span>
           </div>
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
               phone
             </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
+            <Controller
+              name="phone"
+              control={control}
+              rules={{
+                validate: (value) => isValidPhoneNumber(value),
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  onChange={(value) => {
+                    onChange((e) => {
+                      setValue("phone", "+".concat(value));
+                    });
+                  }}
+                  autocompleteSearch={true}
+                  countryCodeEditable={false}
+                  enableSearch={true}
+                  inputStyle={{
+                    width: "100%",
+                    background: "#FFFFFF",
+                    padding: "22px 0 22px 50px",
+                    borderRadius: "5px",
+                    fontSize: "1rem",
+                  }}
+                  dropdownStyle={{
+                    background: "white",
+                    color: "#13216e",
+                    fontWeight: "600",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                />
+              )}
             />
+            <span className="error">{errors?.bphone?.message}</span>
           </div>
           {/* company address */}
           <div className="w-full col-span-full space-y-2">
@@ -145,7 +393,9 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
             <textarea
               placeholder="Type here..."
               className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("companyAddress")}
             />
+            <span className="error">{errors?.companyAddress?.message}</span>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
@@ -156,7 +406,9 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("city")}
             />
+            <span className="error">{errors?.city?.message}</span>
           </div>
           {/* country */}
           <div className="w-full space-y-2">
@@ -167,7 +419,9 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               type="text"
               placeholder="Type here..."
               className="input_field"
+              {...register("country")}
             />
+            <span className="error">{errors?.country?.message}</span>
           </div>
           {/* zipcode */}
           <div className="w-full space-y-2">
@@ -180,11 +434,13 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               className="input_field"
               maxLength={6}
               minLength={6}
+              {...register("zipCode")}
             />
+            <span className="error">{errors?.zipCode?.message}</span>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

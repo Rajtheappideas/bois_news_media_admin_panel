@@ -191,7 +191,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     setValue,
     getValues,
     control,
@@ -275,7 +275,10 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
       contactOrigin,
       clientCode,
     } = data;
-    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+    if (!isDirty) {
+      setShowEditSubscriberDetails(false);
+      return true;
+    } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.remove();
       toast.error("Phone is invalid");
       return true;
@@ -480,8 +483,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
             <input
               type="email"
               placeholder="Type here..."
-              className="input_field"
+              className="input_field cursor-not-allowed"
               {...register("email")}
+              disabled
             />
             <span className="error">{errors?.email?.message}</span>
           </div>

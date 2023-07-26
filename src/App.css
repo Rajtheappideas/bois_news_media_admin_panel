@@ -51,7 +51,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .filter_dropdown {
-  @apply md:mr-5 mr-3 font-semibold h-10 md:w-32 w-28 p-2 shadow-md rounded-md bg-white;
+  @apply md:mr-5 mr-3 outline-none font-semibold h-10 md:w-32 w-28 p-2 shadow-md rounded-md bg-white;
 }
 
 .error {

@@ -187,38 +187,41 @@ const SignUp = () => {
               </span>
             </div>
             {/* password */}
-            <div className="space-y-1 relative">
+            <div className="space-y-1 ">
               <label
                 className="label block font-semibold text-left md:text-base text-sm"
                 htmlFor="password"
               >
                 Password
               </label>{" "}
-              <input
-                {...register("password")}
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                className="input_field"
-              />
+              <div className="relative h-auto">
+                <input
+                  {...register("password")}
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className="input_field"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <BsEyeFill
+                      size={24}
+                      className="absolute top-1/2 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
+                    />
+                  ) : (
+                    <BsEyeSlashFill
+                      size={24}
+                      className="absolute top-1/2 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
+                    />
+                  )}
+                </button>
+              </div>
               <span role="alert" className="error">
                 {errors?.password?.message}
               </span>
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <BsEyeFill
-                    size={24}
-                    className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
-                  />
-                ) : (
-                  <BsEyeSlashFill
-                    size={24}
-                    className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
-                  />
-                )}
-              </button>
             </div>
             {/* butons */}
             <button

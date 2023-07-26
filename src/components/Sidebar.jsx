@@ -63,7 +63,7 @@ const Sidebar = ({
         <p className="my-3 xl:text-4xl text-2xl font-semibold text-center">
           <img
             src={require("../assets/images/logo.png")}
-            className="w-20 h-fit object-contain object-center"
+            className="w-20 h-fit object-contain object-center mx-auto"
           />
         </p>
         <ul className="w-full space-y-3 text-sm ">

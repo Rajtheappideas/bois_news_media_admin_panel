@@ -18,6 +18,8 @@ import useAbortApiCall from "../hooks/useAbortApiCall";
 import { useDispatch, useSelector } from "react-redux";
 import { handleGetAllUsers } from "../redux/UserSlice";
 import { handleGetAllSubscribers } from "../redux/SubscriberSlice";
+import { handleGetAllProspects } from "../redux/ProspectSlice";
+import { handleGetAllPartners } from "../redux/PartnerSlice";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -32,6 +34,8 @@ const Home = () => {
   useEffect(() => {
     dispatch(handleGetAllUsers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
     return () => {
       abortApiCall();
     };

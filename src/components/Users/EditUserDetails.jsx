@@ -100,7 +100,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     setValue,
     getValues,
     control,
@@ -125,7 +125,10 @@ const EditUserDetails = ({ setShowUserDetail }) => {
   const onSubmit = (data) => {
     const { name, phone, company, address, city, country, zipCode, role } =
       data;
-    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+    if (!isDirty) {
+      setShowUserDetail(false);
+      return true;
+    } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.error("Phone is invalid");
       return true;
     }

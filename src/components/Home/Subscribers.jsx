@@ -144,9 +144,9 @@ const Subscribers = () => {
             {/* table */}
             <div className="shadow-sm outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
               <table className="border-none outline-none w-full overflow-scroll">
-                <thead className="w-full border-b border-gray-100 text-center">
+                <thead className="w-full border-b border-gray-100 text-center select-none">
                   <tr>
-                    <th className="p-4 whitespace-nowrap">
+                    <th className="pl-10 whitespace-nowrap text-left">
                       <input
                         type="checkbox"
                         className="rounded-lg inline-block mr-2 w-4 h-4"
@@ -156,10 +156,10 @@ const Subscribers = () => {
                         <span>ID</span>
                       </label>
                     </th>
-                    <th className="p-4">Title</th>
-                    <th className="p-4">Name</th>
-                    <th className="p-4">Company</th>
-                    <th className="p-4">Email</th>
+                    <th className="p-4 pl-10 text-left">Title</th>
+                    <th className="p-4 pl-10 text-left">Name</th>
+                    <th className="p-4 pl-10 text-left">Company</th>
+                    <th className="p-4 pl-10 text-left">Email</th>
                     <th className="p-4">Action</th>
                   </tr>
                 </thead>
@@ -172,9 +172,9 @@ const Subscribers = () => {
                     displaySubscibers.map((subscriber) => (
                       <tr
                         key={subscriber?._id}
-                        className="border-b border-gray-200 w-full text-center"
-                      >
-                        <td className="p-4 whitespace-nowrap">
+                        className="border-b border-gray-200 w-full text-left pl-10 select-none"
+                        >
+                        <td className="pl-10 whitespace-nowrap">
                           <input
                             type="checkbox"
                             className="rounded-lg inline-block mr-2 w-4 h-4"
@@ -187,18 +187,18 @@ const Subscribers = () => {
                           </label>
                         </td>
 
-                        <td className="text-center p-4 whitespace-nowrap">
+                        <td className="text-left p-4 pl-10 whitespace-nowrap">
                           {subscriber?.title !== "" ? subscriber?.title : "-"}
                         </td>
-                        <td className="text-center p-4 whitespace-nowrap">
+                        <td className="text-left p-4 pl-10 whitespace-nowrap">
                           {subscriber?.fname}&nbsp;{subscriber?.lname}
                         </td>
-                        <td className="text-center p-4 whitespace-nowrap">
+                        <td className="text-left p-4 pl-10 whitespace-nowrap">
                           {subscriber?.company !== ""
                             ? subscriber?.company
                             : "-"}
                         </td>
-                        <td className="text-center p-4 whitespace-nowrap">
+                        <td className="text-left p-4 pl-10 whitespace-nowrap">
                           {subscriber?.email}
                         </td>
                         <td className="flex items-center justify-center p-4">
@@ -274,10 +274,10 @@ const Subscribers = () => {
             <div className="flex items-center justify-between py-5">
               <p className="font-medium md:text-base text-sm text-textBlack">
                 Showing{" "}
-                {(pageNumber + 1) * subscribersPerPage > subscribers.length
-                  ? subscribers.length
+                {(pageNumber + 1) * subscribersPerPage > subscribers?.length
+                  ? subscribers?.length
                   : (pageNumber + 1) * subscribersPerPage}{" "}
-                from {subscribers.length} users
+                from {subscribers?.length} subscirbers
               </p>
               <ReactPaginate
                 onPageChange={changePage}

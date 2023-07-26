@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { HiPencil } from "react-icons/hi";
 import { FaUserCircle } from "react-icons/fa";
 import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +23,6 @@ const AddNewUser = ({ setShowAddNewUser }) => {
   const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
@@ -144,7 +142,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("User add Successfully.", { duration: 2000 });
+          toast.success("User added Successfully.", { duration: 2000 });
           setShowAddNewUser(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);

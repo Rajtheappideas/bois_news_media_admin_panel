@@ -73,7 +73,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     setValue,
     getValues,
     control,
@@ -96,7 +96,10 @@ const EditProfile = ({ setShowProfileEdit }) => {
 
   const onSubmit = (data) => {
     const { name, phone, company, address, city, country, zipCode } = data;
-    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+    if (!isDirty) {
+      setShowProfileEdit(false);
+      return true;
+    } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.error("Phone is invalid");
       return true;
     }
