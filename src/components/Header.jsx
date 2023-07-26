@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { HiMenuAlt2 } from "react-icons/hi";
-import { CiBellOn } from "react-icons/ci";
+import { FiChevronDown } from "react-icons/fi";
 import { FaUserAlt } from "react-icons/fa";
 import { BsChevronDown } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { handleLogout } from "../redux/AuthSlice";
+import { handleChangeLanguage, handleLogout } from "../redux/AuthSlice";
 import { toast } from "react-hot-toast";
 
 const Header = ({
@@ -14,10 +14,9 @@ const Header = ({
   setActiveComponent,
 }) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [showNotificationDropdown, setShowNotificationDropdown] =
-    useState(false);
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
-  const { loading } = useSelector((state) => state.root.auth);
+  const { loading, language } = useSelector((state) => state.root.auth);
 
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
@@ -48,7 +47,7 @@ const Header = ({
         notificationRef.current &&
         !notificationRef.current.contains(event?.target)
       ) {
-        setShowNotificationDropdown(false);
+        setShowLanguageDropdown(false);
       }
     };
     document.addEventListener("click", handleClickOutside, true);
@@ -58,11 +57,11 @@ const Header = ({
   }, [handleClickOutsideForNotification]);
 
   function handleClickOutsideForNotification() {
-    setShowNotificationDropdown(false);
+    setShowLanguageDropdown(false);
   }
 
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className="w-full flex flex-wrap items-center md:justify-between gap-2 justify-center">
       {/* left side */}
       <div className="flex items-center flex-1 gap-x-2">
         <HiMenuAlt2
@@ -81,41 +80,73 @@ const Header = ({
       <div className="flex items-center md:gap-x-5 gap-x-1 relative">
         {/* notification butn */}
         <button ref={notificationRef}>
-          <CiBellOn
-            onClick={() =>
-              setShowNotificationDropdown(!showNotificationDropdown)
-            }
-            className={`md:text-3xl text-xl md:h-10 md:w-10 h-7 w-7 p-1 hover:bg-gray-200 transition rounded-full ${
-              showNotificationDropdown && "bg-gray-200"
+          <p
+            onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+            className={`md:text-xl text-xs p-1 border hover:bg-gray-200 transition rounded-lg ${
+              showLanguageDropdown && "bg-gray-200"
             }`}
-          />
+          >
+            {language === "en" ? (
+              <img
+                src={require("../assets/images/english.png")}
+                alt="french"
+                className="md:h-10 h-7 md:w-10 w-7 mr-1 inline-block"
+              />
+            ) : (
+              <img
+                src={require("../assets/images/french.png")}
+                alt="french"
+                className="md:h-10 h-5 md:w-10 w-5 md:mr-1 inline-block"
+              />
+            )}
+
+            <span className="inline-block">
+              {language === "en" ? "English" : "French"}
+            </span>
+            <span>
+              <FiChevronDown
+                className={`inline-block md:ml-2 ml-0.5 mb-1 ${
+                  showLanguageDropdown ? "rotate-180" : "rotate-0"
+                } transition duration-100`}
+              />
+            </span>
+          </p>
           {/* dropdown for notifications */}
           <div
             className={`font-normal md:text-lg transition origin-top transform bg-white ${
-              showNotificationDropdown ? "scale-100" : "scale-0"
-            } absolute top-10 md:-left-28 -left-36 shadow-2xl rounded-md md:p-4 p-2 z-10 space-y-2`}
+              showLanguageDropdown ? "scale-100" : "scale-0"
+            } absolute top-11 left-0 shadow-2xl rounded-md md:p-2 p-0.5 z-10`}
           >
-            <div className="flex items-center justify-start text-left w-full gap-x-1">
-              <p className="bg-gray-300 rounded-full p-5 text-black"></p>
-              <div className="text-textBlack w-full p-1 rounded-md hover:font-semibold transition cursor-pointer">
-                <p>Lorem, ipsum dolor sit amet.</p>
-                <p className="text-textColor text-sm">29 Jul 2023 - 02:26 PM</p>
+            <div
+              onClick={() => {
+                dispatch(handleChangeLanguage("en"));
+                setShowLanguageDropdown(false);
+              }}
+              className="flex items-center justify-start text-left hover:bg-gray-100 w-full p-1 gap-x-1"
+            >
+              <img
+                src={require("../assets/images/english.png")}
+                alt="french"
+                className="md:h-10 h-5 md:w-10 w-5"
+              />
+              <div className="text-textBlack w-full rounded-md  hover:font-semibold transition cursor-pointer">
+                English
               </div>
             </div>
-            <hr />
-            <div className="flex items-center justify-start text-left w-full">
-              <p className="bg-gray-300 rounded-full p-5 text-black"></p>
-              <div className="text-textBlack w-full p-1 rounded-md hover:font-semibold transition cursor-pointer">
-                <p>Lorem, ipsum dolor sit amet.</p>
-                <p className="text-textColor text-sm">29 Jul 2023 - 02:26 PM</p>
-              </div>
-            </div>
-            <hr />
-            <div className="flex items-center justify-start text-left w-full">
-              <p className="bg-gray-300 rounded-full p-5 text-black"></p>
-              <div className="text-textBlack w-full p-1 rounded-md hover:font-semibold transition cursor-pointer">
-                <p>Lorem, ipsum dolor sit amet.</p>
-                <p className="text-textColor text-sm">29 Jul 2023 - 02:26 PM</p>
+            <div
+              onClick={() => {
+                dispatch(handleChangeLanguage("fr"));
+                setShowLanguageDropdown(false);
+              }}
+              className="flex items-center justify-start text-left  hover:bg-gray-100 p-1 w-full gap-x-1"
+            >
+              <img
+                src={require("../assets/images/french.png")}
+                alt="french"
+                className="md:h-10 h-5 md:w-10 w-5"
+              />
+              <div className="text-textBlack w-full rounded-md hover:font-semibold transition cursor-pointer">
+                French
               </div>
             </div>
           </div>

@@ -67,20 +67,22 @@ const Subscribers = () => {
     }
   }, [showMagazineDistrutionPopup]);
 
-  const handleDeletesubscriber = (id) => {
-    dispatch(handleChangeDeleteID(id));
-    const response = dispatch(
-      handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          dispatch(handleDeleteSubscriber(id));
-          toast.success("Subscriber Deleted Successfully.");
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+  const handleDeletesubscriber = (id, name) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(handleChangeDeleteID(id));
+      const response = dispatch(
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.status === "success") {
+            dispatch(handleDeleteSubscriber(id));
+            toast.success(`${name} subscriber Deleted Successfully.`);
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        });
+      }
     }
   };
 
@@ -173,7 +175,7 @@ const Subscribers = () => {
                       <tr
                         key={subscriber?._id}
                         className="border-b border-gray-200 w-full text-left pl-10 select-none"
-                        >
+                      >
                         <td className="pl-10 whitespace-nowrap">
                           <input
                             type="checkbox"
@@ -182,7 +184,7 @@ const Subscribers = () => {
                           />
                           <label htmlFor={subscriber?.userId}>
                             <span className="font-bold text-center cursor-pointer">
-                              #{subscriber?.userId}
+                              {subscriber?.userId}
                             </span>
                           </label>
                         </td>
@@ -239,7 +241,10 @@ const Subscribers = () => {
                               type="button"
                               className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
                               onClick={() =>
-                                handleDeletesubscriber(subscriber?._id)
+                                handleDeletesubscriber(
+                                  subscriber?._id,
+                                  subscriber?.fname.concat(subscriber?.lname)
+                                )
                               }
                               disabled={
                                 addNewSubscriberLoading ||

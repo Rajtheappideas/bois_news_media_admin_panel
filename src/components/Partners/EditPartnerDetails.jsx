@@ -136,7 +136,7 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
       return true;
     } else if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
       toast.remove();
-      toast.error("mobiel phone is invalid");
+      toast.error("mobile phone is invalid");
       return true;
     } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.remove();
@@ -175,7 +175,9 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Partner edited Successfully.", { duration: 2000 });
+          toast.success(`${name} partner edited Successfully.`, {
+            duration: 2000,
+          });
           setShowEditDetailsPartner(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -191,25 +193,26 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
   }, []);
 
   const handleDeletepartner = (id) => {
-    dispatch(handleChangeDeleteID(id));
+    if (window.confirm("Are you sure?")) {
+      dispatch(handleChangeDeleteID(id));
 
-    const response = dispatch(
-      handleDeletePARTNER({ id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          dispatch(handleDeletePartner(id));
-          toast.success("Partner Deleted Successfully.");
-          setShowEditDetailsPartner(false);
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+      const response = dispatch(
+        handleDeletePARTNER({ id, token, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.status === "success") {
+            dispatch(handleDeletePartner(id));
+            toast.success("Partner Deleted Successfully.");
+            setShowEditDetailsPartner(false);
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        });
+      }
     }
   };
 
-  console.log(isDirty);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

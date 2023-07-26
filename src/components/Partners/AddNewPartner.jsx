@@ -14,7 +14,7 @@ import {
 import { handleAddNewPartner } from "../../redux/PartnerSlice";
 
 const AddNewPartner = ({ setShowAddnewPartner }) => {
-  const { addNewPartnerLoading } = useSelector((state) => state.root.users);
+  const { addNewPartnerLoading } = useSelector((state) => state.root.partners);
   const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
@@ -110,7 +110,7 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
     } = data;
     if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
       toast.remove();
-      toast.error("mobiel phone is invalid");
+      toast.error("mobile phone is invalid");
       return true;
     } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.remove();
@@ -148,7 +148,7 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Partner added Successfully.", { duration: 2000 });
+          toast.success(`${name} partner added Successfully.`, { duration: 2000 });
           setShowAddnewPartner(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);

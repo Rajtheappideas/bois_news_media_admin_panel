@@ -28,7 +28,7 @@ const Sidebar = ({
     { title: "subscriptions", icon: CgNotes },
     { title: "magazine", icon: GiWhiteBook },
     { title: "orders", icon: BsCart3 },
-    { title: "settings", icon: LuSettings2 },
+    // { title: "settings", icon: LuSettings2 },
   ];
 
   useEffect(() => {

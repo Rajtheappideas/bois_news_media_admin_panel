@@ -52,21 +52,23 @@ const Prospect = () => {
     setPageNumber(selected);
   };
 
-  const handleDeleteprospect = (id) => {
-    dispatch(handleChangeDeleteID(id));
+  const handleDeleteprospect = (id, name) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(handleChangeDeleteID(id));
 
-    const response = dispatch(
-      handleDeletePROSPECT({ id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          dispatch(handleDeleteProspect(id));
-          toast.success("Prospect Deleted Successfully.");
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+      const response = dispatch(
+        handleDeletePROSPECT({ id, token, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.status === "success") {
+            dispatch(handleDeleteProspect(id));
+            toast.success(`${name} prospect Deleted Successfully.`);
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        });
+      }
     }
   };
 
@@ -172,7 +174,7 @@ const Prospect = () => {
                         </td>
 
                         <td className="text-left p-4 whitespace-nowrap">
-                          {prospect?.city ?? "-"}
+                          {prospect?.billingAddress?.city ?? "-"}
                         </td>
                         <td className="flex items-center justify-center p-4">
                           {role === "admin" || role === "editor" ? (
@@ -214,7 +216,10 @@ const Prospect = () => {
                               type="button"
                               className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
                               onClick={() =>
-                                handleDeleteprospect(prospect?._id)
+                                handleDeleteprospect(
+                                  prospect?._id,
+                                  prospect?.name
+                                )
                               }
                               disabled={
                                 addNewProspectLoading ||

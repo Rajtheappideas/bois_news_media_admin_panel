@@ -30,9 +30,9 @@ const Users = () => {
     useSelector((state) => state.root.users);
   const { token, role } = useSelector((state) => state.root.auth);
 
-  const { AbortControllerRef } = useAbortApiCall();
-
   const dispatch = useDispatch();
+
+  const { AbortControllerRef } = useAbortApiCall();
 
   // pagination logic
   const usersPerPage = 8;
@@ -47,21 +47,23 @@ const Users = () => {
     setPageNumber(selected);
   };
 
-  const handleDeleteruser = (id) => {
-    dispatch(handleChangeDeleteID(id));
+  const handleDeleteruser = (id, name) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(handleChangeDeleteID(id));
 
-    const response = dispatch(
-      handleDeleteUSER({ id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          dispatch(handleDeleteUser(id));
-          toast.success("User Deleted Successfully.");
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+      const response = dispatch(
+        handleDeleteUSER({ id, token, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.status === "success") {
+            dispatch(handleDeleteUser(id));
+            toast.success(` ${name} user Deleted Successfully.`);
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        });
+      }
     }
   };
 
@@ -151,7 +153,7 @@ const Users = () => {
                         />
                         <label htmlFor={user?.userId}>
                           <span className="font-bold text-center cursor-pointer">
-                            #{user?.userId}
+                            {user?.userId}
                           </span>
                         </label>
                       </td>
@@ -206,7 +208,9 @@ const Users = () => {
                           <button
                             type="button"
                             className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                            onClick={() => handleDeleteruser(user?._id)}
+                            onClick={() =>
+                              handleDeleteruser(user?._id, user?.name)
+                            }
                             disabled={
                               addNewUserLoading || deleteUserLoading || loading
                             }

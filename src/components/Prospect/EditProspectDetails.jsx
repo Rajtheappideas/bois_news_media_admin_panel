@@ -185,7 +185,9 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Prospect edited Successfully.", { duration: 2000 });
+          toast.success(`${name} prospect edited Successfully.`, {
+            duration: 2000,
+          });
           setShowEditdetailsProspect(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -200,22 +202,24 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
     };
   }, []);
 
-  const handleDeleteprospect = (id) => {
-    dispatch(handleChangeDeleteID(id));
+  const handleDeleteprospect = (id, name) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(handleChangeDeleteID(id));
 
-    const response = dispatch(
-      handleDeletePROSPECT({ id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          dispatch(handleDeleteProspect(id));
-          toast.success("Prospect Deleted Successfully.");
-          setShowEditdetailsProspect(false);
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+      const response = dispatch(
+        handleDeletePROSPECT({ id, token, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.status === "success") {
+            dispatch(handleDeleteProspect(id));
+            toast.success(` ${name} prospect Deleted Successfully.`);
+            setShowEditdetailsProspect(false);
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        });
+      }
     }
   };
 
@@ -260,7 +264,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
                 (EditProspectLoading || deleteProspectLoading) &&
                 "cursor-not-allowed"
               } `}
-              onClick={() => handleDeleteprospect(_id)}
+              onClick={() => handleDeleteprospect(_id, name)}
               type="button"
             >
               {deleteProspectLoading ? "Deleting..." : "Delete"}

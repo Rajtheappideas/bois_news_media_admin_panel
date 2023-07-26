@@ -271,7 +271,10 @@ const AddNewSubscirber = ({
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Subscriber added Successfully.", { duration: 2000 });
+          toast.success(
+            ` ${fname.concat(lname)} subscriber added Successfully.`,
+            { duration: 2000 }
+          );
           setShowAddNewSubscriber(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);

@@ -3,7 +3,7 @@ import { PostUrl } from "../BaseUrl";
 import { toast } from "react-hot-toast";
 
 export const handleRegisterUser = createAsyncThunk(
-  "user/handleRegisterUser",
+  "auth/handleRegisterUser",
   async ({ name, email, role, password, signal }, { rejectWithValue }) => {
     try {
       signal.current = new AbortController();
@@ -20,7 +20,7 @@ export const handleRegisterUser = createAsyncThunk(
 );
 
 export const handleLoginUser = createAsyncThunk(
-  "user/handleLoginUser",
+  "auth/handleLoginUser",
   async ({ email, password, signal }, { rejectWithValue }) => {
     try {
       signal.current = new AbortController();
@@ -37,7 +37,7 @@ export const handleLoginUser = createAsyncThunk(
 );
 
 export const handleVerifyOtp = createAsyncThunk(
-  "user/handleVerifyOtp",
+  "auth/handleVerifyOtp",
   async ({ email, otp, signal }, { rejectWithValue }) => {
     try {
       signal.current = new AbortController();
@@ -54,7 +54,7 @@ export const handleVerifyOtp = createAsyncThunk(
 );
 
 export const handleUserLogout = createAsyncThunk(
-  "user/handleUserLogout",
+  "auth/handleUserLogout",
   async ({ token, signal }, { rejectWithValue }) => {
     try {
       signal.current = new AbortController();
@@ -73,7 +73,7 @@ export const handleUserLogout = createAsyncThunk(
 );
 
 export const handleForgotPassword = createAsyncThunk(
-  "user/handleForgotPassword",
+  "auth/handleForgotPassword",
   async ({ email, signal }, { rejectWithValue }) => {
     try {
       signal.current = new AbortController();
@@ -90,7 +90,7 @@ export const handleForgotPassword = createAsyncThunk(
 );
 
 export const handleResetPassword = createAsyncThunk(
-  "user/handleResetPassword",
+  "auth/handleResetPassword",
   async ({ email, password, verifyToken, signal }, { rejectWithValue }) => {
     try {
       signal.current = new AbortController();
@@ -107,7 +107,7 @@ export const handleResetPassword = createAsyncThunk(
 );
 
 export const handleChangePassword = createAsyncThunk(
-  "user/handleChangePassword",
+  "auth/handleChangePassword",
   async ({ oldPassword, newPassword, token, signal }, { rejectWithValue }) => {
     try {
       signal.current = new AbortController();
@@ -127,7 +127,7 @@ export const handleChangePassword = createAsyncThunk(
 );
 
 export const handleEditProfile = createAsyncThunk(
-  "user/handleEditProfile",
+  "auth/handleEditProfile",
   async (
     {
       name,
@@ -179,11 +179,13 @@ const initialState = {
   token: null,
   verifyToken: null,
   email: null,
-  language: null,
+  language: !window.localStorage.getItem("lang")
+    ? window.localStorage.setItem("lang", "en")
+    : JSON.parse(window.localStorage.getItem("lang")),
 };
 
-const UserSlice = createSlice({
-  name: "user",
+const AuthSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
     handleLogout: (state) => {
@@ -195,6 +197,11 @@ const UserSlice = createSlice({
     },
     handleStoreUserEmail: (state, { payload }) => {
       state.email = payload;
+    },
+    handleChangeLanguage: (state, { payload }) => {
+      state.language = payload;
+      window.localStorage.setItem("lang", JSON.stringify(payload));
+      // window.location.reload()
     },
   },
   extraReducers: (builder) => {
@@ -375,6 +382,7 @@ const UserSlice = createSlice({
   },
 });
 
-export const { handleLogout, handleStoreUserEmail } = UserSlice.actions;
+export const { handleLogout, handleStoreUserEmail, handleChangeLanguage } =
+  AuthSlice.actions;
 
-export default UserSlice.reducer;
+export default AuthSlice.reducer;

@@ -20,6 +20,8 @@ import { handleGetAllUsers } from "../redux/UserSlice";
 import { handleGetAllSubscribers } from "../redux/SubscriberSlice";
 import { handleGetAllProspects } from "../redux/ProspectSlice";
 import { handleGetAllPartners } from "../redux/PartnerSlice";
+import { handleGetAllPayers } from "../redux/ThirdPartyPayerSlice";
+import { handleGetAllSubscription } from "../redux/SubscriptionSlice";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -36,13 +38,17 @@ const Home = () => {
     dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
     return () => {
       abortApiCall();
     };
   }, []);
+
   return (
     <>
       <Helmet title={`${activeComponent} | Bois News Media`} />
+
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar
           setActiveComponent={setActiveComponent}

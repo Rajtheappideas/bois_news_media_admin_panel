@@ -22,7 +22,6 @@ const AddMagazineDistribution = ({
   }, [handleClickOutside]);
 
   function handleClickOutside() {
-    console.log(":Asdsad");
     handleClosePopup();
   }
 

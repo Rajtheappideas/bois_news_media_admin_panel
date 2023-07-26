@@ -14,7 +14,7 @@ import {
 import { handleAddNewProspect } from "../../redux/ProspectSlice";
 
 const AddNewProspect = ({ setShowAddNewProspect }) => {
-  const { addNewProspectLoading } = useSelector((state) => state.root.users);
+  const { addNewProspectLoading } = useSelector((state) => state.root.prospects);
   const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
@@ -148,7 +148,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Prospect added Successfully.", { duration: 2000 });
+          toast.success(`${name} prospect added Successfully.`, { duration: 2000 });
           setShowAddNewProspect(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);

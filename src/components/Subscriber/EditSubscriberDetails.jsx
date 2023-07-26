@@ -342,21 +342,23 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
     }
   };
 
-  const handleDeletesubscriber = (id) => {
-    dispatch(handleChangeDeleteID(id));
-    const response = dispatch(
-      handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          dispatch(handleDeleteSubscriber(id));
-          toast.success("Subscriber Deleted Successfully.");
-          setShowEditSubscriberDetails(false);
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+  const handleDeletesubscriber = (id, name) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(handleChangeDeleteID(id));
+      const response = dispatch(
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.status === "success") {
+            dispatch(handleDeleteSubscriber(id));
+            toast.success(` ${name} subscriber Deleted Successfully.`);
+            setShowEditSubscriberDetails(false);
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        });
+      }
     }
   };
 
@@ -398,7 +400,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
                 (editLoading || deleteLoading) && "cursor-not-allowed"
               }`}
               disabled={deleteLoading || editLoading}
-              onClick={() => handleDeletesubscriber(_id)}
+              onClick={() => handleDeletesubscriber(_id, fname.concat(lname))}
             >
               {deleteLoading ? "Deleting..." : "Delete"}
             </button>

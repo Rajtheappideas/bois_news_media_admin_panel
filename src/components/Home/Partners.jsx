@@ -52,21 +52,23 @@ const Partners = () => {
     setPageNumber(selected);
   };
 
-  const handleDeletepartner = (id) => {
-    dispatch(handleChangeDeleteID(id));
+  const handleDeletepartner = (id, name) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(handleChangeDeleteID(id));
 
-    const response = dispatch(
-      handleDeletePARTNER({ id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          dispatch(handleDeletePartner(id));
-          toast.success("Partner Deleted Successfully.");
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+      const response = dispatch(
+        handleDeletePARTNER({ id, token, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.status === "success") {
+            dispatch(handleDeletePartner(id));
+            toast.success(` ${name} partner Deleted Successfully.`);
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        });
+      }
     }
   };
 
@@ -205,7 +207,9 @@ const Partners = () => {
                           <button
                             type="button"
                             className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                            onClick={() => handleDeletepartner(partner?._id)}
+                            onClick={() =>
+                              handleDeletepartner(partner?._id, partner?.name)
+                            }
                             disabled={
                               addNewPartnerLoading ||
                               deletePartnerLoading ||

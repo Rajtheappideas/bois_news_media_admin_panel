@@ -151,7 +151,9 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("User upadated successfully.", { duration: 2000 });
+          toast.success(`${name} user edited successfully.`, {
+            duration: 2000,
+          });
           setShowUserDetail(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -168,22 +170,24 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     setProfileImage(file);
   };
 
-  const handleDeleteruser = (id) => {
-    dispatch(handleChangeDeleteID(id));
-    const response = dispatch(
-      handleDeleteUSER({ id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          dispatch(handleDeleteUser(id));
+  const handleDeleteruser = (id, name) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(handleChangeDeleteID(id));
+      const response = dispatch(
+        handleDeleteUSER({ id, token, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.status === "success") {
+            dispatch(handleDeleteUser(id));
 
-          toast.success("User Delete Successfully.");
-          setShowUserDetail(false);
-        } else if (res?.payload?.status === "error") {
-          toast.error(res?.payload?.message);
-        }
-      });
+            toast.success(` ${name} user Delete Successfully.`);
+            setShowUserDetail(false);
+          } else if (res?.payload?.status === "error") {
+            toast.error(res?.payload?.message);
+          }
+        });
+      }
     }
   };
 
@@ -224,7 +228,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
                 deleteUserLoading && "cursor-not-allowed"
               }`}
               type="button"
-              onClick={() => handleDeleteruser(singleUser?._id)}
+              onClick={() => handleDeleteruser(singleUser?._id, name)}
               disabled={deleteUserLoading || EditUserLoading}
             >
               {deleteUserLoading ? "Deleting..." : "Delete"}
