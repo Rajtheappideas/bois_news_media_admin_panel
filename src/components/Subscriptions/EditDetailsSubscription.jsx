@@ -55,8 +55,6 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
     register,
     handleSubmit,
     formState: { errors, isDirty },
-    getValues,
-    control,
   } = useForm({
     shouldFocusError: true,
     reValidateMode: "onChange",
@@ -217,6 +215,8 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
             className="text-3xl absolute z-0 bottom-0 right-0 rounded-full bg-green-600 text-white h-8 w-8 p-1"
           />
         </div>
+        <span className="error">{errors?.image?.message}</span>
+
         <p className="font-bold text-black md:text-xl">Subscription details</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">

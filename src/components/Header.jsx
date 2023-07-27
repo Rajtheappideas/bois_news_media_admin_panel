@@ -6,6 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { handleChangeLanguage, handleLogout } from "../redux/AuthSlice";
 import { toast } from "react-hot-toast";
+import BaseUrl from "../BaseUrl";
 
 const Header = ({
   openSidebar,
@@ -16,7 +17,7 @@ const Header = ({
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
-  const { loading, language } = useSelector((state) => state.root.auth);
+  const { loading, language, user } = useSelector((state) => state.root.auth);
 
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
@@ -78,7 +79,7 @@ const Header = ({
       </div>
       {/* right side profile */}
       <div className="flex items-center md:gap-x-5 gap-x-1 relative">
-        {/* notification butn */}
+        {/* language butn */}
         <button ref={notificationRef}>
           <p
             onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
@@ -157,14 +158,28 @@ const Header = ({
           onClick={() => setShowProfileDropdown(!showProfileDropdown)}
           className="cursor-pointer select-none font-bold lg:text-2xl text-textBlack md:text-xl text-xs capitalize"
         >
-          Adam jackson{" "}
-          <FaUserAlt className="bg-gray-200 md:h-10 md:w-10 h-6 w-6 p-1 rounded-md inline-block" />
-          <BsChevronDown className="md:inline-block hidden text-sm ml-1" />
+          <div className="flex items-center gap-x-2">
+            {user?.name}
+            {user?.profile !== null && user?.profile !== undefined ? (
+              <img
+                src={BaseUrl.concat(user?.profile)}
+                alt={user?.name}
+                className="md:h-12 md:w-12 h-9 w-9 object-contain object-center border rounded-md text-sm bg-blend-multiply bg-transparent"
+              />
+            ) : (
+              <FaUserAlt className="bg-gray-200 md:h-10 md:w-10 h-6 w-6 p-1 rounded-md inline-block" />
+            )}
+            <BsChevronDown
+              className={`md:inline-block hidden text-sm ml-1 ${
+                showProfileDropdown ? "rotate-180" : "rotate-0"
+              } transition duration-300 `}
+            />
+          </div>
           {/* dropdown for profile */}
           <div
             className={`font-normal origin-top bg-white md:text-lg transition transform ${
               showProfileDropdown ? "scale-100" : "scale-0"
-            } absolute md:top-10 top-7 md:left-10 left-5 shadow-2xl rounded-md p-2 z-10 md:min-w-[10rem] min-w-[7rem]`}
+            } absolute md:top-11 top-8 md:left-16 left-5 shadow-2xl rounded-md p-2 z-10 md:min-w-[10rem] min-w-[7rem]`}
           >
             <p
               onClick={() => {

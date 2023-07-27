@@ -212,7 +212,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
             <img
               src={prevImage}
               alt="profile"
-              className="rounded-full md:h-24 md:w-24 w-20 h-20 border"
+              className="rounded-full object-contain object-center md:h-24 md:w-24 w-20 h-20 border"
             />
           )}
           <input

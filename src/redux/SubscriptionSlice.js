@@ -130,7 +130,7 @@ const SubscriptionSlice = createSlice({
           state.singleSubscription = findSubscription;
         }
       } else {
-        state.singlePayer = null;
+        state.singleSubscription = null;
       }
     },
     handleDeleteSubscription: (state, { payload }) => {

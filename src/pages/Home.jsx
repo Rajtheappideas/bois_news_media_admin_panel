@@ -22,6 +22,7 @@ import { handleGetAllProspects } from "../redux/ProspectSlice";
 import { handleGetAllPartners } from "../redux/PartnerSlice";
 import { handleGetAllPayers } from "../redux/ThirdPartyPayerSlice";
 import { handleGetAllSubscription } from "../redux/SubscriptionSlice";
+import { handleGetAllMagazine } from "../redux/MagazineSlice";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -40,6 +41,7 @@ const Home = () => {
     dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
     return () => {
       abortApiCall();
     };

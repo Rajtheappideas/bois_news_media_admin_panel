@@ -135,11 +135,24 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
         <div className="relative md:w-24 w-20 h-24 block">
           {prevImage !== null ? (
-            <img
-              src={prevImage}
-              alt=""
-              className="h-full w-full rounded-full border"
-            />
+            <>
+              <img
+                src={prevImage}
+                alt=""
+                className="h-full w-full object-contain object-center rounded-full border"
+              />
+              <input
+                type="file"
+                className="text-3xl cursor-pointer opacity-0 z-10 absolute bottom-0 right-0 rounded-full text-white h-full w-full p-1"
+                {...register("image", {
+                  required: true,
+                  onChange: (e) => {
+                    handleImageUpload(e);
+                  },
+                })}
+                accept="image/*"
+              />
+            </>
           ) : (
             <>
               <input
