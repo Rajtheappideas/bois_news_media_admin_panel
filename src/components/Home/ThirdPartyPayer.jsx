@@ -116,11 +116,11 @@ const ThirdPartyPayer = () => {
               <thead className="w-full border-b border-gray-100 text-left">
                 <tr>
                   <th className="p-4 whitespace-nowrap">
-                    <input
+                    {/* <input
                       type="checkbox"
                       className="rounded-lg inline-block mr-2 h-4 w-4"
                       id="accountName"
-                    />
+                    /> */}
                     <label htmlFor="accountName">
                       <span>Account name</span>
                     </label>
@@ -144,11 +144,11 @@ const ThirdPartyPayer = () => {
                       className="border-b border-gray-200 w-full text-left pl-10 select-none"
                     >
                       <td className="p-4 whitespace-nowrap">
-                        <input
+                        {/* <input
                           type="checkbox"
                           id={payer?._id}
                           className="rounded-lg inline-block mr-2 w-4 h-4"
-                        />
+                        /> */}
                         <label htmlFor={payer?._id}>
                           <span className="font-bold text-center cursor-pointer">
                             {payer?.accountName}

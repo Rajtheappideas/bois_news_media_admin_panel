@@ -128,11 +128,11 @@ const Prospect = () => {
                 <thead className="w-full border-b border-gray-100 text-center select-none">
                   <tr>
                     <th className="p-4 whitespace-nowrap text-left pl-10">
-                      <input
+                      {/* <input
                         type="checkbox"
                         className="rounded-lg inline-block mr-2 h-4 w-4"
                         id="id"
-                      />
+                      /> */}
                       <label htmlFor="id" className=" cursor-pointer">
                         <span>Contact person</span>
                       </label>
@@ -155,11 +155,11 @@ const Prospect = () => {
                         className="border-b border-gray-200 w-full text-left pl-10 select-none"
                       >
                         <td className="pl-10 whitespace-nowrap">
-                          <input
+                          {/* <input
                             type="checkbox"
                             id={prospect?._id}
                             className="rounded-lg inline-block mr-2 w-4 h-4"
-                          />
+                          /> */}
                           <label htmlFor={prospect?._id}>
                             <span className="font-bold text-center cursor-pointer">
                               {prospect?.billingAddress?.contactName}

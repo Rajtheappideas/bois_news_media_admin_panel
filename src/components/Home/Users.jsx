@@ -117,11 +117,11 @@ const Users = () => {
               <thead className="w-full border-b border-gray-100 text-center select-none">
                 <tr>
                   <th className="p-4 whitespace-nowrap text-center">
-                    <input
+                    {/* <input
                       type="checkbox"
                       className="rounded-lg inline-block mr-2 h-4 w-4"
                       id="id"
-                    />
+                    /> */}
                     <label htmlFor="id" className=" cursor-pointer">
                       <span>ID</span>
                     </label>
@@ -146,11 +146,11 @@ const Users = () => {
                       className="border-b border-gray-200 w-full text-center"
                     >
                       <td className="p-4 whitespace-nowrap">
-                        <input
+                        {/* <input
                           type="checkbox"
                           id={user?.userId}
                           className="rounded-lg inline-block mr-2 w-4 h-4"
-                        />
+                        /> */}
                         <label htmlFor={user?.userId}>
                           <span className="font-bold text-center cursor-pointer">
                             {user?.userId}

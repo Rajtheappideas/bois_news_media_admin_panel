@@ -180,7 +180,7 @@ const initialState = {
   verifyToken: null,
   email: null,
   language: !window.localStorage.getItem("lang")
-    ? window.localStorage.setItem("lang", "en")
+    ? window.localStorage.setItem("lang", JSON.stringify("en"))
     : JSON.parse(window.localStorage.getItem("lang")),
 };
 

@@ -16,11 +16,12 @@ const Header = ({
 }) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const [stickyHeader, setStickyHeader] = useState(false);
 
   const { loading, language, user } = useSelector((state) => state.root.auth);
 
   const profileRef = useRef(null);
-  const notificationRef = useRef(null);
+  const languageRef = useRef(null);
 
   const dispatch = useDispatch();
 
@@ -41,12 +42,12 @@ const Header = ({
     setShowProfileDropdown(false);
   }
 
-  // for notification dropdown
+  // for language dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        notificationRef.current &&
-        !notificationRef.current.contains(event?.target)
+        languageRef.current &&
+        !languageRef.current.contains(event?.target)
       ) {
         setShowLanguageDropdown(false);
       }
@@ -61,8 +62,26 @@ const Header = ({
     setShowLanguageDropdown(false);
   }
 
+  // for sticky header
+  // useEffect(() => {
+  //   window.addEventListener("scroll", () => {
+  //     if (window.scrollY > 80) {
+  //       setStickyHeader(true);
+  //     } else {
+  //       setStickyHeader(false);
+  //     }
+  //   });
+  //   return () => {
+  //     window.removeEventListener("scroll", () => {});
+  //   };
+  // }, [stickyHeader]);
+
   return (
-    <div className="w-full flex flex-wrap items-center md:justify-between gap-2 justify-center">
+    <div
+      className={`w-full ${
+        stickyHeader && "sticky bg-white top-0 z-30 shadow-sm"
+      } lg:p-5 p-3 transition flex flex-wrap items-center md:justify-between gap-2 justify-center`}
+    >
       {/* left side */}
       <div className="flex items-center flex-1 gap-x-2">
         <HiMenuAlt2
@@ -80,7 +99,7 @@ const Header = ({
       {/* right side profile */}
       <div className="flex items-center md:gap-x-5 gap-x-1 relative">
         {/* language butn */}
-        <button ref={notificationRef}>
+        <button ref={languageRef}>
           <p
             onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
             className={`md:text-xl text-xs p-1 border hover:bg-gray-200 transition rounded-lg ${

@@ -143,12 +143,12 @@ const ResetPassword = () => {
                     {showPassword ? (
                       <BsEyeFill
                         size={24}
-                        className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
+                        className="absolute top-1/2 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
                       />
                     ) : (
                       <BsEyeSlashFill
                         size={24}
-                        className="absolute top-2/3 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
+                        className="absolute top-1/2 -translate-y-1/2 cursor-pointer right-3 text-gray-400"
                       />
                     )}
                   </button>

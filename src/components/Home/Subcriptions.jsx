@@ -122,10 +122,10 @@ const Subcriptions = () => {
                 <thead className="w-full border-b border-gray-100 text-left">
                   <tr>
                     <th className="p-4 md:pl-28 whitespace-nowrap">
-                      <input
+                      {/* <input
                         type="checkbox"
                         className="rounded-lg inline-block mr-2 h-4 w-4"
-                      />
+                      /> */}
                       <span>ID</span>
                     </th>
                     <th className="p-4 md:pl-28">Subscriptions name</th>
@@ -147,11 +147,11 @@ const Subcriptions = () => {
                         className="border-b border-gray-200 w-full text-left pl-10 select-none"
                       >
                         <td className="p-4 md:pl-28 whitespace-nowrap">
-                          <input
+                          {/* <input
                             type="checkbox"
                             id={subscription?._id}
                             className="rounded-lg inline-block mr-2 w-4 h-4"
-                          />
+                          /> */}
                           <label htmlFor={subscription?._id}>
                             <span className="font-bold text-center cursor-pointer">
                               {subscription?.subscriptionId}

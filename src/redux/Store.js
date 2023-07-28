@@ -10,6 +10,7 @@ import PartnerSlice from "./PartnerSlice";
 import OrderSlice from "./OrderSlice";
 import SubscriptionSlice from "./SubscriptionSlice";
 import ThirdPartyPayerSlice from "./ThirdPartyPayerSlice";
+import GlobalStates from "./GlobalStates";
 
 const rootPersistConfig = {
   key: "root",
@@ -23,6 +24,7 @@ const rootPersistConfig = {
     "orders",
     "subscriptions",
     "thirdPartyPayers",
+    "globalStates",
   ],
 };
 
@@ -36,6 +38,7 @@ const rootReducer = combineReducers({
   orders: OrderSlice,
   subscriptions: SubscriptionSlice,
   thirdPartyPayers: ThirdPartyPayerSlice,
+  globalStates: GlobalStates,
 });
 
 const persisteRoot = persistReducer(rootPersistConfig, rootReducer);

@@ -1,5 +1,6 @@
 import React from "react";
 import { BiImageAdd } from "react-icons/bi";
+import { FaFileUpload } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -9,10 +10,12 @@ import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { useEffect } from "react";
 import { handleAddNewMagazine } from "../../redux/MagazineSlice";
+import { BsCloudUploadFill } from "react-icons/bs";
 
 const AddnewMagazine = ({ setshowAddnewMagazine }) => {
   const [prevImage, setPrevImage] = useState(null);
   const [magazineImage, setmagazineImage] = useState(null);
+  const [magazinePdf, setMagazinePdf] = useState(null);
 
   const { addNewMagazineLoading } = useSelector(
     (state) => state.root.magazines
@@ -27,6 +30,21 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     title: yup.string().required("title is required").trim(),
     status: yup.string().required("status is required").trim(),
     description: yup.string().required("description is required").trim(""),
+    magazineTitle: yup.string().required("select magazine").trim(""),
+    pdf: yup
+      .mixed()
+      .required("please upload file")
+      .test(
+        "fileSize",
+        "Only pdf up to 10MB are permitted.",
+        (files) =>
+          !files || // Check if `files` is defined
+          files.length === 0 || // Check if `files` is not an empty list
+          Array.from(files).every((file) => file.size <= 10000000)
+      )
+      .test("type", "Only .pdf formats are accepted.", (value) => {
+        return value && value[0]?.type === "application/pdf";
+      }),
     stock: yup
       .string()
       .required("stock is required")
@@ -52,7 +70,6 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     handleSubmit,
     formState: { errors },
     getValues,
-    control,
   } = useForm({
     shouldFocusError: true,
     reValidateMode: "onChange",
@@ -60,16 +77,18 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     resolver: yupResolver(addNewMagazineSchema),
     defaultValues: {
       image: magazineImage,
+      pdf: magazinePdf,
     },
   });
 
   const onSubmit = (data) => {
-    const { title, price, stock, description, status } = data;
-
+    const { title, price, stock, description, status, magazineTitle } = data;
     const response = dispatch(
       handleAddNewMagazine({
         title,
         price,
+        magazineTitle,
+        pdf: magazinePdf,
         stock,
         status,
         description,
@@ -82,7 +101,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(` ${title} magazine added Successfully.`, {
-            duration: 2000,
+            duration: 3000,
           });
           setshowAddnewMagazine(false);
         } else if (res?.payload?.status === "error") {
@@ -99,6 +118,27 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     setPrevImage(URL.createObjectURL(file));
     setmagazineImage(file);
   };
+
+  // file upload
+  const handleFileUpload = (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    // setPrevImage(URL.createObjectURL(file));
+    setMagazinePdf(file);
+  };
+
+  const units = ["bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"];
+
+  function niceBytes(x) {
+    let l = 0,
+      n = parseInt(x, 10) || 0;
+
+    while (n >= 1024 && ++l) {
+      n = n / 1024;
+    }
+
+    return n.toFixed(n < 10 && l > 0 ? 1 : 0) + " " + units[l];
+  }
 
   useEffect(() => {
     return () => {
@@ -140,47 +180,92 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-        <div className="relative md:w-24 w-20 h-24 block">
-          {prevImage !== null ? (
-            <>
-              <img
-                src={prevImage}
-                alt=""
-                className="h-full w-full object-contain object-center rounded-full border"
-              />
+        <div className=" w-full flex items-start md:gap-x-10 gap-x-4">
+          {/* image */}
+          <div className="text-center">
+            <label htmlFor="image" className="Label">
+              Image
+            </label>
+            <div className="relative md:w-24 w-20 h-24">
+              {prevImage !== null ? (
+                <>
+                  <img
+                    src={prevImage}
+                    alt=""
+                    className="h-full w-full object-contain object-center rounded-full border"
+                  />
+                  <input
+                    type="file"
+                    name="image"
+                    id="image"
+                    className="text-3xl cursor-pointer opacity-0 z-10 absolute bottom-0 right-0 rounded-full text-white h-full w-full p-1"
+                    {...register("image", {
+                      required: true,
+                      onChange: (e) => {
+                        handleImageUpload(e);
+                      },
+                    })}
+                    accept="image/*"
+                  />
+                </>
+              ) : (
+                <>
+                  <input
+                    type="file"
+                    name="image"
+                    id="image"
+                    className="text-3xl cursor-pointer opacity-0 z-10 absolute bottom-0 right-0 rounded-full text-white h-full w-full p-1"
+                    aria-invalid={errors.image ? "true" : "false"}
+                    {...register("image", {
+                      required: true,
+                      onChange: (e) => {
+                        handleImageUpload(e);
+                      },
+                    })}
+                    accept="image/*"
+                  />
+                  <BiImageAdd
+                    role="button"
+                    className="text-3xl absolute z-0 bottom-0 right-0 rounded-full bg-gray-300 text-black md:h-24 md:w-24 w-20 h-20 p-5"
+                  />
+                </>
+              )}
+            </div>
+            <span className="error">{errors?.image?.message}</span>
+          </div>
+          {/* pdf */}
+          <div className="text-center">
+            <label htmlFor="pdf" className="Label">
+              Pdf
+            </label>
+
+            <div className="relative md:w-24 w-20 h-24">
               <input
                 type="file"
                 className="text-3xl cursor-pointer opacity-0 z-10 absolute bottom-0 right-0 rounded-full text-white h-full w-full p-1"
-                {...register("image", {
+                {...register("pdf", {
                   required: true,
                   onChange: (e) => {
-                    handleImageUpload(e);
+                    handleFileUpload(e);
                   },
                 })}
-                accept="image/*"
+                accept="application/pdf"
               />
-            </>
-          ) : (
-            <>
-              <input
-                type="file"
-                className="text-3xl cursor-pointer opacity-0 z-10 absolute bottom-0 right-0 rounded-full text-white h-full w-full p-1"
-                {...register("image", {
-                  required: true,
-                  onChange: (e) => {
-                    handleImageUpload(e);
-                  },
-                })}
-                accept="image/*"
-              />
-              <BiImageAdd
-                role="button"
-                className="text-3xl absolute z-0 bottom-0 right-0 rounded-full bg-gray-300 text-black md:h-24 md:w-24 w-20 h-20 p-5"
-              />
-            </>
-          )}
+              {magazinePdf === null ? (
+                <BsCloudUploadFill
+                  role="button"
+                  className="text-3xl absolute z-0 bottom-0 right-0 rounded-full bg-gray-300 text-black md:h-24 md:w-24 w-20 h-20 p-5"
+                />
+              ) : (
+                <p className="text-sm text-center absolute z-0 bottom-0 right-0 rounded-full bg-gray-300 text-black md:h-24 md:w-24 w-20 h-20 p-5">
+                  <span className="block">{magazinePdf?.name}</span>
+                  <span className="block">{niceBytes(magazinePdf?.size)}</span>
+                </p>
+              )}
+            </div>
+            <span className="error">{errors?.pdf?.message}</span>
+          </div>
         </div>
-        <span className="error">{errors?.image?.message}</span>
 
         <p className="font-bold text-black md:text-xl">Magazine details</p>
         {/* personal details */}
@@ -235,6 +320,20 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
               <option value="deactive">deactive</option>
             </select>
             <span className="error">{errors?.status?.message}</span>
+          </div>
+          {/* magazines */}
+          <div className="w-full space-y-2">
+            <label htmlFor="magazineTitle" className="Label">
+              Magazine
+            </label>
+            <select {...register("magazineTitle")} className="input_field">
+              <option label="choose magazine"></option>
+              <option value="boismag">BOISmag</option>
+              <option value="agenceur">Agenceur</option>
+              <option value="artisans&bois">Artisans & Bois</option>
+              <option value="toiture">Toiture</option>
+            </select>
+            <span className="error">{errors?.magazineTitle?.message}</span>
           </div>
           {/* summary */}
           <div className="w-full col-span-full space-y-2">

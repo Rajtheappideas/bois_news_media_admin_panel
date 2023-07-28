@@ -33,10 +33,6 @@ const Orders = () => {
               <thead className="w-full border-b border-gray-100 text-left">
                 <tr>
                   <th className="p-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      className="rounded-lg inline-block mr-2 h-4 w-4"
-                    />
                     <span>Invoice no</span>
                   </th>
                   <th className="p-4">Order date & time</th>
@@ -49,13 +45,7 @@ const Orders = () => {
               </thead>
               <tbody className="w-full">
                 <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      className="rounded-lg inline-block mr-2 w-4 h-4"
-                    />
-                    423455
-                  </td>
+                  <td className="p-4 whitespace-nowrap">423455</td>
 
                   <td className="text-left p-4 whitespace-nowrap">
                     June 1, 2023 10:30 PM
@@ -95,13 +85,7 @@ const Orders = () => {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      className="rounded-lg inline-block mr-2 w-4 h-4"
-                    />
-                    423455
-                  </td>
+                  <td className="p-4 whitespace-nowrap">423455</td>
 
                   <td className="text-left p-4 whitespace-nowrap">
                     June 1, 2023 10:30 PM
@@ -141,13 +125,7 @@ const Orders = () => {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      className="rounded-lg inline-block mr-2 w-4 h-4"
-                    />
-                    423455
-                  </td>
+                  <td className="p-4 whitespace-nowrap">423455</td>
 
                   <td className="text-left p-4 whitespace-nowrap">
                     June 1, 2023 10:30 PM
@@ -187,13 +165,7 @@ const Orders = () => {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      className="rounded-lg inline-block mr-2 w-4 h-4"
-                    />
-                    423455
-                  </td>
+                  <td className="p-4 whitespace-nowrap">423455</td>
 
                   <td className="text-left p-4 whitespace-nowrap">
                     June 1, 2023 10:30 PM
@@ -233,13 +205,7 @@ const Orders = () => {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      className="rounded-lg inline-block mr-2 w-4 h-4"
-                    />
-                    423455
-                  </td>
+                  <td className="p-4 whitespace-nowrap">423455</td>
 
                   <td className="text-left p-4 whitespace-nowrap">
                     June 1, 2023 10:30 PM

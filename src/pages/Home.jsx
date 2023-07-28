@@ -23,18 +23,24 @@ import { handleGetAllPartners } from "../redux/PartnerSlice";
 import { handleGetAllPayers } from "../redux/ThirdPartyPayerSlice";
 import { handleGetAllSubscription } from "../redux/SubscriptionSlice";
 import { handleGetAllMagazine } from "../redux/MagazineSlice";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
   const [openSidebar, setOpenSidebar] = useState(false);
 
-  const { token } = useSelector((state) => state.root.auth);
+  const { token, user } = useSelector((state) => state.root.auth);
 
   const { abortApiCall, AbortControllerRef } = useAbortApiCall();
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const handleGetContent = () => {
+    if (user === null) {
+      navigate("/sign-in");
+      return true;
+    }
     dispatch(handleGetAllUsers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
@@ -42,10 +48,28 @@ const Home = () => {
     dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
+  };
+
+  useEffect(() => {
+    handleGetContent();
     return () => {
       abortApiCall();
     };
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (openSidebar && window.screen.width < 1024) {
+        window.document.body.style.overflow = "hidden";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        window.document.body.style.overflow = "unset";
+      }
+    });
+    return () => {
+      window.removeEventListener("resize", () => {});
+    };
+  }, [openSidebar]);
 
   return (
     <>
@@ -59,7 +83,7 @@ const Home = () => {
           setOpenSidebar={setOpenSidebar}
         />
         <section
-          className={`lg:p-5 p-3 h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
             openSidebar ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
           }`}
         >
@@ -69,21 +93,22 @@ const Home = () => {
             activeComponent={activeComponent}
             setActiveComponent={setActiveComponent}
           />
-
-          {activeComponent === "dashboard" && (
-            <Dashboard setActiveComponent={setActiveComponent} />
-          )}
-          {activeComponent === "users" && <Users />}
-          {activeComponent === "subscribers" && <Subscribers />}
-          {activeComponent === "prospect" && <Prospect />}
-          {activeComponent === "partners" && <Partners />}
-          {activeComponent === "third-party payer" && <ThirdPartyPayer />}
-          {activeComponent === "subscriptions" && <Subcriptions />}
-          {activeComponent === "magazine" && <Magazine />}
-          {activeComponent === "orders" && <Orders />}
-          {activeComponent === "settings" && <Settings />}
-          {activeComponent === "profile" && <Profile />}
-          {activeComponent === "change password" && <ChangePassword />}
+          <div className="lg:p-5 p-3">
+            {activeComponent === "dashboard" && (
+              <Dashboard setActiveComponent={setActiveComponent} />
+            )}
+            {activeComponent === "users" && <Users />}
+            {activeComponent === "subscribers" && <Subscribers />}
+            {activeComponent === "prospect" && <Prospect />}
+            {activeComponent === "partners" && <Partners />}
+            {activeComponent === "third-party payer" && <ThirdPartyPayer />}
+            {activeComponent === "subscriptions" && <Subcriptions />}
+            {activeComponent === "magazine" && <Magazine />}
+            {activeComponent === "orders" && <Orders />}
+            {activeComponent === "settings" && <Settings />}
+            {activeComponent === "profile" && <Profile />}
+            {activeComponent === "change password" && <ChangePassword />}
+          </div>
         </section>
       </div>
     </>

@@ -47,7 +47,7 @@ function App() {
               path="/"
               element={
                 <PrivateRoute>
-                  <Home />/
+                  <Home />
                 </PrivateRoute>
               }
               caseSensitive

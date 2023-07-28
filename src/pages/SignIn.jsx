@@ -125,7 +125,7 @@ const SignIn = () => {
                 htmlFor="password"
               >
                 Password
-              </label>{" "}
+              </label>
               <div className="relative">
                 <input
                   {...register("password")}

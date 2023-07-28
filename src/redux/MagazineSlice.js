@@ -24,7 +24,18 @@ export const handleGetAllMagazine = createAsyncThunk(
 export const handleAddNewMagazine = createAsyncThunk(
   "magazine/handleAddNewMagazine",
   async (
-    { title, price, stock, status, description, image, token, signal },
+    {
+      title,
+      price,
+      magazineTitle,
+      pdf,
+      stock,
+      status,
+      description,
+      image,
+      token,
+      signal,
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -33,6 +44,8 @@ export const handleAddNewMagazine = createAsyncThunk(
         data: {
           title,
           price,
+          magazineTitle,
+          pdf,
           stock,
           status,
           description,
@@ -42,6 +55,10 @@ export const handleAddNewMagazine = createAsyncThunk(
         headers: {
           Authorization: token,
           "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = (progressEvent.loaded / progressEvent.total) * 100;
+          toast.loading(`Uploading... ${progress.toFixed(0)}%`);
         },
       });
       return response.data;
@@ -55,7 +72,19 @@ export const handleAddNewMagazine = createAsyncThunk(
 export const handleEditMagazine = createAsyncThunk(
   "magazine/handleEditMagazine",
   async (
-    { title, price, stock, status, description, image, id, token, signal },
+    {
+      title,
+      price,
+      magazineTitle,
+      pdf,
+      stock,
+      status,
+      description,
+      image,
+      id,
+      token,
+      signal,
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -64,6 +93,8 @@ export const handleEditMagazine = createAsyncThunk(
         data: {
           title,
           price,
+          magazineTitle,
+          pdf,
           stock,
           status,
           description,
@@ -73,6 +104,10 @@ export const handleEditMagazine = createAsyncThunk(
         headers: {
           Authorization: token,
           "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = (progressEvent.loaded / progressEvent.total) * 100;
+          toast.loading(`Uploading... ${progress.toFixed(0)}%`);
         },
       });
       return response.data;

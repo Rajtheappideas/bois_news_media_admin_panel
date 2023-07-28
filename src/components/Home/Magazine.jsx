@@ -18,6 +18,7 @@ import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
 import { BsEye } from "react-icons/bs";
 import ShowMagazineDetails from "../Magazine/ShowMagazineDetails";
+import BaseUrl from "../../BaseUrl";
 
 const Magazine = () => {
   const [showAddnewMagazine, setshowAddnewMagazine] = useState(false);
@@ -34,6 +35,7 @@ const Magazine = () => {
   } = useSelector((state) => state.root.magazines);
 
   const { token, role } = useSelector((state) => state.root.auth);
+  const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -45,10 +47,14 @@ const Magazine = () => {
   let displayMagazine = [];
   if (!loading) {
     displayMagazine =
-      magazines?.length > 0 &&
-      magazines.slice(pageVisited, magazinePerPage + pageVisited);
+      magazines?.length > 0 && fileterdData.length === 0
+        ? magazines.slice(pageVisited, magazinePerPage + pageVisited)
+        : fileterdData.slice(pageVisited, magazinePerPage + pageVisited);
   }
-  const pageCount = Math.ceil(magazines?.length / magazinePerPage);
+  const pageCount =
+    fileterdData.length === 0
+      ? Math.ceil(magazines?.length / magazinePerPage)
+      : Math.ceil(fileterdData.length / magazinePerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
@@ -89,7 +95,7 @@ const Magazine = () => {
           {/* search + buttons */}
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
             <div className="lg:w-1/3 md:w-1/2 w-full">
-              <Search />
+              <Search data={magazines} />
             </div>
             <div>
               <select
@@ -117,11 +123,11 @@ const Magazine = () => {
               <thead className="w-full border-b border-gray-100 text-left">
                 <tr>
                   <th className="p-4 whitespace-nowrap">
-                    <input
+                    {/* <input
                       type="checkbox"
                       className="rounded-lg inline-block mr-2 h-4 w-4"
                       id="sr_no"
-                    />
+                    /> */}
                     <label htmlFor="sr_no">
                       <span>Sr no</span>
                     </label>
@@ -139,20 +145,20 @@ const Magazine = () => {
                     <td colSpan="7">Loading....</td>
                   </tr>
                 ) : magazines?.length !== 0 && magazines !== undefined ? (
-                  displayMagazine.map((magazine, srNo) => (
+                  displayMagazine.map((magazine) => (
                     <tr
                       key={magazine?._id}
                       className="border-b border-gray-200 w-full text-left pl-10 select-none"
                     >
                       <td className="p-4 whitespace-nowrap">
-                        <input
+                        {/* <input
                           type="checkbox"
                           id={magazine?._id}
                           className="rounded-lg inline-block mr-2 w-4 h-4"
-                        />
+                        /> */}
                         <label htmlFor={magazine?._id}>
                           <span className="font-bold text-center cursor-pointer">
-                            {srNo + 1}
+                            {magazine?.magazineId}
                           </span>
                         </label>
                       </td>
@@ -189,7 +195,7 @@ const Magazine = () => {
                         ) : (
                           <button
                             onClick={() => {
-                              setshowEditMagazine(true);
+                              setShowMagazineDetails(true);
                               dispatch(handleFindMagazine(magazine?._id));
                             }}
                             disabled={deleteMagazineLoading || loading}
@@ -204,6 +210,22 @@ const Magazine = () => {
                           </button>
                         )}
 
+                        <button
+                          type="button"
+                          className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
+                        >
+                          <a
+                            href={BaseUrl.concat(magazine?.pdf)}
+                            download
+                            target="_blank"
+                          >
+                            <HiOutlineDownload
+                              color="green"
+                              size={30}
+                              className="inline-block mr-1"
+                            />
+                          </a>
+                        </button>
                         {role === "admin" && (
                           <button
                             type="button"
@@ -247,10 +269,19 @@ const Magazine = () => {
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
               Showing{" "}
-              {(pageNumber + 1) * magazinePerPage > magazines?.length ?? "-"
-                ? magazines?.length ?? "-"
+              {fileterdData.length === 0
+                ? (pageNumber + 1) * magazinePerPage > magazines?.length
+                : (pageNumber + 1) * magazinePerPage > fileterdData.length ??
+                  "-"
+                ? fileterdData.length === 0
+                  ? magazines?.length
+                  : fileterdData.length ?? "-"
                 : (pageNumber + 1) * magazinePerPage}{" "}
-              from {magazines?.length ?? "-"} Magazines
+              from{" "}
+              {fileterdData.length === 0
+                ? magazines?.length
+                : fileterdData.length ?? "-"}{" "}
+              Magazines
             </p>
             <ReactPaginate
               onPageChange={changePage}
