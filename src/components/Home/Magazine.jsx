@@ -271,16 +271,15 @@ const Magazine = () => {
               Showing{" "}
               {fileterdData.length === 0
                 ? (pageNumber + 1) * magazinePerPage > magazines?.length
-                : (pageNumber + 1) * magazinePerPage > fileterdData.length ??
-                  "-"
-                ? fileterdData.length === 0
                   ? magazines?.length
-                  : fileterdData.length ?? "-"
+                  : (pageNumber + 1) * magazinePerPage
+                : (pageNumber + 1) * magazinePerPage > fileterdData?.length
+                ? fileterdData?.length
                 : (pageNumber + 1) * magazinePerPage}{" "}
               from{" "}
-              {fileterdData.length === 0
+              {fileterdData?.length === 0
                 ? magazines?.length
-                : fileterdData.length ?? "-"}{" "}
+                : fileterdData.length}{" "}
               Magazines
             </p>
             <ReactPaginate

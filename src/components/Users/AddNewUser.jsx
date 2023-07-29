@@ -14,6 +14,7 @@ import {
   isPossiblePhoneNumber,
   isValidPhoneNumber,
 } from "react-phone-number-input";
+import { useTranslation } from "react-i18next";
 
 const AddNewUser = ({ setShowAddNewUser }) => {
   const [prevImage, setPrevImage] = useState(null);
@@ -24,66 +25,59 @@ const AddNewUser = ({ setShowAddNewUser }) => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const addNewUserSchema = yup.object({
     name: yup
       .string()
-      .required("Name is required")
+      .required(t("Name is required"))
       .trim()
-      .max(60, "Max character limit reached")
-      .min(3, "minimum three character required")
-      .typeError("Only characters allowed")
+      .max(60, t("Max character limit reached"))
+      .min(3, t("minimum three character required"))
+      .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Name can only contain Latin letters."
+        t("Name can only contain Latin letters.")
       ),
     address: yup
       .string()
-      .max(200, "Maximum character limit reached")
-      .required("address is required")
+      .max(200, t("Maximum character limit reached"))
+      .required(t("address is required"))
       .trim(""),
     zipCode: yup
       .string()
-      .max(6, "max 6 number allowed")
-      .min(5, "min 5 number required")
-      .required("zipcode is required")
+      .max(6, t("max 6 number allowed"))
+      .min(5, t("min 5 number required"))
+      .required(t("zipcode is required"))
       .trim(""),
     city: yup
       .string()
-      .max(40, "Maximum character limit reached")
+      .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "city can only contain Latin letters."
+        t("city can only contain Latin letters.")
       )
-      .required("city is required")
+      .required(t("city is required"))
       .trim(""),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "country can only contain Latin letters."
+        t("country can only contain Latin letters.")
       )
-      .required("country is required")
+      .required(t("country is required"))
       .trim(""),
-    phone: yup.string().required("phone is required"),
-    role: yup.string().required("role is required."),
-    email: yup.string().email().required("email is required.").trim(),
+    phone: yup.string().required(t("phone is required")),
+    role: yup.string().required(t("role is required.")),
     profile: yup
       .mixed()
-      .required("Image is required.")
-      .test(profileImage !== null, "Image is required", () => {
+      .required(t("Image is required."))
+      .test(profileImage !== null, t("Image is required"), () => {
         return true;
       }),
-    password: yup
-      .string()
-      .required("Password is required!!!")
-      .matches(
-        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/,
-        "Minimum 8 characters, at least one special character, at least one digit!!!"
-      )
-      .trim(),
-    company: yup.string().required("Company is required."),
+    company: yup.string().required(t("Company is required.")),
   });
 
   const {
@@ -119,7 +113,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
 
     if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.remove();
-      toast.error("Phone is invalid");
+      toast.error(t("Phone is invalid"));
       return true;
     }
     const response = dispatch(
@@ -142,7 +136,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(` ${name} user added Successfully.`, {
+          toast.success(t(` ${name} user added successfully.`), {
             duration: 2000,
           });
           setShowAddNewUser(false);
@@ -175,7 +169,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Add new user
+          {t("Add new user")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -186,7 +180,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
             disabled={addNewUserLoading}
             type="reset"
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className={`green_button ${
@@ -195,7 +189,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
             type="submit"
             disabled={addNewUserLoading}
           >
-            {addNewUserLoading ? "Submitting..." : "Submit"}
+            {addNewUserLoading ? t("Submitting").concat("...") : t("Submit")}
           </button>
         </div>
       </div>
@@ -236,17 +230,19 @@ const AddNewUser = ({ setShowAddNewUser }) => {
         <span className="error">
           {profileImage === null && errors?.profile?.message}
         </span>
-        <p className="font-bold text-black md:text-xl">Personal Details</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("personal details")}
+        </p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
           <div className="w-full space-y-2">
             <label htmlFor="name" className="Label">
-              User name
+              {t("User name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("name")}
             />
@@ -255,24 +251,24 @@ const AddNewUser = ({ setShowAddNewUser }) => {
           {/* role */}
           <div className="w-full space-y-2">
             <label htmlFor="role" className="Label">
-              Role
+              {t("Role")}
             </label>
             <select {...register("role")} className="input_field">
               <option label="Choose role"></option>
-              <option value="editor">Editor</option>
-              <option value="admin">Admin</option>
-              <option value="viewer">Viewer</option>
+              <option value="editor">{t("Editor")}</option>
+              <option value="admin">{t("Admin")}</option>
+              <option value="viewer">{t("Viewer")}</option>
             </select>
             <span className="error">{errors?.role?.message}</span>
           </div>
           {/* company */}
           <div className="w-full space-y-2">
             <label htmlFor="company" className="Label">
-              company
+              {t("company")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("company")}
             />
@@ -281,11 +277,11 @@ const AddNewUser = ({ setShowAddNewUser }) => {
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("email")}
             />
@@ -294,7 +290,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
-              phone
+              {t("phone")}
             </label>
             <Controller
               name="phone"
@@ -335,11 +331,11 @@ const AddNewUser = ({ setShowAddNewUser }) => {
           {/* password */}
           <div className="w-full space-y-2">
             <label htmlFor="password" className="Label">
-              password
+              {t("password")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("password")}
             />
@@ -348,16 +344,16 @@ const AddNewUser = ({ setShowAddNewUser }) => {
         </div>
         <hr className="my-1" />
         {/* address */}
-        <p className="font-bold text-black md:text-xl">Address</p>
+        <p className="font-bold text-black md:text-xl">{t("Address")}</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*company address */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="company_address" className="Label">
-              Company address
+              {t("Company address")}
             </label>
             <textarea
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("address")}
             />
@@ -366,11 +362,11 @@ const AddNewUser = ({ setShowAddNewUser }) => {
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("city")}
             />
@@ -379,11 +375,11 @@ const AddNewUser = ({ setShowAddNewUser }) => {
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("country")}
             />
@@ -392,11 +388,11 @@ const AddNewUser = ({ setShowAddNewUser }) => {
           {/* zipcode */}
           <div className="w-full space-y-2">
             <label htmlFor="zipcode" className="Label">
-              zipcode
+              {t("zipcode")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               maxLength={6}
               minLength={6}

@@ -32,6 +32,7 @@ const Subcriptions = () => {
   } = useSelector((state) => state.root.subscriptions);
 
   const { token, role } = useSelector((state) => state.root.auth);
+  const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -43,10 +44,14 @@ const Subcriptions = () => {
   let displaySubscriptions = [];
   if (!loading) {
     displaySubscriptions =
-      subscriptions?.length > 0 &&
-      subscriptions.slice(pageVisited, subscriptionPerPage + pageVisited);
+      subscriptions?.length > 0 && fileterdData.length === 0
+        ? subscriptions.slice(pageVisited, subscriptionPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, subscriptionPerPage + pageVisited);
   }
-  const pageCount = Math.ceil(subscriptions?.length / subscriptionPerPage);
+  const pageCount =
+    fileterdData.length === 0
+      ? Math.ceil(subscriptions?.length / subscriptionPerPage)
+      : Math.ceil(fileterdData?.length / subscriptionPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
@@ -101,7 +106,7 @@ const Subcriptions = () => {
             {/* search + buttons */}
             <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
               <div className="lg:w-1/3 md:w-1/2 w-full">
-                <Search />
+                <Search data={subscriptions} />
               </div>
               <div>
                 <select name="filter" id="filter" className="filter_dropdown">
@@ -250,11 +255,20 @@ const Subcriptions = () => {
             <div className="flex items-center justify-between py-5">
               <p className="font-medium md:text-base text-sm text-textBlack">
                 Showing{" "}
-                {(pageNumber + 1) * subscriptionPerPage >
-                  subscriptions?.length ?? "-"
-                  ? subscriptions?.length ?? "-"
+                {fileterdData.length === 0
+                  ? (pageNumber + 1) * subscriptionPerPage >
+                    subscriptions?.length
+                    ? subscriptions?.length
+                    : (pageNumber + 1) * subscriptionPerPage
+                  : (pageNumber + 1) * subscriptionPerPage >
+                    fileterdData?.length
+                  ? fileterdData?.length
                   : (pageNumber + 1) * subscriptionPerPage}{" "}
-                from {subscriptions?.length ?? "-"} Subcriptions
+                from{" "}
+                {fileterdData?.length === 0
+                  ? subscriptions?.length
+                  : fileterdData.length}{" "}
+                Subscriptions
               </p>
               <ReactPaginate
                 onPageChange={changePage}

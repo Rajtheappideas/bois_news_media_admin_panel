@@ -36,6 +36,7 @@ const Subscribers = () => {
   } = useSelector((state) => state.root.subscribers);
 
   const { token, role } = useSelector((state) => state.root.auth);
+  const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -51,10 +52,14 @@ const Subscribers = () => {
   let displaySubscibers = [];
   if (!loading) {
     displaySubscibers =
-      subscribers.length > 0 &&
-      subscribers.slice(pageVisited, subscribersPerPage + pageVisited);
+      subscribers.length > 0 && fileterdData.length === 0
+        ? subscribers.slice(pageVisited, subscribersPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, subscribersPerPage + pageVisited);
   }
-  const pageCount = Math.ceil(subscribers.length / subscribersPerPage);
+  const pageCount =
+    fileterdData.length === 0
+      ? Math.ceil(subscribers.length / subscribersPerPage)
+      : Math.ceil(fileterdData.length / subscribersPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
@@ -124,7 +129,7 @@ const Subscribers = () => {
             {/* search + buttons */}
             <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
               <div className="lg:w-1/3 md:w-1/2 w-full">
-                <Search />
+                <Search data={subscribers} />
               </div>
               {role === "admin" && (
                 <div className="flex items-center gap-3">
@@ -279,10 +284,18 @@ const Subscribers = () => {
             <div className="flex items-center justify-between py-5">
               <p className="font-medium md:text-base text-sm text-textBlack">
                 Showing{" "}
-                {(pageNumber + 1) * subscribersPerPage > subscribers?.length
-                  ? subscribers?.length
+                {fileterdData.length === 0
+                  ? (pageNumber + 1) * subscribersPerPage > subscribers?.length
+                    ? subscribers?.length
+                    : (pageNumber + 1) * subscribersPerPage
+                  : (pageNumber + 1) * subscribersPerPage > fileterdData?.length
+                  ? fileterdData?.length
                   : (pageNumber + 1) * subscribersPerPage}{" "}
-                from {subscribers?.length} subscirbers
+                from{" "}
+                {fileterdData?.length === 0
+                  ? subscribers?.length
+                  : fileterdData.length}{" "}
+                Subscribers
               </p>
               <ReactPaginate
                 onPageChange={changePage}

@@ -4,9 +4,14 @@ import { FiChevronDown } from "react-icons/fi";
 import { FaUserAlt } from "react-icons/fa";
 import { BsChevronDown } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { handleChangeLanguage, handleLogout } from "../redux/AuthSlice";
+import { handleLogout } from "../redux/AuthSlice";
 import { toast } from "react-hot-toast";
 import BaseUrl from "../BaseUrl";
+import {
+  handleLogoutFromAllTabs,
+  handleChangeUserLanguage,
+} from "../redux/GlobalStates";
+import { useTranslation } from "react-i18next";
 
 const Header = ({
   openSidebar,
@@ -18,10 +23,13 @@ const Header = ({
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [stickyHeader, setStickyHeader] = useState(false);
 
-  const { loading, language, user } = useSelector((state) => state.root.auth);
+  const { loading, user } = useSelector((state) => state.root.auth);
+  const { language } = useSelector((state) => state.root.globalStates);
 
   const profileRef = useRef(null);
   const languageRef = useRef(null);
+
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -45,10 +53,7 @@ const Header = ({
   // for language dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        languageRef.current &&
-        !languageRef.current.contains(event?.target)
-      ) {
+      if (languageRef.current && !languageRef.current.contains(event?.target)) {
         setShowLanguageDropdown(false);
       }
     };
@@ -61,6 +66,18 @@ const Header = ({
   function handleClickOutsideForNotification() {
     setShowLanguageDropdown(false);
   }
+
+  const handlechangelanguage = (value) => {
+    if (value === "en") {
+      window.localStorage.setItem("lang", JSON.stringify("en"));
+      dispatch(handleChangeUserLanguage("en"));
+      window.location.reload();
+    } else {
+      window.localStorage.setItem("lang", JSON.stringify("fr"));
+      dispatch(handleChangeUserLanguage("fr"));
+      window.location.reload();
+    }
+  };
 
   // for sticky header
   // useEffect(() => {
@@ -90,10 +107,10 @@ const Header = ({
           className="md:text-2xl text-xl"
         />
         <p className="font-bold lg:text-2xl text-textBlack md:text-xl text-sm capitalize">
-          {activeComponent} <br className="md:hidden block" />{" "}
-          {activeComponent !== "dashboard" &&
-            activeComponent !== "profile" &&
-            "management"}
+          {t(activeComponent)} <br className="md:hidden block" />{" "}
+          {t(activeComponent) !== t("dashboard") &&
+            t(activeComponent) !== t("profile") &&
+            t("management")}
         </p>
       </div>
       {/* right side profile */}
@@ -120,8 +137,8 @@ const Header = ({
               />
             )}
 
-            <span className="inline-block">
-              {language === "en" ? "English" : "French"}
+            <span className="inline-block capitalize">
+              {language === "en" ? t("english") : t("french")}
             </span>
             <span>
               <FiChevronDown
@@ -131,7 +148,7 @@ const Header = ({
               />
             </span>
           </p>
-          {/* dropdown for notifications */}
+          {/* dropdown for langauge */}
           <div
             className={`font-normal md:text-lg transition origin-top transform bg-white ${
               showLanguageDropdown ? "scale-100" : "scale-0"
@@ -139,23 +156,23 @@ const Header = ({
           >
             <div
               onClick={() => {
-                dispatch(handleChangeLanguage("en"));
                 setShowLanguageDropdown(false);
+                handlechangelanguage("en");
               }}
-              className="flex items-center justify-start text-left hover:bg-gray-100 w-full p-1 gap-x-1"
+              className="flex items-center justify-start  text-left hover:bg-gray-100 w-full p-1 gap-x-1"
             >
               <img
                 src={require("../assets/images/english.png")}
                 alt="french"
                 className="md:h-10 h-5 md:w-10 w-5"
               />
-              <div className="text-textBlack w-full rounded-md  hover:font-semibold transition cursor-pointer">
-                English
+              <div className="text-textBlack w-full capitalize rounded-md  hover:font-semibold transition cursor-pointer">
+                {t("english")}
               </div>
             </div>
             <div
               onClick={() => {
-                dispatch(handleChangeLanguage("fr"));
+                handlechangelanguage("fr");
                 setShowLanguageDropdown(false);
               }}
               className="flex items-center justify-start text-left  hover:bg-gray-100 p-1 w-full gap-x-1"
@@ -165,8 +182,8 @@ const Header = ({
                 alt="french"
                 className="md:h-10 h-5 md:w-10 w-5"
               />
-              <div className="text-textBlack w-full rounded-md hover:font-semibold transition cursor-pointer">
-                French
+              <div className="text-textBlack w-full capitalize rounded-md hover:font-semibold transition cursor-pointer">
+                {t("french")}
               </div>
             </div>
           </div>
@@ -202,35 +219,36 @@ const Header = ({
           >
             <p
               onClick={() => {
-                setActiveComponent("profile");
+                setActiveComponent(t("profile"));
                 setShowProfileDropdown(false);
               }}
-              className="hover:font-semibold duration-300 w-full p-1 rounded-md transition cursor-pointer"
+              className="hover:font-semibold duration-300 w-full capitalize p-1 rounded-md transition cursor-pointer"
             >
-              Profile
+              {t("profile")}
             </p>
             <button
               onClick={() => {
-                setActiveComponent("change password");
+                setActiveComponent(t("change password"));
               }}
-              className="text-textBlack text-left w-full p-1 rounded-md hover:font-semibold transition cursor-pointer"
+              className="text-textBlack capitalize text-left w-full p-1 rounded-md hover:font-semibold transition cursor-pointer"
             >
-              Change Password
+              {t("change password")}
             </button>
             <button
               disabled={loading}
               onClick={() => {
-                toast.loading("Logout...");
+                toast.loading(t("logout..."));
                 setTimeout(() => {
                   toast.remove();
                   dispatch(handleLogout());
+                  dispatch(handleLogoutFromAllTabs());
                 }, 1000);
               }}
-              className={`text-red-500 text-left w-full p-1 rounded-md hover:font-semibold transition ${
+              className={`text-red-500 text-left capitalize w-full p-1 rounded-md hover:font-semibold transition ${
                 loading && "cursor-not-allowed"
               } `}
             >
-              {loading ? "..." : "Logout"}
+              {loading ? "..." : t("logout")}
             </button>
           </div>
         </div>

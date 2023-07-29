@@ -2,10 +2,13 @@ import React from "react";
 import { handleFindUser } from "../../redux/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import BaseUrl from "../../BaseUrl";
+import { useTranslation } from "react-i18next";
 
 const ShowUsersDetailsOnly = ({ setShowUserDetailsOnly }) => {
   const { singleUser } = useSelector((state) => state.root.users);
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const {
     name,
@@ -34,7 +37,7 @@ const ShowUsersDetailsOnly = ({ setShowUserDetailsOnly }) => {
               dispatch(handleFindUser(""));
             }}
           >
-            Cancel
+            {t("Cancel")}
           </button>
         </div>
       </div>
@@ -48,74 +51,74 @@ const ShowUsersDetailsOnly = ({ setShowUserDetailsOnly }) => {
           />
         </div>
 
-        <p className="font-bold text-black md:text-xl">Personal Details</p>
+        <p className="font-bold text-black md:text-xl capitalize">{t("personal details")}</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
           <div className="w-full space-y-2">
             <label htmlFor="name" className="Label">
-              User name
+              {t("User name")}
             </label>
             <p className="font-semibold">{name ?? "-"}</p>
           </div>
           {/* role */}
           <div className="w-full space-y-2">
             <label htmlFor="role" className="Label">
-              Role
+              {t("Role")}
             </label>
             <p className="font-semibold">{role ?? "-"}</p>
           </div>
           {/* company */}
           <div className="w-full space-y-2">
             <label htmlFor="company" className="Label">
-              company
+              {t("company")}
             </label>
             <p className="font-semibold">{company ?? "-"}</p>
           </div>
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <p className="font-semibold">{email ?? "-"}</p>
           </div>
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
-              phone
+              {t("phone")}
             </label>
             <p className="font-semibold">{phone ?? "-"}</p>
           </div>
         </div>
         <hr className="my-1" />
         {/* address */}
-        <p className="font-bold text-black md:text-xl">Address</p>
+        <p className="font-bold text-black md:text-xl">{t("Address")}</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*company address */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="company_address" className="Label">
-              Company address
+              {t("Company address")}
             </label>
             <p className="font-semibold">{address ?? "-"}</p>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <p className="font-semibold">{city ?? "-"}</p>
           </div>
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <p className="font-semibold">{country ?? "-"}</p>
           </div>
           {/* zipcode */}
           <div className="w-full space-y-2">
             <label htmlFor="zipCode" className="Label">
-              zipcode
+              {t("zipcode")}
             </label>
             <p className="font-semibold">{zipCode ?? "-"}</p>
           </div>

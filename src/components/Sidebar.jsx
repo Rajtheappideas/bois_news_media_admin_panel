@@ -6,11 +6,12 @@ import { TbUserDollar } from "react-icons/tb";
 import { CgNotes } from "react-icons/cg";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
-import { LuSettings2 } from "react-icons/lu";
 import { HiOutlineXMark } from "react-icons/hi2";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
 import BaseUrl from "../BaseUrl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handleClearFilteredData } from "../redux/GlobalStates";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = ({
   setActiveComponent,
@@ -18,20 +19,24 @@ const Sidebar = ({
   setOpenSidebar,
   openSidebar,
 }) => {
-  const sidebarRef = useRef(null);
-
   const { user } = useSelector((state) => state.root.auth);
 
+  const sidebarRef = useRef(null);
+
+  const dispatch = useDispatch();
+
+  const { t } = useTranslation();
+
   const sidebarList = [
-    { title: "dashboard", icon: BiHome },
-    { title: "users", icon: AiOutlineUser },
-    { title: "subscribers", icon: AiOutlineUsergroupAdd },
-    { title: "prospect", icon: MdSavedSearch },
-    { title: "partners", icon: FaRegHandshake },
-    { title: "third-party payer", icon: TbUserDollar },
-    { title: "subscriptions", icon: CgNotes },
-    { title: "magazine", icon: GiWhiteBook },
-    { title: "orders", icon: BsCart3 },
+    { title: t("dashboard"), icon: BiHome },
+    { title: t("users"), icon: AiOutlineUser },
+    { title: t("subscribers"), icon: AiOutlineUsergroupAdd },
+    { title: t("prospect"), icon: MdSavedSearch },
+    { title: t("partners"), icon: FaRegHandshake },
+    { title: t("third-party payer"), icon: TbUserDollar },
+    { title: t("subscriptions"), icon: CgNotes },
+    { title: t("magazine"), icon: GiWhiteBook },
+    { title: t("orders"), icon: BsCart3 },
     // { title: "settings", icon: LuSettings2 },
   ];
 
@@ -54,11 +59,30 @@ const Sidebar = ({
     setOpenSidebar(false);
   }
 
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 1024) {
+        window.document.body.style.overflow = "unset";
+      } else if (window.innerWidth < 1024) {
+        window.document.body.style.overflow = "hidden";
+      }
+    });
+    if (openSidebar && window.innerWidth < 1024) {
+      window.document.body.style.overflow = "hidden";
+    } else {
+      window.document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      window.removeEventListener("resize", () => {});
+    };
+  }, [openSidebar]);
+
   return (
     <div
       className={`lg:sticky lg:top-0 ${
         openSidebar ? "xl:w-2/12 lg:w-1/5" : "lg:w-[10%]"
-      } h-auto capitalize overflow-hidden`}
+      } h-auto capitalize `}
     >
       {/* for desktop */}
       <div
@@ -78,7 +102,10 @@ const Sidebar = ({
         <ul className="w-full space-y-3 text-sm ">
           {sidebarList.map((list) => (
             <li
-              onClick={() => setActiveComponent(list.title)}
+              onClick={() => {
+                setActiveComponent(list.title);
+                dispatch(handleClearFilteredData());
+              }}
               key={list.title}
               className={`flex items-center ${
                 openSidebar ? "justify-start" : "justify-center"
@@ -110,7 +137,7 @@ const Sidebar = ({
       {/* for tablet / mobile */}
       <div
         ref={sidebarRef}
-        className={`min-h-screen max-h-screen overflow-y-scroll scrollbar inset-0 absolute md:w-1/2 w-4/5 z-50 bg-white ${
+        className={`min-h-screen max-h-[90vh] overflow-y-scroll scrollbar inset-0 absolute md:w-1/2 w-4/5 z-50 bg-white ${
           openSidebar ? "translate-x-0" : "-translate-x-[100%]"
         } px-4 transition duration-300 ease-in-out lg:hidden block py-3 shadow-xl`}
       >
@@ -137,6 +164,7 @@ const Sidebar = ({
               onClick={() => {
                 setActiveComponent(list.title);
                 setOpenSidebar(false);
+                dispatch(handleClearFilteredData());
               }}
               key={list.title}
               className={`flex items-center justify-start whitespace-nowrap
@@ -164,7 +192,7 @@ const Sidebar = ({
         </ul>
       </div>
       {openSidebar && (
-        <div className="absolute lg:hidden block z-40 inset-0 bg-black bg-opacity-20 backdrop-blur-sm max-w-[100%] h-full" />
+        <div className="absolute lg:hidden overflow-hidden block z-40 inset-0 bg-black bg-opacity-20 backdrop-blur-sm max-w-[100%] h-full" />
       )}
     </div>
   );

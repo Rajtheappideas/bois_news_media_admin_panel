@@ -10,6 +10,7 @@ import { handleRegisterUser } from "../redux/AuthSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
+import { handleSuccess } from "../redux/GlobalStates";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -58,6 +59,7 @@ const SignUp = () => {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success("Sign up Successfully.", { duration: 2000 });
+          dispatch(handleSuccess());
           navigate("/");
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);

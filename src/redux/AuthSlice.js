@@ -179,9 +179,6 @@ const initialState = {
   token: null,
   verifyToken: null,
   email: null,
-  language: !window.localStorage.getItem("lang")
-    ? window.localStorage.setItem("lang", JSON.stringify("en"))
-    : JSON.parse(window.localStorage.getItem("lang")),
 };
 
 const AuthSlice = createSlice({
@@ -197,11 +194,6 @@ const AuthSlice = createSlice({
     },
     handleStoreUserEmail: (state, { payload }) => {
       state.email = payload;
-    },
-    handleChangeLanguage: (state, { payload }) => {
-      state.language = payload;
-      window.localStorage.setItem("lang", JSON.stringify(payload));
-      // window.location.reload()
     },
   },
   extraReducers: (builder) => {
@@ -382,7 +374,6 @@ const AuthSlice = createSlice({
   },
 });
 
-export const { handleLogout, handleStoreUserEmail, handleChangeLanguage } =
-  AuthSlice.actions;
+export const { handleLogout, handleStoreUserEmail } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

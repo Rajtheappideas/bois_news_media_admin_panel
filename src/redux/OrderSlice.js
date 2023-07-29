@@ -6,11 +6,11 @@ const initialState = {
   success: false,
   orders: [],
   filterType: "newest",
-  singleUser: null,
-  addNewUserLoading: false,
-  deleteUserLoading: false,
-  EditUserLoading: false,
-  deleteUserID: null,
+  singleOrder: null,
+  addNewOrderLoading: false,
+  deleteOrderLoading: false,
+  EditOrderLoading: false,
+  deleteOrderID: null,
 };
 
 const OrderSlice = createSlice({

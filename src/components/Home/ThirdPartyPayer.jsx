@@ -8,7 +8,7 @@ import EditDetailsThirdPartyPayer from "../ThirdPartyPayer/EditDetailsThirdParty
 import { useDispatch, useSelector } from "react-redux";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
-import { BsEye } from "react-icons/bs";
+import { BsEye, BsFilterLeft } from "react-icons/bs";
 import {
   handleChangeDeleteID,
   handleDeletePAYER,
@@ -33,6 +33,7 @@ const ThirdPartyPayer = () => {
   } = useSelector((state) => state.root.thirdPartyPayers);
 
   const { token, role } = useSelector((state) => state.root.auth);
+  const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -44,10 +45,14 @@ const ThirdPartyPayer = () => {
   let displayPayers = [];
   if (!loading) {
     displayPayers =
-      payers?.length > 0 &&
-      payers.slice(pageVisited, payersPerPage + pageVisited);
+      payers?.length > 0 && fileterdData.length === 0
+        ? payers.slice(pageVisited, payersPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, payersPerPage + pageVisited);
   }
-  const pageCount = Math.ceil(payers?.length / payersPerPage);
+  const pageCount =
+    fileterdData.length === 0
+      ? Math.ceil(payers?.length / payersPerPage)
+      : Math.ceil(fileterdData?.length / payersPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
@@ -90,7 +95,7 @@ const ThirdPartyPayer = () => {
           {/* search + buttons */}
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
             <div className="lg:w-1/3 md:w-1/2 w-full">
-              <Search />
+              <Search data={payers} />
             </div>
             <div>
               <select
@@ -242,10 +247,18 @@ const ThirdPartyPayer = () => {
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
               Showing{" "}
-              {(pageNumber + 1) * payersPerPage > payers?.length ?? "-"
-                ? payers?.length ?? "-"
+              {fileterdData.length === 0
+                ? (pageNumber + 1) * payersPerPage > payers?.length
+                  ? payers?.length
+                  : (pageNumber + 1) * payersPerPage
+                : (pageNumber + 1) * payersPerPage > fileterdData?.length
+                ? fileterdData?.length
                 : (pageNumber + 1) * payersPerPage}{" "}
-              from {payers?.length ?? "-"} payers
+              from{" "}
+              {fileterdData?.length === 0
+                ? payers?.length
+                : fileterdData.length}{" "}
+              Payers
             </p>
             <ReactPaginate
               onPageChange={changePage}

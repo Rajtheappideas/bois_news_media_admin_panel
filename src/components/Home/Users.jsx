@@ -18,6 +18,7 @@ import {
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
 import ShowUsersDetailsOnly from "../Users/ShowUsersDetailsOnly";
+import { useTranslation } from "react-i18next";
 
 const Users = () => {
   const [showUserDetail, setShowUserDetail] = useState(false);
@@ -29,8 +30,11 @@ const Users = () => {
   const { users, loading, addNewUserLoading, deleteUserLoading, deleteUserID } =
     useSelector((state) => state.root.users);
   const { token, role } = useSelector((state) => state.root.auth);
+  const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -40,15 +44,20 @@ const Users = () => {
   let displayUsers = [];
   if (!loading) {
     displayUsers =
-      users?.length > 0 && users.slice(pageVisited, usersPerPage + pageVisited);
+      users?.length > 0 && fileterdData.length === 0
+        ? users.slice(pageVisited, usersPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, usersPerPage + pageVisited);
   }
-  const pageCount = Math.ceil(users?.length / usersPerPage);
+  const pageCount =
+    fileterdData.length === 0
+      ? Math.ceil(users?.length / usersPerPage)
+      : Math.ceil(fileterdData?.length / usersPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
 
   const handleDeleteruser = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
@@ -85,11 +94,11 @@ const Users = () => {
       )}
 
       {!showUserDetail && !showAddNewUser && !showUserDetailsOnly && (
-        <div className="lg:space-y-5 space-y-3 w-full">
+        <div className="lg:space-y-5 select-none space-y-3 w-full">
           {/* search + buttons */}
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
             <div className="lg:w-1/3 md:w-1/2 w-full">
-              <Search />
+              <Search data={users} />
             </div>
             <div>
               <select
@@ -100,14 +109,14 @@ const Users = () => {
                 id="filter"
                 className="filter_dropdown outline-none"
               >
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
+                <option value="newest">{t("newest")}</option>
+                <option value="oldest">{t("oldest")}</option>
               </select>
               <button
                 className="gray_button"
                 onClick={() => setShowAddNewUser(true)}
               >
-                + Add new
+                + {t("Add new")}
               </button>
             </div>
           </div>
@@ -126,18 +135,18 @@ const Users = () => {
                       <span>ID</span>
                     </label>
                   </th>
-                  <th className="p-4 text-left">Joining Date</th>
-                  <th className="p-4 text-left">Name</th>
-                  <th className="p-4 text-left">Email</th>
-                  <th className="p-4 text-left">Phone</th>
-                  <th className="p-4 text-left">Role</th>
-                  <th className="p-4">Action</th>
+                  <th className="p-4 text-left">{t("Joining Date")}</th>
+                  <th className="p-4 text-left">{t("Name")}</th>
+                  <th className="p-4 text-left">{t("Email")}</th>
+                  <th className="p-4 text-left">{t("Phone")}</th>
+                  <th className="p-4 text-left">{t("Role")}</th>
+                  <th className="p-4">{t("Action")}</th>
                 </tr>
               </thead>
               <tbody className="w-full">
                 {loading ? (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">Loading....</td>
+                    <td colSpan="7">{t("Loading")}....</td>
                   </tr>
                 ) : users.length !== 0 && users !== undefined ? (
                   displayUsers.map((user) => (
@@ -204,6 +213,21 @@ const Users = () => {
                             />
                           </button>
                         )}
+                        <button
+                          onClick={() => {
+                            setShowUserDetailsOnly(true);
+                            dispatch(handleFindUser(user?._id));
+                          }}
+                          disabled={deleteUserLoading || loading}
+                          type="button"
+                          className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
+                        >
+                          <BsEye
+                            color="gray"
+                            size={30}
+                            className="inline-block mr-1"
+                          />
+                        </button>
                         {role === "admin" && (
                           <button
                             type="button"
@@ -231,7 +255,7 @@ const Users = () => {
                   ))
                 ) : (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">No users here.</td>
+                    <td colSpan="7">{t("No users here")}.</td>
                   </tr>
                 )}
               </tbody>
@@ -239,12 +263,18 @@ const Users = () => {
           </div>
           {/* pagination */}
           <div className="flex items-center justify-between py-5">
-            <p className="font-medium md:text-base text-sm text-textBlack">
-              Showing{" "}
-              {(pageNumber + 1) * usersPerPage > users?.length ?? "-"
-                ? users?.length ?? "-"
+            <p className="font-medium capitalize md:text-base text-sm text-textBlack">
+              {t("Showing")}{" "}
+              {fileterdData.length === 0
+                ? (pageNumber + 1) * usersPerPage > users?.length
+                  ? users?.length
+                  : (pageNumber + 1) * usersPerPage
+                : (pageNumber + 1) * usersPerPage > fileterdData?.length
+                ? fileterdData?.length
                 : (pageNumber + 1) * usersPerPage}{" "}
-              from {users?.length ?? "-"} users
+              {t("from")}{" "}
+              {fileterdData?.length === 0 ? users?.length : fileterdData.length}{" "}
+              {t("users")}
             </p>
             <ReactPaginate
               onPageChange={changePage}

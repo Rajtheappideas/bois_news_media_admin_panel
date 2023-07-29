@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorFallback";
 import Lottie from "lottie-react";
@@ -8,6 +8,11 @@ import loading from "./assets/animations/loading.json";
 import React, { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import PrivateRoute from "./pages/PrivateRoute";
+import { useDispatch } from "react-redux";
+import {
+  loginAllTabsEventListener,
+  logoutAllTabsEventListener,
+} from "./redux/GlobalStates";
 
 const Home = lazy(() => import("./pages/Home"));
 const SignIn = lazy(() => import("./pages/SignIn"));
@@ -17,6 +22,12 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loginAllTabsEventListener());
+    dispatch(logoutAllTabsEventListener());
+  }, []);
+
   return (
     <BrowserRouter>
       <Toaster toastOptions={{ duration: 4000 }} position="top-center" />

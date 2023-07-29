@@ -11,6 +11,7 @@ import useAbortApiCall from "../hooks/useAbortApiCall";
 import { handleLoginUser } from "../redux/AuthSlice";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
+import { handleSuccess } from "../redux/GlobalStates";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -50,6 +51,7 @@ const SignIn = () => {
         .then((res) => {
           if (res?.payload?.status === "success") {
             toast.success("Sign in Successfully.", { duration: 2000 });
+            dispatch(handleSuccess());
             navigate("/");
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);

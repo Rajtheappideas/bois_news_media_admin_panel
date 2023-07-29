@@ -33,6 +33,7 @@ const Partners = () => {
   } = useSelector((state) => state.root.partners);
 
   const { token, role } = useSelector((state) => state.root.auth);
+  const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -44,10 +45,14 @@ const Partners = () => {
   let displayPartners = [];
   if (!loading) {
     displayPartners =
-      partners?.length > 0 &&
-      partners.slice(pageVisited, partnersPerPage + pageVisited);
+      partners?.length > 0 && fileterdData.length === 0
+        ? partners.slice(pageVisited, partnersPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, partnersPerPage + pageVisited);
   }
-  const pageCount = Math.ceil(partners?.length / partnersPerPage);
+  const pageCount =
+    fileterdData.length === 0
+      ? Math.ceil(partners?.length / partnersPerPage)
+      : Math.ceil(fileterdData?.length / partnersPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
@@ -90,7 +95,7 @@ const Partners = () => {
           {/* search + buttons */}
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
             <div className="lg:w-1/3 md:w-1/2 w-full">
-              <Search />
+              <Search data={partners} />
             </div>
             <div>
               <select
@@ -243,10 +248,18 @@ const Partners = () => {
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
               Showing{" "}
-              {(pageNumber + 1) * partnersPerPage > partners?.length ?? "-"
-                ? partners?.length ?? "-"
+              {fileterdData.length === 0
+                ? (pageNumber + 1) * partnersPerPage > partners?.length
+                  ? partners?.length
+                  : (pageNumber + 1) * partnersPerPage
+                : (pageNumber + 1) * partnersPerPage > fileterdData?.length
+                ? fileterdData?.length
                 : (pageNumber + 1) * partnersPerPage}{" "}
-              from {partners?.length ?? "-"} partners
+              from{" "}
+              {fileterdData?.length === 0
+                ? partners?.length
+                : fileterdData.length}{" "}
+              Partners
             </p>
             <ReactPaginate
               onPageChange={changePage}

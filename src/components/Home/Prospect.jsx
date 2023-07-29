@@ -33,6 +33,7 @@ const Prospect = () => {
   } = useSelector((state) => state.root.prospects);
 
   const { token, role } = useSelector((state) => state.root.auth);
+  const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -44,10 +45,14 @@ const Prospect = () => {
   let displayProspects = [];
   if (!loading) {
     displayProspects =
-      prospects?.length > 0 &&
-      prospects.slice(pageVisited, prospectsPerPage + pageVisited);
+      prospects?.length > 0 && fileterdData.length === 0
+        ? prospects.slice(pageVisited, prospectsPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, prospectsPerPage + pageVisited);
   }
-  const pageCount = Math.ceil(prospects?.length / prospectsPerPage);
+  const pageCount =
+    fileterdData.length === 0
+      ? Math.ceil(prospects?.length / prospectsPerPage)
+      : Math.ceil(fileterdData?.length / prospectsPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
@@ -100,7 +105,7 @@ const Prospect = () => {
             {/* search + buttons */}
             <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
               <div className="lg:w-1/3 md:w-1/2 w-full">
-                <Search />
+                <Search data={prospects} />
               </div>
               <div>
                 <select
@@ -253,11 +258,19 @@ const Prospect = () => {
             {/* pagination */}
             <div className="flex items-center justify-between py-5">
               <p className="font-medium md:text-base text-sm text-textBlack">
-                Showing{" "}
-                {(pageNumber + 1) * prospectsPerPage > prospects?.length ?? "-"
-                  ? prospects?.length ?? "-"
+                Showing Showing{" "}
+                {fileterdData.length === 0
+                  ? (pageNumber + 1) * prospectsPerPage > prospects?.length
+                    ? prospects?.length
+                    : (pageNumber + 1) * prospectsPerPage
+                  : (pageNumber + 1) * prospectsPerPage > fileterdData?.length
+                  ? fileterdData?.length
                   : (pageNumber + 1) * prospectsPerPage}{" "}
-                from {prospects?.length ?? "-"} prospects
+                from{" "}
+                {fileterdData?.length === 0
+                  ? prospects?.length
+                  : fileterdData.length}{" "}
+                prospects
               </p>
               <ReactPaginate
                 onPageChange={changePage}

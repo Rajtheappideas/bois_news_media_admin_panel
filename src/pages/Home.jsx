@@ -24,6 +24,7 @@ import { handleGetAllPayers } from "../redux/ThirdPartyPayerSlice";
 import { handleGetAllSubscription } from "../redux/SubscriptionSlice";
 import { handleGetAllMagazine } from "../redux/MagazineSlice";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -35,6 +36,8 @@ const Home = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const handleGetContent = () => {
     if (user === null) {
@@ -56,20 +59,6 @@ const Home = () => {
       abortApiCall();
     };
   }, []);
-
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      if (openSidebar && window.screen.width < 1024) {
-        window.document.body.style.overflow = "hidden";
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      } else {
-        window.document.body.style.overflow = "unset";
-      }
-    });
-    return () => {
-      window.removeEventListener("resize", () => {});
-    };
-  }, [openSidebar]);
 
   return (
     <>
@@ -97,17 +86,17 @@ const Home = () => {
             {activeComponent === "dashboard" && (
               <Dashboard setActiveComponent={setActiveComponent} />
             )}
-            {activeComponent === "users" && <Users />}
-            {activeComponent === "subscribers" && <Subscribers />}
-            {activeComponent === "prospect" && <Prospect />}
-            {activeComponent === "partners" && <Partners />}
-            {activeComponent === "third-party payer" && <ThirdPartyPayer />}
-            {activeComponent === "subscriptions" && <Subcriptions />}
-            {activeComponent === "magazine" && <Magazine />}
-            {activeComponent === "orders" && <Orders />}
-            {activeComponent === "settings" && <Settings />}
-            {activeComponent === "profile" && <Profile />}
-            {activeComponent === "change password" && <ChangePassword />}
+            {activeComponent === t("users") && <Users />}
+            {activeComponent === t("subscribers") && <Subscribers />}
+            {activeComponent === t("prospect") && <Prospect />}
+            {activeComponent === t("partners") && <Partners />}
+            {activeComponent === t("third-party payer") && <ThirdPartyPayer />}
+            {activeComponent === t("subscriptions") && <Subcriptions />}
+            {activeComponent === t("magazine") && <Magazine />}
+            {activeComponent === t("orders") && <Orders />}
+            {/* {activeComponent === t("settings" && <Settings />} */}
+            {activeComponent === t("profile") && <Profile />}
+            {activeComponent === t("change password") && <ChangePassword />}
           </div>
         </section>
       </div>

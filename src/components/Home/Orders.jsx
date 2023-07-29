@@ -5,9 +5,39 @@ import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { BiPrinter } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import OrderDetails from "../Orders/OrderDetails";
+import { useSelector } from "react-redux";
 
 const Orders = () => {
   const [showOrderDetails, setshowOrderDetails] = useState(false);
+  const [pageNumber, setPageNumber] = useState(0);
+
+  const {
+    orders,
+    loading,
+    addNewOrderLoading,
+    deleteOrderLoading,
+    deleteOrderID,
+  } = useSelector((state) => state.root.orders);
+  const { token, role } = useSelector((state) => state.root.auth);
+  const { fileterdData } = useSelector((state) => state.root.globalStates);
+
+  // pagination logic
+  const ordersPerPage = 8;
+  const pageVisited = pageNumber * ordersPerPage;
+  let displayOrders = [];
+  if (!loading) {
+    displayOrders =
+      orders?.length > 0 && fileterdData.length === 0
+        ? orders.slice(pageVisited, ordersPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, ordersPerPage + pageVisited);
+  }
+  const pageCount =
+    fileterdData.length === 0
+      ? Math.ceil(orders?.length / ordersPerPage)
+      : Math.ceil(fileterdData?.length / ordersPerPage);
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
 
   return (
     <>
@@ -18,7 +48,7 @@ const Orders = () => {
           {/* search + buttons */}
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
             <div className="lg:w-1/3 md:w-1/2 w-full">
-              <Search />
+              <Search data={orders} />
             </div>
             <div>
               <select name="filter" id="filter" className="filter_dropdown">
@@ -254,15 +284,22 @@ const Orders = () => {
           {/* pagination */}
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
-              {/* Showing{" "}
-{(pageNumber + 1) * invoicePerPage > userInvoices.length
-  ? userInvoices.length
-  : (pageNumber + 1) * invoicePerPage}{" "}
-from {userInvoices.length} data */}
-              Showing 8 from 8
+              Showing{" "}
+              {fileterdData.length === 0
+                ? (pageNumber + 1) * ordersPerPage > orders?.length
+                  ? orders?.length
+                  : (pageNumber + 1) * ordersPerPage
+                : (pageNumber + 1) * ordersPerPage > fileterdData?.length
+                ? fileterdData?.length
+                : (pageNumber + 1) * ordersPerPage}{" "}
+              from{" "}
+              {fileterdData?.length === 0
+                ? orders?.length
+                : fileterdData.length}{" "}
+              Orders
             </p>
             <ReactPaginate
-              // onPageChange={changePage}
+              onPageChange={changePage}
               previousLabel={
                 <BiChevronsLeft
                   className="text-blue-500 text-2xl"
@@ -281,7 +318,7 @@ from {userInvoices.length} data */}
               breakLinkClassName="page-link"
               pageRangeDisplayed={1}
               marginPagesDisplayed={1}
-              pageCount={2}
+              pageCount={pageCount}
               containerClassName="pagination"
               activeClassName="py-2 px-4 bg-primaryBlue cursor-pointer text-white rounded-lg text-center"
               className="shadow-sm p-2 font-semibold text-textColor rounded-lg flex items-center md:gap-x-2 gap-x-1"
