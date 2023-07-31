@@ -136,7 +136,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(t(` ${name} user added successfully.`), {
+          toast.success(`${name} ${t("user added successfully.")}`, {
             duration: 2000,
           });
           setShowAddNewUser(false);

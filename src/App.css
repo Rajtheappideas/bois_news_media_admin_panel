@@ -59,23 +59,23 @@ body::-webkit-scrollbar-thumb {
 }
 
 .gray_button {
-  @apply bg-buttonGray capitalize text-white font-medium text-center  w-auto h-10 rounded-lg p-2 hover:bg-buttonGray/80 active:scale-95 transition;
+  @apply bg-buttonGray capitalize text-white font-medium text-center md:min-w-[8rem] h-10 rounded-lg p-2 hover:bg-buttonGray/80 active:scale-95 transition;
 }
 
 .green_button {
-  @apply bg-buttonGreen capitalize text-white font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-buttonGreen/80 active:scale-95 transition;
+  @apply bg-buttonGreen capitalize text-white font-medium text-center md:min-w-[8rem] h-10 rounded-lg p-2 hover:bg-buttonGreen/80 active:scale-95 transition;
 }
 
 .red_button {
-  @apply bg-buttonRed capitalize text-white font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-buttonRed/80 active:scale-95 transition;
+  @apply bg-buttonRed capitalize text-white font-medium text-center md:min-w-[8rem] h-10 rounded-lg p-2 hover:bg-buttonRed/80 active:scale-95 transition;
 }
 
 .blue_button {
-  @apply bg-primaryBlue capitalize text-white font-medium text-center md:min-w-[128px] min-w-[6rem] h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition;
+  @apply bg-primaryBlue capitalize text-white font-medium text-center md:min-w-[8rem] h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition;
 }
 
 .input_field {
-  @apply outline-none w-full capitalize rounded-md border border-gray-300 p-2.5 focus:border-gray-400 focus:border-2;
+  @apply outline-none w-full rounded-md border border-gray-300 p-2.5 focus:border-gray-400 focus:border-2;
 }
 
 .Label {
@@ -83,7 +83,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .otp_Field {
-  @apply rounded-lg border capitalize font-bold md:text-base text-sm border-textColor md:h-12 md:w-12 h-8 w-8 outline-none text-center;
+  @apply rounded-lg border font-bold md:text-base text-sm border-textColor md:h-12 md:w-12 h-8 w-8 outline-none text-center;
 }
 
 .data_not_found_And_Loading {

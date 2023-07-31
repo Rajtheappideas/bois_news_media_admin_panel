@@ -67,7 +67,7 @@ const Users = () => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteUser(id));
-            toast.success(` ${name} user Deleted Successfully.`);
+            toast.success(` ${name} ${t("user Deleted Successfully.")}`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -213,21 +213,7 @@ const Users = () => {
                             />
                           </button>
                         )}
-                        <button
-                          onClick={() => {
-                            setShowUserDetailsOnly(true);
-                            dispatch(handleFindUser(user?._id));
-                          }}
-                          disabled={deleteUserLoading || loading}
-                          type="button"
-                          className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                        >
-                          <BsEye
-                            color="gray"
-                            size={30}
-                            className="inline-block mr-1"
-                          />
-                        </button>
+
                         {role === "admin" && (
                           <button
                             type="button"

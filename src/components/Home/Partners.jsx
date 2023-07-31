@@ -17,6 +17,7 @@ import {
 import { toast } from "react-hot-toast";
 import { BsEye } from "react-icons/bs";
 import ShowPartnerDetails from "../Partners/ShowPartnerDetails";
+import { useTranslation } from "react-i18next";
 
 const Partners = () => {
   const [showAddnewPartner, setShowAddnewPartner] = useState(false);
@@ -39,6 +40,8 @@ const Partners = () => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   // pagination logic
   const partnersPerPage = 8;
   const pageVisited = pageNumber * partnersPerPage;
@@ -58,7 +61,7 @@ const Partners = () => {
   };
 
   const handleDeletepartner = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
@@ -68,7 +71,7 @@ const Partners = () => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeletePartner(id));
-            toast.success(` ${name} partner Deleted Successfully.`);
+            toast.success(` ${name} ${t("partner Deleted Successfully.")}`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -106,14 +109,14 @@ const Partners = () => {
                 id="filter"
                 className="filter_dropdown"
               >
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
+                <option value="newest">{t("newest")}</option>
+                <option value="oldest">{t("oldest")}</option>
               </select>
               <button
                 className="gray_button"
                 onClick={() => setShowAddnewPartner(true)}
               >
-                + Add new
+                + {t("Add new")}
               </button>
             </div>
           </div>
@@ -129,19 +132,19 @@ const Partners = () => {
                       id="partnerName"
                     /> */}
                     <label htmlFor="partnerName">
-                      <span>Partner name</span>
+                      <span>{t("Partner name")}</span>
                     </label>
                   </th>
-                  <th className="p-4 text-left">Email</th>
-                  <th className="p-4 text-left">Phone</th>
-                  <th className="p-4 text-left">City</th>
-                  <th className="p-4">Action</th>
+                  <th className="p-4 text-left">{t("email")}</th>
+                  <th className="p-4 text-left">{t("Phone")}</th>
+                  <th className="p-4 text-left">{t("city")}</th>
+                  <th className="p-4">{t("Action")}</th>
                 </tr>
               </thead>
               <tbody className="w-full">
                 {loading ? (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">Loading....</td>
+                    <td colSpan="7">{t("Loading")}....</td>
                   </tr>
                 ) : partners?.length !== 0 && partners !== undefined ? (
                   displayPartners.map((partner) => (
@@ -238,7 +241,7 @@ const Partners = () => {
                   ))
                 ) : (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">No partners here.</td>
+                    <td colSpan="7">{t("No partners here")}.</td>
                   </tr>
                 )}
               </tbody>
@@ -247,7 +250,7 @@ const Partners = () => {
           {/* pagination */}
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
-              Showing{" "}
+              {t("Showing")}{" "}
               {fileterdData.length === 0
                 ? (pageNumber + 1) * partnersPerPage > partners?.length
                   ? partners?.length
@@ -255,11 +258,11 @@ const Partners = () => {
                 : (pageNumber + 1) * partnersPerPage > fileterdData?.length
                 ? fileterdData?.length
                 : (pageNumber + 1) * partnersPerPage}{" "}
-              from{" "}
+              {t("from")}{" "}
               {fileterdData?.length === 0
                 ? partners?.length
                 : fileterdData.length}{" "}
-              Partners
+              {t("Partners")}
             </p>
             <ReactPaginate
               onPageChange={changePage}

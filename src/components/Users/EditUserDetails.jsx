@@ -154,7 +154,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(t(`${name} user edited successfully.`), {
+          toast.success(t(`${name} ${t("user edited successfully.")}`), {
             duration: 2000,
           });
           setShowUserDetail(false);

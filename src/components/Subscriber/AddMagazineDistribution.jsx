@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { AiOutlineClose } from "react-icons/ai";
 import ReactModal from "react-modal";
 
@@ -7,6 +8,8 @@ const AddMagazineDistribution = ({
   showMagazineDistrutionPopup,
 }) => {
   const popupRef = useRef(null);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -42,7 +45,7 @@ const AddMagazineDistribution = ({
           {/* title + button */}
           <div className="flex items-center justify-between w-full">
             <p className="font-semibold text-lg select-none">
-              Add magazine distribution
+              {t("Add magazine distribution")}
             </p>
             <button onClick={handleClosePopup}>
               <AiOutlineClose size={30} />
@@ -50,7 +53,7 @@ const AddMagazineDistribution = ({
           </div>
           {/* subscription */}
           <label htmlFor="subscription" className="Label">
-            Subcscription
+            {t("Subcscription")}
           </label>
           <select
             name="subcscription"
@@ -66,7 +69,7 @@ const AddMagazineDistribution = ({
           <div className="w-full flex md:flex-row flex-col items-center justify-start gap-3">
             <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
               <label htmlFor="sub_state" className="Label">
-                Sub state
+                {t("Sub state")}
               </label>
               <select name="sub_state" className="input_field" id="sub_state">
                 <option value="option1">option 1</option>
@@ -77,7 +80,7 @@ const AddMagazineDistribution = ({
             </div>
             <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
               <label htmlFor="prospect_state" className="Label">
-                prospect state
+                {t("Prospect state")}
               </label>
               <select
                 name="prospect_state"
@@ -95,7 +98,7 @@ const AddMagazineDistribution = ({
           <div className="w-full flex md:flex-row flex-col items-center justify-start gap-3">
             <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
               <label htmlFor="start_date" className="Label">
-                Start state
+                {t("Start state")}
               </label>
               <input
                 type="date"
@@ -105,7 +108,7 @@ const AddMagazineDistribution = ({
             </div>
             <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
               <label htmlFor="renewal_date" className="Label">
-                Renewal state
+                {t("Renewal state")}
               </label>
               <input
                 type="date"
@@ -116,7 +119,7 @@ const AddMagazineDistribution = ({
           </div>
           {/* button */}
           <button className="bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full">
-            Save
+            {t("Save")}
           </button>
         </div>
       </ReactModal>

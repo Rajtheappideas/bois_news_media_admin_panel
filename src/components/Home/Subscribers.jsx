@@ -17,6 +17,7 @@ import {
 } from "../../redux/SubscriberSlice";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const Subscribers = () => {
   const [showEditSubscriberDetails, setShowEditSubscriberDetails] =
@@ -41,6 +42,8 @@ const Subscribers = () => {
   const { AbortControllerRef } = useAbortApiCall();
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const handleClosePopup = () => {
     setShowMagazineDistrutionPopup(false);
@@ -73,7 +76,7 @@ const Subscribers = () => {
   }, [showMagazineDistrutionPopup]);
 
   const handleDeletesubscriber = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
         handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
@@ -82,7 +85,7 @@ const Subscribers = () => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteSubscriber(id));
-            toast.success(`${name} subscriber Deleted Successfully.`);
+            toast.success(`${name} ${t("subscriber Deleted Successfully.")}`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -133,17 +136,12 @@ const Subscribers = () => {
               </div>
               {role === "admin" && (
                 <div className="flex items-center gap-3">
-                  <button
-                    className="blue_button"
-                    // onClick={() => showAddNewSubscriber(true)}
-                  >
-                    Import
-                  </button>
+                  <button className="blue_button">{t("Import")}</button>
                   <button
                     className="gray_button"
                     onClick={() => setShowAddNewSubscriber(true)}
                   >
-                    + Add new
+                    + {t("Add new")}
                   </button>
                 </div>
               )}
@@ -163,17 +161,17 @@ const Subscribers = () => {
                         <span>ID</span>
                       </label>
                     </th>
-                    <th className="p-4 pl-10 text-left">Title</th>
-                    <th className="p-4 pl-10 text-left">Name</th>
-                    <th className="p-4 pl-10 text-left">Company</th>
-                    <th className="p-4 pl-10 text-left">Email</th>
-                    <th className="p-4">Action</th>
+                    <th className="p-4 pl-10 text-left">{t("Title")}</th>
+                    <th className="p-4 pl-10 text-left">{t("Name")}</th>
+                    <th className="p-4 pl-10 text-left">{t("company")}</th>
+                    <th className="p-4 pl-10 text-left">{t("Email")}</th>
+                    <th className="p-4">{t("Action")}</th>
                   </tr>
                 </thead>
                 <tbody className="w-full">
                   {loading ? (
                     <tr className="data_not_found_And_Loading">
-                      <td colSpan="7">Loading....</td>
+                      <td colSpan="7">{t("Loading")}....</td>
                     </tr>
                   ) : subscribers.length !== 0 && subscribers !== undefined ? (
                     displaySubscibers.map((subscriber) => (
@@ -274,7 +272,7 @@ const Subscribers = () => {
                     ))
                   ) : (
                     <tr className="data_not_found_And_Loading">
-                      <td colSpan="7">No Subscribers here.</td>
+                      <td colSpan="7">{t("No Subscribers here")}.</td>
                     </tr>
                   )}
                 </tbody>
@@ -283,7 +281,7 @@ const Subscribers = () => {
             {/* pagination */}
             <div className="flex items-center justify-between py-5">
               <p className="font-medium md:text-base text-sm text-textBlack">
-                Showing{" "}
+                {t("Showing")}{" "}
                 {fileterdData.length === 0
                   ? (pageNumber + 1) * subscribersPerPage > subscribers?.length
                     ? subscribers?.length
@@ -291,11 +289,11 @@ const Subscribers = () => {
                   : (pageNumber + 1) * subscribersPerPage > fileterdData?.length
                   ? fileterdData?.length
                   : (pageNumber + 1) * subscribersPerPage}{" "}
-                from{" "}
+                {t("from")}{" "}
                 {fileterdData?.length === 0
                   ? subscribers?.length
                   : fileterdData.length}{" "}
-                Subscribers
+                {t("Subscribers")}
               </p>
               <ReactPaginate
                 onPageChange={changePage}

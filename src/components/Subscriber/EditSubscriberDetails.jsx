@@ -20,14 +20,18 @@ import {
   handleEditSubscriber,
   handleFindSubscriber,
 } from "../../redux/SubscriberSlice";
+import { useTranslation } from "react-i18next";
 
 const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
   const { editLoading, deleteLoading, singleSucriber } = useSelector(
     (state) => state.root.subscribers
   );
   const { token, role } = useSelector((state) => state.root.auth);
+  const { payers } = useSelector((state) => state.root.thirdPartyPayers);
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -58,112 +62,118 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
   const EditSubscirberSchema = yup.object({
     fname: yup
       .string()
-      .required("FirstName is required")
+      .required(t("FirstName is required"))
       .trim()
-      .max(60, "Max character limit reached")
-      .min(3, "minimum three character required")
-      .typeError("Only characters allowed")
+      .max(60, t("Max character limit reached"))
+      .min(3, t("minimum three character required"))
+      .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "FirstName can only contain Latin letters."
+        t("FirstName can only contain Latin letters.")
       ),
     lname: yup
       .string()
-      .required("LastName is required")
+      .required(t("LastName is required"))
       .trim()
-      .max(60, "Max character limit reached")
-      .min(3, "minimum three character required")
-      .typeError("Only characters allowed")
+      .max(60, t("Max character limit reached"))
+      .min(3, t("minimum three character required"))
+      .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "LastName can only contain Latin letters."
+        t("LastName can only contain Latin letters.")
       ),
     civility: yup
       .string()
-      .required("Civility is required")
+      .required(t("Civility is required"))
       .trim()
-      .max(60, "Max character limit reached")
-      .min(3, "minimum three character required")
-      .typeError("Only characters allowed")
+      .max(60, t("Max character limit reached"))
+      .min(3, t("minimum three character required"))
+      .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Civility can only contain Latin letters."
+        t("Civility can only contain Latin letters.")
       ),
-    title: yup.string().trim().max(60, "Max character limit reached"),
-    email: yup.string().email().required("email is required.").trim(),
-    phone: yup.string().required("phone is required"),
+    title: yup.string().trim().max(60, t("Max character limit reached")),
+    email: yup.string().email().required(t("email is required.")).trim(),
+    phone: yup.string().required(t("phone is required")),
     mobile: yup.string(),
-    company: yup.string().max(60, "Max character limit reached"),
+    company: yup.string().max(60, t("Max character limit reached")),
     address1: yup
       .string()
-      .max(200, "Maximum character limit reached")
-      .required("address1 is required")
+      .max(200, t("Maximum character limit reached"))
+      .required(t("address1 is required"))
       .trim(""),
-    address2: yup.string().max(200, "Maximum character limit reached").trim(""),
-    address3: yup.string().max(200, "Maximum character limit reached").trim(""),
+    address2: yup
+      .string()
+      .max(200, t("Maximum character limit reached"))
+      .trim(""),
+    address3: yup
+      .string()
+      .max(200, t("Maximum character limit reached"))
+      .trim(""),
     zipCode: yup
       .string()
-      .max(6, "max 6 number allowed")
-      .min(5, "min 5 number required")
-      .required("zipcode is required")
+      .max(6, t("max 6 number allowed"))
+      .min(5, t("min 5 number required"))
+      .required(t("zipcode is required"))
       .trim(""),
     city: yup
       .string()
-      .max(40, "Maximum character limit reached")
+      .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "city can only contain Latin letters."
+        t("city can only contain Latin letters.")
       )
-      .required("city is required")
+      .required(t("city is required"))
       .trim(""),
     province: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "province can only contain Latin letters."
+        t("province can only contain Latin letters.")
       )
       .trim(""),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "country can only contain Latin letters."
+        t("country can only contain Latin letters.")
       )
-      .required("country is required")
+      .required(t("country is required"))
       .trim(""),
     baddress1: yup
       .string()
-      .max(200, "Maximum character limit reached")
+      .max(200, t("Maximum character limit reached"))
       .trim(""),
     baddress2: yup
       .string()
-      .max(200, "Maximum character limit reached")
+      .max(200, t("Maximum character limit reached"))
       .trim(""),
     baddress3: yup
       .string()
-      .max(200, "Maximum character limit reached")
+      .max(200, t("Maximum character limit reached"))
       .trim(""),
-    bzipCode: yup.string().max(6, "max 6 number allowed").trim(""),
+    bzipCode: yup.string().max(6, t("max 6 number allowed")).trim(""),
     bcity: yup
       .string()
-      .max(40, "Maximum character limit reached")
+      .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "city can only contain Latin letters."
+        t("city can only contain Latin letters.")
       )
       .trim(""),
     bprovince: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "province can only contain Latin letters."
+        t("province can only contain Latin letters.")
       )
       .trim(""),
     bcountry: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "country can only contain Latin letters."
+        t("country can only contain Latin letters.")
       )
       .trim(""),
 
@@ -171,15 +181,15 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
     thirdPartyPayer: yup.string(""),
     accountingContact: yup
       .string("")
-      .max(60, "Max character limit reached")
-      .typeError("Only characters allowed")
+      .max(60, t("Max character limit reached"))
+      .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "accountContactName can only contain Latin letters."
+        t("accountContactName can only contain Latin letters.")
       ),
     accountingEmail: yup.string().email(),
     accountingPhone: yup.string(),
-    VATnumber: yup.string().max(30, "max 30 numbers"),
+    VATnumber: yup.string().max(30, t("max 30 numbers")),
     VATcode: yup.string(),
     clientCode: yup.string(),
     companyRegNum: yup.string(),
@@ -333,7 +343,10 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Subscriber added Successfully.", { duration: 2000 });
+          toast.success(
+            ` ${fname.concat(lname)} ${t("subscriber edited successfully.")}`,
+            { duration: 2000 }
+          );
           setShowEditSubscriberDetails(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -343,7 +356,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
   };
 
   const handleDeletesubscriber = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
         handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
@@ -352,7 +365,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteSubscriber(id));
-            toast.success(` ${name} subscriber Deleted Successfully.`);
+            toast.success(` ${name} ${t("subscriber Deleted Successfully.")}`);
             setShowEditSubscriberDetails(false);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
@@ -370,7 +383,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Subscriber Detail
+          {t("Subscriber Detail")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -383,7 +396,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
             }}
             disabled={deleteLoading || editLoading}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className={`green_button ${
@@ -392,7 +405,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
             disabled={deleteLoading || editLoading}
             type="submit"
           >
-            {editLoading ? "Saving..." : "Save"}
+            {editLoading ? t("Saving").concat("...") : t("Save")}
           </button>
           {role === "admin" && (
             <button
@@ -402,24 +415,26 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               disabled={deleteLoading || editLoading}
               onClick={() => handleDeletesubscriber(_id, fname.concat(lname))}
             >
-              {deleteLoading ? "Deleting..." : "Delete"}
+              {deleteLoading ? t("Deleting").concat("...") : t("Delete")}
             </button>
           )}
         </div>
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-        <p className="font-bold text-black md:text-xl">Personal Details</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("personal details")}
+        </p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* first name */}
           <div className="w-full space-y-2">
             <label htmlFor="fname" className="Label">
-              first name
+              {t("first name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("fname")}
             />
@@ -428,11 +443,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* last  name */}
           <div className="w-full space-y-2">
             <label htmlFor="lastname" className="Label">
-              last name
+              {t("last name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("lname")}
             />
@@ -441,11 +456,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
-              title
+              {t("title")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("title")}
             />
@@ -454,11 +469,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* company */}
           <div className="w-full space-y-2">
             <label htmlFor="company" className="Label">
-              company
+              {t("company")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("company")}
             />
@@ -467,11 +482,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* civility */}
           <div className="w-full space-y-2">
             <label htmlFor="civility" className="Label">
-              civility
+              {t("civility")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("civility")}
             />
@@ -480,21 +495,20 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
-              className="input_field cursor-not-allowed"
+              placeholder={t("Type here...")}
+              className="input_field"
               {...register("email")}
-              disabled
             />
             <span className="error">{errors?.email?.message}</span>
           </div>
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
-              phone
+              {t("phone")}
             </label>
             <Controller
               name="phone"
@@ -511,7 +525,6 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
                     });
                   }}
                   autocompleteSearch={true}
-                  value={getValues("phone")}
                   countryCodeEditable={false}
                   enableSearch={true}
                   inputStyle={{
@@ -535,7 +548,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/*mobile phone */}
           <div className="w-full space-y-2">
             <label htmlFor="mobile" className="Label">
-              mobile phone
+              {t("mobile phone")}
             </label>
             <Controller
               name="mobile"
@@ -551,8 +564,8 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
                       setValue("mobile", "+".concat(value));
                     });
                   }}
+                  value={getValues().mobile}
                   autocompleteSearch={true}
-                  value={getValues("mobile")}
                   countryCodeEditable={false}
                   enableSearch={true}
                   inputStyle={{
@@ -576,16 +589,16 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         </div>
         <hr className="my-1" />
         {/*shipping  address */}
-        <p className="font-bold text-black md:text-xl">Shipping Address</p>
+        <p className="font-bold text-black md:text-xl">{t("Shipping Address")}</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*address 1 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address1" className="Label">
-              address 1
+              {t("address")} 1
             </label>
             <textarea
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("address1")}
             />
@@ -594,11 +607,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/*address 2 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address2" className="Label">
-              address 2
+              {t("address")} 2
             </label>
             <textarea
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("address2")}
             />
@@ -607,11 +620,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/*address 3 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address3" className="Label">
-              address 3
+              {t("address")} 3
             </label>
             <textarea
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("address3")}
             />
@@ -620,11 +633,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* postal code */}
           <div className="w-full space-y-2">
             <label htmlFor="postalcode" className="Label">
-              Postal code
+              {t("Postal code")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               maxLength={6}
               minLength={6}
@@ -635,11 +648,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("city")}
             />
@@ -648,11 +661,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* province */}
           <div className="w-full space-y-2">
             <label htmlFor="province" className="Label">
-              province
+              {t("province")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("province")}
             />
@@ -661,11 +674,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("country")}
             />
@@ -674,16 +687,19 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         </div>
         <hr className="my-1" />
         {/*billing address */}
-        <p className="font-bold text-black md:text-xl">Billing Address</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Billing Address")}
+        </p>
+        {/* billing addrss */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*address 1 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address1" className="Label">
-              address 1
+              {t("address")} 1
             </label>
             <textarea
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("baddress1")}
               disabled={getValues("sameAsAbove")}
@@ -692,11 +708,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/*address 2 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address2" className="Label">
-              address 2
+              {t("address")} 2
             </label>
             <textarea
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("baddress2")}
               disabled={getValues("sameAsAbove")}
@@ -705,11 +721,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/*address 3 */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address3" className="Label">
-              address 3
+              {t("address")} 3
             </label>
             <textarea
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("baddress3")}
               disabled={getValues("sameAsAbove")}
@@ -718,11 +734,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* postal code */}
           <div className="w-full space-y-2">
             <label htmlFor="postalcode" className="Label">
-              Postal code
+              {t("Postal code")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               maxLength={6}
               minLength={6}
@@ -733,11 +749,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bcity")}
               disabled={getValues("sameAsAbove")}
@@ -746,11 +762,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* province */}
           <div className="w-full space-y-2">
             <label htmlFor="province" className="Label">
-              province
+              {t("province")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bprovince")}
               disabled={getValues("sameAsAbove")}
@@ -759,11 +775,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bcountry")}
               disabled={getValues("sameAsAbove")}
@@ -776,28 +792,34 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           <div className="w-full space-y-2">
             <label htmlFor="thirdPartyPayer" className="Label">
-              select third-Party Payer
+              {t("select third-Party Payer")}
             </label>
             <select {...register("thirdPartyPayer")} className="input_field">
-              <option value="payer1">Payer 1</option>
-              <option value="payer2">Payer 2</option>
-              <option value="payer3">Payer 3</option>
-              <option value="payer4">Payer 4</option>
+              <option label="Choose Third party payer"></option>
+              {payers !== undefined &&
+                payers.length > 0 &&
+                payers.map((payer) => (
+                  <option key={payer?._id} value={payer?.accountName}>
+                    {payer?.accountName}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
         <hr className="my-1" />
         {/* billing supplement */}
-        <p className="font-bold text-black md:text-xl">Billing supplement</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Billing supplement")}
+        </p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* Accounting contact (name) */}
           <div className="w-full space-y-2">
             <label htmlFor="account_contact_name" className="Label">
-              Accounting contact (name)
+              {t("Accounting contactname")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("accountingContact")}
             />
@@ -806,11 +828,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* Accounting email*/}
           <div className="w-full space-y-2">
             <label htmlFor="accounting_email" className="Label">
-              Accounting email
+              {t("Accounting email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("accountingEmail")}
             />
@@ -819,7 +841,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* Accounting phone */}
           <div className="w-full space-y-2">
             <label htmlFor="accounting_phone" className="Label">
-              Accounting phone{" "}
+              {t("Accounting phone")}{" "}
             </label>
             <Controller
               name="accountingPhone"
@@ -836,7 +858,6 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
                     });
                   }}
                   autocompleteSearch={true}
-                  value={getValues("accountingPhone")}
                   countryCodeEditable={false}
                   enableSearch={true}
                   inputStyle={{
@@ -859,11 +880,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* VAT Number */}
           <div className="w-full space-y-2">
             <label htmlFor="VAT_number" className="Label">
-              VAT Number{" "}
+              {t("VAT Number")}{" "}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("VATnumber")}
             />
@@ -871,7 +892,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* VAT Code */}
           <div className="w-full space-y-2">
             <label htmlFor="VATcode" className="Label">
-              VAT Code
+              {t("VAT Code")}
             </label>
             <select
               {...register("VATcode")}
@@ -893,11 +914,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* Client code */}
           <div className="w-full space-y-2">
             <label htmlFor="client_code" className="Label">
-              Client code
+              {t("Client code")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("clientCode")}
             />
@@ -906,11 +927,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* Company registration number */}
           <div className="w-full space-y-2">
             <label htmlFor="company_registration_number" className="Label">
-              Company registration number
+              {t("Company registration number")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("companyRegNum")}
             />
@@ -919,11 +940,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/*Company website */}
           <div className="w-full space-y-2">
             <label htmlFor="company_website" className="Label">
-              Company website
+              {t("Company website")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("companyWebsite")}
             />
@@ -932,11 +953,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* Activity domain */}
           <div className="w-full space-y-2">
             <label htmlFor="activity_domain" className="Label">
-              Activity domain{" "}
+              {t("Activity domain")}{" "}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("activityDomain")}
             />
@@ -945,11 +966,11 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
           {/* Contact origin */}
           <div className="w-full space-y-2">
             <label htmlFor="contact_origin" className="Label">
-              Contact origin{" "}
+              {t("Contact origin")}{" "}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("contactOrigin")}
             />
@@ -959,20 +980,20 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         <hr className="my-1" />
         {/* Magazine distribution */}
         <div className="font-bold text-black md:text-xl flex flex-wrap w-full flex-row items-center justify-between gap-2">
-          <p>Magazine distribution</p>
+          <p>{t("Magazine distribution")}</p>
         </div>
-        <div className="shadow-sm outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
+        <div className="shadow-md outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
           <table className="border-none outline-none w-full overflow-scroll">
             <thead className="w-full border-b border-gray-100 text-left">
               <tr>
                 <th className="p-4 whitespace-nowrap">
-                  <span>Magazine</span>
+                  <span>{t("Magazine")}</span>
                 </th>
-                <th className="p-4">Sub state</th>
-                <th className="p-4">Prospect state</th>
-                <th className="p-4">Start date</th>
-                <th className="p-4">Renewal date</th>
-                <th className="p-4">Action</th>
+                <th className="p-4">{t("Sub state")}</th>
+                <th className="p-4">{t("Prospect state")}</th>
+                <th className="p-4">{t("Start date")}</th>
+                <th className="p-4">{t("Renewal date")}</th>
+                <th className="p-4">{t("Action")}</th>
               </tr>
             </thead>
             <tbody className="w-full">
