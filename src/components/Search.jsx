@@ -26,7 +26,7 @@ const Search = ({ data }) => {
         type="text"
         ref={searchRef}
         className="w-full shadow-md rounded-md outline-none pl-3 p-3 placeholder:text-textColor"
-        placeholder="Search..."
+        placeholder={t("Search...")}
         onChange={(e) =>
           dispatch(
             handleSearch({

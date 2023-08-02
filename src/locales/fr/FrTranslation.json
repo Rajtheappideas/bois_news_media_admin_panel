@@ -59,6 +59,7 @@
   "civility": "Civilité",
   "mobile phone": "Tel Mobile",
   "address": "adresse",
+  "Search...": "Recherche...",
 
   "//error_comment": "----------------errors----------------",
   "Enter a word": "Saisir un mot",
@@ -310,7 +311,6 @@
   "Verification success": "Succès de la vérification",
   "Verification is success and now you can proceed": "La vérification est réussie et vous pouvez maintenant continuer",
 
-  
   "//changepassword_comment": "----------------change password----------------",
   "old password is required!!!": "l'ancien mot de passe est requis!!!",
   "new password is required!!!": "un nouveau mot de passe est nécessaire!!!",
