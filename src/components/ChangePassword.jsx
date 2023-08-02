@@ -9,6 +9,7 @@ import useAbortApiCall from "../hooks/useAbortApiCall";
 import { handleChangePassword } from "../redux/AuthSlice";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const ChangePassword = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -19,22 +20,26 @@ const ChangePassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
+
   const { AbortControllerRef } = useAbortApiCall();
 
   const changepasswordSchema = yup.object({
-    oldPassword: yup.string().required("old password is required!!!").trim(),
+    oldPassword: yup.string().required(t("old password is required!!!")).trim(),
     newPassword: yup
       .string()
-      .required("new password is required!!!")
+      .required(t("new password is required!!!"))
       .matches(
         /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-        "Minimum 6 characters, at least one special character, at least one digit!!!"
+        t(
+          "Minimum 6 characters, at least one special character, at least one digit"
+        )
       )
       .trim(),
     confirmPassword: yup
       .string()
-      .required("confirm password is required!!!")
-      .oneOf([yup.ref("newPassword"), null], "Password not match!!!"),
+      .required(t("confirm password is required!!!"))
+      .oneOf([yup.ref("newPassword"), null], t("Password not match!!!")),
   });
 
   const {
@@ -59,7 +64,7 @@ const ChangePassword = () => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Password change successfully.", { duration: 4000 });
+          toast.success(t("Password change successfully."), { duration: 4000 });
           navigate("/sign-in");
           window.localStorage.clear();
         } else if (res?.payload?.status === "error") {
@@ -74,7 +79,7 @@ const ChangePassword = () => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Change password
+          {t("Change password")}
         </p>
       </div>
       {/* main div */}
@@ -86,12 +91,12 @@ const ChangePassword = () => {
         {/* old password */}
         <div className="w-full md:w-1/2 xl:w-1/3 space-y-2 relative">
           <label htmlFor="old_password" className="Label">
-            Old password
+            {t("Old password")}
           </label>
           <input
             {...register("oldPassword")}
             type={showOldPassword ? "text" : "password"}
-            placeholder="Type here..."
+            placeholder={t("Type here...")}
             className="input_field"
           />
           <button
@@ -112,12 +117,12 @@ const ChangePassword = () => {
         {/* new password */}
         <div className="w-full md:w-1/2 xl:w-1/3 space-y-2 relative">
           <label htmlFor="new_password" className="Label">
-            new password
+            {t("new password")}
           </label>
           <input
             {...register("newPassword")}
             type={showNewPassword ? "text" : "password"}
-            placeholder="Type here..."
+            placeholder={t("Type here...")}
             className="input_field"
           />
           <button
@@ -138,12 +143,12 @@ const ChangePassword = () => {
         {/* confirm password */}
         <div className="w-full md:w-1/2 xl:w-1/3 space-y-2">
           <label htmlFor="confirm_password" className="Label">
-            confirm password
+            {t("confirm password")}
           </label>
           <input
             {...register("confirmPassword")}
             type="password"
-            placeholder="Type here..."
+            placeholder={t("Type here...")}
             className="input_field"
           />
           <span role="alert" className="error">
@@ -158,7 +163,7 @@ const ChangePassword = () => {
           } `}
           disabled={loading}
         >
-          {loading ? "Changing..." : "Change Password"}
+          {loading ? t("Changing").concat("...") : t("Change Password")}
         </button>
       </form>
     </div>

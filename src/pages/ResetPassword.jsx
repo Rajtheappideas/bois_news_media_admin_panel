@@ -12,6 +12,7 @@ import { handleResetPassword } from "../redux/AuthSlice";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import useAbortApiCall from "../hooks/useAbortApiCall";
+import { useTranslation } from "react-i18next";
 
 const ResetPassword = () => {
   const [showSuccessComponent, setShowSuccessComponent] = useState(false);
@@ -24,21 +25,25 @@ const ResetPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
+
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const resetSchema = yup.object({
     password: yup
       .string()
-      .required("Password is required!!!")
+      .required(t("Password is required"))
       .matches(
         /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-        "Minimum 6 characters, at least one special character, at least one digit!!!"
+        t(
+          "Minimum 6 characters, at least one special character, at least one digit"
+        )
       )
       .trim(),
     confirmPassword: yup
       .string()
-      .required("Confirm password is required!!!")
-      .oneOf([yup.ref("password"), null], "Password not match!!!"),
+      .required(t("Confirm password is required!!!"))
+      .oneOf([yup.ref("password"), null], t("Password not match!!!")),
   });
 
   const {
@@ -63,7 +68,7 @@ const ResetPassword = () => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Password Reset successfully.", { duration: 4000 });
+          toast.success(t("Password Reset successfully."), { duration: 4000 });
           setShowSuccessComponent(true);
           window.localStorage.clear();
         } else if (res?.payload?.status === "error") {
@@ -75,7 +80,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (user !== null) {
-      toast("You already logged in.", { duration: 3000 });
+      toast(t("You already logged in."), { duration: 3000 });
       navigate("/");
     }
     return () => {
@@ -85,7 +90,7 @@ const ResetPassword = () => {
 
   return (
     <>
-      <Helmet title="Reset-password | Bois News Media" />
+      <Helmet title={`${t("Reset-password")} | Bois News Media`} />
 
       <div
         style={{
@@ -111,7 +116,7 @@ const ResetPassword = () => {
             </div>
             {/* title */}
             <p className="font-bold text-textBlack text-center md:text-lg">
-              Reset password
+              {t("Reset password")}
             </p>
             {/* {error !== null && <span className="error">{error?.message}</span>} */}
 
@@ -126,13 +131,13 @@ const ResetPassword = () => {
                   className="label block font-semibold text-left text-lg"
                   htmlFor="password"
                 >
-                  New password
+                  {t("New password")}
                 </label>{" "}
                 <div className="relative h-auto">
                   <input
                     {...register("password")}
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder={t("Enter your password")}
                     className="input_field"
                   />
 
@@ -163,12 +168,12 @@ const ResetPassword = () => {
                   className="label block font-semibold text-left text-lg"
                   htmlFor="confirm_password"
                 >
-                  Confirm password
+                  {t("Confirm password")}
                 </label>{" "}
                 <input
                   {...register("confirmPassword")}
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t("Enter your password")}
                   className="input_field"
                 />
                 <span role="alert" className="error">
@@ -182,7 +187,7 @@ const ResetPassword = () => {
                   } `}
                   disabled={loading}
                 >
-                  {loading ? "Submitting..." : "Submit"}
+                  {loading ? t("Submitting").concat("...") : t("Submit")}
                 </button>
               </div>
             </form>

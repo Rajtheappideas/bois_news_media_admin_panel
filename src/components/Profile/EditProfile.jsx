@@ -14,6 +14,7 @@ import "react-phone-input-2/lib/style.css";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { FaUserCircle } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const EditProfile = ({ setShowProfileEdit }) => {
   const [prevImage, setPrevImage] = useState(null);
@@ -22,6 +23,8 @@ const EditProfile = ({ setShowProfileEdit }) => {
   const { loading, user, token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -40,33 +43,33 @@ const EditProfile = ({ setShowProfileEdit }) => {
   const profileSchema = yup.object({
     name: yup
       .string()
-      .required("Name is required!!!")
+      .required(t("Name is required"))
       .trim()
-      .max(60, "Max character limit reached")
-      .min(3, "minimum three character required")
-      .typeError("Only characters allowed")
+      .max(60, t("Max character limit reached"))
+      .min(3, t("minimum three character required"))
+      .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Name can only contain Latin letters."
+        t("Name can only contain Latin letters.")
       ),
-    phone: yup.string().required("phone is required!!!").trim(),
-    address: yup.string().max(200, "Maximum character limit reached"),
-    city: yup.string().max(40, "Maximum character limit reached").trim(),
+    phone: yup.string().required(t("phone is required")).trim(),
+    address: yup.string().max(200, t("Maximum character limit reached")),
+    city: yup.string().max(40, t("Maximum character limit reached")).trim(),
     zipCode: yup
       .string()
-      .max(6, "max 6 number allowed")
-      .min(5, "min 5 number required!!!"),
+      .max(6, t("max 6 number allowed"))
+      .min(5, t("min 5 number required")),
     city: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "city can only contain Latin letters."
+        t("city can only contain Latin letters.")
       ),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "country can only contain Latin letters."
+        t("country can only contain Latin letters.")
       ),
   });
 
@@ -100,7 +103,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
       setShowProfileEdit(false);
       return true;
     } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
-      toast.error("Phone is invalid");
+      toast.error(t("Phone is invalid"));
       return true;
     }
     const response = dispatch(
@@ -120,7 +123,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Profile upadated.", { duration: 2000 });
+          toast.success(t("Profile upadated."), { duration: 2000 });
           setShowProfileEdit(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -145,7 +148,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Edit profile
+          {t("Edit profile")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -154,14 +157,14 @@ const EditProfile = ({ setShowProfileEdit }) => {
             className={`gray_button  ${loading && "cursor-not-allowed"} `}
             onClick={() => setShowProfileEdit(false)}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             type="submit"
             disabled={loading}
             className={`green_button  ${loading && "cursor-not-allowed"} `}
           >
-            {loading ? "Saving..." : "Save"}
+            {loading ? t("Saving").concat("...") : t("Save")}
           </button>
         </div>
       </div>
@@ -200,17 +203,19 @@ const EditProfile = ({ setShowProfileEdit }) => {
             className="text-3xl absolute z-0 bottom-0 right-0 rounded-full bg-green-600 text-white h-8 w-8 p-1"
           />
         </div>
-        <p className="font-bold text-black md:text-xl">Personal Details</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Personal Details")}
+        </p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
           <div className="w-full space-y-2">
             <label htmlFor="name" className="Label">
-              User name
+              {t("User name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("name")}
             />
@@ -222,11 +227,11 @@ const EditProfile = ({ setShowProfileEdit }) => {
           {/* company */}
           <div className="w-full space-y-2">
             <label htmlFor="company" className="Label">
-              company
+              {t("company")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("company")}
             />
@@ -234,11 +239,11 @@ const EditProfile = ({ setShowProfileEdit }) => {
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field cursor-not-allowed"
               disabled={true}
               {...register("email")}
@@ -247,7 +252,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
-              phone
+              {t("phone")}
             </label>
             <Controller
               name="phone"
@@ -291,16 +296,16 @@ const EditProfile = ({ setShowProfileEdit }) => {
         </div>
         <hr className="my-1" />
         {/* address */}
-        <p className="font-bold text-black md:text-xl">Address</p>
+        <p className="font-bold text-black md:text-xl">{t("Address")}</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*company address */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="address" className="Label">
-              address
+              {t("address")}
             </label>
             <textarea
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("address")}
             />
@@ -311,11 +316,11 @@ const EditProfile = ({ setShowProfileEdit }) => {
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("city")}
             />
@@ -326,11 +331,11 @@ const EditProfile = ({ setShowProfileEdit }) => {
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("country")}
             />
@@ -341,11 +346,11 @@ const EditProfile = ({ setShowProfileEdit }) => {
           {/* zipcode */}
           <div className="w-full space-y-2">
             <label htmlFor="zipcode" className="Label">
-              zipcode
+              {t("zipcode")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               {...register("zipCode")}
               className="input_field"
             />

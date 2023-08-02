@@ -11,12 +11,13 @@ import useAbortApiCall from "../hooks/useAbortApiCall";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { handleForgotPassword, handleStoreUserEmail } from "../redux/AuthSlice";
+import { useTranslation } from "react-i18next";
 
 const ForgotPassword = () => {
   const [showOtpComponent, setShowOtpComponent] = useState(false);
 
   const signinSchema = yup.object({
-    email: yup.string().email().required("Email is required!!!").trim(),
+    email: yup.string().email().required(t("Email is required")).trim(),
   });
 
   const { loading, user, error } = useSelector((state) => state.root.auth);
@@ -24,9 +25,11 @@ const ForgotPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
+
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
-const {
+  const {
     register,
     handleSubmit,
     formState: { errors },
@@ -47,7 +50,7 @@ const {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Check your mails.", { duration: 4000 });
+          toast.success(t("Check your mails."), { duration: 4000 });
           console.log("OTP=>", res.payload?.otp);
           dispatch(handleStoreUserEmail(getValues("email")));
           setShowOtpComponent(true);
@@ -60,7 +63,7 @@ const {
 
   useEffect(() => {
     if (user !== null) {
-      toast("You already logged in.", { duration: 3000 });
+      toast(t("You already logged in."), { duration: 3000 });
       navigate("/");
     }
     return () => {
@@ -70,7 +73,7 @@ const {
 
   return (
     <>
-      <Helmet title="Forgot-password | Bois News Media" />
+      <Helmet title={`${t("Forgot-password")} | Bois News Media`} />
 
       <div
         style={{
@@ -96,7 +99,7 @@ const {
             </div>
             {/* title */}
             <p className="font-bold text-textBlack text-center md:text-lg">
-              Forgot password
+              {t("Forgot password")}
             </p>
             {/* {error !== null && <span className="error">{error?.message}</span>} */}
 
@@ -111,12 +114,12 @@ const {
                   className="label block font-semibold text-left text-lg"
                   htmlFor="email"
                 >
-                  E-Mail
+                  {t("E-Mail")}
                 </label>
                 <input
                   {...register("email")}
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t("Enter your email")}
                   className="input_field"
                 />
                 <span className="error">{errors?.email?.message}</span>
@@ -130,7 +133,7 @@ const {
                   loading && "cursor-not-allowed"
                 } `}
               >
-                {loading ? "Submitting..." : "Submit"}
+                {loading ? t("Submitting").concat("...") : t("Submit")}
               </button>
             </form>
           </section>

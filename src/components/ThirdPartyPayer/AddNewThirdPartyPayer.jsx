@@ -12,62 +12,67 @@ import {
   isValidPhoneNumber,
 } from "react-phone-number-input";
 import { handleAddNewPayer } from "../../redux/ThirdPartyPayerSlice";
+import { useTranslation } from "react-i18next";
 
 const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
-  const { addNewPayerLoading } = useSelector((state) => state.root.thirdPartyPayers);
+  const { addNewPayerLoading } = useSelector(
+    (state) => state.root.thirdPartyPayers
+  );
   const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const addNewPayerSchema = yup.object({
     accountName: yup
       .string()
-      .required("Name is required")
+      .required(t("Name is required"))
       .trim()
-      .max(60, "Max character limit reached")
-      .min(3, "minimum three character required")
-      .typeError("Only characters allowed")
+      .max(60, t("Max character limit reached"))
+      .min(3, t("minimum three character required"))
+      .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Name can only contain Latin letters."
+        t("Name can only contain Latin letters.")
       ),
     companyAddress: yup
       .string()
-      .max(200, "Maximum character limit reached")
-      .required("address is required")
+      .max(200, t("Maximum character limit reached"))
+      .required(t("address is required"))
       .trim(""),
     zipCode: yup
       .string()
-      .max(6, "max 6 number allowed")
-      .min(5, "min 5 number required")
-      .required("zipcode is required")
+      .max(6, t("max 6 number allowed"))
+      .min(5, t("min 5 number required"))
+      .required(t("zipcode is required"))
       .trim(""),
     city: yup
       .string()
-      .max(40, "Maximum character limit reached")
+      .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "city can only contain Latin letters."
+        t("city can only contain Latin letters.")
       )
-      .required("city is required")
+      .required(t("city is required"))
       .trim(""),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "country can only contain Latin letters."
+        t("country can only contain Latin letters.")
       )
-      .required("country is required")
+      .required(t("country is required"))
       .trim(""),
     accountNumber: yup
       .string()
-      .required("office Number is required")
-      .max(15, "maximum 15 numbers!!!"),
-    mobile: yup.string().required("mobile phone is required"),
-    email: yup.string().email().required("email is required.").trim(),
-    status: yup.string().required("status is required.").trim(),
+      .required(t("office Number is required"))
+      .max(15, t("maximum 15 numbers!!!")),
+    mobile: yup.string().required(t("mobile is required")),
+    email: yup.string().email().required(t("email is required.")).trim(),
+    status: yup.string().required(t("status is required.")).trim(),
   });
 
   const {
@@ -99,7 +104,7 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
     } = data;
     if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
       toast.remove();
-      toast.error("mobile phone is invalid");
+      toast.error(t("mobile phone is invalid"));
       return true;
     }
     const response = dispatch(
@@ -120,7 +125,9 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(`${accountName} payer added Successfully.`, { duration: 2000 });
+          toast.success(`${accountName} ${t("payer added Successfully")}.`, {
+            duration: 2000,
+          });
           setShowAddnewPayer(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -143,7 +150,7 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Add new third-party payer
+          {t("Add new third-party payer")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -153,7 +160,7 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
             onClick={() => setShowAddnewPayer(false)}
             disabled={addNewPayerLoading}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className={`green_button ${
@@ -162,35 +169,37 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
             disabled={addNewPayerLoading}
             type="submit"
           >
-            {addNewPayerLoading ? "Saving..." : "Save"}
+            {addNewPayerLoading ? t("Saving").concat("...") : t("Save")}
           </button>
         </div>
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-        <p className="font-bold text-black md:text-xl">Personal details</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Personal details")}
+        </p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* status */}
           <div className="w-full space-y-2">
             <label htmlFor="status" className="Label">
-              status
+              {t("status")}
             </label>
             <select {...register("status")} className="input_field">
               <option label="choose status"></option>
-              <option value="active">active</option>
-              <option value="deactive">deactive</option>
+              <option value="active">{t("active")}</option>
+              <option value="deactive">{t("deactive")}</option>
             </select>
             <span className="error">{errors?.status?.message}</span>
           </div>
           {/*account name */}
           <div className="w-full space-y-2">
             <label htmlFor="account_name" className="Label">
-              Account name
+              {t("Account name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("accountName")}
             />
@@ -199,11 +208,11 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
           {/* account number */}
           <div className="w-full space-y-2">
             <label htmlFor="account_number" className="Label">
-              account number
+              {t("account number")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("accountNumber")}
             />
@@ -212,11 +221,11 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
           {/*email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("email")}
             />
@@ -225,7 +234,7 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
           {/* mobile number */}
           <div className="w-full space-y-2">
             <label htmlFor="mobile_number" className="Label">
-              mobile number
+              {t("mobile number")}
             </label>
             <Controller
               name="mobile"
@@ -267,15 +276,17 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
 
         <hr className="my-1" />
         {/* billing address */}
-        <p className="font-bold text-black md:text-xl">Billing Address</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Billing Address")}
+        </p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* company  address  */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="company_address" className="Label">
-              company address
+              {t("company address")}
             </label>
             <textarea
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("companyAddress")}
             />
@@ -284,11 +295,11 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("city")}
             />
@@ -297,11 +308,11 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("country")}
             />
@@ -310,11 +321,11 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
           {/* zipcode */}
           <div className="w-full space-y-2">
             <label htmlFor="zipcode" className="Label">
-              zipcode
+              {t("zipcode")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               maxLength={6}
               minLength={6}

@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { useEffect } from "react";
 import { handleAddNewSubscription } from "../../redux/SubscriptionSlice";
+import { useTranslation } from "react-i18next";
 
 const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
   const [prevImage, setPrevImage] = useState(null);
@@ -21,22 +22,24 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const addNewSubscriptionSchema = yup.object({
-    title: yup.string().required("title is required").trim(),
-    status: yup.string().required("status is required").trim(),
-    description: yup.string().required("description is required").trim(""),
+    title: yup.string().required(t("title is required")).trim(),
+    status: yup.string().required(t("status is required")).trim(),
+    description: yup.string().required(t("description is required")).trim(""),
     price: yup
       .string()
-      .required("price is required")
-      .max(4, "maximum 4 numbers")
-      .min(2, "minmum 2 numbers")
+      .required(t("price is required"))
+      .max(4, t("maximum 4 numbers"))
+      .min(2, t("minmum 2 numbers"))
       .trim(""),
     image: yup
       .mixed()
-      .required("Image is required.")
-      .test(subscriptionImage !== null, "Image is required", () => {
+      .required(t("Image is required."))
+      .test(subscriptionImage !== null, t("Image is required"), () => {
         return true;
       }),
   });
@@ -74,7 +77,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(` ${title} subscription added Successfully.`, {
+          toast.success(` ${title} ${t("subscription added Successfully")}.`, {
             duration: 2000,
           });
           setShowAddnewSubscription(false);
@@ -107,7 +110,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Add new subscriptions
+          {t("Add new subscriptions")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -118,7 +121,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
             onClick={() => setShowAddnewSubscription(false)}
             type="button"
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className={`green_button ${
@@ -127,7 +130,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
             type="submit"
             disabled={addNewSubscriptionLoading}
           >
-            {addNewSubscriptionLoading ? "Saving..." : "Save"}
+            {addNewSubscriptionLoading ? t("Saving") : t("Save")}
           </button>
         </div>
       </div>
@@ -174,13 +177,13 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
           )}
         </div>
         <span className="error">{errors?.image?.message}</span>
-        <p className="font-bold text-black md:text-xl">Subscription details</p>
+        <p className="font-bold text-black md:text-xl">{t("Subscription details")}</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
-              title
+              {t("title")}
             </label>
             <input
               type="text"
@@ -193,7 +196,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
           {/* price */}
           <div className="w-full space-y-2">
             <label htmlFor="price" className="Label">
-              price
+              {t("price")}
             </label>
             <input
               type="number"
@@ -206,19 +209,19 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
           {/* status */}
           <div className="w-full space-y-2">
             <label htmlFor="status" className="Label">
-              status
+              {t("status")}
             </label>
             <select {...register("status")} className="input_field">
               <option label="choose status"></option>
-              <option value="active">active</option>
-              <option value="deactive">deactive</option>
+              <option value="active">{t("active")}</option>
+              <option value="deactive">{t("deactive")}</option>
             </select>
             <span className="error">{errors?.status?.message}</span>
           </div>
           {/* discriptions */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="discriptions" className="Label">
-              discriptions
+              {t("discriptions")}
             </label>
             <textarea
               placeholder="Type here..."

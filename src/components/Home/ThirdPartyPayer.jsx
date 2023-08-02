@@ -17,6 +17,7 @@ import {
   handlerFilterPayers,
 } from "../../redux/ThirdPartyPayerSlice";
 import ShowThirdPartyPayerDetails from "../ThirdPartyPayer/ShowThirdPartyPayerDetails";
+import { useTranslation } from "react-i18next";
 
 const ThirdPartyPayer = () => {
   const [showAddnewPayer, setShowAddnewPayer] = useState(false);
@@ -39,6 +40,8 @@ const ThirdPartyPayer = () => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   // pagination logic
   const payersPerPage = 8;
   const pageVisited = pageNumber * payersPerPage;
@@ -58,7 +61,7 @@ const ThirdPartyPayer = () => {
   };
 
   const handleDeletepayer = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
@@ -68,7 +71,7 @@ const ThirdPartyPayer = () => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeletePayer(id));
-            toast.success(`${name} payer Deleted Successfully.`);
+            toast.success(`${name} ${t("payer Deleted Successfully")}.`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -104,14 +107,14 @@ const ThirdPartyPayer = () => {
                 onChange={(e) => dispatch(handlerFilterPayers(e.target.value))}
                 className="filter_dropdown"
               >
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
+                <option value="newest">{t("newest")}</option>
+                <option value="oldest">{t("oldest")}</option>
               </select>
               <button
                 className="gray_button"
                 onClick={() => setShowAddnewPayer(true)}
               >
-                + Add new
+                + {t("Add new")}
               </button>
             </div>
           </div>
@@ -127,20 +130,20 @@ const ThirdPartyPayer = () => {
                       id="accountName"
                     /> */}
                     <label htmlFor="accountName">
-                      <span>Account name</span>
+                      <span>{t("Account name")}</span>
                     </label>
                   </th>
-                  <th className="p-4">Account number</th>
-                  <th className="p-4">Postal code</th>
-                  <th className="p-4">Billing country</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-center">Action</th>
+                  <th className="p-4">{t("Account number")}</th>
+                  <th className="p-4">{t("Postal code")}</th>
+                  <th className="p-4">{t("Billing country")}</th>
+                  <th className="p-4">{t("Status")}</th>
+                  <th className="p-4 text-center">{t("Action")}</th>
                 </tr>
               </thead>
               <tbody className="w-full">
                 {loading ? (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">Loading....</td>
+                    <td colSpan="7">{t("Loading")}....</td>
                   </tr>
                 ) : payers?.length !== 0 && payers !== undefined ? (
                   displayPayers.map((payer) => (
@@ -237,7 +240,7 @@ const ThirdPartyPayer = () => {
                   ))
                 ) : (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">No payers here.</td>
+                    <td colSpan="7">{t("No payers here")}.</td>
                   </tr>
                 )}
               </tbody>
@@ -246,7 +249,7 @@ const ThirdPartyPayer = () => {
           {/* pagination */}
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
-              Showing{" "}
+              {t("Showing")}{" "}
               {fileterdData.length === 0
                 ? (pageNumber + 1) * payersPerPage > payers?.length
                   ? payers?.length
@@ -254,11 +257,11 @@ const ThirdPartyPayer = () => {
                 : (pageNumber + 1) * payersPerPage > fileterdData?.length
                 ? fileterdData?.length
                 : (pageNumber + 1) * payersPerPage}{" "}
-              from{" "}
+              {t("from")}{" "}
               {fileterdData?.length === 0
                 ? payers?.length
                 : fileterdData.length}{" "}
-              Payers
+              {t("Payers")}
             </p>
             <ReactPaginate
               onPageChange={changePage}

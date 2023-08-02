@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import { handleForgotPassword, handleVerifyOtp } from "../redux/AuthSlice";
+import { useTranslation } from "react-i18next";
 
 const OTPVerify = ({ email }) => {
   const [numberField, setNumberField] = useState({
@@ -22,6 +23,8 @@ const OTPVerify = ({ email }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
@@ -47,7 +50,7 @@ const OTPVerify = ({ email }) => {
     e.preventDefault();
     if (Object.values(numberField).includes("")) {
       toast.remove();
-      toast.error("Please fill all the fields!!");
+      toast.error(t("Please fill all the fields!!"));
       for (const key in numberField) {
         if (numberField.hasOwnProperty(key)) {
           const element = numberField[key];
@@ -70,7 +73,7 @@ const OTPVerify = ({ email }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("OTP verified successfully.", { duration: 2000 });
+          toast.success(t("OTP verified successfully."), { duration: 2000 });
           navigate("/reset-password");
           resetValues();
         } else if (res?.payload?.status === "error") {
@@ -94,7 +97,7 @@ const OTPVerify = ({ email }) => {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           console.log("OTP=>", res?.payload?.otp);
-          toast.success("Otp Sent to your email.", { duration: 4000 });
+          toast.success(t("Otp Sent to your email."), { duration: 4000 });
           setResendOtpLoading(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -137,10 +140,10 @@ const OTPVerify = ({ email }) => {
       {/* title */}
       <div className="space-y-2 text-center">
         <p className="font-semibold text-DarkBlue text-center md:text-lg text-base">
-          Verification
+          {t("Verification")}
         </p>
         <p className="text-sm text-teclborder-textColor leading-normal font-medium">
-          Check your email for the OTP
+          {t("Check your email for the OTP")}
         </p>
       </div>
       {/* {error !== null && <span className="error">{error?.message}</span>} */}
@@ -282,12 +285,14 @@ const OTPVerify = ({ email }) => {
 
         {/* resend code */}
         <p className="text-teclborder-textColor text-sm">
-          Didn’t recive a verification code? <br />
+          {t("Didn’t recive a verification code")}? <br />
           <span
             onClick={() => handleResendOtp()}
             className="text-red-500 font-semibold cursor-pointer "
           >
-            {resendOtpLoading ? "Sending..." : "Resend the code"}
+            {resendOtpLoading
+              ? t("Sending").concat("...")
+              : t("Resend the code")}
           </span>{" "}
         </p>
         {/* butons */}
@@ -297,7 +302,9 @@ const OTPVerify = ({ email }) => {
           className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full 
           ${loading && "cursor-not-allowed"}`}
         >
-          {loading && !resendOtpLoading ? "Verifying..." : "Continue"}
+          {loading && !resendOtpLoading
+            ? t("Verifying").concat("...")
+            : t("Continue")}
         </button>
       </form>
     </section>

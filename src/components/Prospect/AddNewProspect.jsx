@@ -12,12 +12,17 @@ import {
   isValidPhoneNumber,
 } from "react-phone-number-input";
 import { handleAddNewProspect } from "../../redux/ProspectSlice";
+import { useTranslation } from "react-i18next";
 
 const AddNewProspect = ({ setShowAddNewProspect }) => {
-  const { addNewProspectLoading } = useSelector((state) => state.root.prospects);
+  const { addNewProspectLoading } = useSelector(
+    (state) => state.root.prospects
+  );
   const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
@@ -25,53 +30,53 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
     {
       name: yup
         .string()
-        .required("Name is required")
+        .required(t("Name is required"))
         .trim()
-        .max(60, "Max character limit reached")
-        .min(3, "minimum three character required")
-        .typeError("Only characters allowed")
+        .max(60, t("Max character limit reached"))
+        .min(3, t("minimum three character required"))
+        .typeError(t("Only characters allowed"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          "Name can only contain Latin letters."
+          t("Name can only contain Latin letters.")
         ),
       baddress: yup
         .string()
-        .max(200, "Maximum character limit reached")
-        .required("address is required")
+        .max(200, t("Maximum character limit reached"))
+        .required(t("address is required"))
         .trim(""),
       bzipCode: yup
         .string()
-        .max(6, "max 6 number allowed")
-        .min(5, "min 5 number required")
-        .required("zipcode is required")
+        .max(6, t("max 6 number allowed"))
+        .min(5, t("min 5 number required"))
+        .required(t("zipcode is required"))
         .trim(""),
       bcity: yup
         .string()
-        .max(40, "Maximum character limit reached")
+        .max(40, t("Maximum character limit reached"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          "city can only contain Latin letters."
+          t("city can only contain Latin letters.")
         )
-        .required("city is required")
+        .required(t("city is required"))
         .trim(""),
       bcountry: yup
         .string()
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          "country can only contain Latin letters."
+          t("country can only contain Latin letters.")
         )
-        .required("country is required")
+        .required(t("country is required"))
         .trim(""),
       officeNumber: yup
         .string()
-        .required("office Number is required")
-        .max(15, "maximum 15 numbers!!!"),
-      mobile: yup.string().required("mobile is required"),
-      bphone: yup.string().required("phone is required"),
-      email: yup.string().email().required("email is required.").trim(),
-      bemail: yup.string().email().required("email is required.").trim(),
-      contactName: yup.string().required("contact name is required."),
-      industry: yup.string().required("industry is required."),
+        .required(t("office Number is required"))
+        .max(15, t("maximum 15 numbers!!!")),
+      mobile: yup.string().required(t("mobile is required")),
+      bphone: yup.string().required(t("phone is required")),
+      email: yup.string().email().required(t("email is required.")).trim(),
+      bemail: yup.string().email().required(t("email is required.")).trim(),
+      contactName: yup.string().required(t("contact name is required.")),
+      industry: yup.string().required(t("industry is required.")),
       website: yup.string(),
     },
     [["website", "website"]]
@@ -110,11 +115,11 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
     } = data;
     if (!isPossiblePhoneNumber(bphone) || !isValidPhoneNumber(bphone)) {
       toast.remove();
-      toast.error("Phone is invalid");
+      toast.error(t("Phone is invalid"));
       return true;
     } else if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
       toast.remove();
-      toast.error("mobile phone is invalid");
+      toast.error(t("mobile phone is invalid"));
       return true;
     } else if (
       website !== "" &&
@@ -123,7 +128,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
       )
     ) {
       toast.remove();
-      toast.error("Enter Valid URL!!!");
+      toast.error(t("Enter Valid URL!!!"));
       return true;
     }
     const response = dispatch(
@@ -148,7 +153,9 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(`${name} prospect added Successfully.`, { duration: 2000 });
+          toast.success(`${name} ${t("prospect added Successfully")}`, {
+            duration: 2000,
+          });
           setShowAddNewProspect(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -171,7 +178,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Add new prospect
+          {t("Add new prospect")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -179,30 +186,30 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
             onClick={() => setShowAddNewProspect(false)}
             disabled={addNewProspectLoading}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             type="submit"
             className="green_button"
             disabled={addNewProspectLoading}
           >
-            {addNewProspectLoading ? "Saving..." : "Save"}
+            {addNewProspectLoading ? t("Saving").concat("...") : t("Save")}
           </button>
         </div>
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-        <p className="font-bold text-black md:text-xl">Prospect Info</p>
+        <p className="font-bold text-black md:text-xl">{t("Prospect Info")}</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
           <div className="w-full space-y-2">
             <label htmlFor="name" className="Label">
-              Name
+              {t("Name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("name")}
             />
@@ -211,7 +218,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* industry */}
           <div className="w-full space-y-2">
             <label htmlFor="industry" className="Label">
-              industry
+              {t("industry")}
             </label>
             <select
               itemRef={register("industry", { required: true })}
@@ -228,11 +235,11 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* website */}
           <div className="w-full space-y-2">
             <label htmlFor="website" className="Label">
-              website
+              {t("website")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("website")}
             />
@@ -241,16 +248,16 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
         </div>
         <hr className="my-1" />
         {/* contact info */}
-        <p className="font-bold text-black md:text-xl">Contact Info</p>
+        <p className="font-bold text-black md:text-xl">{t("Contact Info")}</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("email")}
             />
@@ -259,7 +266,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* mobile number */}
           <div className="w-full space-y-2">
             <label htmlFor="mobile_number" className="Label">
-              mobile number
+              {t("mobile number")}
             </label>
             <Controller
               name="mobile"
@@ -299,11 +306,11 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* office number */}
           <div className="w-full space-y-2">
             <label htmlFor="office_number" className="Label">
-              office number
+              {t("office number")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("officeNumber")}
             />
@@ -312,16 +319,16 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
         </div>
         <hr className="my-1" />
         {/*billing address */}
-        <p className="font-bold text-black md:text-xl">Billing Address</p>
+        <p className="font-bold text-black md:text-xl">{t("Billing Address")}</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*contact name */}
           <div className="w-full space-y-2">
             <label htmlFor="contact_name" className="Label">
-              Contact Name
+              {t("Contact Name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("contactName")}
             />
@@ -330,11 +337,11 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bemail")}
             />
@@ -343,7 +350,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
-              phone
+              {t("phone")}
             </label>
             <Controller
               name="bphone"
@@ -383,10 +390,10 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* company address */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="company_address" className="Label">
-              company address
+              {t("company address")}
             </label>
             <textarea
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("baddress")}
             />
@@ -395,11 +402,11 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bcity")}
             />
@@ -408,11 +415,11 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bcountry")}
             />
@@ -421,11 +428,11 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           {/* zipcode */}
           <div className="w-full space-y-2">
             <label htmlFor="zipcode" className="Label">
-              zipcode
+              {t("zipcode")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               maxLength={6}
               minLength={6}

@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { handleAddNewMagazine } from "../../redux/MagazineSlice";
 import { BsCloudUploadFill } from "react-icons/bs";
+import { useTranslation } from "react-i18next";
 
 const AddnewMagazine = ({ setshowAddnewMagazine }) => {
   const [prevImage, setPrevImage] = useState(null);
@@ -24,43 +25,45 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const addNewMagazineSchema = yup.object({
-    title: yup.string().required("title is required").trim(),
-    status: yup.string().required("status is required").trim(),
-    description: yup.string().required("description is required").trim(""),
-    magazineTitle: yup.string().required("select magazine").trim(""),
+    title: yup.string().required(t("title is required")).trim(),
+    status: yup.string().required(t("status is required")).trim(),
+    description: yup.string().required(t("description is required")).trim(""),
+    magazineTitle: yup.string().required(t("select magazine")).trim(""),
     pdf: yup
       .mixed()
-      .required("please upload file")
+      .required(t("please upload file"))
       .test(
         "fileSize",
-        "Only pdf up to 10MB are permitted.",
+        t("Only pdf up to 10MB are permitted."),
         (files) =>
           !files || // Check if `files` is defined
           files.length === 0 || // Check if `files` is not an empty list
           Array.from(files).every((file) => file.size <= 10000000)
       )
-      .test("type", "Only .pdf formats are accepted.", (value) => {
+      .test("type", t("Only .pdf formats are accepted."), (value) => {
         return value && value[0]?.type === "application/pdf";
       }),
     stock: yup
       .string()
-      .required("stock is required")
-      .max(5, "maximum 5 numbers")
-      .min(1, "minimum 1 numbers")
-      .typeError("stock is required"),
+      .required(t("stock is required"))
+      .max(5, t("maximum 5 numbers"))
+      .min(1, t("minimum 1 numbers"))
+      .typeError(t("stock is required")),
     price: yup
       .string()
-      .required("price is required")
-      .max(4, "maximum 4 numbers")
-      .min(2, "minmum 2 numbers")
+      .required(t("price is required"))
+      .max(4, t("maximum 4 numbers"))
+      .min(2, t("minmum 2 numbers"))
       .trim(""),
     image: yup
       .mixed()
-      .required("Image is required.")
-      .test(magazineImage !== null, "Image is required", () => {
+      .required(t("Image is required."))
+      .test(magazineImage !== null, t("Image is required."), () => {
         return true;
       }),
   });
@@ -100,7 +103,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(` ${title} magazine added Successfully.`, {
+          toast.success(` ${title} ${t("magazine added Successfully")}.`, {
             duration: 3000,
           });
           setshowAddnewMagazine(false);
@@ -123,7 +126,6 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
   const handleFileUpload = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    // setPrevImage(URL.createObjectURL(file));
     setMagazinePdf(file);
   };
 
@@ -154,7 +156,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Add new magazine
+          {t("Add new magazine")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -165,7 +167,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
             type="button"
             disabled={addNewMagazineLoading}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className={`green_button ${
@@ -174,7 +176,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
             type="submit"
             disabled={addNewMagazineLoading}
           >
-            {addNewMagazineLoading ? "Saving..." : "Save"}
+            {addNewMagazineLoading ? t("Saving").concat("...") : t("Save")}
           </button>
         </div>
       </div>
@@ -184,7 +186,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
           {/* image */}
           <div className="text-center">
             <label htmlFor="image" className="Label">
-              Image
+              {t("Image")}
             </label>
             <div className="relative md:w-24 w-20 h-24">
               {prevImage !== null ? (
@@ -273,11 +275,12 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
-              title
+              {t
+              ("title")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("title")}
             />
@@ -286,11 +289,11 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
           {/* price */}
           <div className="w-full space-y-2">
             <label htmlFor="price" className="Label">
-              price
+              {t("price")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("price")}
             />
@@ -299,11 +302,11 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
           {/* stock */}
           <div className="w-full space-y-2">
             <label htmlFor="stock" className="Label">
-              stock
+              {t("stock")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("stock")}
             />
@@ -312,19 +315,19 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
           {/* status */}
           <div className="w-full space-y-2">
             <label htmlFor="status" className="Label">
-              status
+              {t("status")}
             </label>
             <select {...register("status")} className="input_field">
               <option label="choose status"></option>
-              <option value="active">active</option>
-              <option value="deactive">deactive</option>
+              <option value="active">{t("active")}</option>
+              <option value="deactive">{t("deactive")}</option>
             </select>
             <span className="error">{errors?.status?.message}</span>
           </div>
           {/* magazines */}
           <div className="w-full space-y-2">
             <label htmlFor="magazineTitle" className="Label">
-              Magazine
+              {t("Magazine")}
             </label>
             <select {...register("magazineTitle")} className="input_field">
               <option label="choose magazine"></option>
@@ -338,10 +341,11 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
           {/* summary */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="summary" className="Label">
-              summary
+              {t
+              ("summary")}
             </label>
             <textarea
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               {...register("description")}
               className="input_field"
             />

@@ -19,6 +19,7 @@ import {
   handleFindProspect,
 } from "../../redux/ProspectSlice";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
   const { deleteProspectLoading, singleProspect, EditProspectLoading } =
@@ -26,6 +27,8 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
   const { token, role } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
@@ -44,54 +47,54 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
     {
       name: yup
         .string()
-        .required("Name is required")
+        .required(t("Name is required"))
         .trim()
-        .max(60, "Max character limit reached")
-        .min(3, "minimum three character required")
-        .typeError("Only characters allowed")
+        .max(60, t("Max character limit reached"))
+        .min(3, t("minimum three character required"))
+        .typeError(t("Only characters allowed"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          "Name can only contain Latin letters."
+          t("Name can only contain Latin letters.")
         ),
       baddress: yup
         .string()
-        .max(200, "Maximum character limit reached")
-        .required("address is required")
+        .max(200, t("Maximum character limit reached"))
+        .required(t("address is required"))
         .trim(""),
       bzipCode: yup
         .string()
-        .max(6, "max 6 number allowed")
-        .min(5, "min 5 number required")
-        .required("zipcode is required")
+        .max(6, t("max 6 number allowed"))
+        .min(5, t("min 5 number required"))
+        .required(t("zipcode is required"))
         .trim(""),
       bcity: yup
         .string()
-        .max(40, "Maximum character limit reached")
+        .max(40, t("Maximum character limit reached"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          "city can only contain Latin letters."
+          t("city can only contain Latin letters.")
         )
-        .required("city is required")
+        .required(t("city is required"))
         .trim(""),
       bcountry: yup
         .string()
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          "country can only contain Latin letters."
+          t("country can only contain Latin letters.")
         )
-        .required("country is required")
+        .required(t("country is required"))
         .trim(""),
       officeNumber: yup
         .string()
-        .required("office Number is required")
-        .max(15, "maximum 15 numbers!!!"),
-      mobile: yup.string().required("mobile is required"),
-      bphone: yup.string().required("phone is required"),
-      email: yup.string().email().required("email is required.").trim(),
-      bemail: yup.string().email().required("email is required.").trim(),
-      contactName: yup.string().required("contact name is required."),
-      industry: yup.string().required("industry is required."),
-      website: yup.string().notRequired(""),
+        .required(t("office Number is required"))
+        .max(15, t("maximum 15 numbers!!!")),
+      mobile: yup.string().required(t("mobile is required")),
+      bphone: yup.string().required(t("phone is required")),
+      email: yup.string().email().required(t("email is required.")).trim(),
+      bemail: yup.string().email().required(t("email is required.")).trim(),
+      contactName: yup.string().required(t("contact name is required.")),
+      industry: yup.string().required(t("industry is required.")),
+      website: yup.string(),
     },
     [["website", "website"]]
   );
@@ -146,11 +149,11 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
       return true;
     } else if (!isPossiblePhoneNumber(bphone) || !isValidPhoneNumber(bphone)) {
       toast.remove();
-      toast.error("Phone is invalid");
+      toast.error(t("Phone is invalid"));
       return true;
     } else if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
       toast.remove();
-      toast.error("mobile phone is invalid");
+      toast.error(t("mobile phone is invalid"));
       return true;
     } else if (
       website !== "" &&
@@ -158,7 +161,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
         website
       )
     ) {
-      toast.error("Enter Valid URL!!!");
+      toast.error(t("Enter Valid URL!!!"));
       return true;
     }
     const response = dispatch(
@@ -185,7 +188,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(`${name} prospect edited Successfully.`, {
+          toast.success(`${name} ${t("prospect edited Successfully")}.`, {
             duration: 2000,
           });
           setShowEditdetailsProspect(false);
@@ -203,7 +206,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
   }, []);
 
   const handleDeleteprospect = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
@@ -213,7 +216,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteProspect(id));
-            toast.success(` ${name} prospect Deleted Successfully.`);
+            toast.success(` ${name} ${t("prospect Deleted Successfully")}.`);
             setShowEditdetailsProspect(false);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
@@ -246,7 +249,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
               dispatch(handleFindProspect(""));
             }}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className={`green_button  ${
@@ -256,7 +259,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
             type="submit"
             disabled={EditProspectLoading || deleteProspectLoading}
           >
-            {EditProspectLoading ? "Saving..." : "Save"}
+            {EditProspectLoading ? t("Saving").concat("...") : t("Save")}
           </button>
           {role === "admin" && (
             <button
@@ -267,24 +270,26 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
               onClick={() => handleDeleteprospect(_id, name)}
               type="button"
             >
-              {deleteProspectLoading ? "Deleting..." : "Delete"}
+              {deleteProspectLoading
+                ? t("Deleting").concat("...")
+                : t("Delete")}
             </button>
           )}
         </div>
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-        <p className="font-bold text-black md:text-xl">Prospect Info</p>
+        <p className="font-bold text-black md:text-xl">{t("Prospect Info")}</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
           <div className="w-full space-y-2">
             <label htmlFor="name" className="Label">
-              Name
+              {t("Name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("name")}
             />
@@ -293,7 +298,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           {/* industry */}
           <div className="w-full space-y-2">
             <label htmlFor="industry" className="Label">
-              industry
+              {t("industry")}
             </label>
             <select
               itemRef={register("industry", { required: true })}
@@ -310,63 +315,38 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           {/* website */}
           <div className="w-full space-y-2">
             <label htmlFor="website" className="Label">
-              website
+              {t("website")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
-              itemRef={register("website", {
-                validate: {
-                  website: (value) =>
-                    /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-]+=[a-zA-Z0-9-%]+&?)?$/.test(
-                      value
-                    ) === getValues().website || "Email confirmation error!",
-                },
-                required: false,
-              })}
-              {...register("website", {
-                // pattern: {
-                //   value:
-                //     /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-]+=[a-zA-Z0-9-%]+&?)?$/.test(
-                //       getValues("website")
-                //     ),
-                //   message: "Enter valid URL!!",
-                // },
-
-                validate: {
-                  website: (value) =>
-                    /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-]+=[a-zA-Z0-9-%]+&?)?$/.test(
-                      value
-                    ) === getValues().website || "Email confirmation error!",
-                },
-              })}
+              {...register("website")}
             />
             <span className="error">{errors?.website?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
         {/* contact info */}
-        <p className="font-bold text-black md:text-xl">Contact Info</p>
+        <p className="font-bold text-black md:text-xl">{t("Contact Info")}</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
-              className="input_field cursor-not-allowed"
+              placeholder={t("Type here...")}
+              className="input_field"
               {...register("email")}
-              disabled
             />
             <span className="error">{errors?.email?.message}</span>
           </div>
           {/* mobile number */}
           <div className="w-full space-y-2">
             <label htmlFor="mobile_number" className="Label">
-              mobile number
+              {t("mobile number")}
             </label>
             <Controller
               name="mobile"
@@ -382,7 +362,6 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
                       setValue("mobile", "+".concat(value));
                     });
                   }}
-                  value={getValues().mobile}
                   autocompleteSearch={true}
                   countryCodeEditable={false}
                   enableSearch={true}
@@ -407,11 +386,11 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           {/* office number */}
           <div className="w-full space-y-2">
             <label htmlFor="office_number" className="Label">
-              office number
+              {t("office number")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("officeNumber")}
             />
@@ -420,16 +399,18 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
         </div>
         <hr className="my-1" />
         {/*billing address */}
-        <p className="font-bold text-black md:text-xl">Billing Address</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Billing Address")}
+        </p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*contact name */}
           <div className="w-full space-y-2">
             <label htmlFor="contact_name" className="Label">
-              Contact Name
+              {t("Contact Name")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("contactName")}
             />
@@ -437,12 +418,12 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           </div>
           {/* email */}
           <div className="w-full space-y-2">
-            <label htmlFor="bemail" className="Label">
-              email
+            <label htmlFor="email" className="Label">
+              {t("email")}
             </label>
             <input
               type="email"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bemail")}
             />
@@ -450,8 +431,8 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           </div>
           {/* phone */}
           <div className="w-full space-y-2">
-            <label htmlFor="bphone" className="Label">
-              phone
+            <label htmlFor="phone" className="Label">
+              {t("phone")}
             </label>
             <Controller
               name="bphone"
@@ -492,10 +473,10 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           {/* company address */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="company_address" className="Label">
-              company address
+              {t("company address")}
             </label>
             <textarea
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
               {...register("baddress")}
             />
@@ -504,11 +485,11 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bcity")}
             />
@@ -517,11 +498,11 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <input
               type="text"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               {...register("bcountry")}
             />
@@ -530,11 +511,11 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           {/* zipcode */}
           <div className="w-full space-y-2">
             <label htmlFor="zipcode" className="Label">
-              zipcode
+              {t("zipcode")}
             </label>
             <input
               type="number"
-              placeholder="Type here..."
+              placeholder={t("Type here...")}
               className="input_field"
               maxLength={6}
               minLength={6}

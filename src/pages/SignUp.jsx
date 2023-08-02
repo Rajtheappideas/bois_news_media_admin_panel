@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
 import { handleSuccess } from "../redux/GlobalStates";
+import { useTranslation } from "react-i18next";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,19 +21,23 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
+
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const signupSchema = yup.object({
-    email: yup.string().email().required("Email is required!!!").trim(),
+    email: yup.string().email().required(t("Email is required")).trim(),
     password: yup
       .string()
-      .required("Password is required!!!")
+      .required(t("Password is required"))
       .matches(
         /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-        "Minimum 6 characters, at least one special character, at least one digit!!!"
+        t(
+          "Minimum 6 characters, at least one special character, at least one digit"
+        )
       )
       .trim(),
-    name: yup.string().required("Name is required!!!").trim(),
+    name: yup.string().required(t("Name is required")).trim(),
   });
 
   const {
@@ -58,7 +63,7 @@ const SignUp = () => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success("Sign up Successfully.", { duration: 2000 });
+          toast.success(t("Sign up Successfully."), { duration: 2000 });
           dispatch(handleSuccess());
           navigate("/");
         } else if (res?.payload?.status === "error") {
@@ -70,7 +75,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (user !== null) {
-      toast.success("You already logged in.");
+      toast.success(t("You already logged in."));
       navigate("/");
     }
     return () => {
@@ -80,7 +85,7 @@ const SignUp = () => {
 
   return (
     <>
-      <Helmet title="Sign-up | Bois News Media" />
+      <Helmet title={`${t("Sign-up")} | Bois News Media`} />
       <div
         style={{
           background: `url(${bgImage})`,
@@ -102,7 +107,7 @@ const SignUp = () => {
           </div>
           {/* title */}
           <p className="font-bold text-textBlack text-center md:text-lg">
-            Sign in your account
+            {t("Create new account")}
           </p>
 
           {/* {error !== null && <span className="error">{error?.message}</span>} */}
@@ -124,7 +129,7 @@ const SignUp = () => {
                   value="admin"
                 />
                 <label htmlFor="admin" className="cursor-pointer">
-                  <span>Administrator</span>
+                  <span>{t("Administrator")}</span>
                 </label>
               </div>
               <div className="flex md:text-base text-sm items-center md:gap-x-2 gap-x-1">
@@ -136,7 +141,7 @@ const SignUp = () => {
                   value="editor"
                 />
                 <label htmlFor="editor" className="cursor-pointer">
-                  <span>Editor</span>
+                  <span>{t("Editor")}</span>
                 </label>
               </div>
               <div className="flex md:text-base text-sm items-center md:gap-x-2 gap-x-1">
@@ -148,7 +153,7 @@ const SignUp = () => {
                   value="viewer"
                 />
                 <label htmlFor="viewer" className="cursor-pointer">
-                  <span>View only</span>
+                  <span>{t("View only")}</span>
                 </label>
               </div>
             </div>
@@ -158,12 +163,12 @@ const SignUp = () => {
                 className="label block font-semibold text-left md:text-base text-sm"
                 htmlFor="name"
               >
-                User name
+                {t("User name")}
               </label>
               <input
                 {...register("name")}
                 type="text"
-                placeholder="Enter your name"
+                placeholder={t("Enter your name")}
                 className="input_field"
               />
               <span role="alert" className="error">
@@ -176,12 +181,12 @@ const SignUp = () => {
                 className="label block font-semibold text-left md:text-base text-sm"
                 htmlFor="email"
               >
-                E-Mail
+                {t("E-Mail")}
               </label>
               <input
                 {...register("email")}
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t("Enter your email")}
                 className="input_field"
               />
               <span role="alert" className="error">
@@ -194,13 +199,13 @@ const SignUp = () => {
                 className="label block font-semibold text-left md:text-base text-sm"
                 htmlFor="password"
               >
-                Password
+                {t("Password")}
               </label>{" "}
               <div className="relative h-auto">
                 <input
                   {...register("password")}
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder={t("Enter your password")}
                   className="input_field"
                 />
 
@@ -232,17 +237,17 @@ const SignUp = () => {
               className={`bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full 
               ${loading && "cursor-not-allowed"}`}
             >
-              {loading ? "Signing up..." : "Sign up"}
+              {loading ? t("Signing up").concat("...") : t("Sign up")}
             </button>
 
             {/* signin link */}
             <div className="text-center font-normal">
-              Already have an account?
+              {t("Already have an account")}?
               <Link
                 to="/sign-in"
                 className="text-primaryBlue ml-1 font-medium hover:underline"
               >
-                Sign in
+                {t("Sign in")}
               </Link>
             </div>
           </form>

@@ -1,10 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import BaseUrl from "../../BaseUrl";
+import { useTranslation } from "react-i18next";
 
 const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
-  const { singleMagazine, editMagazineLoading, deleteMagazineLoading } =
-    useSelector((state) => state.root.magazines);
+  const { singleMagazine } = useSelector((state) => state.root.magazines);
+
+  const { t } = useTranslation();
 
   const {
     title,
@@ -22,7 +24,7 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Magazine details
+          {t("Magazine details")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -30,7 +32,7 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
             onClick={() => setShowMagazineDetails(false)}
             type="button"
           >
-            Cancel
+            {t("Cancel")}
           </button>
         </div>
       </div>
@@ -39,7 +41,7 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
         <div className=" w-full flex items-start md:gap-x-10 gap-x-4">
           <div className="text-center">
             <label htmlFor="image" className="Label">
-              Image
+              {t("Image")}
             </label>
             <div className="relative md:w-24 w-20 h-24 block">
               <img
@@ -50,7 +52,7 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
             </div>
           </div>
           {/* pdf */}
-          <div className="text-center">
+          {/* <div className="text-center">
             <label htmlFor="pdf" className="Label">
               Pdf
             </label>
@@ -60,51 +62,52 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
                 <span className="block">{BaseUrl.concat(pdf)}</span>
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
-
-        <p className="font-bold text-black md:text-xl">Magazine details</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Magazine details")}
+        </p>{" "}
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
-              title
+            {t("title")}
             </label>
             <p className="font-semibold">{title}</p>
           </div>
           {/* price */}
           <div className="w-full space-y-2">
             <label htmlFor="price" className="Label">
-              price
+            {t("price")}
             </label>
             <p className="font-semibold">{price}</p>
           </div>
           {/* stock */}
           <div className="w-full space-y-2">
             <label htmlFor="stock" className="Label">
-              stock
+            {t("stock")}
             </label>
             <p className="font-semibold">{stock}</p>
           </div>
           {/* status */}
           <div className="w-full space-y-2">
             <label htmlFor="status" className="Label">
-              status
+            {t("status")}
             </label>
             <p className="font-semibold">{status}</p>
           </div>
           {/* magazines */}
           <div className="w-full space-y-2">
             <label htmlFor="magazineTitle" className="Label">
-              Magazine
+            {t("Magazine")}
             </label>
             <p className="font-semibold">{magazineTitle}</p>
           </div>
           {/* summary */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="summary" className="Label">
-              summary
+            {t("summary")}
             </label>
             <p className="font-semibold">{description}</p>
           </div>

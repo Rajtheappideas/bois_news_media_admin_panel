@@ -3,11 +3,14 @@ import EditProfile from "../Profile/EditProfile";
 import { useSelector } from "react-redux";
 import BaseUrl from "../../BaseUrl";
 import { FaUserCircle } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
   const [showProfileEdit, setShowProfileEdit] = useState(false);
 
   const { user, loading } = useSelector((state) => state.root.auth);
+
+  const { t } = useTranslation();
 
   return (
     <>
@@ -23,7 +26,7 @@ const Profile = () => {
                 className="gray_button"
                 onClick={() => setShowProfileEdit(true)}
               >
-                Edit profile
+                {t("Edit profile")}
               </button>
             </div>
           </div>
@@ -44,13 +47,13 @@ const Profile = () => {
                 />
               )}
             </div>
-            <p className="font-bold text-black md:text-xl">Personal Details</p>
+            <p className="font-bold text-black md:text-xl">{t("Personal Details")}</p>
             {/* personal details */}
             <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
               {/* name */}
               <div className="w-full space-y-2">
                 <label htmlFor="name" className="Label">
-                  name
+                  {t("name")}
                 </label>
                 <p className="text-textBlack font-medium capitalize">
                   {user?.name ?? "-"}
@@ -59,7 +62,7 @@ const Profile = () => {
               {/* company */}
               <div className="w-full space-y-2">
                 <label htmlFor="company" className="Label">
-                  company
+                  {t("company")}
                 </label>
                 <p className="text-textBlack font-medium capitalize">
                   {user?.company ?? "-"}
@@ -68,7 +71,7 @@ const Profile = () => {
               {/* email */}
               <div className="w-full space-y-2">
                 <label htmlFor="email" className="Label">
-                  email
+                  {t("email")}
                 </label>
                 <p className="text-textBlack font-medium">
                   {user?.email ?? "-"}{" "}
@@ -77,7 +80,7 @@ const Profile = () => {
               {/* phone */}
               <div className="w-full space-y-2">
                 <label htmlFor="phone" className="Label">
-                  phone
+                  {t("phone")}
                 </label>
                 <p className="text-textBlack font-medium">
                   {user?.phone ?? "-"}
@@ -86,12 +89,12 @@ const Profile = () => {
             </div>
             <hr className="my-1" />
             {/* address */}
-            <p className="font-bold text-black md:text-xl">Address</p>
+            <p className="font-bold text-black md:text-xl">{t("Address")}</p>
             <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
               {/*address */}
               <div className="w-full col-span-full space-y-2">
                 <label htmlFor="address" className="Label">
-                  address
+                  {t("address")}
                 </label>
                 <p className="text-textBlack font-medium">
                   {user?.address ?? "-"}{" "}
@@ -100,7 +103,7 @@ const Profile = () => {
               {/* city */}
               <div className="w-full space-y-2">
                 <label htmlFor="city" className="Label">
-                  city
+                  {t("city")}
                 </label>
                 <p className="text-textBlack font-medium capitalize">
                   {" "}
@@ -110,7 +113,7 @@ const Profile = () => {
               {/* country */}
               <div className="w-full space-y-2">
                 <label htmlFor="country" className="Label">
-                  country
+                  {t("country")}
                 </label>
                 <p className="text-textBlack font-medium capitalize">
                   {user?.country ?? "-"}
@@ -119,7 +122,7 @@ const Profile = () => {
               {/* zipcode */}
               <div className="w-full space-y-2">
                 <label htmlFor="zipcode" className="Label">
-                  zipcode
+                  {t("zipcode")}
                 </label>
                 <p className="text-textBlack font-medium">
                   {user?.zipCode ?? "-"}

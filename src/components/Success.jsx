@@ -4,14 +4,17 @@ import Lottie from "lottie-react";
 import success from "../assets/animations/success.json";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const Success = () => {
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     setTimeout(() => {
       navigate("/sign-in");
-      toast.success("You can signin now with your new password.", {
+      toast.success(t("You can signin now with your new password."), {
         duration: 4000,
       });
     }, 5000);
@@ -29,17 +32,17 @@ const Success = () => {
           loop
         />
         <p className="font-bold text-textBlack text-center md:text-lg">
-          Verification success{" "}
+          {t("Verification success")}{" "}
         </p>
         <p className="font-normal text-textColor text-center md:text-lg w-9/12">
-          Verification is success and now you can proceed{" "}
+          {t("Verification is success and now you can proceed")}{" "}
         </p>
         <button
           type="button"
           onClick={() => navigate("/sign-in")}
           className="bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full"
         >
-          Sign In
+          {t("Sign in")}
         </button>
       </section>
     </>

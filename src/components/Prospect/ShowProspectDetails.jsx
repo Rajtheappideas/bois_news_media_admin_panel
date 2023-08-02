@@ -1,10 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleFindProspect } from "../../redux/ProspectSlice";
+import { useTranslation } from "react-i18next";
 
 const ShowProspectDetails = ({ setShowProspectDetails }) => {
   const { singleProspect } = useSelector((state) => state.root.prospects);
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const {
     name,
@@ -21,7 +24,7 @@ const ShowProspectDetails = ({ setShowProspectDetails }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Prospect details
+          {t("Prospect details")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -31,71 +34,73 @@ const ShowProspectDetails = ({ setShowProspectDetails }) => {
               dispatch(handleFindProspect(""));
             }}
           >
-            Cancel
+            {t("Cancel")}
           </button>
         </div>
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-        <p className="font-bold text-black md:text-xl">Prospect Info</p>
+        <p className="font-bold text-black md:text-xl">{t("Prospect Info")}</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
           <div className="w-full space-y-2">
             <label htmlFor="name" className="Label">
-              Name
+              {t("Name")}
             </label>
             <p className="font-semibold">{name ?? "-"}</p>
           </div>
           {/* industry */}
           <div className="w-full space-y-2">
             <label htmlFor="industry" className="Label">
-              industry
+              {t("industry")}
             </label>
             <p className="font-semibold">{industry ?? "-"}</p>
           </div>
           {/* website */}
           <div className="w-full space-y-2">
             <label htmlFor="website" className="Label">
-              website
+              {t("website")}
             </label>
             <p className="font-semibold">{website ?? "-"}</p>
           </div>
         </div>
         <hr className="my-1" />
         {/* contact info */}
-        <p className="font-bold text-black md:text-xl">Contact Info</p>
+        <p className="font-bold text-black md:text-xl">{t("Contact Info")}</p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <p className="font-semibold">{email ?? "-"}</p>
           </div>
           {/* mobile number */}
           <div className="w-full space-y-2">
             <label htmlFor="mobile_number" className="Label">
-              mobile number
+              {t("mobile number")}
             </label>
             <p className="font-semibold">{mobile ?? "-"}</p>
           </div>
           {/* office number */}
           <div className="w-full space-y-2">
             <label htmlFor="office_number" className="Label">
-              office number
+              {t("office number")}
             </label>
             <p className="font-semibold">{officeNumber ?? "-"}</p>
           </div>
         </div>
         <hr className="my-1" />
         {/*billing address */}
-        <p className="font-bold text-black md:text-xl">Billing Address</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Billing Address")}
+        </p>{" "}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*contact name */}
           <div className="w-full space-y-2">
             <label htmlFor="contact_name" className="Label">
-              Contact Name
+              {t("Contact Name")}
             </label>
             <p className="font-semibold">
               {billingAddress?.contactName !== ""
@@ -106,7 +111,7 @@ const ShowProspectDetails = ({ setShowProspectDetails }) => {
           {/* email */}
           <div className="w-full space-y-2">
             <label htmlFor="email" className="Label">
-              email
+              {t("email")}
             </label>
             <p className="font-semibold">
               {billingAddress?.email !== "" ? billingAddress?.email : "-"}
@@ -115,7 +120,7 @@ const ShowProspectDetails = ({ setShowProspectDetails }) => {
           {/* phone */}
           <div className="w-full space-y-2">
             <label htmlFor="phone" className="Label">
-              phone
+              {t("phone")}
             </label>
             <p className="font-semibold">
               {billingAddress?.phone !== "" ? billingAddress?.phone : "-"}
@@ -124,7 +129,7 @@ const ShowProspectDetails = ({ setShowProspectDetails }) => {
           {/* company address */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="company_address" className="Label">
-              company address
+              {t("company address")}
             </label>
             <p className="font-semibold">
               {billingAddress?.address !== "" ? billingAddress?.address : "-"}
@@ -133,7 +138,7 @@ const ShowProspectDetails = ({ setShowProspectDetails }) => {
           {/* city */}
           <div className="w-full space-y-2">
             <label htmlFor="city" className="Label">
-              city
+              {t("city")}
             </label>
             <p className="font-semibold">
               {billingAddress?.city !== "" ? billingAddress?.city : "-"}
@@ -142,7 +147,7 @@ const ShowProspectDetails = ({ setShowProspectDetails }) => {
           {/* country */}
           <div className="w-full space-y-2">
             <label htmlFor="country" className="Label">
-              country
+              {t("country")}
             </label>
             <p className="font-semibold">
               {billingAddress?.country !== "" ? billingAddress?.country : "-"}
@@ -151,7 +156,7 @@ const ShowProspectDetails = ({ setShowProspectDetails }) => {
           {/* zipcode */}
           <div className="w-full space-y-2">
             <label htmlFor="zipcode" className="Label">
-              zipcode
+              {t("zipcode")}
             </label>
             <p className="font-semibold">
               {billingAddress?.zipCode !== "" ? billingAddress?.zipCode : "-"}

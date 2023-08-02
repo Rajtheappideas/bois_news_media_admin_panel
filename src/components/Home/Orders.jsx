@@ -6,6 +6,7 @@ import { BiPrinter } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import OrderDetails from "../Orders/OrderDetails";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const Orders = () => {
   const [showOrderDetails, setshowOrderDetails] = useState(false);
@@ -20,6 +21,8 @@ const Orders = () => {
   } = useSelector((state) => state.root.orders);
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData } = useSelector((state) => state.root.globalStates);
+
+  const { t } = useTranslation();
 
   // pagination logic
   const ordersPerPage = 8;
@@ -52,8 +55,8 @@ const Orders = () => {
             </div>
             <div>
               <select name="filter" id="filter" className="filter_dropdown">
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
+                <option value="newest">{t("newest")}</option>
+                <option value="oldest">{t("oldest")}</option>
               </select>
             </div>
           </div>
@@ -65,12 +68,12 @@ const Orders = () => {
                   <th className="p-4 whitespace-nowrap">
                     <span>Invoice no</span>
                   </th>
-                  <th className="p-4">Order date & time</th>
-                  <th className="p-4">Customer name</th>
-                  <th className="p-4">Pay method</th>
-                  <th className="p-4">Amount</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4">Action</th>
+                  <th className="p-4">{t("Order date & time")}</th>
+                  <th className="p-4">{t("Customer name")}</th>
+                  <th className="p-4">{t("Pay method")}</th>
+                  <th className="p-4">{t("Amount")}</th>
+                  <th className="p-4">{t("Status")}</th>
+                  <th className="p-4">{t("Action")}</th>
                 </tr>
               </thead>
               <tbody className="w-full">
@@ -284,7 +287,7 @@ const Orders = () => {
           {/* pagination */}
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
-              Showing{" "}
+              {t("Showing")}{" "}
               {fileterdData.length === 0
                 ? (pageNumber + 1) * ordersPerPage > orders?.length
                   ? orders?.length
@@ -292,11 +295,11 @@ const Orders = () => {
                 : (pageNumber + 1) * ordersPerPage > fileterdData?.length
                 ? fileterdData?.length
                 : (pageNumber + 1) * ordersPerPage}{" "}
-              from{" "}
+              {t("from")}{" "}
               {fileterdData?.length === 0
                 ? orders?.length
                 : fileterdData.length}{" "}
-              Orders
+              {t("Orders")}
             </p>
             <ReactPaginate
               onPageChange={changePage}

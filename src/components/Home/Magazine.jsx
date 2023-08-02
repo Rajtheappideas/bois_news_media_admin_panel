@@ -19,6 +19,7 @@ import { toast } from "react-hot-toast";
 import { BsEye } from "react-icons/bs";
 import ShowMagazineDetails from "../Magazine/ShowMagazineDetails";
 import BaseUrl from "../../BaseUrl";
+import { useTranslation } from "react-i18next";
 
 const Magazine = () => {
   const [showAddnewMagazine, setshowAddnewMagazine] = useState(false);
@@ -41,6 +42,8 @@ const Magazine = () => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   // pagination logic
   const magazinePerPage = 8;
   const pageVisited = pageNumber * magazinePerPage;
@@ -60,7 +63,7 @@ const Magazine = () => {
   };
 
   const handleDeletemagazine = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
@@ -70,7 +73,7 @@ const Magazine = () => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteMagazine(id));
-            toast.success(`${name} magazine Deleted Successfully.`);
+            toast.success(`${name} ${t("magazine Deleted Successfully")}.`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -106,14 +109,14 @@ const Magazine = () => {
                 id="filter"
                 className="filter_dropdown"
               >
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
+                <option value="newest">{t("newest")}</option>
+                <option value="oldest">{t("oldest")}</option>
               </select>
               <button
                 className="gray_button"
                 onClick={() => setshowAddnewMagazine(true)}
               >
-                + Add new
+                + {t("Add new")}
               </button>
             </div>
           </div>
@@ -132,17 +135,17 @@ const Magazine = () => {
                       <span>Sr no</span>
                     </label>
                   </th>
-                  <th className="p-4">Magazine name</th>
-                  <th className="p-4">Price</th>
-                  <th className="p-4">Stock</th>
-                  <th className="p-4 text-center">Status</th>
-                  <th className="p-4 text-center">Action</th>
+                  <th className="p-4">{t("Magazine name")}</th>
+                  <th className="p-4">{t("Price")}</th>
+                  <th className="p-4">{t("Stock")}</th>
+                  <th className="p-4 text-center">{t("Status")}</th>
+                  <th className="p-4 text-center">{t("Action")}</th>
                 </tr>
               </thead>
               <tbody className="w-full">
                 {loading ? (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">Loading....</td>
+                    <td colSpan="7">{t("Loading")}....</td>
                   </tr>
                 ) : magazines?.length !== 0 && magazines !== undefined ? (
                   displayMagazine.map((magazine) => (
@@ -259,7 +262,7 @@ const Magazine = () => {
                   ))
                 ) : (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">No magazines here.</td>
+                    <td colSpan="7">{t("No magazines here")}.</td>
                   </tr>
                 )}
               </tbody>
@@ -268,7 +271,7 @@ const Magazine = () => {
           {/* pagination */}
           <div className="flex items-center justify-between py-5">
             <p className="font-medium md:text-base text-sm text-textBlack">
-              Showing{" "}
+              {t("Showing")}{" "}
               {fileterdData.length === 0
                 ? (pageNumber + 1) * magazinePerPage > magazines?.length
                   ? magazines?.length
@@ -276,11 +279,11 @@ const Magazine = () => {
                 : (pageNumber + 1) * magazinePerPage > fileterdData?.length
                 ? fileterdData?.length
                 : (pageNumber + 1) * magazinePerPage}{" "}
-              from{" "}
+              {t("from")}{" "}
               {fileterdData?.length === 0
                 ? magazines?.length
                 : fileterdData.length}{" "}
-              Magazines
+              {t("Magazines")}
             </p>
             <ReactPaginate
               onPageChange={changePage}

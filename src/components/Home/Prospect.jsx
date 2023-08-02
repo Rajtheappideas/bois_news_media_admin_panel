@@ -17,6 +17,7 @@ import {
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
 import ShowProspectDetails from "../Prospect/ShowProspectDetails";
+import { useTranslation } from "react-i18next";
 
 const Prospect = () => {
   const [showAddNewProspect, setShowAddNewProspect] = useState(false);
@@ -39,6 +40,8 @@ const Prospect = () => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   // pagination logic
   const prospectsPerPage = 8;
   const pageVisited = pageNumber * prospectsPerPage;
@@ -58,7 +61,7 @@ const Prospect = () => {
   };
 
   const handleDeleteprospect = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
@@ -68,7 +71,7 @@ const Prospect = () => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteProspect(id));
-            toast.success(`${name} prospect Deleted Successfully.`);
+            toast.success(`${name} ${t("prospect Deleted Successfully")}.`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -116,14 +119,14 @@ const Prospect = () => {
                   id="filter"
                   className="filter_dropdown"
                 >
-                  <option value="newest">Newest</option>
-                  <option value="oldest">Oldest</option>
+                  <option value="newest">{t("newest")}</option>
+                  <option value="oldest">{t("oldest")}</option>
                 </select>
                 <button
                   className="gray_button"
                   onClick={() => setShowAddNewProspect(true)}
                 >
-                  + Add new
+                  + {t("Add new")}
                 </button>
               </div>
             </div>
@@ -139,19 +142,19 @@ const Prospect = () => {
                         id="id"
                       /> */}
                       <label htmlFor="id" className=" cursor-pointer">
-                        <span>Contact person</span>
+                        <span>{t("Contact person")}</span>
                       </label>
                     </th>
-                    <th className="p-4 text-left">Email</th>
-                    <th className="p-4 text-left">Phone</th>
-                    <th className="p-4 text-left">city</th>
-                    <th className="p-4">Action</th>
+                    <th className="p-4 text-left">{t("Email")}</th>
+                    <th className="p-4 text-left">{t("Phone")}</th>
+                    <th className="p-4 text-left">{t("city")}</th>
+                    <th className="p-4">{t("Action")}</th>
                   </tr>
                 </thead>
                 <tbody className="w-full">
                   {loading ? (
                     <tr className="data_not_found_And_Loading">
-                      <td colSpan="7">Loading....</td>
+                      <td colSpan="7">{t("Loading")}....</td>
                     </tr>
                   ) : prospects?.length !== 0 && prospects !== undefined ? (
                     displayProspects.map((prospect) => (
@@ -249,7 +252,7 @@ const Prospect = () => {
                     ))
                   ) : (
                     <tr className="data_not_found_And_Loading">
-                      <td colSpan="7">No prospects here.</td>
+                      <td colSpan="7">{t("No prospects here")}.</td>
                     </tr>
                   )}
                 </tbody>
@@ -258,7 +261,7 @@ const Prospect = () => {
             {/* pagination */}
             <div className="flex items-center justify-between py-5">
               <p className="font-medium md:text-base text-sm text-textBlack">
-                Showing Showing{" "}
+                {t("Showing")}{" "}
                 {fileterdData.length === 0
                   ? (pageNumber + 1) * prospectsPerPage > prospects?.length
                     ? prospects?.length
@@ -266,11 +269,11 @@ const Prospect = () => {
                   : (pageNumber + 1) * prospectsPerPage > fileterdData?.length
                   ? fileterdData?.length
                   : (pageNumber + 1) * prospectsPerPage}{" "}
-                from{" "}
+                {t("from")}{" "}
                 {fileterdData?.length === 0
                   ? prospects?.length
                   : fileterdData.length}{" "}
-                prospects
+                {t("prospects")}
               </p>
               <ReactPaginate
                 onPageChange={changePage}

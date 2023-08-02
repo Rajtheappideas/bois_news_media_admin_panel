@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
 import { BsEye } from "react-icons/bs";
+import { useTranslation } from "react-i18next";
+import ShowSubscriptionDetails from "../Subscriptions/ShowSubscriptionDetails";
 
 const Subcriptions = () => {
   const [showAddnewSubscription, setShowAddnewSubscription] = useState(false);
@@ -38,6 +40,8 @@ const Subcriptions = () => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   // pagination logic
   const subscriptionPerPage = 8;
   const pageVisited = pageNumber * subscriptionPerPage;
@@ -57,7 +61,7 @@ const Subcriptions = () => {
   };
 
   const handleDeletesubscription = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
@@ -67,7 +71,7 @@ const Subcriptions = () => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteSubscription(id));
-            toast.success(`${name} subscription Deleted Successfully.`);
+            toast.success(`${name} ${t("subscription Deleted Successfully")}.`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -95,8 +99,8 @@ const Subcriptions = () => {
       {!showAddnewSubscription &&
         !showEditSubscription &&
         showSubscriptionDetails && (
-          <ShowSubscriberDetails
-            setShowEditSubscription={setShowEditSubscription}
+          <ShowSubscriptionDetails
+            setShowSubscriptionDetails={setShowSubscriptionDetails}
           />
         )}
       {!showAddnewSubscription &&
@@ -110,14 +114,14 @@ const Subcriptions = () => {
               </div>
               <div>
                 <select name="filter" id="filter" className="filter_dropdown">
-                  <option value="newest">Newest</option>
-                  <option value="oldest">Oldest</option>
+                  <option value="newest">{t("newest")}</option>
+                  <option value="oldest">{t("oldest")}</option>
                 </select>
                 <button
                   className="gray_button"
                   onClick={() => setShowAddnewSubscription(true)}
                 >
-                  + Add new
+                  + {t("Add new")}
                 </button>
               </div>
             </div>
@@ -131,18 +135,18 @@ const Subcriptions = () => {
                         type="checkbox"
                         className="rounded-lg inline-block mr-2 h-4 w-4"
                       /> */}
-                      <span>ID</span>
+                      <span>{t("ID")}</span>
                     </th>
-                    <th className="p-4 md:pl-28">Subscriptions name</th>
-                    <th className="p-4 md:pr-20">Price</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4 text-center">Action</th>
+                    <th className="p-4 md:pl-28">{t("Subscriptions name")}</th>
+                    <th className="p-4 md:pr-20">{t("Price")}</th>
+                    <th className="p-4">{t("Status")}</th>
+                    <th className="p-4 text-center">{t("Action")}</th>
                   </tr>
                 </thead>
                 <tbody className="w-full">
                   {loading ? (
                     <tr className="data_not_found_And_Loading">
-                      <td colSpan="7">Loading....</td>
+                      <td colSpan="7">{t("Loading")}....</td>
                     </tr>
                   ) : subscriptions?.length !== 0 &&
                     subscriptions !== undefined ? (
@@ -245,7 +249,7 @@ const Subcriptions = () => {
                     ))
                   ) : (
                     <tr className="data_not_found_And_Loading">
-                      <td colSpan="7">No subscriptions here.</td>
+                      <td colSpan="7">{t("No subscriptions here")}.</td>
                     </tr>
                   )}
                 </tbody>
@@ -254,7 +258,7 @@ const Subcriptions = () => {
             {/* pagination */}
             <div className="flex items-center justify-between py-5">
               <p className="font-medium md:text-base text-sm text-textBlack">
-                Showing{" "}
+                {t("Showing")}{" "}
                 {fileterdData.length === 0
                   ? (pageNumber + 1) * subscriptionPerPage >
                     subscriptions?.length
@@ -264,11 +268,11 @@ const Subcriptions = () => {
                     fileterdData?.length
                   ? fileterdData?.length
                   : (pageNumber + 1) * subscriptionPerPage}{" "}
-                from{" "}
+                {t("from")}{" "}
                 {fileterdData?.length === 0
                   ? subscriptions?.length
                   : fileterdData.length}{" "}
-                Subscriptions
+                {t("Subscriptions")}
               </p>
               <ReactPaginate
                 onPageChange={changePage}

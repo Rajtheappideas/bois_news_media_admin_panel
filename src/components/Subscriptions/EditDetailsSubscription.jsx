@@ -15,6 +15,7 @@ import {
   handleEditSubscription,
 } from "../../redux/SubscriptionSlice";
 import BaseUrl from "../../BaseUrl";
+import { useTranslation } from "react-i18next";
 
 const EditDetailsSubscription = ({ setShowEditSubscription }) => {
   const [prevImage, setPrevImage] = useState(null);
@@ -31,22 +32,24 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const editSubscriptionSchema = yup.object({
-    title: yup.string().required("title is required").trim(),
-    status: yup.string().required("status is required").trim(),
-    description: yup.string().required("description is required").trim(""),
+    title: yup.string().required(t("title is required")).trim(),
+    status: yup.string().required(t("status is required")).trim(),
+    description: yup.string().required(t("description is required")).trim(""),
     price: yup
       .string()
-      .required("price is required")
-      .max(4, "maximum 4 numbers")
-      .min(2, "minmum 2 numbers")
+      .required(t("price is required"))
+      .max(4, t("maximum 4 numbers"))
+      .min(2, t("minmum 2 numbers"))
       .trim(""),
     image: yup
       .mixed()
-      .required("Image is required.")
-      .test(subscriptionImage !== null, "Image is required", () => {
+      .required(t("Image is required."))
+      .test(subscriptionImage !== null, t("Image is required"), () => {
         return true;
       }),
   });
@@ -90,7 +93,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(` ${title} subscription added Successfully.`, {
+          toast.success(` ${title} ${t("subscription edited Successfully")}.`, {
             duration: 2000,
           });
           setShowEditSubscription(false);
@@ -116,7 +119,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
   }, []);
 
   const handleDeletesubscription = (id, name) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
@@ -126,7 +129,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteSubscription(id));
-            toast.success(`${name} subscription Deleted Successfully.`);
+            toast.success(`${name} ${t("subscription Deleted Successfully")}.`);
             setShowEditSubscription(false);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
@@ -144,7 +147,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Subscriptions details{" "}
+          {t("Subscriptions details")}{" "}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -156,7 +159,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
             type="button"
             onClick={() => setShowEditSubscription(false)}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className={`green_button ${
@@ -166,7 +169,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
             disabled={deleteSubscriptionLoading || editSubscriptionLoading}
             type="submit"
           >
-            {editSubscriptionLoading ? "Saving..." : "Save"}
+            {editSubscriptionLoading ? t("Saving").concat("...") : t("Save")}
           </button>
           {role === "admin" && (
             <button
@@ -178,7 +181,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
               type="button"
               onClick={() => handleDeletesubscription(_id, title)}
             >
-              {deleteSubscriptionLoading ? "Deleting..." : "Delete"}
+              {deleteSubscriptionLoading ? t("Deleting") : t("Delete")}
             </button>
           )}
         </div>
@@ -223,7 +226,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
-              title
+              {t("title")}
             </label>
             <input
               type="text"
@@ -236,7 +239,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
           {/* price */}
           <div className="w-full space-y-2">
             <label htmlFor="price" className="Label">
-              price
+              {t("price")}
             </label>
             <input
               type="number"
@@ -249,19 +252,19 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
           {/* status */}
           <div className="w-full space-y-2">
             <label htmlFor="status" className="Label">
-              status
+              {t("status")}
             </label>
             <select {...register("status")} className="input_field">
               <option label="choose status"></option>
-              <option value="active">active</option>
-              <option value="deactive">deactive</option>
+              <option value="active">{t("active")}</option>
+              <option value="deactive">{t("deactive")}</option>
             </select>
             <span className="error">{errors?.status?.message}</span>
           </div>
           {/* discriptions */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="discriptions" className="Label">
-              discriptions
+              {t("discriptions")}
             </label>
             <textarea
               placeholder="Type here..."

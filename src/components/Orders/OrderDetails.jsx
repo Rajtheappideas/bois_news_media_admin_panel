@@ -1,8 +1,15 @@
 import React from "react";
+import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { BiPrinter } from "react-icons/bi";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import Print from "react-to-print";
 
 const OrderDetails = ({ setshowOrderDetails }) => {
+  const { t } = useTranslation();
+
+  const printComponentRef = useRef();
+
   return (
     <div className="w-full lg:space-y-5 space-y-3">
       {/* title + buttons */}
@@ -15,19 +22,34 @@ const OrderDetails = ({ setshowOrderDetails }) => {
             size={25}
             className="inline-block pb-1 mr-1"
           />
-          Order Detail
+          {t("Order Detail")}
         </p>
-        <div className="flex flex-wrap gray_button items-center text-black justify-start md:gap-3 gap-1">
-          <BiPrinter size={25} color="white" />
-          <button className="">Print</button>
+        <div className="flex flex-wrap cursor-pointer gray_button items-center text-black justify-start md:gap-3 gap-1">
+          <Print
+            trigger={() => (
+              <button>
+                <BiPrinter size={25} color="white" className="inline-block mr-1" />
+                {t("Print")}
+              </button>
+            )}
+            documentTitle="Invoice_bois_news_media"
+            content={() => printComponentRef.current}
+          >
+            {t("Print")}
+          </Print>
         </div>
       </div>
       {/* main div */}
-      <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-2">
+      <div
+        ref={printComponentRef}
+        className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-2"
+      >
         <div>
-          <p className="font-bold text-black md:text-4xl text-xl">Invoice</p>
+          <p className="font-bold text-black md:text-4xl text-xl">
+            {t("Invoice")}
+          </p>
           <p className="font-bold text-black md:text-lg">
-            Status:<span className="text-green-500 ml-1">Delivered</span>
+            {t("Status")}:<span className="text-green-500 ml-1">Delivered</span>
           </p>
         </div>
         {/*invoice details */}
@@ -35,7 +57,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
           {/* date */}
           <div className="w-full md:space-y-2">
             <label htmlFor="date" className="Label">
-              Date
+              {t("Date")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">
               June 1, 2023 10:30 PM
@@ -44,14 +66,14 @@ const OrderDetails = ({ setshowOrderDetails }) => {
           {/* Payment method */}
           <div className="w-full md:space-y-2">
             <label htmlFor="payment_method" className="Label">
-              Payment method
+              {t("Payment method")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">Cash</p>
           </div>
           {/* Contact */}
           <div className="w-full md:space-y-2">
             <label htmlFor="Contact" className="Label">
-              Contact
+              {t("Contact")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">
               Marilyn Workman
@@ -66,7 +88,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
           {/* Address */}
           <div className="w-full md:space-y-2">
             <label htmlFor="Address" className="Label">
-              Address
+              {t("Address")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">
               gf 22vvvvggg, ghh, 3222
@@ -81,10 +103,10 @@ const OrderDetails = ({ setshowOrderDetails }) => {
                 <th className="p-4 whitespace-nowrap">
                   <span>Sr no.</span>
                 </th>
-                <th className="p-4 whitespace-nowrap">Product title</th>
-                <th className="p-4 whitespace-nowrap">Quantity</th>
-                <th className="p-4 whitespace-nowrap">Item price</th>
-                <th className="p-4 whitespace-nowrap">Amount</th>
+                <th className="p-4 whitespace-nowrap">{t("Product title")}</th>
+                <th className="p-4 whitespace-nowrap">{t("Quantity")}</th>
+                <th className="p-4 whitespace-nowrap">{t("Item price")}</th>
+                <th className="p-4 whitespace-nowrap">{t("Amount")}</th>
               </tr>
             </thead>
             <tbody className="w-full">
@@ -127,15 +149,17 @@ const OrderDetails = ({ setshowOrderDetails }) => {
           <div className="md:w-3/5 w-0" />
           <div className="md:w-2/5 w-full md:space-y-3 space-y-2">
             <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold">SHIPPING COST</p>
+              <p className="w-1/2 font-semibold uppercase">
+                {t("shipping cost")}
+              </p>
               <p className="w-1/2 text-right">€ 20.00</p>
             </div>
             <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold">DISCOUNT</p>
+              <p className="w-1/2 font-semibold uppercase">{"discount"}</p>
               <p className="w-1/2 text-right">€ 00.00</p>
             </div>
             <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-bold">Total Amount</p>
+              <p className="w-1/2 font-bold ">{t("Total Amount")}</p>
               <p className="w-1/2 text-right">€ 400.00</p>
             </div>
           </div>
