@@ -44,45 +44,43 @@ const Sidebar = ({
     // { title: "settings", icon: LuSettings2 },
   ];
 
+  // useEffect(() => {
+  //   window.addEventListener("resize", () => {
+  //     if (window.innerWidth >= 1024) {
+  //       window.document.body.style.overflow = "unset";
+  //       console.log(">1024");
+  //     } else if (window.innerWidth < 1024 && openSidebar === true) {
+  //       window.document.body.style.overflow = "hidden";
+  //       console.log("<1024", openSidebar);
+  //     }
+  //   });
+
+  //   return () => {
+  //     window.removeEventListener("resize", () => {
+  //       console.log(openSidebar);
+  //     });
+  //   };
+  // }, [openSidebar, window.innerWidth,handleClickOutside]);
+
   useEffect(() => {
-    if (window.screen.width < 1024) {
-      const handleClickOutside = (event) => {
-        if (sidebarRef.current && !sidebarRef.current.contains(event?.target)) {
-          setOpenSidebar(false);
-        }
-      };
-      console.log(window.screen.width);
-      document.addEventListener("click", handleClickOutside, true);
-      return () => {
-        document.removeEventListener("click", handleClickOutside, true);
-        document.removeEventListener("resize", () => {});
-      };
-    }
-  }, [handleClickOutside, window.screen.width, openSidebar]);
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event?.target) &&
+        window.innerWidth < 1024&&openSidebar
+      ) {
+        setOpenSidebar(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, [handleClickOutside,openSidebar]);
 
   function handleClickOutside() {
     setOpenSidebar(false);
   }
-
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth >= 1024) {
-        window.document.body.style.overflow = "unset";
-      } else if (window.innerWidth < 1024) {
-        window.document.body.style.overflow = "hidden";
-      }
-    });
-    if (openSidebar && window.innerWidth < 1024) {
-      window.document.body.style.overflow = "hidden";
-    } else {
-      window.document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      window.removeEventListener("resize", () => {});
-    };
-  }, [openSidebar]);
-  console.log(openSidebar);
 
   return (
     <div
@@ -200,7 +198,7 @@ const Sidebar = ({
         </ul>
       </div>
       {openSidebar && (
-        <div className="absolute lg:hidden overflow-hidden block z-40 inset-0 bg-black bg-opacity-20 backdrop-blur-sm max-w-[100%] h-full" />
+        <div className="absolute lg:hidden block z-40 inset-0 bg-black bg-opacity-20 backdrop-blur-sm max-w-[100%] max-h-screen min-h-screen" />
       )}
     </div>
   );
