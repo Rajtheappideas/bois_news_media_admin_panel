@@ -27,6 +27,10 @@ const Sidebar = ({
 
   const { t } = useTranslation();
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const sidebarList = [
     { title: t("dashboard"), icon: BiHome },
     { title: t("users"), icon: AiOutlineUser },
@@ -47,13 +51,14 @@ const Sidebar = ({
           setOpenSidebar(false);
         }
       };
+      console.log(window.screen.width);
       document.addEventListener("click", handleClickOutside, true);
       return () => {
         document.removeEventListener("click", handleClickOutside, true);
         document.removeEventListener("resize", () => {});
       };
     }
-  }, [handleClickOutside, window.screen.width]);
+  }, [handleClickOutside, window.screen.width, openSidebar]);
 
   function handleClickOutside() {
     setOpenSidebar(false);
@@ -77,6 +82,7 @@ const Sidebar = ({
       window.removeEventListener("resize", () => {});
     };
   }, [openSidebar]);
+  console.log(openSidebar);
 
   return (
     <div
@@ -105,6 +111,7 @@ const Sidebar = ({
               onClick={() => {
                 setActiveComponent(list.title);
                 dispatch(handleClearFilteredData());
+                scrollToTop();
               }}
               key={list.title}
               className={`flex items-center ${
@@ -165,6 +172,7 @@ const Sidebar = ({
                 setActiveComponent(list.title);
                 setOpenSidebar(false);
                 dispatch(handleClearFilteredData());
+                scrollToTop();
               }}
               key={list.title}
               className={`flex items-center justify-start whitespace-nowrap
