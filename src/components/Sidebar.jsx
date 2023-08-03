@@ -44,39 +44,29 @@ const Sidebar = ({
     // { title: "settings", icon: LuSettings2 },
   ];
 
-  // useEffect(() => {
-  //   window.addEventListener("resize", () => {
-  //     if (window.innerWidth >= 1024) {
-  //       window.document.body.style.overflow = "unset";
-  //       console.log(">1024");
-  //     } else if (window.innerWidth < 1024 && openSidebar === true) {
-  //       window.document.body.style.overflow = "hidden";
-  //       console.log("<1024", openSidebar);
-  //     }
-  //   });
-
-  //   return () => {
-  //     window.removeEventListener("resize", () => {
-  //       console.log(openSidebar);
-  //     });
-  //   };
-  // }, [openSidebar, window.innerWidth,handleClickOutside]);
-
   useEffect(() => {
+    if (openSidebar && window.screen.width < 1024) {
+      window.document.body.style.overflow = "hidden";
+    } else {
+      window.document.body.style.overflow = "unset";
+    }
     const handleClickOutside = (event) => {
       if (
         sidebarRef.current &&
         !sidebarRef.current.contains(event?.target) &&
-        window.innerWidth < 1024&&openSidebar
+        window.innerWidth < 1024 &&
+        openSidebar
       ) {
         setOpenSidebar(false);
       }
     };
+    console.log(window.document.body.style.overflow);
     document.addEventListener("click", handleClickOutside, true);
     return () => {
+      console.log("reurn", window.document.body.style.overflow);
       document.removeEventListener("click", handleClickOutside, true);
     };
-  }, [handleClickOutside,openSidebar]);
+  }, [handleClickOutside, openSidebar]);
 
   function handleClickOutside() {
     setOpenSidebar(false);
