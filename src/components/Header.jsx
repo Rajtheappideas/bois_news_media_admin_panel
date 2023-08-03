@@ -79,20 +79,6 @@ const Header = ({
     }
   };
 
-  // for sticky header
-  // useEffect(() => {
-  //   window.addEventListener("scroll", () => {
-  //     if (window.scrollY > 80) {
-  //       setStickyHeader(true);
-  //     } else {
-  //       setStickyHeader(false);
-  //     }
-  //   });
-  //   return () => {
-  //     window.removeEventListener("scroll", () => {});
-  //   };
-  // }, [stickyHeader]);
-
   return (
     <div
       className={`w-full ${

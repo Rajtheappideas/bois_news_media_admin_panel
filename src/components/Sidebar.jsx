@@ -60,10 +60,8 @@ const Sidebar = ({
         setOpenSidebar(false);
       }
     };
-    console.log(window.document.body.style.overflow);
     document.addEventListener("click", handleClickOutside, true);
     return () => {
-      console.log("reurn", window.document.body.style.overflow);
       document.removeEventListener("click", handleClickOutside, true);
     };
   }, [handleClickOutside, openSidebar]);
@@ -82,7 +80,12 @@ const Sidebar = ({
       <div
         className={` sticky top-0 min-h-screen w-full xl:px-6 lg:px-3 lg:block hidden py-3`}
       >
-        <p className="my-3 xl:text-4xl text-2xl font-semibold text-center">
+        <p
+          onClick={() => {
+            setActiveComponent(t("profile"));
+          }}
+          className="my-3 cursor-pointer xl:text-4xl text-2xl font-semibold text-center"
+        >
           {user?.profile !== null && user?.profile !== undefined ? (
             <img
               src={BaseUrl.concat(user?.profile)}
@@ -136,7 +139,14 @@ const Sidebar = ({
           openSidebar ? "translate-x-0" : "-translate-x-[100%]"
         } px-4 transition duration-300 ease-in-out lg:hidden block py-3 shadow-xl`}
       >
-        <p className="my-3 xl:text-4xl text-2xl font-semibold text-center flex items-center justify-between">
+        {/* profile image */}
+        <p
+          onClick={() => {
+            setActiveComponent(t("profile"));
+            setOpenSidebar(false);
+          }}
+          className="my-3 xl:text-4xl text-2xl font-semibold text-center flex items-center justify-between"
+        >
           {user?.profile !== null && user?.profile !== undefined ? (
             <img
               src={BaseUrl.concat(user?.profile)}
