@@ -5,7 +5,7 @@ import Search from "../Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import AddMagazineDistribution from "../Subscriber/AddMagazineDistribution";
+import AddMagazineSubscription from "../Subscriber/AddMagazineSubscription";
 import { useDispatch, useSelector } from "react-redux";
 import { BsEye } from "react-icons/bs";
 import ShowSubscriberDetails from "../Subscriber/ShowSubscriberDetails";
@@ -27,6 +27,7 @@ const Subscribers = () => {
     useState(false);
   const [showSubscriberDetails, setShowSubscriberDetails] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
+  const [selectedSubscriberId, setSelectedSubscriberId] = useState(null);
 
   const {
     subscribers,
@@ -97,9 +98,11 @@ const Subscribers = () => {
   return (
     <>
       {showMagazineDistrutionPopup && (
-        <AddMagazineDistribution
+        <AddMagazineSubscription
           showMagazineDistrutionPopup={showMagazineDistrutionPopup}
           handleClosePopup={handleClosePopup}
+          selectedSubscriberId={selectedSubscriberId}
+          setSelectedSubscriberId={setSelectedSubscriberId}
         />
       )}
       {showEditSubscriberDetails &&
@@ -107,13 +110,15 @@ const Subscribers = () => {
         !showSubscriberDetails && (
           <EditSubscriberDetails
             setShowEditSubscriberDetails={setShowEditSubscriberDetails}
+            setShowMagazineDistrutionPopup={setShowMagazineDistrutionPopup}
+            setSelectedSubscriberId={setSelectedSubscriberId}
           />
         )}
       {!showEditSubscriberDetails &&
         showAddNewSubscriber &&
         !showSubscriberDetails && (
           <AddNewSubscirber
-            setShowMagazineDistrutionPopup={setShowMagazineDistrutionPopup}
+            // setShowMagazineDistrutionPopup={setShowMagazineDistrutionPopup}
             setShowAddNewSubscriber={setShowAddNewSubscriber}
           />
         )}

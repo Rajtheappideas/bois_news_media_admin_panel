@@ -15,17 +15,32 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import {
   handleChangeDeleteID,
+  handleChangeDeleteSubscriptionID,
   handleDeleteSUBSCRIBER,
+  handleDeleteSubsciption,
   handleDeleteSubscriber,
   handleEditSubscriber,
   handleFindSubscriber,
+  handleDeleteSubscription,
+  handleDeleteSUBSCRIPTION,
+  handleFindSubscription,
 } from "../../redux/SubscriberSlice";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 
-const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
-  const { editLoading, deleteLoading, singleSucriber } = useSelector(
-    (state) => state.root.subscribers
-  );
+const EditSubscriberDetails = ({
+  setShowEditSubscriberDetails,
+  setShowMagazineDistrutionPopup,
+  setSelectedSubscriberId,
+}) => {
+  const {
+    editLoading,
+    deleteLoading,
+    singleSucriber,
+    loading,
+    deleteSubscriptionID,
+    subscribers,
+  } = useSelector((state) => state.root.subscribers);
   const { token, role } = useSelector((state) => state.root.auth);
   const { payers } = useSelector((state) => state.root.thirdPartyPayers);
 
@@ -44,6 +59,7 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
     thirdPartyPayer,
     title,
     email,
+    subscriptions,
     civility,
     shippingAddress: {
       address1,
@@ -375,6 +391,32 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
     }
   };
 
+  const handleDeletesubscription = (id, name) => {
+    dispatch(handleChangeDeleteSubscriptionID(id));
+
+    const response = dispatch(
+      handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          dispatch(handleDeleteSubscription({ id, subscriberId: _id }));
+          toast.success(` ${name} ${t("subscription Deleted Successfully.")}`);
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
+  };
+
+  const handleShowMagazinePopupForEditSubscription = (
+    subscriberId,
+    subscriptionId
+  ) => {
+    setShowMagazineDistrutionPopup(true);
+    dispatch(handleFindSubscription({ subscriberId, subscriptionId }));
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -589,7 +631,9 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         </div>
         <hr className="my-1" />
         {/*shipping  address */}
-        <p className="font-bold text-black md:text-xl">{t("Shipping Address")}</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Shipping Address")}
+        </p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*address 1 */}
           <div className="w-full col-span-full space-y-2">
@@ -981,7 +1025,18 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
         {/* Magazine distribution */}
         <div className="font-bold text-black md:text-xl flex flex-wrap w-full flex-row items-center justify-between gap-2">
           <p>{t("Magazine distribution")}</p>
+          <button
+            onClick={() => {
+              setShowMagazineDistrutionPopup(true);
+              setSelectedSubscriberId(_id);
+            }}
+            type="button"
+            className="border text-base text-textColor border-textColor rounded-md p-1 hover:bg-textColor/30 transition hover:text-black"
+          >
+            + {t("Add new")}
+          </button>
         </div>
+
         <div className="shadow-md outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
           <table className="border-none outline-none w-full overflow-scroll">
             <thead className="w-full border-b border-gray-100 text-left">
@@ -997,146 +1052,75 @@ const EditSubscriberDetails = ({ setShowEditSubscriberDetails }) => {
               </tr>
             </thead>
             <tbody className="w-full">
-              <tr className="border-b border-gray-200 w-full text-left">
-                <td className="p-4 whitespace-nowrap">Agenceur</td>
-                <td className="text-left p-4 whitespace-nowrap">Paper</td>
-                <td className="text-left p-4 whitespace-nowrap">Digital </td>
-                <td className="text-left p-4 whitespace-nowrap">
-                  11 July, 2022{" "}
-                </td>
-                <td className="text-left p-4 whitespace-nowrap">
-                  10 July, 2023{" "}
-                </td>
-                <td className="flex items-center justify-start p-4">
-                  <button
-                    // onClick={() => setShowEditSubscriberDetails(true)}
-                    type="button"
-                    className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
+              {subscriptions !== undefined && subscriptions.length > 0 ? (
+                subscriptions.map((subscription) => (
+                  <tr
+                    key={subscription?._id}
+                    className="border-b border-gray-200 w-full text-left"
                   >
-                    <BiPencil
-                      color="gray"
-                      size={30}
-                      className="inline-block mr-1"
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                  >
-                    <RiDeleteBin6Line
-                      color="red"
-                      size={30}
-                      className="inline-block"
-                    />
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-gray-200 w-full text-left">
-                <td className="p-4 whitespace-nowrap">BOISmag</td>
-                <td className="text-left p-4 whitespace-nowrap">Paper</td>
-                <td className="text-left p-4 whitespace-nowrap">Digital </td>
-                <td className="text-left p-4 whitespace-nowrap">
-                  11 July, 2022{" "}
-                </td>
-                <td className="text-left p-4 whitespace-nowrap">
-                  10 July, 2023{" "}
-                </td>
-                <td className="flex items-center justify-start p-4">
-                  <button
-                    // onClick={() => setShowEditSubscriberDetails(true)}
-                    type="button"
-                    className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                  >
-                    <BiPencil
-                      color="gray"
-                      size={30}
-                      className="inline-block mr-1"
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                  >
-                    <RiDeleteBin6Line
-                      color="red"
-                      size={30}
-                      className="inline-block"
-                    />
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-gray-200 w-full text-left">
-                <td className="p-4 whitespace-nowrap">Artisans et Bois</td>
-                <td className="text-left p-4 whitespace-nowrap">Paper</td>
-                <td className="text-left p-4 whitespace-nowrap">Digital </td>
-                <td className="text-left p-4 whitespace-nowrap">
-                  11 July, 2022{" "}
-                </td>
-                <td className="text-left p-4 whitespace-nowrap">
-                  10 July, 2023{" "}
-                </td>
-                <td className="flex items-center justify-start p-4">
-                  <button
-                    // onClick={() => setShowEditSubscriberDetails(true)}
-                    type="button"
-                    className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                  >
-                    <BiPencil
-                      color="gray"
-                      size={30}
-                      className="inline-block mr-1"
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                  >
-                    <RiDeleteBin6Line
-                      color="red"
-                      size={30}
-                      className="inline-block"
-                    />
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-gray-200 w-full text-left">
-                <td className="p-4 whitespace-nowrap">Toiture</td>
-                <td className="text-left p-4 whitespace-nowrap">Paper</td>
-                <td className="text-left p-4 whitespace-nowrap">Digital </td>
-                <td className="text-left p-4 whitespace-nowrap">
-                  11 July, 2022{" "}
-                </td>
-                <td className="text-left p-4 whitespace-nowrap">
-                  10 July, 2023{" "}
-                </td>
-                <td className="flex items-center justify-start p-4">
-                  <button
-                    // onClick={() => setShowEditSubscriberDetails(true)}
-                    type="button"
-                    className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                  >
-                    <BiPencil
-                      color="gray"
-                      size={30}
-                      className="inline-block mr-1"
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                  >
-                    <RiDeleteBin6Line
-                      color="red"
-                      size={30}
-                      className="inline-block"
-                    />
-                  </button>
-                </td>
-              </tr>
-
-              {/* <tr className="text-center text-2xl font-semibold py-2">
-              <td colSpan="6">No Invoices here.</td>
-            </tr> */}
+                    <td className="p-4 whitespace-nowrap">
+                      {subscription?.subscription?.title}
+                    </td>
+                    <td className="text-left p-4 whitespace-nowrap">
+                      {subscription?.subState}
+                    </td>
+                    <td className="text-left p-4 whitespace-nowrap">
+                      {subscription?.prospectState}{" "}
+                    </td>
+                    <td className="text-left p-4 whitespace-nowrap">
+                      {moment(subscription?.startDate).format("LL")}{" "}
+                    </td>
+                    <td className="text-left p-4 whitespace-nowrap">
+                      {moment(subscription?.renewDate).format("LL")}
+                    </td>
+                    <td className="flex items-center justify-start p-4">
+                      <button
+                        onClick={() =>
+                          handleShowMagazinePopupForEditSubscription(
+                            _id,
+                            subscription?._id
+                          )
+                        }
+                        type="button"
+                        className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
+                        disabled={deleteLoading}
+                      >
+                        <BiPencil
+                          color="gray"
+                          size={30}
+                          className="inline-block mr-1"
+                        />
+                      </button>
+                      <button
+                        type="button"
+                        className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
+                        disabled={deleteLoading}
+                        onClick={() =>
+                          handleDeletesubscription(
+                            subscription?._id,
+                            subscription?.subscription?.title
+                          )
+                        }
+                      >
+                        {deleteLoading &&
+                        subscription?._id === deleteSubscriptionID ? (
+                          "..."
+                        ) : (
+                          <RiDeleteBin6Line
+                            color="red"
+                            size={30}
+                            className="inline-block"
+                          />
+                        )}
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr className="data_not_found_And_Loading">
+                  <td colSpan="7">{t("No Subscriptions here")}.</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

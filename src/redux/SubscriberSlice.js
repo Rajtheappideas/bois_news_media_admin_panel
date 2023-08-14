@@ -241,6 +241,105 @@ export const handleDeleteSUBSCRIBER = createAsyncThunk(
   }
 );
 
+export const handleCreateSubsciption = createAsyncThunk(
+  "user/handleCreateSubsciption",
+  async (
+    {
+      subscriber,
+      subscription,
+      subState,
+      prospectState,
+      startDate,
+      renewDate,
+      token,
+      signal,
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      signal.current = new AbortController();
+      const response = await PostUrl("subscriber/subscription", {
+        data: {
+          subscriber,
+          subscription,
+          subState,
+          prospectState,
+          startDate,
+          renewDate,
+        },
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+          "Content-Type": "Application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleEditSubsciption = createAsyncThunk(
+  "user/handleEditSubsciption",
+  async (
+    {
+      subState,
+      prospectState,
+      startDate,
+      renewDate,
+      subscription,
+      id,
+      token,
+      signal,
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      signal.current = new AbortController();
+      const response = await PostUrl(`subscriber/subscription/${id}`, {
+        data: {
+          subscription,
+          subState,
+          prospectState,
+          startDate,
+          renewDate,
+        },
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+          "Content-Type": "Application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleDeleteSUBSCRIPTION = createAsyncThunk(
+  "user/handleDeleteSUBSCRIPTION",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`subscriber/subscription/delete/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+          "Content-Type": "Application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 const initialState = {
   loading: false,
   success: false,
@@ -251,6 +350,8 @@ const initialState = {
   deleteLoading: false,
   editLoading: false,
   deleteSubscriberID: null,
+  deleteSubscriptionID: null,
+  singleSubscription: null,
 };
 
 const SubscriberSlice = createSlice({
@@ -269,6 +370,7 @@ const SubscriberSlice = createSlice({
         state.singleSucriber = null;
       }
     },
+
     handleDeleteSubscriber: (state, { payload }) => {
       const findSubcriber = state.subscribers.filter(
         (subscriber) => subscriber?._id !== payload
@@ -277,8 +379,56 @@ const SubscriberSlice = createSlice({
         state.subscribers = findSubcriber;
       }
     },
+
+    handleDeleteSubscription: (state, { payload }) => {
+      const findSubcription = state.subscribers.map((subscriber) =>
+        subscriber._id === payload?.subscriberId
+          ? {
+              ...subscriber,
+              subscriptions: subscriber.subscriptions.filter(
+                (subscription) => subscription?._id !== payload?.id
+              ),
+            }
+          : subscriber
+      );
+      if (findSubcription) {
+        state.subscribers = findSubcription;
+        state.singleSucriber = {
+          ...state.singleSucriber,
+          subscriptions: state.singleSucriber.subscriptions.filter(
+            (subscription) => subscription?._id !== payload?.id
+          ),
+        };
+      }
+    },
+
     handleChangeDeleteID: (state, { payload }) => {
       state.deleteSubscriberID = payload;
+    },
+
+    handleChangeDeleteSubscriptionID: (state, { payload }) => {
+      state.deleteSubscriptionID = payload;
+    },
+
+    handleFindSubscription: (state, { payload }) => {
+      if (payload !== "") {
+        const findSubscriber = state.subscribers.find(
+          (subscriber) => subscriber?._id === payload?.subscriberId
+        );
+
+        const findSubscription = findSubscriber?.subscriptions.find(
+          (subscription) => subscription?._id === payload?.subscriptionId
+        );
+        if (findSubscription) {
+          state.singleSubscription = findSubscription;
+        }
+      } else {
+        state.singleSubscription = null;
+      }
+    },
+
+    handleClearSingleSubscription: (state, {}) => {
+      state.singleSubscription = null;
     },
   },
   extraReducers: (builder) => {
@@ -314,6 +464,74 @@ const SubscriberSlice = createSlice({
     });
     builder.addCase(handleAddNewSubscriber.rejected, (state, { payload }) => {
       state.addNewSubscriberLoading = false;
+      state.success = false;
+      state.error = payload ?? null;
+    });
+    // create subscriptin
+    builder.addCase(handleCreateSubsciption.pending, (state, {}) => {
+      state.loading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleCreateSubsciption.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.error = null;
+      state.subscribers = state.subscribers.map((subscriber) =>
+        subscriber?._id === payload?.subscription?.subscriber
+          ? {
+              ...subscriber,
+              subscriptions: [
+                ...subscriber?.subscriptions,
+                payload?.subscription,
+              ],
+            }
+          : subscriber
+      );
+      state.singleSucriber = {
+        ...state.singleSucriber,
+        subscriptions: [
+          ...state.singleSucriber?.subscriptions,
+          payload?.subscription,
+        ],
+      };
+    });
+    builder.addCase(handleCreateSubsciption.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.success = false;
+      state.error = payload ?? null;
+    });
+    // edit subscriptin
+    builder.addCase(handleEditSubsciption.pending, (state, {}) => {
+      state.loading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleEditSubsciption.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.error = null;
+      state.subscribers = state.subscribers.map((subscriber) =>
+        subscriber?._id === payload?.subscription?.subscriber
+          ? {
+              ...subscriber,
+              subscriptions: subscriber?.subscriptions.map((s) =>
+                s?._id === payload?.subscription?._id
+                  ? payload?.subscription
+                  : s
+              ),
+            }
+          : subscriber
+      );
+      state.singleSucriber = {
+        ...state.singleSucriber,
+        subscriptions: state.singleSucriber?.subscriptions.map((s) =>
+          s?._id === payload?.subscription?._id ? payload?.subscription : s
+        ),
+      };
+    });
+    builder.addCase(handleEditSubsciption.rejected, (state, { payload }) => {
+      state.loading = false;
       state.success = false;
       state.error = payload ?? null;
     });
@@ -356,6 +574,26 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
       state.deleteSubscriberID = null;
     });
+    // delete subscription
+    builder.addCase(handleDeleteSUBSCRIPTION.pending, (state, {}) => {
+      state.deleteLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(
+      handleDeleteSUBSCRIPTION.fulfilled,
+      (state, { payload }) => {
+        state.deleteLoading = false;
+        state.success = true;
+        state.error = null;
+      }
+    );
+    builder.addCase(handleDeleteSUBSCRIPTION.rejected, (state, { payload }) => {
+      state.deleteLoading = false;
+      state.success = false;
+      state.error = payload ?? null;
+      state.deleteSubscriptionID = null;
+    });
   },
 });
 
@@ -363,6 +601,10 @@ export const {
   handleFindSubscriber,
   handleDeleteSubscriber,
   handleChangeDeleteID,
+  handleChangeDeleteSubscriptionID,
+  handleDeleteSubscription,
+  handleFindSubscription,
+  handleClearSingleSubscription,
 } = SubscriberSlice.actions;
 
 export default SubscriberSlice.reducer;

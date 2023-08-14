@@ -353,7 +353,7 @@ const AddNewSubscirber = ({
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          Add new subscriber
+          {t("Add new subscriber")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -542,7 +542,9 @@ const AddNewSubscirber = ({
         </div>
         <hr className="my-1" />
         {/*shipping  address */}
-        <p className="font-bold text-black md:text-xl">{t("Shipping Address")}</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Shipping Address")}
+        </p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/*address 1 */}
           <div className="w-full col-span-full space-y-2">
@@ -940,16 +942,18 @@ const AddNewSubscirber = ({
         </div>
         <hr className="my-1" />
         {/* Magazine distribution */}
-        <div className="font-bold text-black md:text-xl flex flex-wrap w-full flex-row items-center justify-between gap-2">
+        {/* <div className="font-bold text-black md:text-xl flex flex-wrap w-full flex-row items-center justify-between gap-2">
           <p>{t("Magazine distribution")}</p>
           <button
-            onClick={() => setShowMagazineDistrutionPopup(true)}
+            onClick={() => {
+              setShowMagazineDistrutionPopup(true);
+            }}
             className="border text-base text-textColor border-textColor rounded-md p-1 hover:bg-textColor/30 transition hover:text-black"
           >
             + {t("Add new")}
           </button>
-        </div>
-        <div className="shadow-md outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
+        </div> */}
+        {/* <div className="shadow-md outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
           <table className="border-none outline-none w-full overflow-scroll">
             <thead className="w-full border-b border-gray-100 text-left">
               <tr>
@@ -1104,9 +1108,9 @@ const AddNewSubscirber = ({
               {/* <tr className="text-center text-2xl font-semibold py-2">
               <td colSpan="6">No Invoices here.</td>
             </tr> */}
-            </tbody>
-          </table>
-        </div>
+        {/* </tbody>
+          </table> */}
+        {/* </div> */}{" "}
       </div>
     </form>
   );
