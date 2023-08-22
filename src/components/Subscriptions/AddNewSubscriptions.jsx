@@ -18,6 +18,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
   const { addNewSubscriptionLoading } = useSelector(
     (state) => state.root.subscriptions
   );
+  const { magazines } = useSelector((state) => state.root.magazines);
   const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
       .test(subscriptionImage !== null, t("Image is required"), () => {
         return true;
       }),
+    magazineTitle: yup.string().required("choose magazine"),
   });
 
   const {
@@ -61,7 +63,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
   });
 
   const onSubmit = (data) => {
-    const { title, price, description, status } = data;
+    const { title, price, description, status, magazineTitle } = data;
 
     const response = dispatch(
       handleAddNewSubscription({
@@ -70,6 +72,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
         status,
         description,
         image: subscriptionImage,
+        magazineTitle,
         token,
         signal: AbortControllerRef,
       })
@@ -101,6 +104,8 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
       abortApiCall();
     };
   }, []);
+
+  console.log(magazines);
 
   return (
     <form
@@ -177,9 +182,11 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
           )}
         </div>
         <span className="error">{errors?.image?.message}</span>
-        <p className="font-bold text-black md:text-xl">{t("Subscription details")}</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("Subscription details")}
+        </p>
         {/* personal details */}
-        <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
+        <div className="w-full grid md:grid-cols-2 place-items-start items-center md:gap-5 gap-2">
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
@@ -217,6 +224,20 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
               <option value="deactive">{t("deactive")}</option>
             </select>
             <span className="error">{errors?.status?.message}</span>
+          </div>
+          {/* magazine title */}
+          <div className="w-full space-y-2">
+            <label htmlFor="magazineTitle" className="Label">
+              {t("Magazine")}
+            </label>
+            <select {...register("magazineTitle")} className="input_field">
+              <option label="choose magazine"></option>
+              <option value="boismag">BOISmag</option>
+              <option value="agenceur">Agenceur</option>
+              <option value="artisans&bois">Artisans & Bois</option>
+              <option value="toiture">Toiture</option>
+            </select>
+            <span className="error">{errors?.magazineTitle?.message}</span>
           </div>
           {/* discriptions */}
           <div className="w-full col-span-full space-y-2">

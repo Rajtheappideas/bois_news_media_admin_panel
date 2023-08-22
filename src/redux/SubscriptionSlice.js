@@ -24,7 +24,7 @@ export const handleGetAllSubscription = createAsyncThunk(
 export const handleAddNewSubscription = createAsyncThunk(
   "subscription/handleAddNewSubscription",
   async (
-    { title, price, status, description, image, token, signal },
+    { title, price, status, description, image, magazineTitle, token, signal },
     { rejectWithValue }
   ) => {
     try {
@@ -36,6 +36,7 @@ export const handleAddNewSubscription = createAsyncThunk(
           status,
           description,
           image,
+          magazineTitle,
         },
         signal: signal.current.signal,
         headers: {
@@ -54,7 +55,17 @@ export const handleAddNewSubscription = createAsyncThunk(
 export const handleEditSubscription = createAsyncThunk(
   "subscription/handleEditSubscription",
   async (
-    { title, price, status, description, image, id, token, signal },
+    {
+      title,
+      price,
+      status,
+      description,
+      image,
+      magazineTitle,
+      id,
+      token,
+      signal,
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -66,6 +77,7 @@ export const handleEditSubscription = createAsyncThunk(
           status,
           description,
           image,
+          magazineTitle,
         },
         signal: signal.current.signal,
         headers: {

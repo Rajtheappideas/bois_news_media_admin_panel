@@ -194,14 +194,14 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
           {t("Magazine details")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
-          <button
+          {/* <button
             type="button"
             className="text-green-500 border border-green-400 font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-green-200 active:scale-95 transition"
           >
             <a href={BaseUrl.concat(pdf)} download target="_blank">
               {t("Download")}
             </a>
-          </button>
+          </button> */}
           <button
             className={`gray_button ${
               (editMagazineLoading || deleteMagazineLoading) &&

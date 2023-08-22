@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Search from "../Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
@@ -26,6 +26,7 @@ const Magazine = () => {
   const [showEditMagazine, setshowEditMagazine] = useState(false);
   const [showMagazineDetails, setShowMagazineDetails] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
+  const [showDownloadDropdown, setShowDownloadDropdown] = useState(false);
 
   const {
     magazines,
@@ -39,6 +40,8 @@ const Magazine = () => {
   const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const { AbortControllerRef } = useAbortApiCall();
+
+  const downloadRef = useRef(null);
 
   const dispatch = useDispatch();
 
@@ -82,6 +85,22 @@ const Magazine = () => {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (downloadRef.current && !downloadRef.current.contains(event?.target)) {
+        setShowDownloadDropdown(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, [handleClickOutside]);
+
+  function handleClickOutside() {
+    setShowDownloadDropdown(false);
+  }
+
   return (
     <>
       {showAddnewMagazine && !showEditMagazine && !showMagazineDetails && (
@@ -96,7 +115,7 @@ const Magazine = () => {
       {!showAddnewMagazine && !showEditMagazine && !showMagazineDetails && (
         <div className="lg:space-y-5 space-y-3 w-full">
           {/* search + buttons */}
-          <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
+          <div className="w-full flex items-center justify-between md:flex-row flex-col md:gap-4 gap-2">
             <div className="lg:w-1/3 md:w-1/2 w-full">
               <Search data={magazines} />
             </div>
@@ -124,8 +143,8 @@ const Magazine = () => {
           <div className="shadow-sm outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
             <table className="border-none outline-none w-full overflow-scroll">
               <thead className="w-full border-b border-gray-100 text-left">
-                <tr>
-                  <th className="p-4 whitespace-nowrap">
+                <tr className="whitespace-nowrap">
+                  <th className="md:p-4 p-2 whitespace-nowrap">
                     {/* <input
                       type="checkbox"
                       className="rounded-lg inline-block mr-2 h-4 w-4"
@@ -135,11 +154,11 @@ const Magazine = () => {
                       <span>Sr no</span>
                     </label>
                   </th>
-                  <th className="p-4">{t("Magazine name")}</th>
-                  <th className="p-4">{t("Price")}</th>
-                  <th className="p-4">{t("Stock")}</th>
-                  <th className="p-4 text-center">{t("Status")}</th>
-                  <th className="p-4 text-center">{t("Action")}</th>
+                  <th className="md:p-4 p-2">{t("Magazine name")}</th>
+                  <th className="md:p-4 p-2">{t("Price")}</th>
+                  <th className="md:p-4 p-2">{t("Stock")}</th>
+                  <th className="md:p-4 p-2 text-center">{t("Status")}</th>
+                  <th className="md:p-4 p-2 text-center">{t("Action")}</th>
                 </tr>
               </thead>
               <tbody className="w-full">
@@ -151,9 +170,9 @@ const Magazine = () => {
                   displayMagazine.map((magazine) => (
                     <tr
                       key={magazine?._id}
-                      className="border-b border-gray-200 w-full text-left pl-10 select-none"
+                      className="border-b border-gray-200 whitespace-nowrap w-full text-left pl-10 select-none"
                     >
-                      <td className="p-4 whitespace-nowrap">
+                      <td className="md:p-4 p-2">
                         {/* <input
                           type="checkbox"
                           id={magazine?._id}
@@ -165,20 +184,20 @@ const Magazine = () => {
                           </span>
                         </label>
                       </td>
-                      <td className="text-left p-4 whitespace-nowrap">
+                      <td className="text-left md:p-4 p-2 whitespace-nowrap">
                         {magazine?.title}
                       </td>
-                      <td className="text-left p-4 whitespace-nowrap">
+                      <td className="text-left md:p-4 p-2 whitespace-nowrap">
                         $ {magazine?.price}
                       </td>
 
-                      <td className="text-left p-4 whitespace-nowrap">
+                      <td className="text-left md:p-4 p-2 whitespace-nowrap">
                         {magazine?.stock ?? "-"}
                       </td>
-                      <td className="text-center p-4 whitespace-nowrap">
+                      <td className="text-center md:p-4 p-2 whitespace-nowrap">
                         {magazine?.status ?? "-"}
                       </td>
-                      <td className="flex items-center justify-center p-4">
+                      <td className="flex items-center justify-center md:p-4 p-2">
                         {role === "admin" || role === "editor" ? (
                           <button
                             onClick={() => {
@@ -212,23 +231,55 @@ const Magazine = () => {
                             />
                           </button>
                         )}
-
-                        <button
-                          type="button"
-                          className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
-                        >
-                          <a
-                            href={BaseUrl.concat(magazine?.pdf)}
-                            download
-                            target="_blank"
+                        <div className="relative">
+                          <button
+                            type="button"
+                            className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
+                            onClick={() => setShowDownloadDropdown(true)}
                           >
                             <HiOutlineDownload
                               color="green"
                               size={30}
                               className="inline-block mr-1"
                             />
-                          </a>
-                        </button>
+                          </button>
+                          <p
+                            className={`origin-center ${
+                              showDownloadDropdown ? "scale-100" : "scale-0"
+                            } absolute -top-16 md:-left-6 -left-16 shadow-md rounded-lg bg-white w-auto whitespace-nowrap h-auto p-3 transition`}
+                            ref={downloadRef}
+                          >
+                            <ul className="space-y-1 text-sm">
+                              <li className="hover:bg-gray-200 transition duration-100 cursor-pointer p-1">
+                                <a
+                                  href={BaseUrl.concat(magazine?.pdf)}
+                                  download
+                                  target="_blank"
+                                >
+                                  Magazine pdf
+                                </a>
+                              </li>
+                              <hr />
+                              <li className="hover:bg-gray-200 transition duration-100 cursor-pointer p-1">
+                                <a
+                                  href={BaseUrl.concat(magazine?.digital)}
+                                  download
+                                >
+                                  Routing file (digital)
+                                </a>
+                              </li>
+                              <hr />
+                              <li className="hover:bg-gray-200 transition duration-100 cursor-pointer p-1">
+                                <a
+                                  href={BaseUrl.concat(magazine?.paper)}
+                                  download
+                                >
+                                  Routing file (paper)
+                                </a>
+                              </li>
+                            </ul>
+                          </p>
+                        </div>
                         {role === "admin" && (
                           <button
                             type="button"
