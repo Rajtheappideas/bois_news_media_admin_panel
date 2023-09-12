@@ -16,6 +16,8 @@ import { useTranslation } from "react-i18next";
 const ForgotPassword = () => {
   const [showOtpComponent, setShowOtpComponent] = useState(false);
 
+  const { t } = useTranslation();
+
   const signinSchema = yup.object({
     email: yup.string().email().required(t("Email is required")).trim(),
   });
@@ -25,7 +27,6 @@ const ForgotPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { t } = useTranslation();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
