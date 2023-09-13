@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Success from "../components/Success";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
-import { handleResetPassword } from "../redux/AuthSlice";
+import { handleChangeLoading, handleResetPassword } from "../redux/AuthSlice";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import useAbortApiCall from "../hooks/useAbortApiCall";
@@ -16,9 +16,10 @@ import { useTranslation } from "react-i18next";
 
 const ResetPassword = () => {
   const [showSuccessComponent, setShowSuccessComponent] = useState(false);
+  const [loading,setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, user, verifyToken, email, error } = useSelector(
+  const {  user, verifyToken, email, error } = useSelector(
     (state) => state.root.auth
   );
 
@@ -57,6 +58,8 @@ const ResetPassword = () => {
 
   const onSubmit = (data) => {
     const { password } = data;
+    setLoading(true)
+
     const response = dispatch(
       handleResetPassword({
         email,
@@ -70,10 +73,16 @@ const ResetPassword = () => {
         if (res?.payload?.status === "success") {
           toast.success(t("Password Reset successfully."), { duration: 4000 });
           setShowSuccessComponent(true);
+    setLoading(true)
+
           window.localStorage.clear();
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
+    setLoading(true)
+
         }
+    setLoading(true)
+
       });
     }
   };
@@ -84,6 +93,7 @@ const ResetPassword = () => {
       navigate("/");
     }
     return () => {
+
       abortApiCall();
     };
   }, []);

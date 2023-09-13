@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useAbortApiCall from "../hooks/useAbortApiCall";
-import { handleLoginUser } from "../redux/AuthSlice";
+import {  handleLoginUser } from "../redux/AuthSlice";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
 import { handleSuccess } from "../redux/GlobalStates";
@@ -16,8 +16,9 @@ import { useTranslation } from "react-i18next";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading,setLoading] = useState(false)
 
-  const { loading, user, error } = useSelector((state) => state.root.auth);
+  const {  user, error } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const SignIn = () => {
 
   const onSubmit = (data) => {
     const { email, password } = data;
+    setLoading(true)
     const response = dispatch(
       handleLoginUser({
         email,
@@ -54,10 +56,14 @@ const SignIn = () => {
         if (res?.payload?.status === "success") {
           toast.success(t("Sign in Successfully."), { duration: 2000 });
           dispatch(handleSuccess());
+          setLoading(false)
           navigate("/");
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
+          setLoading(false)
         }
+          setLoading(false)
+
       });
     }
   };

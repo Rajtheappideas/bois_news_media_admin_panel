@@ -195,6 +195,9 @@ const AuthSlice = createSlice({
     handleStoreUserEmail: (state, { payload }) => {
       state.email = payload;
     },
+    handleChangeLoading:(state)=>{
+      state.loading=false
+    }
   },
   extraReducers: (builder) => {
     // register user
@@ -374,6 +377,6 @@ const AuthSlice = createSlice({
   },
 });
 
-export const { handleLogout, handleStoreUserEmail } = AuthSlice.actions;
+export const { handleLogout, handleStoreUserEmail,handleChangeLoading } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

@@ -10,11 +10,13 @@ import OTPVerify from "../components/OTPVerify";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { handleForgotPassword, handleStoreUserEmail } from "../redux/AuthSlice";
+import { handleChangeLoading, handleForgotPassword, handleStoreUserEmail } from "../redux/AuthSlice";
 import { useTranslation } from "react-i18next";
 
 const ForgotPassword = () => {
   const [showOtpComponent, setShowOtpComponent] = useState(false);
+  const [loading,setLoading] = useState(false)
+
 
   const { t } = useTranslation();
 
@@ -22,7 +24,7 @@ const ForgotPassword = () => {
     email: yup.string().email().required(t("Email is required")).trim(),
   });
 
-  const { loading, user, error } = useSelector((state) => state.root.auth);
+  const {  user, error } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ const ForgotPassword = () => {
 
   const onSubmit = (data) => {
     const { email } = data;
+    setLoading(true)
     const response = dispatch(
       handleForgotPassword({
         email,
@@ -52,12 +55,17 @@ const ForgotPassword = () => {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(t("Check your mails."), { duration: 4000 });
-          console.log("OTP=>", res.payload?.otp);
           dispatch(handleStoreUserEmail(getValues("email")));
+           setLoading(false)
+
           setShowOtpComponent(true);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
+          setLoading(false)
+
         }
+        setLoading(false)
+
       });
     }
   };
@@ -68,6 +76,8 @@ const ForgotPassword = () => {
       navigate("/");
     }
     return () => {
+      dispatch(handleChangeLoading())
+
       abortApiCall();
     };
   }, []);
