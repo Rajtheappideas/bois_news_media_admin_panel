@@ -47,7 +47,7 @@ const Home = () => {
       navigate("/sign-in");
       return true;
     }
-    const response =  dispatch(handleGetAllUsers({ token:"asd", signal: AbortControllerRef }));
+    const response =  dispatch(handleGetAllUsers({ token, signal: AbortControllerRef }));
     if(response){
       response.then(res=>{
         if(res?.payload?.status==='fail' && (res?.payload?.message==='Please provide authentication token.'||res?.payload?.message==="Invalid token.")){
