@@ -213,6 +213,8 @@ const AuthSlice = createSlice({
       state.error = null;
       state.role = payload?.user?.role;
       state.token = payload?.token;
+       state.verifyToken = null;
+      state.email = null;
     });
     builder.addCase(handleRegisterUser.rejected, (state, { payload }) => {
       state.loading = false;
@@ -221,6 +223,8 @@ const AuthSlice = createSlice({
       state.error = payload ?? null;
       state.role = null;
       state.token = null;
+       state.verifyToken = null;
+      state.email = null;
     });
     // login user
     builder.addCase(handleLoginUser.pending, (state, {}) => {
@@ -235,6 +239,8 @@ const AuthSlice = createSlice({
       state.error = null;
       state.role = payload?.user?.role;
       state.token = payload?.token;
+      state.verifyToken = null;
+      state.email = null;
     });
     builder.addCase(handleLoginUser.rejected, (state, { payload }) => {
       state.loading = false;
@@ -243,6 +249,8 @@ const AuthSlice = createSlice({
       state.error = payload ?? null;
       state.role = null;
       state.token = null;
+       state.verifyToken = null;
+      state.email = null;
     });
     // forgot password
     builder.addCase(handleForgotPassword.pending, (state, {}) => {
@@ -253,7 +261,7 @@ const AuthSlice = createSlice({
     builder.addCase(handleForgotPassword.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.success = true;
-      state.user = payload?.otp;
+      state.user =null
       state.error = null;
       state.role = null;
       state.token = null;

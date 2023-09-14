@@ -25,6 +25,9 @@ import { handleGetAllSubscription } from "../redux/SubscriptionSlice";
 import { handleGetAllMagazine } from "../redux/MagazineSlice";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { handleLogout } from "../redux/AuthSlice";
+import { handleLogoutFromAllTabs } from "../redux/GlobalStates";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -44,7 +47,16 @@ const Home = () => {
       navigate("/sign-in");
       return true;
     }
-    dispatch(handleGetAllUsers({ token, signal: AbortControllerRef }));
+    const response =  dispatch(handleGetAllUsers({ token:"asd", signal: AbortControllerRef }));
+    if(response){
+      response.then(res=>{
+        if(res?.payload?.status==='fail' && (res?.payload?.message==='Please provide authentication token.'||res?.payload?.message==="Invalid token.")){
+        dispatch(handleLogout())
+        dispatch(handleLogoutFromAllTabs());
+        toast.error("Please login again")
+        }
+      })
+    }
     dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
