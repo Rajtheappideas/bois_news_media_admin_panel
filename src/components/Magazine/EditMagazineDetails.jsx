@@ -93,7 +93,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
   });
 
   const onSubmit = (data) => {
-    const { title, price, stock, description, status } = data;
+    const { title, price, stock, description, status, magazineTitle } = data;
     if (!isDirty) {
       setshowEditMagazine(false);
       return true;
@@ -111,7 +111,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
         id: _id,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -161,7 +161,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef })
+        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -344,11 +344,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
             <label htmlFor="magazineTitle" className="Label">
               {t("Magazine")}
             </label>
-            <select
-              disabled
-              {...register("magazineTitle")}
-              className="input_field cursor-not-allowed"
-            >
+            <select {...register("magazineTitle")} className="input_field">
               <option label="choose magazine"></option>
               <option value="boismag">BOISmag</option>
               <option value="agenceur">Agenceur</option>
