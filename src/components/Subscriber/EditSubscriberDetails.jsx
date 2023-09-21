@@ -75,6 +75,8 @@ const EditSubscriberDetails = ({
     _id,
   } = singleSucriber;
 
+  console.log(singleSucriber);
+
   const EditSubscirberSchema = yup.object({
     fname: yup
       .string()
@@ -85,7 +87,7 @@ const EditSubscriberDetails = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("FirstName can only contain Latin letters.")
+        t("FirstName can only contain Latin letters."),
       ),
     lname: yup
       .string()
@@ -96,7 +98,7 @@ const EditSubscriberDetails = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("LastName can only contain Latin letters.")
+        t("LastName can only contain Latin letters."),
       ),
     civility: yup
       .string()
@@ -107,7 +109,7 @@ const EditSubscriberDetails = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Civility can only contain Latin letters.")
+        t("Civility can only contain Latin letters."),
       ),
     title: yup.string().trim().max(60, t("Max character limit reached")),
     email: yup.string().email().required(t("email is required.")).trim(),
@@ -138,7 +140,7 @@ const EditSubscriberDetails = ({
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .required(t("city is required"))
       .trim(""),
@@ -146,14 +148,14 @@ const EditSubscriberDetails = ({
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters.")
+        t("province can only contain Latin letters."),
       )
       .trim(""),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .required(t("country is required"))
       .trim(""),
@@ -175,21 +177,21 @@ const EditSubscriberDetails = ({
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .trim(""),
     bprovince: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters.")
+        t("province can only contain Latin letters."),
       )
       .trim(""),
     bcountry: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .trim(""),
 
@@ -201,7 +203,7 @@ const EditSubscriberDetails = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("accountContactName can only contain Latin letters.")
+        t("accountContactName can only contain Latin letters."),
       ),
     accountingEmail: yup.string().email(),
     accountingPhone: yup.string(),
@@ -354,14 +356,14 @@ const EditSubscriberDetails = ({
         id: _id,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(
             ` ${fname.concat(lname)} ${t("subscriber edited successfully.")}`,
-            { duration: 2000 }
+            { duration: 2000 },
           );
           setShowEditSubscriberDetails(false);
         } else if (res?.payload?.status === "error") {
@@ -375,7 +377,7 @@ const EditSubscriberDetails = ({
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
-        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -395,7 +397,7 @@ const EditSubscriberDetails = ({
     dispatch(handleChangeDeleteSubscriptionID(id));
 
     const response = dispatch(
-      handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef })
+      handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -411,7 +413,7 @@ const EditSubscriberDetails = ({
 
   const handleShowMagazinePopupForEditSubscription = (
     subscriberId,
-    subscriptionId
+    subscriptionId,
   ) => {
     setShowMagazineDistrutionPopup(true);
     dispatch(handleFindSubscription({ subscriberId, subscriptionId }));
@@ -566,6 +568,7 @@ const EditSubscriberDetails = ({
                       setValue("phone", "+".concat(value));
                     });
                   }}
+                  value={phone}
                   autocompleteSearch={true}
                   countryCodeEditable={false}
                   enableSearch={true}
@@ -1078,7 +1081,7 @@ const EditSubscriberDetails = ({
                         onClick={() =>
                           handleShowMagazinePopupForEditSubscription(
                             _id,
-                            subscription?._id
+                            subscription?._id,
                           )
                         }
                         type="button"
@@ -1098,7 +1101,7 @@ const EditSubscriberDetails = ({
                         onClick={() =>
                           handleDeletesubscription(
                             subscription?._id,
-                            subscription?.subscription?.title
+                            subscription?.subscription?.title,
                           )
                         }
                       >
