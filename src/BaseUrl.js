@@ -2,10 +2,10 @@ import axios from "axios";
 
 const language = JSON.parse(window.localStorage.getItem("lang"));
 
-export default axios.defaults.baseURL = "https://boisnewsmedia.onrender.com";
+export default axios.defaults.baseURL = "http://15.235.192.7:3000";
 
 export const PostUrl = axios.create({
-  baseURL: "https://boisnewsmedia.onrender.com/api/admin",
+  baseURL: "http://15.235.192.7:3000/api/admin",
   method: "POST",
   headers: {
     "Content-Type": "Application/json",
@@ -14,7 +14,7 @@ export const PostUrl = axios.create({
 });
 
 export const GetUrl = axios.create({
-  baseURL: "https://boisnewsmedia.onrender.com/api/admin",
+  baseURL: "http://15.235.192.7:3000/api/admin",
   method: "GET",
   headers: {
     "Content-Type": "Application/json",
