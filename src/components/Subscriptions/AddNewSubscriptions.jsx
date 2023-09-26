@@ -16,7 +16,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
   const [subscriptionImage, setSubscriptionImage] = useState(null);
 
   const { addNewSubscriptionLoading } = useSelector(
-    (state) => state.root.subscriptions
+    (state) => state.root.subscriptions,
   );
   const { magazines } = useSelector((state) => state.root.magazines);
   const { token } = useSelector((state) => state.root.auth);
@@ -44,6 +44,24 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
         return true;
       }),
     magazineTitle: yup.string().required("choose magazine"),
+    RestOfTheWorld: yup
+      .string()
+      .required(t("this field is required"))
+      .max(4, t("maximum 4 numbers"))
+      .min(2, t("minmum 2 numbers"))
+      .trim(""),
+    MetropolitanFrance: yup
+      .string()
+      .required(t("this field is required"))
+      .max(4, t("maximum 4 numbers"))
+      .min(2, t("minmum 2 numbers"))
+      .trim(""),
+    EEC_Switzerland_Overseas: yup
+      .string()
+      .required(t("this field is required"))
+      .max(4, t("maximum 4 numbers"))
+      .min(2, t("minmum 2 numbers"))
+      .trim(""),
   });
 
   const {
@@ -63,19 +81,31 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
   });
 
   const onSubmit = (data) => {
-    const { title, price, description, status, magazineTitle } = data;
+    const {
+      title,
+      price,
+      description,
+      status,
+      magazineTitle,
+      RestOfTheWorld,
+      MetropolitanFrance,
+      EEC_Switzerland_Overseas,
+    } = data;
 
     const response = dispatch(
       handleAddNewSubscription({
         title,
         price,
+        RestOfTheWorld,
+        MetropolitanFrance,
+        EEC_Switzerland_Overseas,
         status,
         description,
         image: subscriptionImage,
         magazineTitle,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -104,8 +134,6 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
       abortApiCall();
     };
   }, []);
-
-  console.log(magazines);
 
   return (
     <form
@@ -200,6 +228,33 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
             />
             <span className="error">{errors?.title?.message}</span>
           </div>
+          {/* status */}
+          <div className="w-full space-y-2">
+            <label htmlFor="status" className="Label">
+              {t("status")}
+            </label>
+            <select {...register("status")} className="input_field">
+              <option label="choose status"></option>
+              <option value="active">{t("active")}</option>
+              <option value="deactive">{t("deactive")}</option>
+            </select>
+            <span className="error">{errors?.status?.message}</span>
+          </div>
+
+          {/* magazine title */}
+          <div className="w-full space-y-2">
+            <label htmlFor="magazineTitle" className="Label">
+              {t("Magazine")}
+            </label>
+            <select {...register("magazineTitle")} className="input_field">
+              <option label="choose magazine"></option>
+              <option value="boismag">BOISmag</option>
+              <option value="agenceur">Agenceur</option>
+              <option value="artisans_and_bois">Artisans & Bois</option>
+              <option value="toiture">Toiture</option>
+            </select>
+            <span className="error">{errors?.magazineTitle?.message}</span>
+          </div>
           {/* price */}
           <div className="w-full space-y-2">
             <label htmlFor="price" className="Label">
@@ -213,32 +268,48 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
             />
             <span className="error">{errors?.price?.message}</span>
           </div>
-          {/* status */}
+          {/* rest of the world price */}
           <div className="w-full space-y-2">
-            <label htmlFor="status" className="Label">
-              {t("status")}
+            <label htmlFor="price" className="Label">
+              {t("Rest of the world price")}
             </label>
-            <select {...register("status")} className="input_field">
-              <option label="choose status"></option>
-              <option value="active">{t("active")}</option>
-              <option value="deactive">{t("deactive")}</option>
-            </select>
-            <span className="error">{errors?.status?.message}</span>
+            <input
+              type="number"
+              placeholder="Type here..."
+              className="input_field"
+              {...register("RestOfTheWorld")}
+            />
+            <span className="error">{errors?.RestOfTheWorld?.message}</span>
           </div>
-          {/* magazine title */}
+          {/*MetropolitanFrance price */}
           <div className="w-full space-y-2">
-            <label htmlFor="magazineTitle" className="Label">
-              {t("Magazine")}
+            <label htmlFor="MetropolitanFrance_price" className="Label">
+              {t("MetropolitanFrance price")}
             </label>
-            <select {...register("magazineTitle")} className="input_field">
-              <option label="choose magazine"></option>
-              <option value="boismag">BOISmag</option>
-              <option value="agenceur">Agenceur</option>
-              <option value="artisans&bois">Artisans & Bois</option>
-              <option value="toiture">Toiture</option>
-            </select>
-            <span className="error">{errors?.magazineTitle?.message}</span>
+            <input
+              type="number"
+              placeholder="Type here..."
+              className="input_field"
+              {...register("MetropolitanFrance")}
+            />
+            <span className="error">{errors?.MetropolitanFrance?.message}</span>
           </div>
+          {/*EEC_Switzerland_Overseas price */}
+          <div className="w-full space-y-2">
+            <label htmlFor="EEC_Switzerland_Overseas_price" className="Label">
+              {t("EEC_Switzerland_Overseas price")}
+            </label>
+            <input
+              type="number"
+              placeholder="Type here..."
+              className="input_field"
+              {...register("EEC_Switzerland_Overseas")}
+            />
+            <span className="error">
+              {errors?.EEC_Switzerland_Overseas?.message}
+            </span>
+          </div>
+
           {/* discriptions */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="discriptions" className="Label">

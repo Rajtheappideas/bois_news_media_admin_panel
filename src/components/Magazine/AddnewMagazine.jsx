@@ -19,7 +19,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
   const [magazinePdf, setMagazinePdf] = useState(null);
 
   const { addNewMagazineLoading } = useSelector(
-    (state) => state.root.magazines
+    (state) => state.root.magazines,
   );
   const { token } = useSelector((state) => state.root.auth);
 
@@ -43,7 +43,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
         (files) =>
           !files || // Check if `files` is defined
           files.length === 0 || // Check if `files` is not an empty list
-          Array.from(files).every((file) => file.size <= 10000000)
+          Array.from(files).every((file) => file.size <= 10000000),
       )
       .test("type", t("Only .pdf formats are accepted."), (value) => {
         return value && value[0]?.type === "application/pdf";
@@ -98,7 +98,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
         image: magazineImage,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -275,8 +275,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
-              {t
-              ("title")}
+              {t("title")}
             </label>
             <input
               type="text"
@@ -333,7 +332,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
               <option label="choose magazine"></option>
               <option value="boismag">BOISmag</option>
               <option value="agenceur">Agenceur</option>
-              <option value="artisans&bois">Artisans & Bois</option>
+              <option value="artisans_and_bois">Artisans & Bois</option>
               <option value="toiture">Toiture</option>
             </select>
             <span className="error">{errors?.magazineTitle?.message}</span>
@@ -341,8 +340,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
           {/* summary */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="summary" className="Label">
-              {t
-              ("summary")}
+              {t("summary")}
             </label>
             <textarea
               placeholder={t("Type here...")}

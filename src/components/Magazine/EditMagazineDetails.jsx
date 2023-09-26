@@ -348,7 +348,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
               <option label="choose magazine"></option>
               <option value="boismag">BOISmag</option>
               <option value="agenceur">Agenceur</option>
-              <option value="artisans&bois">Artisans & Bois</option>
+              <option value="artisans_and_bois">Artisans & Bois</option>
               <option value="toiture">Toiture</option>
             </select>
             <span className="error">{errors?.magazineTitle?.message}</span>

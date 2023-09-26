@@ -18,21 +18,36 @@ export const handleGetAllSubscription = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleAddNewSubscription = createAsyncThunk(
   "subscription/handleAddNewSubscription",
   async (
-    { title, price, status, description, image, magazineTitle, token, signal },
-    { rejectWithValue }
+    {
+      title,
+      price,
+      RestOfTheWorld,
+      MetropolitanFrance,
+      EEC_Switzerland_Overseas,
+      status,
+      description,
+      image,
+      magazineTitle,
+      token,
+      signal,
+    },
+    { rejectWithValue },
   ) => {
     try {
       signal.current = new AbortController();
       const response = await PostUrl("subscription", {
         data: {
           title,
-          price,
+          digital: price,
+          RestOfTheWorld,
+          MetropolitanFrance,
+          EEC_Switzerland_Overseas,
           status,
           description,
           image,
@@ -49,7 +64,7 @@ export const handleAddNewSubscription = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleEditSubscription = createAsyncThunk(
@@ -58,6 +73,9 @@ export const handleEditSubscription = createAsyncThunk(
     {
       title,
       price,
+      RestOfTheWorld,
+      MetropolitanFrance,
+      EEC_Switzerland_Overseas,
       status,
       description,
       image,
@@ -66,14 +84,17 @@ export const handleEditSubscription = createAsyncThunk(
       token,
       signal,
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       signal.current = new AbortController();
       const response = await PostUrl(`subscription/${id}`, {
         data: {
           title,
-          price,
+          digital: price,
+          RestOfTheWorld,
+          MetropolitanFrance,
+          EEC_Switzerland_Overseas,
           status,
           description,
           image,
@@ -90,7 +111,7 @@ export const handleEditSubscription = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleDeletesUBSCRIPTION = createAsyncThunk(
@@ -109,7 +130,7 @@ export const handleDeletesUBSCRIPTION = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -136,7 +157,7 @@ const SubscriptionSlice = createSlice({
     handleFindSubscription: (state, { payload }) => {
       if (payload !== "") {
         const findSubscription = state.subscriptions.find(
-          (subscription) => subscription?._id === payload
+          (subscription) => subscription?._id === payload,
         );
         if (findSubscription) {
           state.singleSubscription = findSubscription;
@@ -147,7 +168,7 @@ const SubscriptionSlice = createSlice({
     },
     handleDeleteSubscription: (state, { payload }) => {
       const findSubscription = state.subscriptions.filter(
-        (subscription) => subscription?._id !== payload
+        (subscription) => subscription?._id !== payload,
       );
       if (findSubscription) {
         state.subscriptions = findSubscription;
@@ -171,7 +192,7 @@ const SubscriptionSlice = createSlice({
         state.success = true;
         state.subscriptions = payload?.subscription;
         state.error = null;
-      }
+      },
     );
     builder.addCase(handleGetAllSubscription.rejected, (state, { payload }) => {
       state.loading = false;
@@ -192,7 +213,7 @@ const SubscriptionSlice = createSlice({
         state.success = true;
         state.error = null;
         state.subscriptions = [payload?.subscription, ...state.subscriptions];
-      }
+      },
     );
     builder.addCase(handleAddNewSubscription.rejected, (state, { payload }) => {
       state.addNewSubscriptionLoading = false;
@@ -212,7 +233,7 @@ const SubscriptionSlice = createSlice({
       state.subscriptions = state.subscriptions.map((subscription) =>
         subscription?._id === payload?.subscription?._id
           ? payload?.subscription
-          : subscription
+          : subscription,
       );
     });
     builder.addCase(handleEditSubscription.rejected, (state, { payload }) => {
@@ -233,7 +254,7 @@ const SubscriptionSlice = createSlice({
         state.success = true;
         state.error = null;
         state.deleteSubscriptionID = null;
-      }
+      },
     );
     builder.addCase(handleDeletesUBSCRIPTION.rejected, (state, { payload }) => {
       state.deleteSubscriptionLoading = false;
