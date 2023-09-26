@@ -80,7 +80,7 @@ const Subscribers = () => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
-        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -94,6 +94,12 @@ const Subscribers = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (fileterdData && fileterdData.length > 0) {
+      setPageNumber(0);
+    }
+  }, [fileterdData]);
 
   return (
     <>
@@ -251,7 +257,7 @@ const Subscribers = () => {
                               onClick={() =>
                                 handleDeletesubscriber(
                                   subscriber?._id,
-                                  subscriber?.fname.concat(subscriber?.lname)
+                                  subscriber?.fname.concat(subscriber?.lname),
                                 )
                               }
                               disabled={
@@ -324,6 +330,7 @@ const Subscribers = () => {
                 containerClassName="pagination"
                 activeClassName="py-2 px-4 bg-primaryBlue cursor-pointer text-white rounded-lg text-center"
                 className="shadow-sm p-2 font-semibold text-textColor rounded-lg flex items-center md:gap-x-2 gap-x-1"
+                forcePage={pageNumber}
               />
             </div>
           </div>

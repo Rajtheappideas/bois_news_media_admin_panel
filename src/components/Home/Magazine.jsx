@@ -70,7 +70,7 @@ const Magazine = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef })
+        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -100,6 +100,12 @@ const Magazine = () => {
   function handleClickOutside() {
     setShowDownloadDropdown(false);
   }
+
+  useEffect(() => {
+    if (fileterdData && fileterdData.length > 0) {
+      setPageNumber(0);
+    }
+  }, [fileterdData]);
 
   return (
     <>
@@ -255,6 +261,7 @@ const Magazine = () => {
                                   href={BaseUrl.concat(magazine?.pdf)}
                                   download
                                   target="_blank"
+                                  rel="noreferrer"
                                 >
                                   Magazine pdf
                                 </a>
@@ -287,7 +294,7 @@ const Magazine = () => {
                             onClick={() =>
                               handleDeletemagazine(
                                 magazine?._id,
-                                magazine?.title
+                                magazine?.title,
                               )
                             }
                             disabled={
@@ -360,6 +367,7 @@ const Magazine = () => {
               containerClassName="pagination"
               activeClassName="py-2 px-4 bg-primaryBlue cursor-pointer text-white rounded-lg text-center"
               className="shadow-sm p-2 font-semibold text-textColor rounded-lg flex items-center md:gap-x-2 gap-x-1"
+              forcePage={pageNumber}
             />
           </div>
         </div>

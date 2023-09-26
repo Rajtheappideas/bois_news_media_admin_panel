@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
@@ -65,7 +65,7 @@ const Subcriptions = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletesUBSCRIPTION({ id, token, signal: AbortControllerRef })
+        handleDeletesUBSCRIPTION({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -79,6 +79,12 @@ const Subcriptions = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (fileterdData && fileterdData.length > 0) {
+      setPageNumber(0);
+    }
+  }, [fileterdData]);
 
   return (
     <>
@@ -183,7 +189,7 @@ const Subcriptions = () => {
                               onClick={() => {
                                 setShowEditSubscription(true);
                                 dispatch(
-                                  handleFindSubscription(subscription?._id)
+                                  handleFindSubscription(subscription?._id),
                                 );
                               }}
                               disabled={deleteSubscriptionLoading || loading}
@@ -201,7 +207,7 @@ const Subcriptions = () => {
                               onClick={() => {
                                 setShowSubscriptionDetails(true);
                                 dispatch(
-                                  handleFindSubscription(subscription?._id)
+                                  handleFindSubscription(subscription?._id),
                                 );
                               }}
                               disabled={deleteSubscriptionLoading || loading}
@@ -223,7 +229,7 @@ const Subcriptions = () => {
                               onClick={() =>
                                 handleDeletesubscription(
                                   subscription?._id,
-                                  subscription?.title
+                                  subscription?.title,
                                 )
                               }
                               disabled={
@@ -298,6 +304,7 @@ const Subcriptions = () => {
                 containerClassName="pagination"
                 activeClassName="py-2 px-4 bg-primaryBlue cursor-pointer text-white rounded-lg text-center"
                 className="shadow-sm p-2 font-semibold text-textColor rounded-lg flex items-center md:gap-x-2 gap-x-1"
+                forcePage={pageNumber}
               />
             </div>
           </div>
