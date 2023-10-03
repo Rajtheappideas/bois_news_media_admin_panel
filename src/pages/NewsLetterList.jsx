@@ -37,7 +37,6 @@ const NewsLetterList = () => {
     setPageNumber(selected);
   };
 
-
   return (
     <div className="lg:space-y-5 select-none space-y-3 w-full">
       {/* search + buttons */}
@@ -85,7 +84,9 @@ const NewsLetterList = () => {
                   className="border-b border-gray-200 w-full text-center"
                 >
                   <td className="p-4 whitespace-nowrap">
-                    <span className="font-bold text-center">{i + 1}</span>
+                    <span className="font-bold text-center">
+                      {newsLetter?.index}
+                    </span>
                   </td>
 
                   <td className="text-left p-4 whitespace-nowrap">

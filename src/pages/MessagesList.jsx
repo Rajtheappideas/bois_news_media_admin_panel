@@ -106,7 +106,9 @@ const MessagesList = () => {
                       className="border-b border-gray-200 w-full text-center"
                     >
                       <td className="p-4 whitespace-nowrap">
-                        <span className="font-bold text-center">{i + 1}</span>
+                        <span className="font-bold text-center">
+                          {message?.index}
+                        </span>
                       </td>
 
                       <td className="text-left p-4 whitespace-nowrap">
