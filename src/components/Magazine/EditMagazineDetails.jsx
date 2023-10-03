@@ -111,7 +111,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
         id: _id,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {
@@ -161,7 +161,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef }),
+        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -305,10 +305,9 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
               {t("price")}
             </label>
             <input
-              disabled
               type="number"
               placeholder={t("Type here...")}
-              className="input_field cursor-not-allowed"
+              className="input_field"
               {...register("price")}
             />
             <span className="error">{errors?.price?.message}</span>
@@ -319,10 +318,9 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
               {t("stock")}
             </label>
             <input
-              disabled
               type="number"
               placeholder={t("Type here...")}
-              className="input_field cursor-not-allowed"
+              className="input_field"
               {...register("stock")}
             />
             <span className="error">{errors?.stock?.message}</span>

@@ -70,7 +70,7 @@ const Magazine = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef }),
+        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -237,6 +237,7 @@ const Magazine = () => {
                             />
                           </button>
                         )}
+
                         <div className="relative">
                           <button
                             type="button"
@@ -294,7 +295,7 @@ const Magazine = () => {
                             onClick={() =>
                               handleDeletemagazine(
                                 magazine?._id,
-                                magazine?.title,
+                                magazine?.title
                               )
                             }
                             disabled={

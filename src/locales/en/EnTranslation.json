@@ -324,5 +324,23 @@
   "Changing": "Changing",
   "Change Password": "Change Password",
   "Go to home": "Go to home",
-  "Please sign-in first!!!": "Please sign-in first!!!"
+  "Please sign-in first!!!": "Please sign-in first!!!",
+
+  "//messages": "---------------------------------messages--------------------",
+  "Message Details": "Message Details",
+  "Comments": "Comments",
+  "Comment": "Comment",
+  "No messages here": "No messages here",
+  "messages": "messages",
+
+  "//newsletter": "---------------------------------newsletter--------------------",
+  "No newsletter here": "No newsletter here",
+  "newsLetters": "newsLetters",
+  "newsLetter": "newsLetter",
+
+  "//tax & shipping": "---------------------------------tax & shipping-----------------------",
+  "Tax & Shipping Charges": "Tax & Shipping Charges",
+  "Edit": "Edit",
+  "Tax Charges": "Tax Charges",
+  "Shipping Charges": "Shipping Charges"
 }

@@ -26,8 +26,16 @@ import { handleGetAllMagazine } from "../redux/MagazineSlice";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { handleLogout } from "../redux/AuthSlice";
-import { handleLogoutFromAllTabs } from "../redux/GlobalStates";
+import {
+  handleGetMessages,
+  handleGetNewsLetter,
+  handleLogoutFromAllTabs,
+} from "../redux/GlobalStates";
 import toast from "react-hot-toast";
+import TaxtAndShippingCharges from "./TaxtAndShippingCharges";
+import { handleGetPricing } from "../redux/TaxAndShippingSlice";
+import MessagesList from "./MessagesList";
+import NewsLetterList from "./NewsLetterList";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -44,18 +52,23 @@ const Home = () => {
 
   const handleGetContent = () => {
     if (user === null) {
-      navigate("/sign-in");
-      return true;
+      return navigate("/sign-in");
     }
-    const response =  dispatch(handleGetAllUsers({ token, signal: AbortControllerRef }));
-    if(response){
-      response.then(res=>{
-        if(res?.payload?.status==='fail' && (res?.payload?.message==='Please provide authentication token.'||res?.payload?.message==="Invalid token.")){
-        dispatch(handleLogout())
-        dispatch(handleLogoutFromAllTabs());
-        toast.error("Please login again")
+    const response = dispatch(
+      handleGetAllUsers({ token, signal: AbortControllerRef })
+    );
+    if (response) {
+      response.then((res) => {
+        if (
+          res?.payload?.status === "fail" &&
+          (res?.payload?.message === "Please provide authentication token." ||
+            res?.payload?.message === "Invalid token.")
+        ) {
+          dispatch(handleLogout());
+          dispatch(handleLogoutFromAllTabs());
+          toast.error("Please login again");
         }
-      })
+      });
     }
     dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
@@ -63,6 +76,9 @@ const Home = () => {
     dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
+    dispatch(handleGetPricing({ token, signal: AbortControllerRef }));
+    dispatch(handleGetNewsLetter({ token, signal: AbortControllerRef }));
+    dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
   };
 
   useEffect(() => {
@@ -106,9 +122,14 @@ const Home = () => {
             {activeComponent === t("subscriptions") && <Subcriptions />}
             {activeComponent === t("magazine") && <Magazine />}
             {activeComponent === t("orders") && <Orders />}
-            {/* {activeComponent === t("settings" && <Settings />} */}
             {activeComponent === t("profile") && <Profile />}
             {activeComponent === t("change password") && <ChangePassword />}
+            {activeComponent === t("messages") && <MessagesList />}
+            {activeComponent === t("newsLetter") && <NewsLetterList />}
+            {activeComponent === t("tax & shipping") && (
+              <TaxtAndShippingCharges />
+            )}
+            {/* {activeComponent === t("settings" && <Settings />} */}
           </div>
         </section>
       </div>

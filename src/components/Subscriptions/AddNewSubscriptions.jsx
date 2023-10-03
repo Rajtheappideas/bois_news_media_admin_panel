@@ -16,7 +16,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
   const [subscriptionImage, setSubscriptionImage] = useState(null);
 
   const { addNewSubscriptionLoading } = useSelector(
-    (state) => state.root.subscriptions,
+    (state) => state.root.subscriptions
   );
   const { magazines } = useSelector((state) => state.root.magazines);
   const { token } = useSelector((state) => state.root.auth);
@@ -44,24 +44,6 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
         return true;
       }),
     magazineTitle: yup.string().required("choose magazine"),
-    RestOfTheWorld: yup
-      .string()
-      .required(t("this field is required"))
-      .max(4, t("maximum 4 numbers"))
-      .min(2, t("minmum 2 numbers"))
-      .trim(""),
-    MetropolitanFrance: yup
-      .string()
-      .required(t("this field is required"))
-      .max(4, t("maximum 4 numbers"))
-      .min(2, t("minmum 2 numbers"))
-      .trim(""),
-    EEC_Switzerland_Overseas: yup
-      .string()
-      .required(t("this field is required"))
-      .max(4, t("maximum 4 numbers"))
-      .min(2, t("minmum 2 numbers"))
-      .trim(""),
   });
 
   const {
@@ -81,31 +63,19 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
   });
 
   const onSubmit = (data) => {
-    const {
-      title,
-      price,
-      description,
-      status,
-      magazineTitle,
-      RestOfTheWorld,
-      MetropolitanFrance,
-      EEC_Switzerland_Overseas,
-    } = data;
+    const { title, price, description, status, magazineTitle } = data;
 
     const response = dispatch(
       handleAddNewSubscription({
         title,
         price,
-        RestOfTheWorld,
-        MetropolitanFrance,
-        EEC_Switzerland_Overseas,
         status,
         description,
         image: subscriptionImage,
         magazineTitle,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {
@@ -267,47 +237,6 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
               {...register("price")}
             />
             <span className="error">{errors?.price?.message}</span>
-          </div>
-          {/* rest of the world price */}
-          <div className="w-full space-y-2">
-            <label htmlFor="price" className="Label">
-              {t("Rest of the world price")}
-            </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-              {...register("RestOfTheWorld")}
-            />
-            <span className="error">{errors?.RestOfTheWorld?.message}</span>
-          </div>
-          {/*MetropolitanFrance price */}
-          <div className="w-full space-y-2">
-            <label htmlFor="MetropolitanFrance_price" className="Label">
-              {t("MetropolitanFrance price")}
-            </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-              {...register("MetropolitanFrance")}
-            />
-            <span className="error">{errors?.MetropolitanFrance?.message}</span>
-          </div>
-          {/*EEC_Switzerland_Overseas price */}
-          <div className="w-full space-y-2">
-            <label htmlFor="EEC_Switzerland_Overseas_price" className="Label">
-              {t("EEC_Switzerland_Overseas price")}
-            </label>
-            <input
-              type="number"
-              placeholder="Type here..."
-              className="input_field"
-              {...register("EEC_Switzerland_Overseas")}
-            />
-            <span className="error">
-              {errors?.EEC_Switzerland_Overseas?.message}
-            </span>
           </div>
 
           {/* discriptions */}

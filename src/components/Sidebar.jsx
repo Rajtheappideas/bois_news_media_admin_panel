@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { BiHome } from "react-icons/bi";
+import { BiHome, BiMessageSquareDots } from "react-icons/bi";
 import { MdSavedSearch } from "react-icons/md";
 import { FaRegHandshake, FaUserAlt } from "react-icons/fa";
 import { TbUserDollar } from "react-icons/tb";
@@ -7,6 +7,8 @@ import { CgNotes } from "react-icons/cg";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
 import { HiOutlineXMark } from "react-icons/hi2";
+import { SlEnvolopeLetter } from "react-icons/sl";
+import { HiOutlineReceiptTax } from "react-icons/hi";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
 import BaseUrl from "../BaseUrl";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,6 +43,9 @@ const Sidebar = ({
     { title: t("subscriptions"), icon: CgNotes },
     { title: t("magazine"), icon: GiWhiteBook },
     { title: t("orders"), icon: BsCart3 },
+    { title: t("tax & shipping"), icon: HiOutlineReceiptTax },
+    { title: t("newsLetter"), icon: SlEnvolopeLetter },
+    { title: t("messages"), icon: BiMessageSquareDots },
     // { title: "settings", icon: LuSettings2 },
   ];
 
@@ -78,7 +83,7 @@ const Sidebar = ({
     >
       {/* for desktop */}
       <div
-        className={` sticky top-0 min-h-screen w-full xl:px-6 lg:px-3 lg:block hidden py-3`}
+        className={` sticky top-0 min-h-screen max-h-screen w-full overflow-y-scroll no_scrollbar xl:px-6 lg:px-3 lg:block hidden py-3`}
       >
         <p
           onClick={() => {
