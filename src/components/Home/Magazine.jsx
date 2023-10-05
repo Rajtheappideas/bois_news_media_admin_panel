@@ -27,6 +27,7 @@ const Magazine = () => {
   const [showMagazineDetails, setShowMagazineDetails] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const [showDownloadDropdown, setShowDownloadDropdown] = useState(false);
+  const [downloadDropdownId, setDownloadDropdownId] = useState(null);
 
   const {
     magazines,
@@ -241,7 +242,10 @@ const Magazine = () => {
                           <button
                             type="button"
                             className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
-                            onClick={() => setShowDownloadDropdown(true)}
+                            onClick={() => {
+                              setShowDownloadDropdown(true);
+                              setDownloadDropdownId(magazine?._id);
+                            }}
                           >
                             <HiOutlineDownload
                               color="green"
@@ -251,8 +255,11 @@ const Magazine = () => {
                           </button>
                           <p
                             className={`origin-center ${
-                              showDownloadDropdown ? "scale-100" : "scale-0"
-                            } absolute -top-16 md:-left-6 -left-16 shadow-md rounded-lg bg-white w-auto whitespace-nowrap h-auto p-3 transition`}
+                              showDownloadDropdown &&
+                              downloadDropdownId === magazine?._id
+                                ? "scale-100"
+                                : "scale-0"
+                            } absolute z-0 -top-16 md:-left-6 -left-16 shadow-md rounded-lg bg-white w-auto whitespace-nowrap h-auto p-3 transition`}
                             ref={downloadRef}
                           >
                             <ul className="space-y-1 text-sm">
