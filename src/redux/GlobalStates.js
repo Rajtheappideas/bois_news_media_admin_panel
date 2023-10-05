@@ -1,12 +1,55 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
 import { BroadcastChannel } from "broadcast-channel";
 import i18next from "i18next";
+import { GetUrl } from "../BaseUrl";
+
+export const handleGetNewsLetter = createAsyncThunk(
+  "global/handleGetNewsLetter",
+  async ({ token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl("newsletter", {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleGetMessages = createAsyncThunk(
+  "global/handleGetMessages",
+  async ({ token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl("contact", {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
 
 const initialState = {
   searchTerm: "",
   fileterdData: [],
   language: JSON.parse(window.localStorage.getItem("lang")) ?? "en",
+  newsLetters: [],
+  messages: [],
+  newsLetterLoading: false,
+  messageLoading: false,
 };
 
 const logoutChannel = new BroadcastChannel("handleLogout");
@@ -73,11 +116,48 @@ const GlobalStates = createSlice({
         loginChannel.close();
       };
     },
-
     handleChangeUserLanguage: (state, { payload }) => {
       state.language = payload;
       i18next.changeLanguage(payload);
     },
+    handlerFilterNewsLetters: (state, { payload }) => {
+      state.newsLetters = state.newsLetters?.slice().reverse();
+    },
+    handlerFilterMessages: (state, { payload }) => {
+      state.messages = state.messages?.slice().reverse();
+    },
+  },
+  extraReducers: (builder) => {
+    // get all news letter
+    builder.addCase(handleGetNewsLetter.pending, (state, {}) => {
+      state.newsLetterLoading = true;
+      state.error = null;
+    });
+    builder.addCase(handleGetNewsLetter.fulfilled, (state, { payload }) => {
+      state.newsLetterLoading = false;
+      state.newsLetters = payload?.newsletter;
+      state.error = null;
+    });
+    builder.addCase(handleGetNewsLetter.rejected, (state, { payload }) => {
+      state.newsLetterLoading = false;
+      state.newsLetters = null;
+      state.error = payload ?? null;
+    });
+    // get all message
+    builder.addCase(handleGetMessages.pending, (state, {}) => {
+      state.messageLoading = true;
+      state.error = null;
+    });
+    builder.addCase(handleGetMessages.fulfilled, (state, { payload }) => {
+      state.messageLoading = false;
+      state.messages = payload?.messages;
+      state.error = null;
+    });
+    builder.addCase(handleGetMessages.rejected, (state, { payload }) => {
+      state.messageLoading = false;
+      state.messages = null;
+      state.error = payload ?? null;
+    });
   },
 });
 
@@ -90,6 +170,8 @@ export const {
   loginAllTabsEventListener,
   logoutAllTabsEventListener,
   handleChangeUserLanguage,
+  handlerFilterMessages,
+  handlerFilterNewsLetters,
 } = GlobalStates.actions;
 
 export default GlobalStates.reducer;

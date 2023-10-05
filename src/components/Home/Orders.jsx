@@ -77,210 +77,67 @@ const Orders = () => {
                 </tr>
               </thead>
               <tbody className="w-full">
-                <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">423455</td>
+                {loading ? (
+                  <tr className="data_not_found_And_Loading">
+                    <td colSpan="7">{t("Loading")}....</td>
+                  </tr>
+                ) : orders !== undefined && orders.length > 0 ? (
+                  orders.map((order) => (
+                    <tr
+                      key={order?._id}
+                      className="border-b border-gray-200 w-full text-left"
+                    >
+                      <td className="p-4 whitespace-nowrap">423455</td>
 
-                  <td className="text-left p-4 whitespace-nowrap">
-                    June 1, 2023 10:30 PM
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">
-                    Marilyn Workman
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">Cash</td>
-                  <td className="text-left p-4 whitespace-nowrap">€ 95.00</td>
-                  <td className="text-left p-4">
-                    <select
-                      name="status"
-                      className="border border-gray-200 rounded-md p-1 font-medium"
-                    >
-                      <option value="Delivered">Delivered</option>
-                      <option value="Pending">Pending</option>
-                    </select>
-                  </td>
-                  <td className="flex items-center justify-start p-4">
-                    <button
-                      type="button"
-                      className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BiPrinter
-                        color="gray"
-                        size={30}
-                        className="inline-block mr-1"
-                      />
-                    </button>
-                    <button
-                      onClick={() => setshowOrderDetails(true)}
-                      type="button"
-                      className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BsEye color="gray" size={30} className="inline-block" />
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">423455</td>
-
-                  <td className="text-left p-4 whitespace-nowrap">
-                    June 1, 2023 10:30 PM
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">
-                    Marilyn Workman
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">Cash</td>
-                  <td className="text-left p-4 whitespace-nowrap">€ 95.00</td>
-                  <td className="text-left p-4">
-                    <select
-                      name="status"
-                      className="border border-gray-200 rounded-md p-1 font-medium"
-                    >
-                      <option value="Delivered">Delivered</option>
-                      <option value="Pending">Pending</option>
-                    </select>
-                  </td>
-                  <td className="flex items-center justify-start p-4">
-                    <button
-                      type="button"
-                      className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BiPrinter
-                        color="gray"
-                        size={30}
-                        className="inline-block mr-1"
-                      />
-                    </button>
-                    <button
-                      onClick={() => setshowOrderDetails(true)}
-                      type="button"
-                      className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BsEye color="gray" size={30} className="inline-block" />
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">423455</td>
-
-                  <td className="text-left p-4 whitespace-nowrap">
-                    June 1, 2023 10:30 PM
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">
-                    Marilyn Workman
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">Cash</td>
-                  <td className="text-left p-4 whitespace-nowrap">€ 95.00</td>
-                  <td className="text-left p-4">
-                    <select
-                      name="status"
-                      className="border border-gray-200 rounded-md p-1 font-medium"
-                    >
-                      <option value="Delivered">Delivered</option>
-                      <option value="Pending">Pending</option>
-                    </select>
-                  </td>
-                  <td className="flex items-center justify-start p-4">
-                    <button
-                      type="button"
-                      className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BiPrinter
-                        color="gray"
-                        size={30}
-                        className="inline-block mr-1"
-                      />
-                    </button>
-                    <button
-                      onClick={() => setshowOrderDetails(true)}
-                      type="button"
-                      className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BsEye color="gray" size={30} className="inline-block" />
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">423455</td>
-
-                  <td className="text-left p-4 whitespace-nowrap">
-                    June 1, 2023 10:30 PM
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">
-                    Marilyn Workman
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">Cash</td>
-                  <td className="text-left p-4 whitespace-nowrap">€ 95.00</td>
-                  <td className="text-left p-4">
-                    <select
-                      name="status"
-                      className="border border-gray-200 rounded-md p-1 font-medium"
-                    >
-                      <option value="Delivered">Delivered</option>
-                      <option value="Pending">Pending</option>
-                    </select>
-                  </td>
-                  <td className="flex items-center justify-start p-4">
-                    <button
-                      type="button"
-                      className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BiPrinter
-                        color="gray"
-                        size={30}
-                        className="inline-block mr-1"
-                      />
-                    </button>
-                    <button
-                      onClick={() => setshowOrderDetails(true)}
-                      type="button"
-                      className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BsEye color="gray" size={30} className="inline-block" />
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b border-gray-200 w-full text-left">
-                  <td className="p-4 whitespace-nowrap">423455</td>
-
-                  <td className="text-left p-4 whitespace-nowrap">
-                    June 1, 2023 10:30 PM
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">
-                    Marilyn Workman
-                  </td>
-                  <td className="text-left p-4 whitespace-nowrap">Cash</td>
-                  <td className="text-left p-4 whitespace-nowrap">€ 95.00</td>
-                  <td className="text-left p-4">
-                    <select
-                      name="status"
-                      className="border border-gray-200 rounded-md p-1 font-medium"
-                    >
-                      <option value="Delivered">Delivered</option>
-                      <option value="Pending">Pending</option>
-                    </select>
-                  </td>
-                  <td className="flex items-center justify-start p-4">
-                    <button
-                      type="button"
-                      className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BiPrinter
-                        color="gray"
-                        size={30}
-                        className="inline-block mr-1"
-                      />
-                    </button>
-                    <button
-                      onClick={() => setshowOrderDetails(true)}
-                      type="button"
-                      className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
-                    >
-                      <BsEye color="gray" size={30} className="inline-block" />
-                    </button>
-                  </td>
-                </tr>
-
-                {/* <tr className="text-center text-2xl font-semibold py-2">
-    <td colSpan="6">No Invoices here.</td>
-  </tr> */}
+                      <td className="text-left p-4 whitespace-nowrap">
+                        June 1, 2023 10:30 PM
+                      </td>
+                      <td className="text-left p-4 whitespace-nowrap">
+                        Marilyn Workman
+                      </td>
+                      <td className="text-left p-4 whitespace-nowrap">Cash</td>
+                      <td className="text-left p-4 whitespace-nowrap">
+                        € 95.00
+                      </td>
+                      <td className="text-left p-4">
+                        <select
+                          name="status"
+                          className="border border-gray-200 rounded-md p-1 font-medium"
+                        >
+                          <option value="Delivered">Delivered</option>
+                          <option value="Pending">Pending</option>
+                        </select>
+                      </td>
+                      <td className="flex items-center justify-start p-4">
+                        <button
+                          type="button"
+                          className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
+                        >
+                          <BiPrinter
+                            color="gray"
+                            size={30}
+                            className="inline-block mr-1"
+                          />
+                        </button>
+                        <button
+                          onClick={() => setshowOrderDetails(true)}
+                          type="button"
+                          className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
+                        >
+                          <BsEye
+                            color="gray"
+                            size={30}
+                            className="inline-block"
+                          />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className="data_not_found_And_Loading">
+                    <td colSpan="7">{t("No Orders here")}.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

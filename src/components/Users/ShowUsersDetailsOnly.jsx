@@ -27,7 +27,7 @@ const ShowUsersDetailsOnly = ({ setShowUserDetailsOnly }) => {
     <div className="w-full lg:space-y-5 space-y-3">
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
-        <p className="font-semibold text-left lg:text-xl text-lg">Edit User</p>
+        <p className="font-semibold text-left lg:text-xl text-lg">User Details</p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
             className={`gray_button `}
