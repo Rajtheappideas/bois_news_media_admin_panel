@@ -5,8 +5,10 @@ import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { BiPrinter } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import OrderDetails from "../Orders/OrderDetails";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
+import { handleFindSingleOrder } from "../../redux/OrderSlice";
 
 const Orders = () => {
   const [showOrderDetails, setshowOrderDetails] = useState(false);
@@ -22,6 +24,7 @@ const Orders = () => {
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData } = useSelector((state) => state.root.globalStates);
 
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   // pagination logic
@@ -82,22 +85,24 @@ const Orders = () => {
                     <td colSpan="7">{t("Loading")}....</td>
                   </tr>
                 ) : orders !== undefined && orders.length > 0 ? (
-                  orders.map((order) => (
+                  displayOrders.map((order) => (
                     <tr
                       key={order?._id}
                       className="border-b border-gray-200 w-full text-left"
                     >
-                      <td className="p-4 whitespace-nowrap">423455</td>
+                      <td className="p-4 whitespace-nowrap">
+                        {order?.orderId}
+                      </td>
 
                       <td className="text-left p-4 whitespace-nowrap">
-                        June 1, 2023 10:30 PM
+                        {moment(order?.date).format("lll")}
                       </td>
                       <td className="text-left p-4 whitespace-nowrap">
-                        Marilyn Workman
+                        {order?.subscriber?.fname} {order?.subscriber?.lname}
                       </td>
                       <td className="text-left p-4 whitespace-nowrap">Cash</td>
                       <td className="text-left p-4 whitespace-nowrap">
-                        € 95.00
+                        € {order?.total}
                       </td>
                       <td className="text-left p-4">
                         <select
@@ -109,7 +114,7 @@ const Orders = () => {
                         </select>
                       </td>
                       <td className="flex items-center justify-start p-4">
-                        <button
+                        {/* <button
                           type="button"
                           className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
                         >
@@ -118,9 +123,12 @@ const Orders = () => {
                             size={30}
                             className="inline-block mr-1"
                           />
-                        </button>
+                        </button> */}
                         <button
-                          onClick={() => setshowOrderDetails(true)}
+                          onClick={() => {
+                            dispatch(handleFindSingleOrder(order?._id));
+                            setshowOrderDetails(true);
+                          }}
                           type="button"
                           className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
                         >
@@ -182,6 +190,7 @@ const Orders = () => {
               containerClassName="pagination"
               activeClassName="py-2 px-4 bg-primaryBlue cursor-pointer text-white rounded-lg text-center"
               className="shadow-sm p-2 font-semibold text-textColor rounded-lg flex items-center md:gap-x-2 gap-x-1"
+              forcePage={pageNumber}
             />
           </div>
         </div>

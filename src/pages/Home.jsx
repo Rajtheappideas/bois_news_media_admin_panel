@@ -23,6 +23,7 @@ import { handleGetAllPartners } from "../redux/PartnerSlice";
 import { handleGetAllPayers } from "../redux/ThirdPartyPayerSlice";
 import { handleGetAllSubscription } from "../redux/SubscriptionSlice";
 import { handleGetAllMagazine } from "../redux/MagazineSlice";
+import { handleGetAllOrder } from "../redux/OrderSlice";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { handleLogout } from "../redux/AuthSlice";
@@ -55,7 +56,7 @@ const Home = () => {
       return navigate("/sign-in");
     }
     const response = dispatch(
-      handleGetAllUsers({ token, signal: AbortControllerRef })
+      handleGetAllUsers({ token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -79,6 +80,7 @@ const Home = () => {
     dispatch(handleGetPricing({ token, signal: AbortControllerRef }));
     dispatch(handleGetNewsLetter({ token, signal: AbortControllerRef }));
     dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllOrder({ token, signal: AbortControllerRef }));
   };
 
   useEffect(() => {
