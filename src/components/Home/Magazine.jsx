@@ -71,7 +71,7 @@ const Magazine = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef })
+        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -260,7 +260,7 @@ const Magazine = () => {
                               downloadDropdownId === magazine?._id
                                 ? "scale-100"
                                 : "scale-0"
-                            } absolute z-0 -top-16 md:-left-6 -left-16 shadow-md rounded-lg bg-white w-auto whitespace-nowrap h-auto p-3 transition`}
+                            } absolute z-10 -top-16 md:-left-6 -left-16 shadow-md rounded-lg bg-white w-44 whitespace-nowrap h-auto p-3 transition`}
                             ref={downloadRef}
                           >
                             <ul className="space-y-1 text-sm">
@@ -279,6 +279,8 @@ const Magazine = () => {
                                 <a
                                   href={BaseUrl.concat(magazine?.digital)}
                                   download
+                                  target="_blank"
+                                  rel="noreferrer"
                                 >
                                   Routing file (digital)
                                 </a>
@@ -288,10 +290,38 @@ const Magazine = () => {
                                 <a
                                   href={BaseUrl.concat(magazine?.paper)}
                                   download
+                                  target="_blank"
+                                  rel="noreferrer"
                                 >
                                   Routing file (paper)
                                 </a>
                               </li>
+                              {/* <hr /> */}
+                              {/* 
+                              <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
+                                <a
+                                  href={BaseUrl.concat(magazine?.paper)}
+                                  download
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Routing file (paper including partners and
+                                  prospects)
+                                </a>
+                              </li>
+                              <hr />
+
+                              <li className="hover:bg-gray-200 break-words  whitespace-normal transition duration-100 cursor-pointer p-1">
+                                <a
+                                  href={BaseUrl.concat(magazine?.paper)}
+                                  download
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Routing file (digital including partners and
+                                  prospects)
+                                </a>
+                              </li> */}
                             </ul>
                           </p>
                         </div>
@@ -302,7 +332,7 @@ const Magazine = () => {
                             onClick={() =>
                               handleDeletemagazine(
                                 magazine?._id,
-                                magazine?.title
+                                magazine?.title,
                               )
                             }
                             disabled={

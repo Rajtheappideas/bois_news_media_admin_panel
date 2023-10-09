@@ -109,8 +109,10 @@ const Orders = () => {
                           name="status"
                           className="border border-gray-200 rounded-md p-1 font-medium"
                         >
-                          <option value="Delivered">Delivered</option>
-                          <option value="Pending">Pending</option>
+                          <option value="on_hold">On hold</option>
+                          <option value="order_received">Order received</option>
+                          <option value="order_accepted">Order accepted</option>
+                          <option value="delivered">Delivered</option>
                         </select>
                       </td>
                       <td className="flex items-center justify-start p-4">
@@ -130,7 +132,7 @@ const Orders = () => {
                             setshowOrderDetails(true);
                           }}
                           type="button"
-                          className="hover:bg-green-200 p-1 rounded-full h-10 w-10"
+                          className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
                         >
                           <BsEye
                             color="gray"

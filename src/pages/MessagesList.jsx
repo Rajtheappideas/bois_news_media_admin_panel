@@ -16,7 +16,7 @@ const MessagesList = () => {
   const [singleMessage, setSingleMessage] = useState(null);
 
   const { messages, messageLoading, fileterdData } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
 
   const dispatch = useDispatch();
@@ -103,7 +103,7 @@ const MessagesList = () => {
                   displayMessages.map((message, i) => (
                     <tr
                       key={message?._id}
-                      className="border-b border-gray-200 w-full text-center"
+                      className="border-b last:border-none border-gray-200 w-full text-center"
                     >
                       <td className="p-4 whitespace-nowrap">
                         <span className="font-bold text-center">

@@ -50,7 +50,7 @@ const Sidebar = ({
   ];
 
   useEffect(() => {
-    if (openSidebar && window.screen.width < 1024) {
+    if (openSidebar && window.innerWidth < 1024) {
       window.document.body.style.overflow = "hidden";
     } else {
       window.document.body.style.overflow = "unset";
@@ -63,6 +63,7 @@ const Sidebar = ({
         openSidebar
       ) {
         setOpenSidebar(false);
+        window.document.body.style.overflow = "unset";
       }
     };
     document.addEventListener("click", handleClickOutside, true);
@@ -117,6 +118,7 @@ const Sidebar = ({
                   ? "bg-primaryBlue text-white"
                   : "text-textColor bg-white"
               } xl:px-4 px-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
+              title={list.title}
             >
               <list.icon
                 className={`${
