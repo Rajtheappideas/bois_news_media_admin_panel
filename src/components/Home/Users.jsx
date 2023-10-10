@@ -158,7 +158,7 @@ const Users = () => {
                   displayUsers.map((user) => (
                     <tr
                       key={user?._id}
-                      className="border-b border-gray-200 w-full text-center"
+                      className="border-b last:border-none border-gray-200 w-full text-center"
                     >
                       <td className="p-4 whitespace-nowrap">
                         {/* <input

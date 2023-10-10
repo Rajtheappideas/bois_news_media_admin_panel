@@ -177,7 +177,7 @@ const Magazine = () => {
                   displayMagazine.map((magazine) => (
                     <tr
                       key={magazine?._id}
-                      className="border-b border-gray-200 whitespace-nowrap w-full text-left pl-10 select-none"
+                      className="border-b last:border-none border-gray-200 whitespace-nowrap w-full text-left pl-10 select-none"
                     >
                       <td className="md:p-4 p-2">
                         {/* <input
@@ -275,29 +275,29 @@ const Magazine = () => {
                                 </a>
                               </li>
                               <hr />
-                              <li className="hover:bg-gray-200 transition duration-100 cursor-pointer p-1">
+                              <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
                                   href={BaseUrl.concat(magazine?.digital)}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  Routing file (digital)
+                                  Routing file (digital subscribers)
                                 </a>
                               </li>
                               <hr />
-                              <li className="hover:bg-gray-200 transition duration-100 cursor-pointer p-1">
+                              <li className="hover:bg-gray-200 transition  break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
                                   href={BaseUrl.concat(magazine?.paper)}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  Routing file (paper)
+                                  Routing file (paper subscribers)
                                 </a>
                               </li>
-                              {/* <hr /> */}
-                              {/* 
+                              {/* <hr />
+
                               <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
                                   href={BaseUrl.concat(magazine?.paper)}
@@ -305,8 +305,7 @@ const Magazine = () => {
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  Routing file (paper including partners and
-                                  prospects)
+                                  Routing file (paper partners & prospects)
                                 </a>
                               </li>
                               <hr />
@@ -318,8 +317,7 @@ const Magazine = () => {
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  Routing file (digital including partners and
-                                  prospects)
+                                  Routing file (digital partners & prospects)
                                 </a>
                               </li> */}
                             </ul>

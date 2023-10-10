@@ -37,6 +37,7 @@ import TaxtAndShippingCharges from "./TaxtAndShippingCharges";
 import { handleGetPricing } from "../redux/TaxAndShippingSlice";
 import MessagesList from "./MessagesList";
 import NewsLetterList from "./NewsLetterList";
+import PromoCode from "../components/PromoCode";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -131,7 +132,7 @@ const Home = () => {
             {activeComponent === t("tax & shipping") && (
               <TaxtAndShippingCharges />
             )}
-            {/* {activeComponent === t("settings" && <Settings />} */}
+            {activeComponent === t("promo codes") && <PromoCode />}
           </div>
         </section>
       </div>

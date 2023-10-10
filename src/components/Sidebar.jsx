@@ -6,6 +6,7 @@ import { TbUserDollar } from "react-icons/tb";
 import { CgNotes } from "react-icons/cg";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
+import { RiCoupon3Line } from "react-icons/ri";
 import { HiOutlineXMark } from "react-icons/hi2";
 import { SlEnvolopeLetter } from "react-icons/sl";
 import { HiOutlineReceiptTax } from "react-icons/hi";
@@ -44,6 +45,7 @@ const Sidebar = ({
     { title: t("magazine"), icon: GiWhiteBook },
     { title: t("orders"), icon: BsCart3 },
     { title: t("tax & shipping"), icon: HiOutlineReceiptTax },
+    { title: t("promo codes"), icon: RiCoupon3Line },
     { title: t("newsLetter"), icon: SlEnvolopeLetter },
     { title: t("messages"), icon: BiMessageSquareDots },
     // { title: "settings", icon: LuSettings2 },

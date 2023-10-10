@@ -88,7 +88,7 @@ const Orders = () => {
                   displayOrders.map((order) => (
                     <tr
                       key={order?._id}
-                      className="border-b border-gray-200 w-full text-left"
+                      className="border-b last:border-none border-gray-200 w-full text-left"
                     >
                       <td className="p-4 whitespace-nowrap">
                         {order?.orderId}

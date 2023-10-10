@@ -96,6 +96,10 @@ const Header = ({
           {t(activeComponent)} <br className="md:hidden block" />{" "}
           {t(activeComponent) !== t("dashboard") &&
             t(activeComponent) !== t("profile") &&
+            t(activeComponent) !== t("tax & shipping") &&
+            t(activeComponent) !== t("promo codes") &&
+            t(activeComponent) !== t("newsLetter") &&
+            t(activeComponent) !== t("messages") &&
             t("management")}
         </p>
       </div>

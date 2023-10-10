@@ -12,7 +12,7 @@ const NewsLetterList = () => {
   const [pageNumber, setPageNumber] = useState(0);
 
   const { newsLetters, newsLetterLoading, fileterdData } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
 
   const dispatch = useDispatch();
@@ -81,7 +81,7 @@ const NewsLetterList = () => {
               displayNewsLetters.map((newsLetter, i) => (
                 <tr
                   key={newsLetter?._id}
-                  className="border-b border-gray-200 w-full text-center"
+                  className="border-b last:border-none border-gray-200 w-full text-center"
                 >
                   <td className="p-4 whitespace-nowrap">
                     <span className="font-bold text-center">

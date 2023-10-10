@@ -159,7 +159,7 @@ const Subcriptions = () => {
                     displaySubscriptions.map((subscription) => (
                       <tr
                         key={subscription?._id}
-                        className="border-b border-gray-200 w-full text-left pl-10 select-none"
+                        className="border-b last:border-none border-gray-200 w-full text-left pl-10 select-none"
                       >
                         <td className="p-4 md:pl-28 whitespace-nowrap">
                           {/* <input
