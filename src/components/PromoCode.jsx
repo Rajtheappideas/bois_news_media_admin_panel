@@ -139,7 +139,7 @@ const PromoCode = () => {
                       </td>
 
                       <td className="text-center p-4 whitespace-nowrap">
-                        {moment(promo?.expireDate).format("lll")}
+                        {moment(promo?.expireDate).format("L")}
                       </td>
                       <td className="text-center p-4 whitespace-nowrap">
                         {promo?.discountPercentage} %
