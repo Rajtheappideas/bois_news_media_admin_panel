@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from "react";
 import Search from "../Search";
 import ReactPaginate from "react-paginate";
-import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
-import { BsEye } from "react-icons/bs";
+import { BiChevronsLeft, BiChevronsRight } from "react-icons/bi";
 import OrderDetails from "../Orders/OrderDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import moment from "moment";
-import {
-  handleFindSingleOrder,
-  handleUpdateOrderStatus,
-  handlerFilterOrders,
-} from "../../redux/OrderSlice";
+import { handlerFilterOrders } from "../../redux/OrderSlice";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
-import toast from "react-hot-toast";
+import SingleOrderList from "../Orders/SingleOrderList";
 
 const Orders = () => {
   const [showOrderDetails, setshowOrderDetails] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
 
-  const { orders, loading, updateLoading, filterType } = useSelector(
+  const { orders, loading, filterType } = useSelector(
     (state) => state.root.orders
   );
-  const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const dispatch = useDispatch();
 
-  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
+  const { abortApiCall } = useAbortApiCall();
 
   const { t } = useTranslation();
 
@@ -47,22 +40,6 @@ const Orders = () => {
       : Math.ceil(fileterdData?.length / ordersPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
-  };
-
-  const hanldeChangeOrderStatus = (id, status) => {
-    if (updateLoading) return;
-    toast.loading("Updating Status...");
-    const response = dispatch(
-      handleUpdateOrderStatus({ status, id, token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (res?.payload?.status === "success") {
-          toast.remove();
-          toast.success("status updated.");
-        }
-      });
-    }
   };
 
   useEffect(() => {
@@ -116,66 +93,11 @@ const Orders = () => {
                   </tr>
                 ) : orders !== undefined && orders.length > 0 ? (
                   displayOrders.map((order) => (
-                    <tr
+                    <SingleOrderList
                       key={order?._id}
-                      className="border-b last:border-none border-gray-200 w-full text-left"
-                    >
-                      <td className="p-4 whitespace-nowrap">
-                        {order?.orderId}
-                      </td>
-
-                      <td className="text-left p-4 whitespace-nowrap">
-                        {moment(order?.date).format("lll")}
-                      </td>
-                      <td className="text-left p-4 whitespace-nowrap">
-                        {order?.subscriber?.fname} {order?.subscriber?.lname}
-                      </td>
-                      <td className="text-left p-4 whitespace-nowrap">Cash</td>
-                      <td className="text-left p-4 whitespace-nowrap">
-                        € {order?.total}
-                      </td>
-                      <td className="text-left p-4">
-                        <select
-                          name="status"
-                          className="border border-gray-200 rounded-md p-1 font-medium"
-                          value={order?.status}
-                          onChange={(e) => {
-                            hanldeChangeOrderStatus(order?._id, e.target.value);
-                          }}
-                        >
-                          <option value="On Hold">On hold</option>
-                          <option value="Order Received">Order received</option>
-                          <option value="Order Accepted">Order accepted</option>
-                          <option value="Delivered">Delivered</option>
-                        </select>
-                      </td>
-                      <td className="flex items-center justify-start p-4">
-                        {/* <button
-                          type="button"
-                          className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                        >
-                          <BiPrinter
-                            color="gray"
-                            size={30}
-                            className="inline-block mr-1"
-                          />
-                        </button> */}
-                        <button
-                          onClick={() => {
-                            dispatch(handleFindSingleOrder(order?._id));
-                            setshowOrderDetails(true);
-                          }}
-                          type="button"
-                          className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-                        >
-                          <BsEye
-                            color="gray"
-                            size={30}
-                            className="inline-block"
-                          />
-                        </button>
-                      </td>
-                    </tr>
+                      order={order}
+                      setshowOrderDetails={setshowOrderDetails}
+                    />
                   ))
                 ) : (
                   <tr className="data_not_found_And_Loading">

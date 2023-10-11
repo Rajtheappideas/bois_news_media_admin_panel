@@ -38,6 +38,7 @@ import { handleGetPricing } from "../redux/TaxAndShippingSlice";
 import MessagesList from "./MessagesList";
 import NewsLetterList from "./NewsLetterList";
 import PromoCode from "../components/PromoCode";
+import { handleGetAllPromoCodes } from "../redux/PromoCodeSlice";
 
 const Home = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
@@ -82,6 +83,7 @@ const Home = () => {
     dispatch(handleGetNewsLetter({ token, signal: AbortControllerRef }));
     dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllOrder({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllPromoCodes({ token, signal: AbortControllerRef }));
   };
 
   useEffect(() => {

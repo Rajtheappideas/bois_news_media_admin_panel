@@ -12,6 +12,7 @@ import SubscriptionSlice from "./SubscriptionSlice";
 import ThirdPartyPayerSlice from "./ThirdPartyPayerSlice";
 import GlobalStates from "./GlobalStates";
 import TaxAndShippingSlice from "./TaxAndShippingSlice";
+import PromoCodeSlice from "./PromoCodeSlice";
 
 const rootPersistConfig = {
   key: "root",
@@ -27,6 +28,7 @@ const rootPersistConfig = {
     "thirdPartyPayers",
     "globalStates",
     "taxAndShipping",
+    "promoCode",
   ],
 };
 
@@ -42,6 +44,7 @@ const rootReducer = combineReducers({
   thirdPartyPayers: ThirdPartyPayerSlice,
   globalStates: GlobalStates,
   taxAndShipping: TaxAndShippingSlice,
+  promoCode: PromoCodeSlice,
 });
 
 const persisteRoot = persistReducer(rootPersistConfig, rootReducer);

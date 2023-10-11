@@ -70,6 +70,13 @@ const OrderSlice = createSlice({
         state.singleOrder = null;
       }
     },
+    handleChangeOrderStatus: (state, { payload }) => {
+      state.orders = state.orders.map((order) =>
+        order?._id === payload?.id
+          ? { ...order, status: payload?.status }
+          : order
+      );
+    },
   },
   extraReducers: (builder) => {
     // get all payers
@@ -99,9 +106,6 @@ const OrderSlice = createSlice({
     builder.addCase(handleUpdateOrderStatus.fulfilled, (state, { payload }) => {
       state.updateLoading = false;
       state.success = true;
-      state.orders = state.orders.map((order) => {
-        return order?._id === payload?._id ? payload : order;
-      });
       state.error = null;
     });
     builder.addCase(handleUpdateOrderStatus.rejected, (state, { payload }) => {
@@ -112,7 +116,10 @@ const OrderSlice = createSlice({
   },
 });
 
-export const { handleFindSingleOrder, handlerFilterOrders } =
-  OrderSlice.actions;
+export const {
+  handleFindSingleOrder,
+  handlerFilterOrders,
+  handleChangeOrderStatus,
+} = OrderSlice.actions;
 
 export default OrderSlice.reducer;
