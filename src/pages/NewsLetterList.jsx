@@ -12,7 +12,7 @@ const NewsLetterList = () => {
   const [pageNumber, setPageNumber] = useState(0);
 
   const { newsLetters, newsLetterLoading, fileterdData } = useSelector(
-    (state) => state.root.globalStates,
+    (state) => state.root.globalStates
   );
 
   const dispatch = useDispatch();
@@ -43,19 +43,6 @@ const NewsLetterList = () => {
       <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
         <div className="lg:w-1/3 md:w-1/2 w-full">
           <Search data={newsLetters} />
-        </div>
-        <div>
-          <select
-            name="filter"
-            onChange={(e) => {
-              dispatch(handlerFilterNewsLetters(e.target.value));
-            }}
-            id="filter"
-            className="filter_dropdown outline-none"
-          >
-            <option value="newest">{t("newest")}</option>
-            <option value="oldest">{t("oldest")}</option>
-          </select>
         </div>
       </div>
       {/* table */}

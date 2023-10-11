@@ -31,6 +31,7 @@ const Partners = () => {
     addNewPartnerLoading,
     deletePartnerLoading,
     deletePartnerID,
+    filterType,
   } = useSelector((state) => state.root.partners);
 
   const { token, role } = useSelector((state) => state.root.auth);
@@ -65,7 +66,7 @@ const Partners = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePARTNER({ id, token, signal: AbortControllerRef }),
+        handleDeletePARTNER({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -113,6 +114,7 @@ const Partners = () => {
                   dispatch(handlerFilterPartners(e.target.value))
                 }
                 id="filter"
+                value={filterType}
                 className="filter_dropdown"
               >
                 <option value="newest">{t("newest")}</option>

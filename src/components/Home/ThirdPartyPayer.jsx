@@ -31,6 +31,7 @@ const ThirdPartyPayer = () => {
     addNewPayerLoading,
     deletePayerLoading,
     deletePayerID,
+    filterType,
   } = useSelector((state) => state.root.thirdPartyPayers);
 
   const { token, role } = useSelector((state) => state.root.auth);
@@ -65,7 +66,7 @@ const ThirdPartyPayer = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePAYER({ id, token, signal: AbortControllerRef }),
+        handleDeletePAYER({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -111,6 +112,7 @@ const ThirdPartyPayer = () => {
                 name="filter"
                 id="filter"
                 onChange={(e) => dispatch(handlerFilterPayers(e.target.value))}
+                value={filterType}
                 className="filter_dropdown"
               >
                 <option value="newest">{t("newest")}</option>

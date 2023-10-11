@@ -1,30 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Search from "../Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
-import { BiPrinter } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import OrderDetails from "../Orders/OrderDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { handleFindSingleOrder } from "../../redux/OrderSlice";
+import {
+  handleFindSingleOrder,
+  handleUpdateOrderStatus,
+  handlerFilterOrders,
+} from "../../redux/OrderSlice";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
+import toast from "react-hot-toast";
 
 const Orders = () => {
   const [showOrderDetails, setshowOrderDetails] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
 
-  const {
-    orders,
-    loading,
-    addNewOrderLoading,
-    deleteOrderLoading,
-    deleteOrderID,
-  } = useSelector((state) => state.root.orders);
+  const { orders, loading, updateLoading, filterType } = useSelector(
+    (state) => state.root.orders
+  );
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData } = useSelector((state) => state.root.globalStates);
 
   const dispatch = useDispatch();
+
+  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
+
   const { t } = useTranslation();
 
   // pagination logic
@@ -45,6 +49,26 @@ const Orders = () => {
     setPageNumber(selected);
   };
 
+  const hanldeChangeOrderStatus = (id, status) => {
+    if (updateLoading) return;
+    toast.loading("Updating Status...");
+    const response = dispatch(
+      handleUpdateOrderStatus({ status, id, token, signal: AbortControllerRef })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.status === "success") {
+          toast.remove();
+          toast.success("status updated.");
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    return () => abortApiCall();
+  }, []);
+
   return (
     <>
       {showOrderDetails ? (
@@ -57,7 +81,13 @@ const Orders = () => {
               <Search data={orders} />
             </div>
             <div>
-              <select name="filter" id="filter" className="filter_dropdown">
+              <select
+                onChange={(e) => dispatch(handlerFilterOrders(e.target.value))}
+                name="filter"
+                id="filter"
+                className="filter_dropdown"
+                value={filterType}
+              >
                 <option value="newest">{t("newest")}</option>
                 <option value="oldest">{t("oldest")}</option>
               </select>
@@ -69,7 +99,7 @@ const Orders = () => {
               <thead className="w-full border-b border-gray-100 text-left">
                 <tr>
                   <th className="p-4 whitespace-nowrap">
-                    <span>Invoice no</span>
+                    <span>Invoice Id</span>
                   </th>
                   <th className="p-4">{t("Order date & time")}</th>
                   <th className="p-4">{t("Customer name")}</th>
@@ -108,11 +138,15 @@ const Orders = () => {
                         <select
                           name="status"
                           className="border border-gray-200 rounded-md p-1 font-medium"
+                          value={order?.status}
+                          onChange={(e) => {
+                            hanldeChangeOrderStatus(order?._id, e.target.value);
+                          }}
                         >
-                          <option value="on_hold">On hold</option>
-                          <option value="order_received">Order received</option>
-                          <option value="order_accepted">Order accepted</option>
-                          <option value="delivered">Delivered</option>
+                          <option value="On Hold">On hold</option>
+                          <option value="Order Received">Order received</option>
+                          <option value="Order Accepted">Order accepted</option>
+                          <option value="Delivered">Delivered</option>
                         </select>
                       </td>
                       <td className="flex items-center justify-start p-4">

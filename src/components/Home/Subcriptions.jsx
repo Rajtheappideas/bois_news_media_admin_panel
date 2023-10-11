@@ -11,6 +11,7 @@ import {
   handleDeleteSubscription,
   handleDeletesUBSCRIPTION,
   handleFindSubscription,
+  handlerFilterSubscription,
 } from "../../redux/SubscriptionSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
@@ -31,6 +32,7 @@ const Subcriptions = () => {
     addNewSubscriptionLoading,
     deleteSubscriptionLoading,
     deleteSubscriptionID,
+    filterType,
   } = useSelector((state) => state.root.subscriptions);
 
   const { token, role } = useSelector((state) => state.root.auth);
@@ -65,7 +67,7 @@ const Subcriptions = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletesUBSCRIPTION({ id, token, signal: AbortControllerRef }),
+        handleDeletesUBSCRIPTION({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -119,7 +121,15 @@ const Subcriptions = () => {
                 <Search data={subscriptions} />
               </div>
               <div>
-                <select name="filter" id="filter" className="filter_dropdown">
+                <select
+                  name="filter"
+                  value={filterType}
+                  id="filter"
+                  className="filter_dropdown"
+                  onChange={(e) =>
+                    dispatch(handlerFilterSubscription(e.target.value))
+                  }
+                >
                   <option value="newest">{t("newest")}</option>
                   <option value="oldest">{t("oldest")}</option>
                 </select>
@@ -189,7 +199,7 @@ const Subcriptions = () => {
                               onClick={() => {
                                 setShowEditSubscription(true);
                                 dispatch(
-                                  handleFindSubscription(subscription?._id),
+                                  handleFindSubscription(subscription?._id)
                                 );
                               }}
                               disabled={deleteSubscriptionLoading || loading}
@@ -207,7 +217,7 @@ const Subcriptions = () => {
                               onClick={() => {
                                 setShowSubscriptionDetails(true);
                                 dispatch(
-                                  handleFindSubscription(subscription?._id),
+                                  handleFindSubscription(subscription?._id)
                                 );
                               }}
                               disabled={deleteSubscriptionLoading || loading}
@@ -229,7 +239,7 @@ const Subcriptions = () => {
                               onClick={() =>
                                 handleDeletesubscription(
                                   subscription?._id,
-                                  subscription?.title,
+                                  subscription?.title
                                 )
                               }
                               disabled={

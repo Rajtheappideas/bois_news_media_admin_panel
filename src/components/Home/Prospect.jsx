@@ -31,6 +31,7 @@ const Prospect = () => {
     addNewProspectLoading,
     deleteProspectLoading,
     deleteProspectID,
+    filterType,
   } = useSelector((state) => state.root.prospects);
 
   const { token, role } = useSelector((state) => state.root.auth);
@@ -65,7 +66,7 @@ const Prospect = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePROSPECT({ id, token, signal: AbortControllerRef }),
+        handleDeletePROSPECT({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -123,6 +124,7 @@ const Prospect = () => {
                   }}
                   name="filter"
                   id="filter"
+                  value={filterType}
                   className="filter_dropdown"
                 >
                   <option value="newest">{t("newest")}</option>
@@ -232,7 +234,7 @@ const Prospect = () => {
                               onClick={() =>
                                 handleDeleteprospect(
                                   prospect?._id,
-                                  prospect?.name,
+                                  prospect?.name
                                 )
                               }
                               disabled={

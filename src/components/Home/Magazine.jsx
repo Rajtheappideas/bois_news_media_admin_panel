@@ -35,6 +35,7 @@ const Magazine = () => {
     addNewMagazineLoading,
     deleteMagazineLoading,
     deleteMagazineID,
+    filterType,
   } = useSelector((state) => state.root.magazines);
 
   const { token, role } = useSelector((state) => state.root.auth);
@@ -71,7 +72,7 @@ const Magazine = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef }),
+        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -132,6 +133,7 @@ const Magazine = () => {
                 onChange={(e) =>
                   dispatch(handlerFilterMagazine(e.target.value))
                 }
+                value={filterType}
                 id="filter"
                 className="filter_dropdown"
               >
@@ -330,7 +332,7 @@ const Magazine = () => {
                             onClick={() =>
                               handleDeletemagazine(
                                 magazine?._id,
-                                magazine?.title,
+                                magazine?.title
                               )
                             }
                             disabled={

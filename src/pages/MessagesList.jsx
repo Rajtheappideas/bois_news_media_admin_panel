@@ -16,7 +16,7 @@ const MessagesList = () => {
   const [singleMessage, setSingleMessage] = useState(null);
 
   const { messages, messageLoading, fileterdData } = useSelector(
-    (state) => state.root.globalStates,
+    (state) => state.root.globalStates
   );
 
   const dispatch = useDispatch();
@@ -61,19 +61,6 @@ const MessagesList = () => {
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
             <div className="lg:w-1/3 md:w-1/2 w-full">
               <Search data={messages} />
-            </div>
-            <div>
-              <select
-                name="filter"
-                onChange={(e) => {
-                  dispatch(handlerFilterMessages(e.target.value));
-                }}
-                id="filter"
-                className="filter_dropdown outline-none"
-              >
-                <option value="newest">{t("newest")}</option>
-                <option value="oldest">{t("oldest")}</option>
-              </select>
             </div>
           </div>
           {/* table */}

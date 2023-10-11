@@ -27,8 +27,14 @@ const Users = () => {
   const [editUserId, setEditUserId] = useState(null);
   const [showUserDetailsOnly, setShowUserDetailsOnly] = useState(false);
 
-  const { users, loading, addNewUserLoading, deleteUserLoading, deleteUserID } =
-    useSelector((state) => state.root.users);
+  const {
+    users,
+    loading,
+    addNewUserLoading,
+    deleteUserLoading,
+    deleteUserID,
+    filterType,
+  } = useSelector((state) => state.root.users);
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData } = useSelector((state) => state.root.globalStates);
 
@@ -61,7 +67,7 @@ const Users = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteUSER({ id, token, signal: AbortControllerRef }),
+        handleDeleteUSER({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -112,6 +118,7 @@ const Users = () => {
                 onChange={(e) => {
                   dispatch(handlerFilterUsers(e.target.value));
                 }}
+                value={filterType}
                 id="filter"
                 className="filter_dropdown outline-none"
               >
