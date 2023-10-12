@@ -83,7 +83,7 @@ const EditSubscriberDetails = ({
       .required(t("FirstName is required"))
       .trim()
       .max(60, t("Max character limit reached"))
-      .min(3, t("minimum three character required"))
+      .min(1, t("minimum three character required"))
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
@@ -94,7 +94,7 @@ const EditSubscriberDetails = ({
       .required(t("LastName is required"))
       .trim()
       .max(60, t("Max character limit reached"))
-      .min(3, t("minimum three character required"))
+      .min(1, t("minimum three character required"))
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,

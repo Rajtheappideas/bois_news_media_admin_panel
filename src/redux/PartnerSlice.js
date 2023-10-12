@@ -18,14 +18,15 @@ export const handleGetAllPartners = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleAddNewPartner = createAsyncThunk(
   "partner/handleAddNewPartner",
   async (
     {
-      name,
+      fname,
+      lname,
       industry,
       website,
       email,
@@ -41,13 +42,14 @@ export const handleAddNewPartner = createAsyncThunk(
       token,
       signal,
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       signal.current = new AbortController();
       const response = await PostUrl("partner", {
         data: {
-          name,
+          fname,
+          lname,
           industry,
           website,
           email,
@@ -74,14 +76,15 @@ export const handleAddNewPartner = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleEditPartner = createAsyncThunk(
   "partner/handleEditPartner",
   async (
     {
-      name,
+      fname,
+      lname,
       industry,
       website,
       email,
@@ -98,13 +101,14 @@ export const handleEditPartner = createAsyncThunk(
       token,
       signal,
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       signal.current = new AbortController();
       const response = await PostUrl(`partner/${id}`, {
         data: {
-          name,
+          fname,
+          lname,
           industry,
           website,
           email,
@@ -131,7 +135,7 @@ export const handleEditPartner = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleDeletePARTNER = createAsyncThunk(
@@ -150,7 +154,7 @@ export const handleDeletePARTNER = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -177,7 +181,7 @@ const PartnerSlice = createSlice({
     handleFindPartner: (state, { payload }) => {
       if (payload !== "") {
         const findPartner = state.partners.find(
-          (partner) => partner?._id === payload
+          (partner) => partner?._id === payload,
         );
         if (findPartner) {
           state.singlePartner = findPartner;
@@ -188,7 +192,7 @@ const PartnerSlice = createSlice({
     },
     handleDeletePartner: (state, { payload }) => {
       const findPartner = state.partners.filter(
-        (partner) => partner?._id !== payload
+        (partner) => partner?._id !== payload,
       );
       if (findPartner) {
         state.partners = findPartner;
@@ -245,7 +249,7 @@ const PartnerSlice = createSlice({
       state.success = true;
       state.error = null;
       state.partners = state.partners.map((partner) =>
-        partner?._id === payload?.partner?._id ? payload?.partner : partner
+        partner?._id === payload?.partner?._id ? payload?.partner : partner,
       );
     });
     builder.addCase(handleEditPartner.rejected, (state, { payload }) => {

@@ -45,16 +45,27 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
 
   const EditProspectSchema = yup.object(
     {
-      name: yup
+      fname: yup
         .string()
-        .required(t("Name is required"))
+        .required(t("first Name is required"))
         .trim()
         .max(60, t("Max character limit reached"))
-        .min(3, t("minimum three character required"))
+        .min(1, t("minimum three character required"))
         .typeError(t("Only characters allowed"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("Name can only contain Latin letters.")
+          t("Name can only contain Latin letters."),
+        ),
+      lname: yup
+        .string()
+        .required(t("last Name is required"))
+        .trim()
+        .max(60, t("Max character limit reached"))
+        .min(1, t("minimum three character required"))
+        .typeError(t("Only characters allowed"))
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          t("Name can only contain Latin letters."),
         ),
       baddress: yup
         .string()
@@ -72,7 +83,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
         .max(40, t("Maximum character limit reached"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("city can only contain Latin letters.")
+          t("city can only contain Latin letters."),
         )
         .required(t("city is required"))
         .trim(""),
@@ -80,7 +91,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
         .string()
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("country can only contain Latin letters.")
+          t("country can only contain Latin letters."),
         )
         .required(t("country is required"))
         .trim(""),
@@ -96,7 +107,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
       industry: yup.string().required(t("industry is required.")),
       website: yup.string(),
     },
-    [["website", "website"]]
+    [["website", "website"]],
   );
 
   const {
@@ -130,7 +141,8 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
 
   const onSubmit = (data) => {
     const {
-      name,
+      fname,
+      lname,
       industry,
       website,
       email,
@@ -158,7 +170,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
     } else if (
       website !== "" &&
       !/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_-]+=[a-zA-Z0-9-%-_]+&?)?$/.test(
-        website
+        website,
       )
     ) {
       toast.error(t("Enter Valid URL!!!"));
@@ -166,7 +178,8 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
     }
     const response = dispatch(
       handleEditProspect({
-        name,
+        fname,
+        lname,
         industry,
         website,
         email,
@@ -182,7 +195,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
         id: _id,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
 
     if (response) {
@@ -210,7 +223,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePROSPECT({ id, token, signal: AbortControllerRef })
+        handleDeletePROSPECT({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -283,17 +296,31 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
-          <div className="w-full space-y-2">
-            <label htmlFor="name" className="Label">
-              {t("Name")}
-            </label>
-            <input
-              type="text"
-              placeholder={t("Type here...")}
-              className="input_field"
-              {...register("name")}
-            />
-            <span className="error">{errors?.name?.message}</span>
+          <div className="w-full flex items-center gap-2">
+            <div className="w-1/2">
+              <label htmlFor="fname" className="Label">
+                {t("first Name")}
+              </label>
+              <input
+                type="text"
+                placeholder={t("Type here...")}
+                className="input_field"
+                {...register("fname")}
+              />
+              <span className="error">{errors?.fname?.message}</span>
+            </div>
+            <div className="w-1/2">
+              <label htmlFor="lname" className="Label">
+                {t("last Name")}
+              </label>
+              <input
+                type="text"
+                placeholder={t("Type here...")}
+                className="input_field"
+                {...register("lname")}
+              />
+              <span className="error">{errors?.lname?.message}</span>
+            </div>
           </div>
           {/* industry */}
           <div className="w-full space-y-2">

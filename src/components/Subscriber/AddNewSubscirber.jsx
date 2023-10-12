@@ -21,7 +21,7 @@ const AddNewSubscirber = ({
   setShowMagazineDistrutionPopup,
 }) => {
   const { addNewSubscriberLoading } = useSelector(
-    (state) => state.root.subscribers
+    (state) => state.root.subscribers,
   );
   const { payers } = useSelector((state) => state.root.thirdPartyPayers);
 
@@ -39,22 +39,22 @@ const AddNewSubscirber = ({
       .required(t("FirstName is required"))
       .trim()
       .max(60, t("Max character limit reached"))
-      .min(3, t("minimum three character required"))
+      .min(1, t("minimum three character required"))
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("FirstName can only contain Latin letters.")
+        t("FirstName can only contain Latin letters."),
       ),
     lname: yup
       .string()
       .required(t("LastName is required"))
       .trim()
       .max(60, t("Max character limit reached"))
-      .min(3, t("minimum three character required"))
+      .min(1, t("minimum three character required"))
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("LastName can only contain Latin letters.")
+        t("LastName can only contain Latin letters."),
       ),
     civility: yup
       .string()
@@ -65,7 +65,7 @@ const AddNewSubscirber = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Civility can only contain Latin letters.")
+        t("Civility can only contain Latin letters."),
       ),
     title: yup.string().trim().max(60, t("Max character limit reached")),
     email: yup.string().email().required(t("email is required.")).trim(),
@@ -96,7 +96,7 @@ const AddNewSubscirber = ({
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .required(t("city is required"))
       .trim(""),
@@ -104,14 +104,14 @@ const AddNewSubscirber = ({
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters.")
+        t("province can only contain Latin letters."),
       )
       .trim(""),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .required(t("country is required"))
       .trim(""),
@@ -133,21 +133,21 @@ const AddNewSubscirber = ({
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .trim(""),
     bprovince: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters.")
+        t("province can only contain Latin letters."),
       )
       .trim(""),
     bcountry: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .trim(""),
 
@@ -159,7 +159,7 @@ const AddNewSubscirber = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("accountContactName can only contain Latin letters.")
+        t("accountContactName can only contain Latin letters."),
       ),
     accountingEmail: yup.string().email(),
     accountingPhone: yup.string(),
@@ -277,14 +277,14 @@ const AddNewSubscirber = ({
         clientCode,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(
             t(` ${fname.concat(lname)} ${t("subscriber added successfully.")}`),
-            { duration: 2000 }
+            { duration: 2000 },
           );
           setShowAddNewSubscriber(false);
         } else if (res?.payload?.status === "error") {

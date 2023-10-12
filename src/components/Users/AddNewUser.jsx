@@ -35,11 +35,11 @@ const AddNewUser = ({ setShowAddNewUser }) => {
       .required(t("Name is required"))
       .trim()
       .max(60, t("Max character limit reached"))
-      .min(3, t("minimum three character required"))
+      .min(1, t("minimum three character required"))
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Name can only contain Latin letters.")
+        t("Name can only contain Latin letters."),
       ),
     address: yup
       .string()
@@ -57,7 +57,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .required(t("city is required"))
       .trim(""),
@@ -65,7 +65,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .required(t("country is required"))
       .trim(""),
@@ -131,7 +131,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
         country,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {

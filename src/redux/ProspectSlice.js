@@ -18,14 +18,15 @@ export const handleGetAllProspects = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleAddNewProspect = createAsyncThunk(
   "prospect/handleAddNewProspect",
   async (
     {
-      name,
+      fname,
+      lname,
       industry,
       website,
       email,
@@ -41,13 +42,14 @@ export const handleAddNewProspect = createAsyncThunk(
       token,
       signal,
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       signal.current = new AbortController();
       const response = await PostUrl("prospect", {
         data: {
-          name,
+          fname,
+          lname,
           industry,
           website,
           email,
@@ -74,14 +76,15 @@ export const handleAddNewProspect = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleEditProspect = createAsyncThunk(
   "prospect/handleEditProspect",
   async (
     {
-      name,
+      fname,
+      lname,
       industry,
       website,
       email,
@@ -98,13 +101,14 @@ export const handleEditProspect = createAsyncThunk(
       token,
       signal,
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       signal.current = new AbortController();
       const response = await PostUrl(`prospect/${id}`, {
         data: {
-          name,
+          fname,
+          lname,
           industry,
           website,
           email,
@@ -131,7 +135,7 @@ export const handleEditProspect = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleDeletePROSPECT = createAsyncThunk(
@@ -150,7 +154,7 @@ export const handleDeletePROSPECT = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -177,7 +181,7 @@ const ProspectSlice = createSlice({
     handleFindProspect: (state, { payload }) => {
       if (payload !== "") {
         const findProspect = state.prospects.find(
-          (prospect) => prospect?._id === payload
+          (prospect) => prospect?._id === payload,
         );
         if (findProspect) {
           state.singleProspect = findProspect;
@@ -188,7 +192,7 @@ const ProspectSlice = createSlice({
     },
     handleDeleteProspect: (state, { payload }) => {
       const findProspect = state.prospects.filter(
-        (prospect) => prospect?._id !== payload
+        (prospect) => prospect?._id !== payload,
       );
       if (findProspect) {
         state.prospects = findProspect;
@@ -245,7 +249,7 @@ const ProspectSlice = createSlice({
       state.success = true;
       state.error = null;
       state.prospects = state.prospects.map((prospect) =>
-        prospect?._id === payload?.prospect?._id ? payload?.prospect : prospect
+        prospect?._id === payload?.prospect?._id ? payload?.prospect : prospect,
       );
     });
     builder.addCase(handleEditProspect.rejected, (state, { payload }) => {

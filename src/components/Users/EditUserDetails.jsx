@@ -23,7 +23,7 @@ import { useTranslation } from "react-i18next";
 
 const EditUserDetails = ({ setShowUserDetail }) => {
   const { singleUser, EditUserLoading, deleteUserLoading } = useSelector(
-    (state) => state.root.users
+    (state) => state.root.users,
   );
   const { token, role: userRole } = useSelector((state) => state.root.auth);
 
@@ -55,11 +55,11 @@ const EditUserDetails = ({ setShowUserDetail }) => {
       .required(t("Name is required"))
       .trim()
       .max(60, t("Max character limit reached"))
-      .min(3, t("minimum three character required"))
+      .min(1, t("minimum three character required"))
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Name can only contain Latin letters.")
+        t("Name can only contain Latin letters."),
       ),
     address: yup
       .string()
@@ -77,7 +77,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .required(t("city is required"))
       .trim(""),
@@ -85,7 +85,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .required(t("country is required"))
       .trim(""),
@@ -149,7 +149,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
         id: singleUser?._id,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -177,7 +177,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
-        handleDeleteUSER({ id, token, signal: AbortControllerRef })
+        handleDeleteUSER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -201,7 +201,9 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     >
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
-        <p className="font-semibold text-left lg:text-xl text-lg">{t("Edit User")}</p>
+        <p className="font-semibold text-left lg:text-xl text-lg">
+          {t("Edit User")}
+        </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
             className={`gray_button  ${
@@ -277,7 +279,9 @@ const EditUserDetails = ({ setShowUserDetail }) => {
         <span className="error">
           {profileImage === null && errors?.profile?.message}
         </span>
-        <p className="font-bold text-black md:text-xl">{t("personal details")}</p>
+        <p className="font-bold text-black md:text-xl">
+          {t("personal details")}
+        </p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
