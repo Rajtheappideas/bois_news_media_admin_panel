@@ -39,7 +39,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Name can only contain Latin letters."),
+        t("Name can only contain Latin letters.")
       ),
     address: yup
       .string()
@@ -57,18 +57,16 @@ const AddNewUser = ({ setShowAddNewUser }) => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters."),
+        t("city can only contain Latin letters.")
       )
-      .required(t("city is required"))
-      .trim(""),
+      .required(t("city is required")),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters."),
+        t("country can only contain Latin letters.")
       )
-      .required(t("country is required"))
-      .trim(""),
+      .required(t("country is required")),
     phone: yup.string().required(t("phone is required")),
     role: yup.string().required(t("role is required.")),
     profile: yup
@@ -131,7 +129,7 @@ const AddNewUser = ({ setShowAddNewUser }) => {
         country,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {

@@ -44,51 +44,47 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
 
   const editPayerSchema = yup.object({
     accountName: yup
-      .string()
-      .required(t("Name is required"))
-      .trim()
-      .max(60, t("Max character limit reached"))
-      .min(3, t("minimum three character required"))
-      .typeError(t("Only characters allowed"))
-      .matches(
-        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Name can only contain Latin letters."),
-      ),
-    companyAddress: yup
-      .string()
-      .max(200, t("Maximum character limit reached"))
-      .required(t("address is required"))
-      .trim(""),
-    zipCode: yup
-      .string()
-      .max(6, t("max 6 number allowed"))
-      .min(5, t("min 5 number required"))
-      .required(t("zipcode is required"))
-      .trim(""),
-    city: yup
-      .string()
-      .max(40, t("Maximum character limit reached"))
-      .matches(
-        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters."),
-      )
-      .required(t("city is required"))
-      .trim(""),
-    country: yup
-      .string()
-      .matches(
-        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters."),
-      )
-      .required(t("country is required"))
-      .trim(""),
-    accountNumber: yup
-      .string()
-      .required(t("office Number is required"))
-      .max(15, t("maximum 15 numbers!!!")),
-    mobile: yup.string().required(t("mobile is required")),
-    email: yup.string().email().required(t("email is required.")).trim(),
-    status: yup.string().required(t("status is required.")).trim(),
+    .string()
+    .required(t("Name is required"))
+    .max(60, t("Max character limit reached"))
+    .min(1, t("minimum three character required"))
+    .typeError(t("Only characters allowed"))
+    .matches(
+      /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+      t("Name can only contain Latin letters.")
+    ),
+  companyAddress: yup
+    .string()
+    .max(200, t("Maximum character limit reached"))
+    .required(t("address is required")),
+  zipCode: yup
+    .string()
+    .max(6, t("max 6 number allowed"))
+    .min(5, t("min 5 number required"))
+    .required(t("zipcode is required"))
+    .trim(""),
+  city: yup
+    .string()
+    .max(40, t("Maximum character limit reached"))
+    .matches(
+      /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+      t("city can only contain Latin letters.")
+    )
+    .required(t("city is required")),
+  country: yup
+    .string()
+    .matches(
+      /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+      t("country can only contain Latin letters.")
+    )
+    .required(t("country is required")),
+  accountNumber: yup
+    .string()
+    .required(t("office Number is required"))
+    .max(15, t("maximum 15 numbers!!!")),
+  mobile: yup.string().required(t("mobile is required")),
+  email: yup.string().email().required(t("email is required.")).trim(),
+  status: yup.string().required(t("status is required.")),
   });
 
   const {

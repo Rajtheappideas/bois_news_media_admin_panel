@@ -18,7 +18,7 @@ export const handleGetAllProspects = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 export const handleAddNewProspect = createAsyncThunk(
@@ -32,17 +32,19 @@ export const handleAddNewProspect = createAsyncThunk(
       email,
       mobile,
       officeNumber,
-      contactName,
-      bemail,
-      bphone,
-      baddress,
-      bcity,
-      bcountry,
-      bzipCode,
+      city,
+      country,
+      company,
+      civility,
+      province,
+      zipCode,
+      address1,
+      address2,
+      address3,
       token,
       signal,
     },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       signal.current = new AbortController();
@@ -55,14 +57,16 @@ export const handleAddNewProspect = createAsyncThunk(
           email,
           mobile,
           officeNumber,
-          billingAddress: {
-            contactName,
-            email: bemail,
-            phone: bphone,
-            address: baddress,
-            city: bcity,
-            country: bcountry,
-            zipCode: bzipCode,
+          civility,
+          company,
+          shippingAddress: {
+            address1,
+            address2,
+            address3,
+            city,
+            country,
+            zipCode,
+            province,
           },
         },
         signal: signal.current.signal,
@@ -76,7 +80,7 @@ export const handleAddNewProspect = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 export const handleEditProspect = createAsyncThunk(
@@ -90,18 +94,20 @@ export const handleEditProspect = createAsyncThunk(
       email,
       mobile,
       officeNumber,
-      contactName,
-      bemail,
-      bphone,
-      baddress,
-      bcity,
-      bcountry,
-      bzipCode,
+      city,
+      country,
+      company,
+      civility,
+      province,
+      zipCode,
+      address1,
+      address2,
+      address3,
       id,
       token,
       signal,
     },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       signal.current = new AbortController();
@@ -114,14 +120,16 @@ export const handleEditProspect = createAsyncThunk(
           email,
           mobile,
           officeNumber,
-          billingAddress: {
-            contactName,
-            email: bemail,
-            phone: bphone,
-            address: baddress,
-            city: bcity,
-            country: bcountry,
-            zipCode: bzipCode,
+          company,
+          civility,
+          shippingAddress: {
+            province,
+            zipCode,
+            address1,
+            address2,
+            address3,
+            city,
+            country,
           },
         },
         signal: signal.current.signal,
@@ -135,7 +143,7 @@ export const handleEditProspect = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 export const handleDeletePROSPECT = createAsyncThunk(
@@ -154,7 +162,7 @@ export const handleDeletePROSPECT = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 const initialState = {
@@ -181,7 +189,7 @@ const ProspectSlice = createSlice({
     handleFindProspect: (state, { payload }) => {
       if (payload !== "") {
         const findProspect = state.prospects.find(
-          (prospect) => prospect?._id === payload,
+          (prospect) => prospect?._id === payload
         );
         if (findProspect) {
           state.singleProspect = findProspect;
@@ -192,7 +200,7 @@ const ProspectSlice = createSlice({
     },
     handleDeleteProspect: (state, { payload }) => {
       const findProspect = state.prospects.filter(
-        (prospect) => prospect?._id !== payload,
+        (prospect) => prospect?._id !== payload
       );
       if (findProspect) {
         state.prospects = findProspect;
@@ -249,7 +257,7 @@ const ProspectSlice = createSlice({
       state.success = true;
       state.error = null;
       state.prospects = state.prospects.map((prospect) =>
-        prospect?._id === payload?.prospect?._id ? payload?.prospect : prospect,
+        prospect?._id === payload?.prospect?._id ? payload?.prospect : prospect
       );
     });
     builder.addCase(handleEditProspect.rejected, (state, { payload }) => {

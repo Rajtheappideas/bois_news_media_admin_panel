@@ -161,16 +161,9 @@ const Partners = () => {
                       className="border-b last:border-none border-gray-200 w-full text-left pl-10 select-none"
                     >
                       <td className="pl-10 whitespace-nowrap">
-                        {/* <input
-                          type="checkbox"
-                          id={partner?._id}
-                          className="rounded-lg inline-block mr-2 w-4 h-4"
-                        /> */}
-                        <label htmlFor={partner?._id}>
-                          <span className="font-bold text-center cursor-pointer">
-                            {partner?.name}
-                          </span>
-                        </label>
+                        <span className="font-bold text-center cursor-pointer">
+                          {partner?.fname} {partner?.lname}
+                        </span>
                       </td>
                       <td className="text-left p-4 whitespace-nowrap">
                         {partner?.email}
@@ -180,8 +173,8 @@ const Partners = () => {
                       </td>
 
                       <td className="text-left p-4 whitespace-nowrap">
-                        {partner?.address?.city !== ""
-                          ? partner?.address?.city
+                        {partner?.shippingAddress?.city !== ""
+                          ? partner?.shippingAddress?.city
                           : "-"}
                       </td>
                       <td className="flex items-center justify-center p-4">

@@ -18,7 +18,7 @@ export const handleGetAllPartners = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 export const handleAddNewPartner = createAsyncThunk(
@@ -32,17 +32,19 @@ export const handleAddNewPartner = createAsyncThunk(
       email,
       mobile,
       officeNumber,
-      contactName,
-      aemail,
-      phone,
-      companyAddress,
       city,
       country,
+      company,
+      civility,
+      province,
       zipCode,
+      address1,
+      address2,
+      address3,
       token,
       signal,
     },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       signal.current = new AbortController();
@@ -55,14 +57,16 @@ export const handleAddNewPartner = createAsyncThunk(
           email,
           mobile,
           officeNumber,
-          address: {
-            contactName,
-            email: aemail,
-            phone,
-            companyAddress,
+          company,
+          civility,
+          shippingAddress: {
             city,
             country,
+            province,
             zipCode,
+            address1,
+            address2,
+            address3,
           },
         },
         signal: signal.current.signal,
@@ -76,7 +80,7 @@ export const handleAddNewPartner = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 export const handleEditPartner = createAsyncThunk(
@@ -90,18 +94,20 @@ export const handleEditPartner = createAsyncThunk(
       email,
       mobile,
       officeNumber,
-      contactName,
-      aemail,
-      phone,
-      companyAddress,
       city,
       country,
+      company,
+      civility,
+      province,
       zipCode,
+      address1,
+      address2,
+      address3,
       id,
       token,
       signal,
     },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       signal.current = new AbortController();
@@ -114,14 +120,16 @@ export const handleEditPartner = createAsyncThunk(
           email,
           mobile,
           officeNumber,
-          address: {
-            contactName,
-            email: aemail,
-            phone,
-            companyAddress,
+          company,
+          civility,
+          shippingAddress: {
             city,
             country,
+            province,
             zipCode,
+            address1,
+            address2,
+            address3,
           },
         },
         signal: signal.current.signal,
@@ -135,7 +143,7 @@ export const handleEditPartner = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 export const handleDeletePARTNER = createAsyncThunk(
@@ -154,7 +162,7 @@ export const handleDeletePARTNER = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 const initialState = {
@@ -181,7 +189,7 @@ const PartnerSlice = createSlice({
     handleFindPartner: (state, { payload }) => {
       if (payload !== "") {
         const findPartner = state.partners.find(
-          (partner) => partner?._id === payload,
+          (partner) => partner?._id === payload
         );
         if (findPartner) {
           state.singlePartner = findPartner;
@@ -192,7 +200,7 @@ const PartnerSlice = createSlice({
     },
     handleDeletePartner: (state, { payload }) => {
       const findPartner = state.partners.filter(
-        (partner) => partner?._id !== payload,
+        (partner) => partner?._id !== payload
       );
       if (findPartner) {
         state.partners = findPartner;
@@ -249,7 +257,7 @@ const PartnerSlice = createSlice({
       state.success = true;
       state.error = null;
       state.partners = state.partners.map((partner) =>
-        partner?._id === payload?.partner?._id ? payload?.partner : partner,
+        partner?._id === payload?.partner?._id ? payload?.partner : partner
       );
     });
     builder.addCase(handleEditPartner.rejected, (state, { payload }) => {

@@ -171,26 +171,19 @@ const Prospect = () => {
                         className="border-b last:border-none border-gray-200 w-full text-left pl-10 select-none"
                       >
                         <td className="pl-10 whitespace-nowrap">
-                          {/* <input
-                            type="checkbox"
-                            id={prospect?._id}
-                            className="rounded-lg inline-block mr-2 w-4 h-4"
-                          /> */}
-                          <label htmlFor={prospect?._id}>
-                            <span className="font-bold text-center cursor-pointer">
-                              {prospect?.billingAddress?.contactName}
-                            </span>
-                          </label>
+                          <span className="font-bold text-center cursor-pointer">
+                            {prospect?.fname} {prospect?.lname}
+                          </span>
                         </td>
                         <td className="text-left p-4 whitespace-nowrap">
                           {prospect?.email}
                         </td>
                         <td className="text-left p-4 whitespace-nowrap">
-                          {prospect?.name ?? "-"}
+                          {prospect?.mobile ?? "-"}
                         </td>
 
                         <td className="text-left p-4 whitespace-nowrap">
-                          {prospect?.billingAddress?.city ?? "-"}
+                          {prospect?.shippingAddress?.city ?? "-"}
                         </td>
                         <td className="flex items-center justify-center p-4">
                           {role === "admin" || role === "editor" ? (

@@ -149,7 +149,7 @@ const Magazine = () => {
             </div>
           </div>
           {/* table */}
-          <div className="shadow-sm outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
+          <div className="shadow-sm outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar h-auto">
             <table className="border-none outline-none w-full overflow-scroll">
               <thead className="w-full border-b border-gray-100 text-left">
                 <tr className="whitespace-nowrap">
@@ -279,7 +279,7 @@ const Magazine = () => {
                               <hr />
                               <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
-                                  href={BaseUrl.concat(magazine?.digital)}
+                                  href={BaseUrl.concat(magazine?.digitalSubscribers)}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
@@ -290,7 +290,7 @@ const Magazine = () => {
                               <hr />
                               <li className="hover:bg-gray-200 transition  break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
-                                  href={BaseUrl.concat(magazine?.paper)}
+                                  href={BaseUrl.concat(magazine?.paperSubscribers)}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
@@ -298,11 +298,11 @@ const Magazine = () => {
                                   Routing file (paper subscribers)
                                 </a>
                               </li>
-                              {/* <hr />
+                              <hr />
 
                               <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
-                                  href={BaseUrl.concat(magazine?.paper)}
+                                  href={BaseUrl.concat(magazine?.paperProspectsPartners)}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
@@ -314,14 +314,14 @@ const Magazine = () => {
 
                               <li className="hover:bg-gray-200 break-words  whitespace-normal transition duration-100 cursor-pointer p-1">
                                 <a
-                                  href={BaseUrl.concat(magazine?.paper)}
+                                  href={BaseUrl.concat(magazine?.digitalProspectsPartners)}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
                                 >
                                   Routing file (digital partners & prospects)
                                 </a>
-                              </li> */}
+                              </li>
                             </ul>
                           </p>
                         </div>

@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 
 const AddNewProspect = ({ setShowAddNewProspect }) => {
   const { addNewProspectLoading } = useSelector(
-    (state) => state.root.prospects,
+    (state) => state.root.prospects
   );
   const { token } = useSelector((state) => state.root.auth);
 
@@ -37,7 +37,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
         .typeError(t("Only characters allowed"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("Name can only contain Latin letters."),
+          t("Name can only contain Latin letters.")
         ),
       lname: yup
         .string()
@@ -48,49 +48,61 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
         .typeError(t("Only characters allowed"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("Name can only contain Latin letters."),
+          t("Name can only contain Latin letters.")
         ),
-      baddress: yup
+      company: yup
         .string()
         .max(200, t("Maximum character limit reached"))
-        .required(t("address is required"))
-        .trim(""),
-      bzipCode: yup
+        .required(t("company is required")),
+      civility: yup
+        .string()
+        .max(200, t("Maximum character limit reached"))
+        .required(t("civility is required")),
+      address1: yup
+        .string()
+        .max(200, t("Maximum character limit reached"))
+        .required(t("address is required")),
+      address2: yup.string().max(200, t("Maximum character limit reached")),
+      address3: yup.string().max(200, t("Maximum character limit reached")),
+      zipCode: yup
         .string()
         .max(6, t("max 6 number allowed"))
         .min(5, t("min 5 number required"))
         .required(t("zipcode is required"))
         .trim(""),
-      bcity: yup
+      city: yup
         .string()
         .max(40, t("Maximum character limit reached"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("city can only contain Latin letters."),
+          t("city can only contain Latin letters.")
         )
-        .required(t("city is required"))
-        .trim(""),
-      bcountry: yup
+        .required(t("city is required")),
+      province: yup
+        .string()
+        .max(40, t("Maximum character limit reached"))
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          t("province can only contain Latin letters.")
+        )
+        .required(t("province is required")),
+      country: yup
         .string()
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("country can only contain Latin letters."),
+          t("country can only contain Latin letters.")
         )
-        .required(t("country is required"))
-        .trim(""),
+        .required(t("country is required")),
       officeNumber: yup
         .string()
         .required(t("office Number is required"))
         .max(15, t("maximum 15 numbers!!!")),
       mobile: yup.string().required(t("mobile is required")),
-      bphone: yup.string().required(t("phone is required")),
       email: yup.string().email().required(t("email is required.")).trim(),
-      bemail: yup.string().email().required(t("email is required.")).trim(),
-      contactName: yup.string().required(t("contact name is required.")),
       industry: yup.string().required(t("industry is required.")),
       website: yup.string(),
     },
-    [["website", "website"]],
+    [["website", "website"]]
   );
 
   const {
@@ -117,32 +129,31 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
       email,
       mobile,
       officeNumber,
-      contactName,
-      bemail,
-      bphone,
-      baddress,
-      bcity,
-      bcountry,
-      bzipCode,
+      city,
+      country,
+      company,
+      civility,
+      province,
+      zipCode,
+      address1,
+      address2,
+      address3,
     } = data;
-    if (!isPossiblePhoneNumber(bphone) || !isValidPhoneNumber(bphone)) {
-      toast.remove();
-      toast.error(t("Phone is invalid"));
-      return true;
-    } else if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
+    if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
       toast.remove();
       toast.error(t("mobile phone is invalid"));
       return true;
     } else if (
       website !== "" &&
       !/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_-]+=[a-zA-Z0-9-%-_]+&?)?$/.test(
-        website,
+        website
       )
     ) {
       toast.remove();
       toast.error(t("Enter Valid URL!!!"));
       return true;
     }
+
     const response = dispatch(
       handleAddNewProspect({
         fname,
@@ -152,21 +163,23 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
         email,
         mobile,
         officeNumber,
-        contactName,
-        bemail,
-        bphone,
-        baddress,
-        bcity,
-        bcountry,
-        bzipCode,
+        city,
+        civility,
+        company,
+        country,
+        province,
+        zipCode,
+        address1,
+        address2,
+        address3,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(`${name} ${t("prospect added Successfully")}`, {
+          toast.success(`${t("prospect added Successfully")}`, {
             duration: 2000,
           });
           setShowAddNewProspect(false);
@@ -216,31 +229,29 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
-          <div className="w-full flex items-center gap-2">
-            <div className="w-1/2">
-              <label htmlFor="fname" className="Label">
-                {t("first Name")}
-              </label>
-              <input
-                type="text"
-                placeholder={t("Type here...")}
-                className="input_field"
-                {...register("fname")}
-              />
-              <span className="error">{errors?.fname?.message}</span>
-            </div>
-            <div className="w-1/2">
-              <label htmlFor="lname" className="Label">
-                {t("last Name")}
-              </label>
-              <input
-                type="text"
-                placeholder={t("Type here...")}
-                className="input_field"
-                {...register("lname")}
-              />
-              <span className="error">{errors?.lname?.message}</span>
-            </div>
+          <div className="w-full space-y-2">
+            <label htmlFor="fname" className="Label">
+              {t("first Name")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("fname")}
+            />
+            <span className="error">{errors?.fname?.message}</span>
+          </div>
+          <div className="w-full space-y-2">
+            <label htmlFor="lname" className="Label">
+              {t("last Name")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("lname")}
+            />
+            <span className="error">{errors?.lname?.message}</span>
           </div>
           {/* industry */}
           <div className="w-full space-y-2">
@@ -271,6 +282,32 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               {...register("website")}
             />
             <span className="error">{errors?.website?.message}</span>
+          </div>
+          {/* company name */}
+          <div className="w-full space-y-2">
+            <label htmlFor="company_name" className="Label">
+              {t("company name")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("company")}
+            />
+            <span className="error">{errors?.company?.message}</span>
+          </div>
+          {/* civilty */}
+          <div className="w-full space-y-2">
+            <label htmlFor="civility" className="Label">
+              {t("civility")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("civility")}
+            />
+            <span className="error">{errors?.civility?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -336,7 +373,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               {t("office number")}
             </label>
             <input
-              type="number"
+              type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("officeNumber")}
@@ -345,88 +382,46 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
           </div>
         </div>
         <hr className="my-1" />
-        {/*billing address */}
+        {/*Shipping address */}
         <p className="font-bold text-black md:text-xl">
-          {t("Billing Address")}
+          {t("Shipping Address")}
         </p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
-          {/*contact name */}
-          <div className="w-full space-y-2">
-            <label htmlFor="contact_name" className="Label">
-              {t("Contact Name")}
-            </label>
-            <input
-              type="text"
-              placeholder={t("Type here...")}
-              className="input_field"
-              {...register("contactName")}
-            />
-            <span className="error">{errors?.contactName?.message}</span>
-          </div>
-          {/* email */}
-          <div className="w-full space-y-2">
-            <label htmlFor="email" className="Label">
-              {t("email")}
-            </label>
-            <input
-              type="email"
-              placeholder={t("Type here...")}
-              className="input_field"
-              {...register("bemail")}
-            />
-            <span className="error">{errors?.bemail?.message}</span>
-          </div>
-          {/* phone */}
-          <div className="w-full space-y-2">
-            <label htmlFor="phone" className="Label">
-              {t("phone")}
-            </label>
-            <Controller
-              name="bphone"
-              control={control}
-              rules={{
-                validate: (value) => isValidPhoneNumber(value),
-              }}
-              render={({ field: { onChange, value } }) => (
-                <PhoneInput
-                  country={"us"}
-                  onChange={(value) => {
-                    onChange((e) => {
-                      setValue("bphone", "+".concat(value));
-                    });
-                  }}
-                  autocompleteSearch={true}
-                  countryCodeEditable={false}
-                  enableSearch={true}
-                  inputStyle={{
-                    width: "100%",
-                    background: "#FFFFFF",
-                    padding: "22px 0 22px 50px",
-                    borderRadius: "5px",
-                    fontSize: "1rem",
-                  }}
-                  dropdownStyle={{
-                    background: "white",
-                    color: "#13216e",
-                    fontWeight: "600",
-                    padding: "0px 0px 0px 10px",
-                  }}
-                />
-              )}
-            />
-            <span className="error">{errors?.bphone?.message}</span>
-          </div>
-          {/* company address */}
+          {/*  address 1*/}
           <div className="w-full col-span-full space-y-2">
-            <label htmlFor="company_address" className="Label">
-              {t("company address")}
+            <label htmlFor="address1" className="Label">
+              {t("address 1")}
             </label>
             <textarea
               placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
-              {...register("baddress")}
+              {...register("address1")}
             />
-            <span className="error">{errors?.baddress?.message}</span>
+            <span className="error">{errors?.address1?.message}</span>
+          </div>
+          {/*  address 2*/}
+          <div className="w-full col-span-full space-y-2">
+            <label htmlFor="address2" className="Label">
+              {t("address 2")}
+            </label>
+            <textarea
+              placeholder={t("Type here...")}
+              className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address2")}
+            />
+            <span className="error">{errors?.address2?.message}</span>
+          </div>
+          {/*  address 3*/}
+          <div className="w-full col-span-full space-y-2">
+            <label htmlFor="address3" className="Label">
+              {t("address 3")}
+            </label>
+            <textarea
+              placeholder={t("Type here...")}
+              className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address3")}
+            />
+            <span className="error">{errors?.address3?.message}</span>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
@@ -437,9 +432,22 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="text"
               placeholder={t("Type here...")}
               className="input_field"
-              {...register("bcity")}
+              {...register("city")}
             />
-            <span className="error">{errors?.bcity?.message}</span>
+            <span className="error">{errors?.city?.message}</span>
+          </div>
+          {/* province */}
+          <div className="w-full space-y-2">
+            <label htmlFor="province" className="Label">
+              {t("province")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("province")}
+            />
+            <span className="error">{errors?.province?.message}</span>
           </div>
           {/* country */}
           <div className="w-full space-y-2">
@@ -450,9 +458,9 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               type="text"
               placeholder={t("Type here...")}
               className="input_field"
-              {...register("bcountry")}
+              {...register("country")}
             />
-            <span className="error">{errors?.bcountry?.message}</span>
+            <span className="error">{errors?.country?.message}</span>
           </div>
           {/* zipcode */}
           <div className="w-full space-y-2">
@@ -465,9 +473,9 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               className="input_field"
               maxLength={6}
               minLength={6}
-              {...register("bzipCode")}
+              {...register("zipCode")}
             />
-            <span className="error">{errors?.bzipCode?.message}</span>
+            <span className="error">{errors?.zipCode?.message}</span>
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@ const AddNewSubscirber = ({
   setShowMagazineDistrutionPopup,
 }) => {
   const { addNewSubscriberLoading } = useSelector(
-    (state) => state.root.subscribers,
+    (state) => state.root.subscribers
   );
   const { payers } = useSelector((state) => state.root.thirdPartyPayers);
 
@@ -43,7 +43,7 @@ const AddNewSubscirber = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("FirstName can only contain Latin letters."),
+        t("FirstName can only contain Latin letters.")
       ),
     lname: yup
       .string()
@@ -54,7 +54,7 @@ const AddNewSubscirber = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("LastName can only contain Latin letters."),
+        t("LastName can only contain Latin letters.")
       ),
     civility: yup
       .string()
@@ -65,7 +65,7 @@ const AddNewSubscirber = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Civility can only contain Latin letters."),
+        t("Civility can only contain Latin letters.")
       ),
     title: yup.string().trim().max(60, t("Max character limit reached")),
     email: yup.string().email().required(t("email is required.")).trim(),
@@ -75,16 +75,9 @@ const AddNewSubscirber = ({
     address1: yup
       .string()
       .max(200, t("Maximum character limit reached"))
-      .required(t("address1 is required"))
-      .trim(""),
-    address2: yup
-      .string()
-      .max(200, t("Maximum character limit reached"))
-      .trim(""),
-    address3: yup
-      .string()
-      .max(200, t("Maximum character limit reached"))
-      .trim(""),
+      .required(t("address1 is required")),
+    address2: yup.string().max(200, t("Maximum character limit reached")),
+    address3: yup.string().max(200, t("Maximum character limit reached")),
     zipCode: yup
       .string()
       .max(6, t("max 6 number allowed"))
@@ -96,61 +89,45 @@ const AddNewSubscirber = ({
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters."),
+        t("city can only contain Latin letters.")
       )
-      .required(t("city is required"))
-      .trim(""),
+      .required(t("city is required")),
     province: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters."),
-      )
-      .trim(""),
+        t("province can only contain Latin letters.")
+      ),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters."),
+        t("country can only contain Latin letters.")
       )
-      .required(t("country is required"))
-      .trim(""),
-    baddress1: yup
-      .string()
-      .max(200, t("Maximum character limit reached"))
-      .trim(""),
-    baddress2: yup
-      .string()
-      .max(200, t("Maximum character limit reached"))
-      .trim(""),
-    baddress3: yup
-      .string()
-      .max(200, t("Maximum character limit reached"))
-      .trim(""),
+      .required(t("country is required")),
+    baddress1: yup.string().max(200, t("Maximum character limit reached")),
+    baddress2: yup.string().max(200, t("Maximum character limit reached")),
+    baddress3: yup.string().max(200, t("Maximum character limit reached")),
     bzipCode: yup.string().max(6, t("max 6 number allowed")).trim(""),
     bcity: yup
       .string()
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters."),
-      )
-      .trim(""),
+        t("city can only contain Latin letters.")
+      ),
     bprovince: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters."),
-      )
-      .trim(""),
+        t("province can only contain Latin letters.")
+      ),
     bcountry: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters."),
-      )
-      .trim(""),
-
+        t("country can only contain Latin letters.")
+      ),
     sameAsAbove: yup.boolean(),
     thirdPartyPayer: yup.string(""),
     accountingContact: yup
@@ -159,7 +136,7 @@ const AddNewSubscirber = ({
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("accountContactName can only contain Latin letters."),
+        t("accountContactName can only contain Latin letters.")
       ),
     accountingEmail: yup.string().email(),
     accountingPhone: yup.string(),
@@ -277,14 +254,14 @@ const AddNewSubscirber = ({
         clientCode,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(
             t(` ${fname.concat(lname)} ${t("subscriber added successfully.")}`),
-            { duration: 2000 },
+            { duration: 2000 }
           );
           setShowAddNewSubscriber(false);
         } else if (res?.payload?.status === "error") {

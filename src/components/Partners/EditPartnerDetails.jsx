@@ -30,8 +30,19 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
-  const { _id, name, industry, website, email, mobile, officeNumber, address } =
-    singlePartner;
+  const {
+    _id,
+    fname,
+    lname,
+    civility,
+    company,
+    industry,
+    website,
+    email,
+    mobile,
+    officeNumber,
+    shippingAddress,
+  } = singlePartner;
 
   const addNewPartnerSchema = yup.object(
     {
@@ -44,7 +55,7 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
         .typeError(t("Only characters allowed"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("Name can only contain Latin letters."),
+          t("Name can only contain Latin letters.")
         ),
       lname: yup
         .string()
@@ -55,13 +66,22 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
         .typeError(t("Only characters allowed"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("Name can only contain Latin letters."),
+          t("Name can only contain Latin letters.")
         ),
-      companyAddress: yup
+      company: yup
         .string()
         .max(200, t("Maximum character limit reached"))
-        .required(t("address is required"))
-        .trim(""),
+        .required(t("company is required")),
+      civility: yup
+        .string()
+        .max(200, t("Maximum character limit reached"))
+        .required(t("civility is required")),
+      address1: yup
+        .string()
+        .max(200, t("Maximum character limit reached"))
+        .required(t("address is required")),
+      address2: yup.string().max(200, t("Maximum character limit reached")),
+      address3: yup.string().max(200, t("Maximum character limit reached")),
       zipCode: yup
         .string()
         .max(6, t("max 6 number allowed"))
@@ -73,31 +93,34 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
         .max(40, t("Maximum character limit reached"))
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("city can only contain Latin letters."),
+          t("city can only contain Latin letters.")
         )
-        .required(t("city is required"))
-        .trim(""),
+        .required(t("city is required")),
+      province: yup
+        .string()
+        .max(40, t("Maximum character limit reached"))
+        .matches(
+          /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+          t("province can only contain Latin letters.")
+        )
+        .required(t("province is required")),
       country: yup
         .string()
         .matches(
           /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-          t("country can only contain Latin letters."),
+          t("country can only contain Latin letters.")
         )
-        .required(t("country is required"))
-        .trim(""),
+        .required(t("country is required")),
       officeNumber: yup
         .string()
         .required(t("office Number is required"))
         .max(15, t("maximum 15 numbers!!!")),
-      mobile: yup.string().required(t("mobile phone is required")),
-      phone: yup.string().required(t("phone is required")),
+      mobile: yup.string().required(t("mobile is required")),
       email: yup.string().email().required(t("email is required.")).trim(),
-      aemail: yup.string().email().required(t("email is required.")).trim(),
-      contactName: yup.string().required(t("contact name is required.")),
       industry: yup.string().required(t("industry is required.")),
       website: yup.string(),
     },
-    [["website", "website"]],
+    [["website", "website"]]
   );
 
   const {
@@ -113,19 +136,22 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
     mode: "onChange",
     resolver: yupResolver(addNewPartnerSchema),
     defaultValues: {
-      name,
+      fname,
+      lname,
       industry,
       website,
       email,
       mobile,
+      company,
+      civility,
       officeNumber,
-      contactName: address?.contactName,
-      aemail: address?.email,
-      phone: address?.phone,
-      companyAddress: address?.companyAddress,
-      city: address?.city,
-      country: address?.country,
-      zipCode: address?.zipCode,
+      address1: shippingAddress?.address1,
+      address2: shippingAddress?.address2,
+      address3: shippingAddress?.address3,
+      city: shippingAddress?.city,
+      country: shippingAddress?.country,
+      zipCode: shippingAddress?.zipCode,
+      province: shippingAddress?.province,
     },
   });
 
@@ -138,13 +164,15 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
       email,
       mobile,
       officeNumber,
-      contactName,
-      aemail,
-      phone,
-      companyAddress,
       city,
       country,
+      company,
+      civility,
+      province,
       zipCode,
+      address1,
+      address2,
+      address3,
     } = data;
     if (!isDirty) {
       setShowEditDetailsPartner(false);
@@ -153,14 +181,10 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
       toast.remove();
       toast.error(t("mobile phone is invalid"));
       return true;
-    } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
-      toast.remove();
-      toast.error(t("Phone is invalid"));
-      return true;
     } else if (
       website !== "" &&
       !/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_-]+=[a-zA-Z0-9-%-_]+&?)?$/.test(
-        website,
+        website
       )
     ) {
       toast.remove();
@@ -176,22 +200,24 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
         email,
         mobile,
         officeNumber,
-        contactName,
-        aemail,
-        phone,
-        companyAddress,
         city,
         country,
+        company,
+        civility,
+        province,
         zipCode,
+        address1,
+        address2,
+        address3,
         id: _id,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(`${name} ${t("partner edited Successfully.")}`, {
+          toast.success(`${fname} ${lname} ${t("partner edited Successfully.")}`, {
             duration: 2000,
           });
           setShowEditDetailsPartner(false);
@@ -213,7 +239,7 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePARTNER({ id, token, signal: AbortControllerRef }),
+        handleDeletePARTNER({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -237,75 +263,54 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          {t("Partner details")}
+          {t("Add new prospect")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className={`gray_button ${
-              (editPartnerLoading || deletePartnerLoading) &&
-              "cursor-not-allowed"
-            } `}
+            className="gray_button"
             onClick={() => setShowEditDetailsPartner(false)}
-            disabled={editPartnerLoading || deletePartnerLoading}
-            type="button"
+            disabled={editPartnerLoading}
           >
             {t("Cancel")}
           </button>
           <button
-            className={`green_button ${
-              (editPartnerLoading || deletePartnerLoading) &&
-              "cursor-not-allowed"
-            }`}
             type="submit"
-            disabled={editPartnerLoading || deletePartnerLoading}
+            className="green_button"
+            disabled={editPartnerLoading}
           >
             {editPartnerLoading ? t("Saving").concat("...") : t("Save")}
           </button>
-          {role === "admin" && (
-            <button
-              className={`red_button ${
-                (editPartnerLoading || deletePartnerLoading) &&
-                "cursor-not-allowed"
-              }`}
-              onClick={() => handleDeletepartner(_id)}
-              disabled={deletePartnerLoading || editPartnerLoading}
-            >
-              {deletePartnerLoading ? t("Deleting").concat("...") : t("Delete")}
-            </button>
-          )}
         </div>
       </div>
       {/* main div */}
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-        <p className="font-bold text-black md:text-xl">{t("Basic Info")}</p>
+        <p className="font-bold text-black md:text-xl">{t("Prospect Info")}</p>
         {/* personal details */}
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
           {/* name */}
-          <div className="w-full flex items-center gap-2">
-            <div className="w-1/2">
-              <label htmlFor="fname" className="Label">
-                {t("first Name")}
-              </label>
-              <input
-                type="text"
-                placeholder={t("Type here...")}
-                className="input_field"
-                {...register("fname")}
-              />
-              <span className="error">{errors?.fname?.message}</span>
-            </div>
-            <div className="w-1/2">
-              <label htmlFor="lname" className="Label">
-                {t("last Name")}
-              </label>
-              <input
-                type="text"
-                placeholder={t("Type here...")}
-                className="input_field"
-                {...register("lname")}
-              />
-              <span className="error">{errors?.lname?.message}</span>
-            </div>
+          <div className="w-full space-y-2">
+            <label htmlFor="fname" className="Label">
+              {t("first Name")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("fname")}
+            />
+            <span className="error">{errors?.fname?.message}</span>
+          </div>
+          <div className="w-full space-y-2">
+            <label htmlFor="lname" className="Label">
+              {t("last Name")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("lname")}
+            />
+            <span className="error">{errors?.lname?.message}</span>
           </div>
           {/* industry */}
           <div className="w-full space-y-2">
@@ -336,6 +341,32 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
               {...register("website")}
             />
             <span className="error">{errors?.website?.message}</span>
+          </div>
+          {/* company name */}
+          <div className="w-full space-y-2">
+            <label htmlFor="company_name" className="Label">
+              {t("company name")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("company")}
+            />
+            <span className="error">{errors?.company?.message}</span>
+          </div>
+          {/* civilty */}
+          <div className="w-full space-y-2">
+            <label htmlFor="civility" className="Label">
+              {t("civility")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("civility")}
+            />
+            <span className="error">{errors?.civility?.message}</span>
           </div>
         </div>
         <hr className="my-1" />
@@ -374,10 +405,10 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
                       setValue("mobile", "+".concat(value));
                     });
                   }}
-                  value={getValues().mobile}
                   autocompleteSearch={true}
                   countryCodeEditable={false}
                   enableSearch={true}
+                  value={mobile}
                   inputStyle={{
                     width: "100%",
                     background: "#FFFFFF",
@@ -402,7 +433,7 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
               {t("office number")}
             </label>
             <input
-              type="number"
+              type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("officeNumber")}
@@ -411,87 +442,46 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
           </div>
         </div>
         <hr className="my-1" />
-        {/*address */}
-        <p className="font-bold text-black md:text-xl">{t("Address")}</p>
+        {/*Shipping address */}
+        <p className="font-bold text-black md:text-xl">
+          {t("Shipping Address")}
+        </p>
         <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
-          {/*contact name */}
-          <div className="w-full space-y-2">
-            <label htmlFor="contact_name" className="Label">
-              {t("Contact Name")}
-            </label>
-            <input
-              type="text"
-              placeholder={t("Type here...")}
-              className="input_field"
-              {...register("contactName")}
-            />
-            <span className="error">{errors?.contactName?.message}</span>
-          </div>
-          {/* email */}
-          <div className="w-full space-y-2">
-            <label htmlFor="email" className="Label">
-              {t("email")}
-            </label>
-            <input
-              type="email"
-              placeholder={t("Type here...")}
-              className="input_field"
-              {...register("aemail")}
-            />
-            <span className="error">{errors?.aemail?.message}</span>
-          </div>
-          {/* phone */}
-          <div className="w-full space-y-2">
-            <label htmlFor="phone" className="Label">
-              {t("phone")}
-            </label>
-            <Controller
-              name="phone"
-              control={control}
-              rules={{
-                validate: (value) => isValidPhoneNumber(value),
-              }}
-              render={({ field: { onChange, value } }) => (
-                <PhoneInput
-                  country={"us"}
-                  onChange={(value) => {
-                    onChange((e) => {
-                      setValue("phone", "+".concat(value));
-                    });
-                  }}
-                  value={getValues().phone}
-                  autocompleteSearch={true}
-                  countryCodeEditable={false}
-                  enableSearch={true}
-                  inputStyle={{
-                    width: "100%",
-                    background: "#FFFFFF",
-                    padding: "22px 0 22px 50px",
-                    borderRadius: "5px",
-                    fontSize: "1rem",
-                  }}
-                  dropdownStyle={{
-                    background: "white",
-                    color: "#13216e",
-                    fontWeight: "600",
-                    padding: "0px 0px 0px 10px",
-                  }}
-                />
-              )}
-            />
-            <span className="error">{errors?.bphone?.message}</span>
-          </div>
-          {/* company address */}
+          {/*  address 1*/}
           <div className="w-full col-span-full space-y-2">
-            <label htmlFor="company_address" className="Label">
-              {t("company address")}
+            <label htmlFor="address1" className="Label">
+              {t("address 1")}
             </label>
             <textarea
               placeholder={t("Type here...")}
               className="input_field min-h-[5rem] max-h-[15rem]"
-              {...register("companyAddress")}
+              {...register("address1")}
             />
-            <span className="error">{errors?.companyAddress?.message}</span>
+            <span className="error">{errors?.address1?.message}</span>
+          </div>
+          {/*  address 2*/}
+          <div className="w-full col-span-full space-y-2">
+            <label htmlFor="address2" className="Label">
+              {t("address 2")}
+            </label>
+            <textarea
+              placeholder={t("Type here...")}
+              className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address2")}
+            />
+            <span className="error">{errors?.address2?.message}</span>
+          </div>
+          {/*  address 3*/}
+          <div className="w-full col-span-full space-y-2">
+            <label htmlFor="address3" className="Label">
+              {t("address 3")}
+            </label>
+            <textarea
+              placeholder={t("Type here...")}
+              className="input_field min-h-[5rem] max-h-[15rem]"
+              {...register("address3")}
+            />
+            <span className="error">{errors?.address3?.message}</span>
           </div>
           {/* city */}
           <div className="w-full space-y-2">
@@ -505,6 +495,19 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
               {...register("city")}
             />
             <span className="error">{errors?.city?.message}</span>
+          </div>
+          {/* province */}
+          <div className="w-full space-y-2">
+            <label htmlFor="province" className="Label">
+              {t("province")}
+            </label>
+            <input
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("province")}
+            />
+            <span className="error">{errors?.province?.message}</span>
           </div>
           {/* country */}
           <div className="w-full space-y-2">

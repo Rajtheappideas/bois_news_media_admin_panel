@@ -45,10 +45,24 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
   } = singleMagazine;
 
   const editMagazineSchema = yup.object({
-    title: yup.string().required(t("title is required")).trim(),
-    status: yup.string().required(t("status is required")).trim(),
-    description: yup.string().required(t("description is required")).trim(""),
-    magazineTitle: yup.string().required(t("select magazine")).trim(""),
+    title: yup.string().required(t("title is required")),
+    status: yup.string().required(t("status is required")),
+    description: yup.string().required(t("description is required")),
+    magazineTitle: yup.string().required(t("select magazine")),
+    pdf: yup
+      .mixed()
+      .required(t("please upload file"))
+      .test(
+        "fileSize",
+        t("Only pdf up to 10MB are permitted."),
+        (files) =>
+          !files || // Check if `files` is defined
+          files.length === 0 || // Check if `files` is not an empty list
+          Array.from(files).every((file) => file.size <= 10000000)
+      )
+      .test("type", t("Only .pdf formats are accepted."), (value) => {
+        return value && value[0]?.type === "application/pdf";
+      }),
     stock: yup
       .string()
       .required(t("stock is required"))
@@ -59,8 +73,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
       .string()
       .required(t("price is required"))
       .max(4, t("maximum 4 numbers"))
-      .min(2, t("minmum 2 numbers"))
-      .trim(""),
+      .min(2, t("minmum 2 numbers")),
     image: yup
       .mixed()
       .required(t("Image is required."))
