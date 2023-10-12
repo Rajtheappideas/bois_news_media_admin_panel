@@ -268,7 +268,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          {t("Add new prospect")}
+          {t("prospect details")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -285,6 +285,18 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
           >
             {EditProspectLoading ? t("Saving").concat("...") : t("Save")}
           </button>
+          {role === "admin" && (
+            <button
+              className={`red_button ${
+                (EditProspectLoading || deleteProspectLoading) &&
+                "cursor-not-allowed"
+              }`}
+              disabled={deleteProspectLoading || EditProspectLoading}
+              onClick={() => handleDeleteprospect(_id,fname.concat(lname))}
+            >
+              {deleteProspectLoading ? t("Deleting").concat("...") : t("Delete")}
+            </button>
+          )}
         </div>
       </div>
       {/* main div */}

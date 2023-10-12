@@ -217,9 +217,12 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(`${fname} ${lname} ${t("partner edited Successfully.")}`, {
-            duration: 2000,
-          });
+          toast.success(
+            `${fname} ${lname} ${t("partner edited Successfully.")}`,
+            {
+              duration: 2000,
+            }
+          );
           setShowEditDetailsPartner(false);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -263,7 +266,7 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p className="font-semibold text-left lg:text-xl text-lg">
-          {t("Add new prospect")}
+          {t("partner details")}
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
@@ -280,6 +283,18 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
           >
             {editPartnerLoading ? t("Saving").concat("...") : t("Save")}
           </button>
+          {role === "admin" && (
+            <button
+              className={`red_button ${
+                (editPartnerLoading || deletePartnerLoading) &&
+                "cursor-not-allowed"
+              }`}
+              disabled={deletePartnerLoading || editPartnerLoading}
+              onClick={() => handleDeletepartner(_id)}
+            >
+              {deletePartnerLoading ? t("Deleting").concat("...") : t("Delete")}
+            </button>
+          )}
         </div>
       </div>
       {/* main div */}
