@@ -164,6 +164,17 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               <p className="w-1/2 text-right">€ {singleOrder?.discount}</p>
             </div>
             <div className="w-full flex items-center justify-between">
+              <p className="w-1/2 font-semibold uppercase">
+                {"promo code discount"}{" "}
+                <span className="text-sm lowercase font-light">
+                  (code : {singleOrder?.promoCode})
+                </span>
+              </p>
+              <p className="w-1/2 text-right">
+                € {singleOrder?.promoDiscount}{" "}
+              </p>
+            </div>
+            <div className="w-full flex items-center justify-between">
               <p className="w-1/2 font-semibold uppercase">{"tax"}</p>
               <p className="w-1/2 text-right">€ {singleOrder?.tax}</p>
             </div>

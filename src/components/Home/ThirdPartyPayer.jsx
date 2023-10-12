@@ -66,7 +66,7 @@ const ThirdPartyPayer = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePAYER({ id, token, signal: AbortControllerRef })
+        handleDeletePAYER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {

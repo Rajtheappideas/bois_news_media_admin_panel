@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 
 const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
   const { deletePayerLoading, editPayerLoading, singlePayer } = useSelector(
-    (state) => state.root.thirdPartyPayers
+    (state) => state.root.thirdPartyPayers,
   );
   const { token, role } = useSelector((state) => state.root.auth);
 
@@ -52,7 +52,7 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Name can only contain Latin letters.")
+        t("Name can only contain Latin letters."),
       ),
     companyAddress: yup
       .string()
@@ -60,7 +60,6 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
       .required(t("address is required"))
       .trim(""),
     zipCode: yup
-      .string()
       .string()
       .max(6, t("max 6 number allowed"))
       .min(5, t("min 5 number required"))
@@ -71,7 +70,7 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .required(t("city is required"))
       .trim(""),
@@ -79,7 +78,7 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .required(t("country is required"))
       .trim(""),
@@ -151,7 +150,7 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
         id: _id,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -178,7 +177,7 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePAYER({ id, token, signal: AbortControllerRef })
+        handleDeletePAYER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
