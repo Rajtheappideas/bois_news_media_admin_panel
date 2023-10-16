@@ -140,12 +140,14 @@ const Magazine = () => {
                 <option value="newest">{t("newest")}</option>
                 <option value="oldest">{t("oldest")}</option>
               </select>
-              <button
-                className="gray_button"
-                onClick={() => setshowAddnewMagazine(true)}
-              >
-                + {t("Add new")}
-              </button>
+              {role === "admin" && (
+                <button
+                  className="gray_button"
+                  onClick={() => setshowAddnewMagazine(true)}
+                >
+                  + {t("Add new")}
+                </button>
+              )}
             </div>
           </div>
           {/* table */}
@@ -279,7 +281,9 @@ const Magazine = () => {
                               <hr />
                               <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
-                                  href={BaseUrl.concat(magazine?.digitalSubscribers)}
+                                  href={BaseUrl.concat(
+                                    magazine?.digitalSubscribers
+                                  )}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
@@ -290,7 +294,9 @@ const Magazine = () => {
                               <hr />
                               <li className="hover:bg-gray-200 transition  break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
-                                  href={BaseUrl.concat(magazine?.paperSubscribers)}
+                                  href={BaseUrl.concat(
+                                    magazine?.paperSubscribers
+                                  )}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
@@ -302,7 +308,9 @@ const Magazine = () => {
 
                               <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                 <a
-                                  href={BaseUrl.concat(magazine?.paperProspectsPartners)}
+                                  href={BaseUrl.concat(
+                                    magazine?.paperProspectsPartners
+                                  )}
                                   download
                                   target="_blank"
                                   rel="noreferrer"
@@ -314,7 +322,9 @@ const Magazine = () => {
 
                               <li className="hover:bg-gray-200 break-words  whitespace-normal transition duration-100 cursor-pointer p-1">
                                 <a
-                                  href={BaseUrl.concat(magazine?.digitalProspectsPartners)}
+                                  href={BaseUrl.concat(
+                                    magazine?.digitalProspectsPartners
+                                  )}
                                   download
                                   target="_blank"
                                   rel="noreferrer"

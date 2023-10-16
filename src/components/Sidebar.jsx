@@ -46,7 +46,7 @@ const Sidebar = ({
     { title: t("orders"), icon: BsCart3 },
     { title: t("tax & shipping"), icon: HiOutlineReceiptTax },
     { title: t("promo codes"), icon: RiCoupon3Line },
-    { title: t("newsLetter"), icon: SlEnvolopeLetter },
+    // { title: t("newsLetter"), icon: SlEnvolopeLetter },
     { title: t("messages"), icon: BiMessageSquareDots },
     // { title: "settings", icon: LuSettings2 },
   ];

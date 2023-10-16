@@ -130,7 +130,7 @@ const Home = () => {
             {activeComponent === t("profile") && <Profile />}
             {activeComponent === t("change password") && <ChangePassword />}
             {activeComponent === t("messages") && <MessagesList />}
-            {activeComponent === t("newsLetter") && <NewsLetterList />}
+            {/* {activeComponent === t("newsLetter") && <NewsLetterList />} */}
             {activeComponent === t("tax & shipping") && (
               <TaxtAndShippingCharges />
             )}

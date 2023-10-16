@@ -303,7 +303,7 @@ const EditUserDetails = ({ setShowUserDetail }) => {
               {t("Role")}
             </label>
             <select {...register("role")} className="input_field">
-              <option value="editor">t{"Editor"}</option>
+              <option value="editor">{t("Editor")}</option>
               <option value="admin">{t("Admin")}</option>
               <option value="viewer">{t("Viewer")}</option>
             </select>

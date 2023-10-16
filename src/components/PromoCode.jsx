@@ -103,12 +103,14 @@ const PromoCode = () => {
             <div className="lg:w-1/3 md:w-1/2 w-full">
               <Search data={promoCodes} />
             </div>
-            <button
-              className="gray_button"
-              onClick={() => setShowCreatePromoCode(true)}
-            >
-              + {t("Add new")}
-            </button>
+            {role === "admin" && (
+              <button
+                className="gray_button"
+                onClick={() => setShowCreatePromoCode(true)}
+              >
+                + {t("Add new")}
+              </button>
+            )}
           </div>
           {/* table */}
           <div className="shadow-sm outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">

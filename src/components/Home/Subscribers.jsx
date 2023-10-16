@@ -147,7 +147,7 @@ const Subscribers = () => {
               </div>
               {role === "admin" && (
                 <div className="flex items-center gap-3">
-                  <button className="blue_button">{t("Import")}</button>
+                  {/* <button className="blue_button">{t("Import")}</button> */}
                   <button
                     className="gray_button"
                     onClick={() => setShowAddNewSubscriber(true)}

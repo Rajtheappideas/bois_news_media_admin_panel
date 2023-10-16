@@ -185,7 +185,7 @@ const SignIn = () => {
             </div>
 
             {/* register link */}
-            <div className="text-center font-normal">
+            {/* <div className="text-center font-normal">
               {t("Don’t have an account")}?
               <Link
                 to="/sign-up"
@@ -193,7 +193,7 @@ const SignIn = () => {
               >
                 {t("Register Now")}!
               </Link>
-            </div>
+            </div> */}
           </form>
         </section>
       </div>

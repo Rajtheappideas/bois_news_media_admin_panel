@@ -1023,10 +1023,8 @@ const EditSubscriberDetails = ({
                   <span>{t("Magazine")}</span>
                 </th>
                 <th className="p-4">{t("Sub state")}</th>
-                <th className="p-4">{t("Prospect state")}</th>
-                <th className="p-4">{t("Start date")}</th>
-                <th className="p-4">{t("Renewal date")}</th>
-                <th className="p-4">{t("Action")}</th>
+                <th className="p-4 text-center">{t("Remaining Issues")}</th>
+                <th className="p-4 text-center">{t("Action")}</th>
               </tr>
             </thead>
             <tbody className="w-full">
@@ -1034,7 +1032,7 @@ const EditSubscriberDetails = ({
                 subscriptions.map((subscription) => (
                   <tr
                     key={subscription?._id}
-                    className="border-b border-gray-200 w-full text-left"
+                    className="border-b last:border-0 border-gray-200 w-full text-left"
                   >
                     <td className="p-4 whitespace-nowrap">
                       {subscription?.subscription?.title}
@@ -1042,16 +1040,11 @@ const EditSubscriberDetails = ({
                     <td className="text-left p-4 whitespace-nowrap">
                       {subscription?.subState}
                     </td>
-                    <td className="text-left p-4 whitespace-nowrap">
-                      {subscription?.prospectState}{" "}
+                    <td className="text-center p-4 whitespace-nowrap">
+                      {subscription?.remainingIssues}{" "}
                     </td>
-                    <td className="text-left p-4 whitespace-nowrap">
-                      {moment(subscription?.startDate).format("LL")}{" "}
-                    </td>
-                    <td className="text-left p-4 whitespace-nowrap">
-                      {moment(subscription?.renewDate).format("LL")}
-                    </td>
-                    <td className="flex items-center justify-start p-4">
+
+                    <td className="flex items-center justify-center p-4">
                       <button
                         onClick={() =>
                           handleShowMagazinePopupForEditSubscription(

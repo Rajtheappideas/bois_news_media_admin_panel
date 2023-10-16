@@ -120,12 +120,14 @@ const Partners = () => {
                 <option value="newest">{t("newest")}</option>
                 <option value="oldest">{t("oldest")}</option>
               </select>
-              <button
-                className="gray_button"
-                onClick={() => setShowAddnewPartner(true)}
-              >
-                + {t("Add new")}
-              </button>
+              {role === "admin" && (
+                <button
+                  className="gray_button"
+                  onClick={() => setShowAddnewPartner(true)}
+                >
+                  + {t("Add new")}
+                </button>
+              )}
             </div>
           </div>
           {/* table */}

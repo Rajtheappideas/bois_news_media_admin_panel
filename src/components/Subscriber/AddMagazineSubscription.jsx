@@ -43,8 +43,8 @@ const AddMagazineSubscription = ({
       .string()
       .required(t("prospect state is required"))
       .trim(),
-    renewDate: yup.string().required(t("renew date is required")).trim(),
-    startDate: yup.string().required(t("start date is required")).trim(),
+    // renewDate: yup.string().required(t("renew date is required")).trim(),
+    // startDate: yup.string().required(t("start date is required")).trim(),
   });
 
   const {
@@ -57,8 +57,8 @@ const AddMagazineSubscription = ({
     resolver: yupResolver(createSubscribptionSchema),
     defaultValues: {
       prospectState: singleSubscription?.prospectState ?? "",
-      renewDate: singleSubscription?.renewDate.split("T")[0] ?? "",
-      startDate: singleSubscription?.startDate.split("T")[0] ?? "",
+      // renewDate: singleSubscription?.renewDate.split("T")[0] ?? "",
+      // startDate: singleSubscription?.startDate.split("T")[0] ?? "",
       subscription: singleSubscription?.subscription?._id ?? "",
       subState: singleSubscription?.subState ?? "",
     },
@@ -217,7 +217,7 @@ const AddMagazineSubscription = ({
             </div>
           </div>
           {/* start / renewal date */}
-          <div className="w-full flex md:flex-row flex-col items-center justify-start gap-3">
+          {/* <div className="w-full flex md:flex-row flex-col items-center justify-start gap-3">
             <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
               <label htmlFor="start_date" className="Label">
                 {t("Start state")}
@@ -235,13 +235,7 @@ const AddMagazineSubscription = ({
               <label htmlFor="renewal_date" className="Label">
                 {t("Renewal state")}
               </label>
-              {/* <ReactDatePicker
-                selected={getValues().renewDate}
-                {...register("renewDate")}
-                minDate={moment().format("L")}
-                dateFormat="mm/dd/yyyy"
-                className="input_field"
-              /> */}
+             
               <input
                 type="date"
                 placeholder="DD/MM/YYYY"
@@ -251,7 +245,7 @@ const AddMagazineSubscription = ({
               />
               <span className="error">{errors?.renewDate?.message}</span>
             </div>
-          </div>
+          </div> */}
           {/* button */}
           <button
             type="submit"

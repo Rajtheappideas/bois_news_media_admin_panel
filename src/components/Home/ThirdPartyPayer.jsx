@@ -66,7 +66,7 @@ const ThirdPartyPayer = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePAYER({ id, token, signal: AbortControllerRef }),
+        handleDeletePAYER({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -118,12 +118,14 @@ const ThirdPartyPayer = () => {
                 <option value="newest">{t("newest")}</option>
                 <option value="oldest">{t("oldest")}</option>
               </select>
-              <button
-                className="gray_button"
-                onClick={() => setShowAddnewPayer(true)}
-              >
-                + {t("Add new")}
-              </button>
+              {role === "admin" && (
+                <button
+                  className="gray_button"
+                  onClick={() => setShowAddnewPayer(true)}
+                >
+                  + {t("Add new")}
+                </button>
+              )}
             </div>
           </div>
           {/* table */}

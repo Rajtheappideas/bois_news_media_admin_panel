@@ -64,7 +64,7 @@ function App() {
               caseSensitive
             />
             <Route caseSensitive path="/sign-in" element={<SignIn />} />
-            <Route caseSensitive path="/sign-up" element={<SignUp />} />
+            {/* <Route caseSensitive path="/sign-up" element={<SignUp />} /> */}
             <Route
               caseSensitive
               path="/forgot-password"
