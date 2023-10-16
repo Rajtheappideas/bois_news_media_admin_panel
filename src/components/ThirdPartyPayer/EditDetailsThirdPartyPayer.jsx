@@ -59,8 +59,6 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
     .required(t("address is required")),
   zipCode: yup
     .string()
-    .max(6, t("max 6 number allowed"))
-    .min(5, t("min 5 number required"))
     .required(t("zipcode is required"))
     .trim(""),
   city: yup

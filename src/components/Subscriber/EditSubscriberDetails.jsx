@@ -122,8 +122,6 @@ const EditSubscriberDetails = ({
     address3: yup.string().max(200, t("Maximum character limit reached")),
     zipCode: yup
       .string()
-      .max(6, t("max 6 number allowed"))
-      .min(5, t("min 5 number required"))
       .required(t("zipcode is required"))
       .trim(""),
     city: yup

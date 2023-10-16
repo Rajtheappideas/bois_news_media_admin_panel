@@ -80,8 +80,6 @@ const AddNewSubscirber = ({
     address3: yup.string().max(200, t("Maximum character limit reached")),
     zipCode: yup
       .string()
-      .max(6, t("max 6 number allowed"))
-      .min(5, t("min 5 number required"))
       .required(t("zipcode is required"))
       .trim(""),
     city: yup
@@ -108,7 +106,7 @@ const AddNewSubscirber = ({
     baddress1: yup.string().max(200, t("Maximum character limit reached")),
     baddress2: yup.string().max(200, t("Maximum character limit reached")),
     baddress3: yup.string().max(200, t("Maximum character limit reached")),
-    bzipCode: yup.string().max(6, t("max 6 number allowed")).trim(""),
+    bzipCode: yup.string().trim(""),
     bcity: yup
       .string()
       .max(40, t("Maximum character limit reached"))
@@ -823,7 +821,7 @@ const AddNewSubscirber = ({
               {t("VAT Number")}{" "}
             </label>
             <input
-              type="number"
+              type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("VATnumber")}
@@ -870,7 +868,7 @@ const AddNewSubscirber = ({
               {t("Company registration number")}
             </label>
             <input
-              type="number"
+              type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("companyRegNum")}

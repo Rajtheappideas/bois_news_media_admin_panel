@@ -15,12 +15,13 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
 
   const { updateLoading } = useSelector((state) => state.root.orders);
 
-  const { token } = useSelector((state) => state.root.auth);
+  const { token, role } = useSelector((state) => state.root.auth);
 
   const { AbortControllerRef } = useAbortApiCall();
   const dispatch = useDispatch();
 
   const hanldeChangeOrderStatus = (id, status) => {
+    if (role !== "admin") return;
     if (updateLoading) return;
     toast.loading("Updating Status...");
     const response = dispatch(

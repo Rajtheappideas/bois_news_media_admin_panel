@@ -8,15 +8,18 @@ import { useTranslation } from "react-i18next";
 import { handlerFilterOrders } from "../../redux/OrderSlice";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import SingleOrderList from "../Orders/SingleOrderList";
+import AddOrder from "../Orders/AddOrder";
 
 const Orders = () => {
   const [showOrderDetails, setshowOrderDetails] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
+  const [showAddOrder, setShowAddOrder] = useState(false);
 
   const { orders, loading, filterType } = useSelector(
     (state) => state.root.orders
   );
   const { fileterdData } = useSelector((state) => state.root.globalStates);
+  const { role, token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
 
@@ -48,9 +51,14 @@ const Orders = () => {
 
   return (
     <>
-      {showOrderDetails ? (
+      {showOrderDetails && !showAddOrder && (
         <OrderDetails setshowOrderDetails={setshowOrderDetails} />
-      ) : (
+      )}
+      {!showOrderDetails && showAddOrder && (
+        <AddOrder setShowAddOrder={setShowAddOrder} />
+      )}
+
+      {!showOrderDetails && !showAddOrder && (
         <div className="lg:space-y-5 space-y-3 w-full">
           {/* search + buttons */}
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
@@ -68,6 +76,14 @@ const Orders = () => {
                 <option value="newest">{t("newest")}</option>
                 <option value="oldest">{t("oldest")}</option>
               </select>
+              {role === "admin" && (
+                <button
+                  className="gray_button"
+                  onClick={() => setShowAddOrder(true)}
+                >
+                  + {t("Add new")}
+                </button>
+              )}
             </div>
           </div>
           {/* table */}

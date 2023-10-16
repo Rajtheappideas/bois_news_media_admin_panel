@@ -84,12 +84,7 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
         .required(t("address is required")),
       address2: yup.string().max(200, t("Maximum character limit reached")),
       address3: yup.string().max(200, t("Maximum character limit reached")),
-      zipCode: yup
-        .string()
-        .max(6, t("max 6 number allowed"))
-        .min(5, t("min 5 number required"))
-        .required(t("zipcode is required"))
-        .trim(""),
+      zipCode: yup.string().required(t("zipcode is required")).trim(""),
       city: yup
         .string()
         .max(40, t("Maximum character limit reached"))
@@ -292,9 +287,11 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
                 "cursor-not-allowed"
               }`}
               disabled={deleteProspectLoading || EditProspectLoading}
-              onClick={() => handleDeleteprospect(_id,fname.concat(lname))}
+              onClick={() => handleDeleteprospect(_id, fname.concat(lname))}
             >
-              {deleteProspectLoading ? t("Deleting").concat("...") : t("Delete")}
+              {deleteProspectLoading
+                ? t("Deleting").concat("...")
+                : t("Delete")}
             </button>
           )}
         </div>

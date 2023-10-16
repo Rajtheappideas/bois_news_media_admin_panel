@@ -41,11 +41,7 @@ const EditDetailsSubscription = ({ setShowEditSubscription }) => {
     title: yup.string().required(t("title is required")),
     status: yup.string().required(t("status is required")),
     description: yup.string().required(t("description is required")),
-    price: yup
-      .string()
-      .required(t("price is required"))
-      .max(4, t("maximum 4 numbers"))
-      .min(2, t("minmum 2 numbers")),
+    price: yup.string().required(t("price is required")),
     image: yup
       .mixed()
       .required(t("Image is required."))

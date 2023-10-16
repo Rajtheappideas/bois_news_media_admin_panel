@@ -43,8 +43,6 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
       .required(t("address is required")),
     zipCode: yup
       .string()
-      .max(6, t("max 6 number allowed"))
-      .min(5, t("min 5 number required"))
       .required(t("zipcode is required"))
       .trim(""),
     city: yup
@@ -207,7 +205,7 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
               {t("account number")}
             </label>
             <input
-              type="number"
+              type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("accountNumber")}

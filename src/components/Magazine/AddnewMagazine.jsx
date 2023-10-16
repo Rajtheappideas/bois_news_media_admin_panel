@@ -51,14 +51,9 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     stock: yup
       .string()
       .required(t("stock is required"))
-      .max(5, t("maximum 5 numbers"))
-      .min(1, t("minimum 1 numbers"))
+
       .typeError(t("stock is required")),
-    price: yup
-      .string()
-      .required(t("price is required"))
-      .max(4, t("maximum 4 numbers"))
-      .min(2, t("minmum 2 numbers")),
+    price: yup.string().required(t("price is required")),
     image: yup
       .mixed()
       .required(t("Image is required."))
