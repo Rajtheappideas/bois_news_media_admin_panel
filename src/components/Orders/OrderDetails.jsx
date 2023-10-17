@@ -151,7 +151,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
           <div className="md:w-2/5 w-full md:space-y-3 space-y-2">
             <div className="w-full flex items-center justify-between">
               <p className="w-1/2 font-semibold uppercase">{t("sub total")}</p>
-              <p className="w-1/2 text-right">€ {singleOrder?.subtotal}</p>
+              <p className="w-1/2 text-right">€ {parseFloat(singleOrder?.subtotal).toFixed(2)}</p>
             </div>
             <div className="w-full flex items-center justify-between">
               <p className="w-1/2 font-semibold uppercase">
@@ -181,7 +181,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
             <div className="w-full flex items-center justify-between border-t-2">
               <p className="w-1/2 font-bold ">{t("Total Amount")}</p>
               <p className="w-1/2 text-right font-bold">
-                € {singleOrder?.total}
+                € {parseFloat(singleOrder?.total).toFixed(2)}
               </p>
             </div>
           </div>
