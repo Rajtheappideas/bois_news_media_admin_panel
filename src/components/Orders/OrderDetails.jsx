@@ -63,7 +63,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
             {t("Invoice")}
           </p>
           <p className="font-bold text-black md:text-lg">
-            {t("Status")}:<span className="text-green-500 ml-1">Delivered</span>
+            {t("Status")}:<span className="text-green-500 ml-1">{singleOrder?.status}</span>
           </p>
         </div>
         {/*invoice details */}

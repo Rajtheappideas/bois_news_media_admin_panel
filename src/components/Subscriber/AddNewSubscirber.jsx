@@ -735,7 +735,7 @@ const AddNewSubscirber = ({
               {payers !== undefined &&
                 payers.length > 0 &&
                 payers.map((payer) => (
-                  <option key={payer?._id} value={payer?.accountName}>
+                  <option key={payer?._id} value={payer?._id}>
                     {payer?.accountName}
                   </option>
                 ))}

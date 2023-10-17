@@ -24,7 +24,7 @@ const AddOrder = ({ setShowAddOrder }) => {
   const [items, setItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
-  const { addNewUserLoading } = useSelector((state) => state.root.users);
+  const { createLoading } = useSelector((state) => state.root.orders);
   const { subscribers } = useSelector((state) => state.root.subscribers);
   const { token } = useSelector((state) => state.root.auth);
 
@@ -159,22 +159,22 @@ const AddOrder = ({ setShowAddOrder }) => {
           <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
             <button
               className={`gray_button ${
-                addNewUserLoading && "cursor-not-allowed"
+                createLoading && "cursor-not-allowed"
               }`}
               onClick={() => setShowAddOrder(false)}
-              disabled={addNewUserLoading}
+              disabled={createLoading}
               type="reset"
             >
               {t("Cancel")}
             </button>
             <button
               className={`green_button ${
-                addNewUserLoading && "cursor-not-allowed"
+                createLoading && "cursor-not-allowed"
               }`}
               type="submit"
-              disabled={addNewUserLoading}
+              disabled={createLoading}
             >
-              {addNewUserLoading ? t("Submitting").concat("...") : t("Submit")}
+              {createLoading ? t("Submitting").concat("...") : t("Submit")}
             </button>
           </div>
         </div>

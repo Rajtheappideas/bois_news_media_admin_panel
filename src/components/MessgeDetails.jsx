@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { BsArrowLeft } from "react-icons/bs";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
 const MessgeDetails = ({ setShowMessageDetails, singleMessage }) => {
   const { t } = useTranslation();
@@ -13,7 +13,10 @@ const MessgeDetails = ({ setShowMessageDetails, singleMessage }) => {
           className="font-semibold text-left lg:text-xl text-lg cursor-pointer"
           onClick={() => setShowMessageDetails(false)}
         >
-          <BsArrowLeft className="inline-block mr-2 " size={30} />
+          <MdOutlineKeyboardBackspace
+            size={25}
+            className="inline-block pb-1 mr-1"
+          />{" "}
           <span>{t("Message Details")}</span>
         </p>
       </div>
