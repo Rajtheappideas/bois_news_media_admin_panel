@@ -54,23 +54,28 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
         {order?.subscriber?.fname} {order?.subscriber?.lname}
       </td>
       <td className="text-left p-4 whitespace-nowrap">Cash</td>
-      <td className="text-left p-4 whitespace-nowrap">€ {order?.total}</td>
-      <td className="text-left p-4">
-        <select
-          name="status"
-          className="border border-gray-200 rounded-md p-1 font-medium"
-          value={orderStatus}
-          onChange={(e) => {
-            hanldeChangeOrderStatus(order?._id, e.target.value);
-            setOrderStatus(e.target.value);
-          }}
-        >
-          <option value="On Hold">On hold</option>
-          <option value="Order Received">Order received</option>
-          <option value="Order Accepted">Order accepted</option>
-          <option value="Delivered">Delivered</option>
-        </select>
-      </td>
+      <td className="text-left p-4 whitespace-nowrap">€ {parseFloat(order?.total).toFixed(2)}</td>
+      {role === "viewer" ? (
+        <td className="text-left p-4">{orderStatus}</td>
+      ) : (
+        <td className="text-left p-4">
+          <select
+            name="status"
+            className="border border-gray-200 rounded-md p-1 font-medium"
+            value={orderStatus}
+            onChange={(e) => {
+              hanldeChangeOrderStatus(order?._id, e.target.value);
+              setOrderStatus(e.target.value);
+            }}
+          >
+            <option value="On Hold">On hold</option>
+            <option value="Order Received">Order received</option>
+            <option value="Order Accepted">Order accepted</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+        </td>
+      )}
+
       <td className="flex items-center justify-start p-4">
         {/* <button
             type="button"

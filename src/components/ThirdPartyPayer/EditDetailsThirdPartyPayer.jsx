@@ -333,7 +333,6 @@ const EditDetailsThirdPartyPayer = ({ setShowEditDetailsPayer }) => {
             <span className="error">{errors?.mobile?.message}</span>
           </div>
         </div>
-        <hr className="my-1" />
 
         <hr className="my-1" />
         {/* billing address */}

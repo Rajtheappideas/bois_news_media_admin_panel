@@ -64,12 +64,8 @@ const EditUserDetails = ({ setShowUserDetail }) => {
     address: yup
       .string()
       .max(200, t("Maximum character limit reached"))
-      .required(t("address is required"))
-      .trim(""),
-    zipCode: yup
-      .string()
-      .required(t("zipcode is required"))
-      .trim(""),
+      .required(t("address is required")),
+    zipCode: yup.string().required(t("zipcode is required")),
     city: yup
       .string()
       .max(40, t("Maximum character limit reached"))

@@ -120,10 +120,7 @@ const EditSubscriberDetails = ({
       .required(t("address1 is required")),
     address2: yup.string().max(200, t("Maximum character limit reached")),
     address3: yup.string().max(200, t("Maximum character limit reached")),
-    zipCode: yup
-      .string()
-      .required(t("zipcode is required"))
-      .trim(""),
+    zipCode: yup.string().required(t("zipcode is required")).trim(""),
     city: yup
       .string()
       .max(40, t("Maximum character limit reached"))
@@ -819,7 +816,11 @@ const EditSubscriberDetails = ({
               {payers !== undefined &&
                 payers.length > 0 &&
                 payers.map((payer) => (
-                  <option key={payer?._id} value={payer?.accountName}>
+                  <option
+                    key={payer?._id}
+                    value={payer?._id}
+                    selected={payer?._id === thirdPartyPayer?._id}
+                  >
                     {payer?.accountName}
                   </option>
                 ))}

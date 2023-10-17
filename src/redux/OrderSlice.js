@@ -21,6 +21,47 @@ export const handleGetAllOrder = createAsyncThunk(
   }
 );
 
+export const handleCreateOrder = createAsyncThunk(
+  "order/handleCreateOrder",
+  async (
+    {
+      subscriber,
+      items,
+      VAT,
+      purchaseOrder,
+      orderNotes,
+      paymentMethod,
+      status,
+      token,
+      signal,
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      signal.current = new AbortController();
+      const response = await PostUrl(`order/add`, {
+        data: {
+          subscriber,
+          items,
+          VAT,
+          purchaseOrder,
+          orderNotes,
+          paymentMethod,
+          status,
+        },
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const handleUpdateOrderStatus = createAsyncThunk(
   "order/handleUpdateOrderStatus",
   async ({ status, id, token, signal }, { rejectWithValue }) => {
@@ -47,6 +88,7 @@ export const handleUpdateOrderStatus = createAsyncThunk(
 const initialState = {
   loading: false,
   updateLoading: false,
+  createLoading: false,
   error: null,
   success: false,
   orders: [],
@@ -95,6 +137,23 @@ const OrderSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.orders = [];
+      state.error = payload ?? null;
+    });
+    // create order
+    builder.addCase(handleCreateOrder.pending, (state, {}) => {
+      state.createLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleCreateOrder.fulfilled, (state, { payload }) => {
+      state.createLoading = false;
+      state.success = true;
+      state.orders = [...state.orders, payload?.order];
+      state.error = null;
+    });
+    builder.addCase(handleCreateOrder.rejected, (state, { payload }) => {
+      state.createLoading = false;
+      state.success = false;
       state.error = payload ?? null;
     });
     // update order status

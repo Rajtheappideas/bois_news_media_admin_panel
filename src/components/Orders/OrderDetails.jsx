@@ -105,11 +105,11 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               {t("Address")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">
-              {singleOrder?.subscriber?.shippingAddress?.zipCode}{" "}
-              {singleOrder?.subscriber?.shippingAddress?.address1},<br />{" "}
-              {singleOrder?.subscriber?.shippingAddress?.city},<br />{" "}
-              {singleOrder?.subscriber?.shippingAddress?.province},<br />
-              {singleOrder?.subscriber?.shippingAddress?.country}
+              {singleOrder?.billingAddress?.zipCode}{" "}
+              {singleOrder?.billingAddress?.address1},<br />{" "}
+              {singleOrder?.billingAddress?.city},<br />{" "}
+              {singleOrder?.billingAddress?.province},<br />
+              {singleOrder?.billingAddress?.country}
             </p>
           </div>
         </div>

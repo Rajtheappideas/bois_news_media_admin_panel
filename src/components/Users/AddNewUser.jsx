@@ -46,25 +46,21 @@ const AddNewUser = ({ setShowAddNewUser }) => {
       .max(200, t("Maximum character limit reached"))
       .required(t("address is required"))
       .trim(""),
-    zipCode: yup
-      .string()
-      .required(t("zipcode is required"))
-      .trim(""),
+    zipCode: yup.string().required(t("zipcode is required")),
     city: yup
       .string()
-      .max(40, t("Maximum character limit reached"))
+      .required(t("city is required"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         t("city can only contain Latin letters.")
-      )
-      .required(t("city is required")),
+      ),
     country: yup
       .string()
+      .required(t("country is required"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
-      )
-      .required(t("country is required")),
+        t("city can only contain Latin letters.")
+      ),
     phone: yup.string().required(t("phone is required")),
     role: yup.string().required(t("role is required.")),
     profile: yup

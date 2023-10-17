@@ -20,12 +20,13 @@ const Search = ({ data }) => {
       searchRef.current.focus();
     }
   };
+
   return (
     <div className="w-full relative">
       <input
         type="text"
         ref={searchRef}
-        className="w-full shadow-md rounded-md outline-none pl-3 p-3 placeholder:text-textColor"
+        className="w-full shadow-md rounded-md outline-none pr-10 pl-3 p-3 placeholder:text-textColor"
         placeholder={t("Search...")}
         onChange={(e) =>
           dispatch(

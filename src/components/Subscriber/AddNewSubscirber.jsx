@@ -678,8 +678,6 @@ const AddNewSubscirber = ({
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
-              maxLength={6}
-              minLength={6}
               {...register("bzipCode")}
               disabled={getValues("sameAsAbove")}
             />
