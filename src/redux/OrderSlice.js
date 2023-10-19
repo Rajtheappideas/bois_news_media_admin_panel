@@ -18,7 +18,7 @@ export const handleGetAllOrder = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleCreateOrder = createAsyncThunk(
@@ -35,7 +35,7 @@ export const handleCreateOrder = createAsyncThunk(
       token,
       signal,
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       signal.current = new AbortController();
@@ -59,7 +59,7 @@ export const handleCreateOrder = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleUpdateOrderStatus = createAsyncThunk(
@@ -82,7 +82,7 @@ export const handleUpdateOrderStatus = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -116,7 +116,7 @@ const OrderSlice = createSlice({
       state.orders = state.orders.map((order) =>
         order?._id === payload?.id
           ? { ...order, status: payload?.status }
-          : order
+          : order,
       );
     },
   },
@@ -148,7 +148,7 @@ const OrderSlice = createSlice({
     builder.addCase(handleCreateOrder.fulfilled, (state, { payload }) => {
       state.createLoading = false;
       state.success = true;
-      state.orders = [...state.orders, payload?.order];
+      state.orders = [payload?.order, ...state.orders];
       state.error = null;
     });
     builder.addCase(handleCreateOrder.rejected, (state, { payload }) => {

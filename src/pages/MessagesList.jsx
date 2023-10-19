@@ -1,5 +1,5 @@
 import moment from "moment";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,7 @@ const MessagesList = () => {
   const [singleMessage, setSingleMessage] = useState(null);
 
   const { messages, messageLoading, fileterdData } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
 
   const dispatch = useDispatch();
@@ -48,6 +48,13 @@ const MessagesList = () => {
       setShowMessageDetails(true);
     }
   };
+
+  useEffect(() => {
+    if (fileterdData && fileterdData.length > 0) {
+      setPageNumber(0);
+    }
+  }, [fileterdData]);
+
   return (
     <>
       {showMessageDetails ? (

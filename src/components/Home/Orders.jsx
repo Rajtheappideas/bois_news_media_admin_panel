@@ -16,7 +16,7 @@ const Orders = () => {
   const [showAddOrder, setShowAddOrder] = useState(false);
 
   const { orders, loading, filterType } = useSelector(
-    (state) => state.root.orders
+    (state) => state.root.orders,
   );
   const { fileterdData } = useSelector((state) => state.root.globalStates);
   const { role, token } = useSelector((state) => state.root.auth);
@@ -48,6 +48,12 @@ const Orders = () => {
   useEffect(() => {
     return () => abortApiCall();
   }, []);
+
+  useEffect(() => {
+    if (fileterdData && fileterdData.length > 0) {
+      setPageNumber(0);
+    }
+  }, [fileterdData]);
 
   return (
     <>
