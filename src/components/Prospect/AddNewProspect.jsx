@@ -301,12 +301,22 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
             <label htmlFor="civility" className="Label">
               {t("civility")}
             </label>
-            <input
+            <select
+              {...register("civility")}
+              name="civility"
+              className="input_field"
+            >
+              <option label="Choose civility"></option>
+              <option value="Mr.">Mr.</option>
+              <option value="Mrs.">Mrs.</option>
+              <option value="Ms.">Ms.</option>
+            </select>
+            {/* <input
               type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("civility")}
-            />
+            /> */}
             <span className="error">{errors?.civility?.message}</span>
           </div>
         </div>

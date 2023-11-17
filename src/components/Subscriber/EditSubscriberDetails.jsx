@@ -498,12 +498,22 @@ const EditSubscriberDetails = ({
             <label htmlFor="civility" className="Label">
               {t("civility")}
             </label>
-            <input
+            <select
+              {...register("civility")}
+              name="civility"
+              className="input_field"
+            >
+              <option label="Choose civility"></option>
+              <option value="Mr.">Mr.</option>
+              <option value="Mrs.">Mrs.</option>
+              <option value="Ms.">Ms.</option>
+            </select>
+            {/* <input
               type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("civility")}
-            />
+            /> */}
             <span className="error">{errors?.civility?.message}</span>
           </div>
           {/* email */}
@@ -1061,7 +1071,7 @@ const EditSubscriberDetails = ({
                           className="inline-block mr-1"
                         />
                       </button>
-                      <button
+                      {/* <button
                         type="button"
                         className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
                         disabled={deleteLoading}
@@ -1082,7 +1092,7 @@ const EditSubscriberDetails = ({
                             className="inline-block"
                           />
                         )}
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                 ))

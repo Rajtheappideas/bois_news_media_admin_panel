@@ -374,12 +374,22 @@ const EditProspectDetails = ({ setShowEditdetailsProspect }) => {
             <label htmlFor="civility" className="Label">
               {t("civility")}
             </label>
-            <input
+            {/* <input
               type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("civility")}
-            />
+            /> */}
+            <select
+              {...register("civility")}
+              name="civility"
+              className="input_field"
+            >
+              <option label="Choose civility"></option>
+              <option value="Mr.">Mr.</option>
+              <option value="Mrs.">Mrs.</option>
+              <option value="Ms.">Ms.</option>
+            </select>
             <span className="error">{errors?.civility?.message}</span>
           </div>
         </div>

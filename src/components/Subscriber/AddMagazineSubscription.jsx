@@ -36,10 +36,10 @@ const AddMagazineSubscription = ({
   const createSubscribptionSchema = yup.object({
     subscription: yup.string().required(t("subscription is required")).trim(),
     subState: yup.string().required(t("substate is required")).trim(),
-    prospectState: yup
-      .string()
-      .required(t("prospect state is required"))
-      .trim(),
+    // prospectState: yup
+    //   .string()
+    //   .required(t("prospect state is required"))
+    //   .trim(),
     // renewDate: yup.string().required(t("renew date is required")).trim(),
     // startDate: yup.string().required(t("start date is required")).trim(),
   });
@@ -188,7 +188,7 @@ const AddMagazineSubscription = ({
           <span className="error">{errors?.subscription?.message}</span>
           {/* sub / prospect state */}
           <div className="w-full flex md:flex-row flex-col items-center justify-start gap-3">
-            <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
+            <div className="md:space-y-2 space-y-1 w-full">
               <label htmlFor="sub_state" className="Label">
                 {t("Sub state")}
               </label>
@@ -200,7 +200,7 @@ const AddMagazineSubscription = ({
               </select>
               <span className="error">{errors?.subState?.message}</span>
             </div>
-            <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
+            {/* <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
               <label htmlFor="prospect_state" className="Label">
                 {t("Prospect state")}
               </label>
@@ -211,7 +211,7 @@ const AddMagazineSubscription = ({
                 <option value="cancelled">cancelled</option>
               </select>
               <span className="error">{errors?.prospectState?.message}</span>
-            </div>
+            </div> */}
           </div>
           {/* start / renewal date */}
           {/* <div className="w-full flex md:flex-row flex-col items-center justify-start gap-3">

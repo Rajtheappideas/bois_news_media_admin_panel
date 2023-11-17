@@ -82,10 +82,7 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
         .required(t("address is required")),
       address2: yup.string().max(200, t("Maximum character limit reached")),
       address3: yup.string().max(200, t("Maximum character limit reached")),
-      zipCode: yup
-        .string()
-        .required(t("zipcode is required"))
-        .trim(""),
+      zipCode: yup.string().required(t("zipcode is required")).trim(""),
       city: yup
         .string()
         .max(40, t("Maximum character limit reached"))
@@ -373,12 +370,22 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
             <label htmlFor="civility" className="Label">
               {t("civility")}
             </label>
-            <input
+            <select
+              {...register("civility")}
+              name="civility"
+              className="input_field"
+            >
+              <option label="Choose civility"></option>
+              <option value="Mr.">Mr.</option>
+              <option value="Mrs.">Mrs.</option>
+              <option value="Ms.">Ms.</option>
+            </select>
+            {/* <input
               type="text"
               placeholder={t("Type here...")}
               className="input_field"
               {...register("civility")}
-            />
+            /> */}
             <span className="error">{errors?.civility?.message}</span>
           </div>
         </div>
