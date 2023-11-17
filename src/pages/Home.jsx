@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import Dashboard from "../components/Home/Dashboard";
-import Users from "../components/Home/Users";
-import Subscribers from "../components/Home/Subscribers";
-import Prospect from "../components/Home/Prospect";
-import Partners from "../components/Home/Partners";
-import ThirdPartyPayer from "../components/Home/ThirdPartyPayer";
-import Subcriptions from "../components/Home/Subcriptions";
-import Settings from "../components/Home/Settings";
-import Orders from "../components/Home/Orders";
-import Magazine from "../components/Home/Magazine";
+// import Dashboard from "../components/Home/Dashboard";
+// import Users from "../components/Home/Users";
+// import Subscribers from "../components/Home/Subscribers";
+// import Prospect from "../components/Home/Prospect";
+// import Partners from "../components/Home/Partners";
+// import ThirdPartyPayer from "../components/Home/ThirdPartyPayer";
+// import Subcriptions from "../components/Home/Subcriptions";
+// import Settings from "../components/Home/Settings";
+// import Orders from "../components/Home/Orders";
+// import Magazine from "../components/Home/Magazine";
 import { Helmet } from "react-helmet";
-import Profile from "../components/Home/Profile";
+// import Profile from "./Profile";
 import ChangePassword from "../components/ChangePassword";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,7 +37,7 @@ import TaxtAndShippingCharges from "./TaxtAndShippingCharges";
 import { handleGetPricing } from "../redux/TaxAndShippingSlice";
 import MessagesList from "./MessagesList";
 import NewsLetterList from "./NewsLetterList";
-import PromoCode from "../components/PromoCode";
+import PromoCode from "./PromoCode";
 import { handleGetAllPromoCodes } from "../redux/PromoCodeSlice";
 
 const Home = () => {
@@ -73,17 +73,17 @@ const Home = () => {
         }
       });
     }
-    dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
-    dispatch(handleGetPricing({ token, signal: AbortControllerRef }));
-    dispatch(handleGetNewsLetter({ token, signal: AbortControllerRef }));
-    dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllOrder({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPromoCodes({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetPricing({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetNewsLetter({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetAllOrder({ token, signal: AbortControllerRef }));
+    // dispatch(handleGetAllPromoCodes({ token, signal: AbortControllerRef }));
   };
 
   useEffect(() => {
@@ -115,8 +115,8 @@ const Home = () => {
             activeComponent={activeComponent}
             setActiveComponent={setActiveComponent}
           />
-          <div className="lg:p-5 p-3">
-            {activeComponent === "dashboard" && (
+          {/* <div className="lg:p-5 p-3">
+            // {activeComponent === "dashboard" && (
               <Dashboard setActiveComponent={setActiveComponent} />
             )}
             {activeComponent === t("users") && <Users />}
@@ -131,11 +131,11 @@ const Home = () => {
             {activeComponent === t("change password") && <ChangePassword />}
             {activeComponent === t("messages") && <MessagesList />}
             {/* {activeComponent === t("newsLetter") && <NewsLetterList />} */}
-            {activeComponent === t("tax & shipping") && (
+            {/* {activeComponent === t("tax & shipping") && (
               <TaxtAndShippingCharges />
-            )}
-            {activeComponent === t("promo codes") && <PromoCode />}
-          </div>
+            )} */}
+            {/* {activeComponent === t("promo codes") && <PromoCode />}
+          </div> */} 
         </section>
       </div>
     </>

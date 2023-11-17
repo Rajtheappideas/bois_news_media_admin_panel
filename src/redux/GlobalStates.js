@@ -50,6 +50,8 @@ const initialState = {
   messages: [],
   newsLetterLoading: false,
   messageLoading: false,
+  isSidebarOpen: false,
+  activeSidebarTab: "dashboard",
 };
 
 const logoutChannel = new BroadcastChannel("handleLogout");
@@ -62,6 +64,7 @@ const GlobalStates = createSlice({
     handleChangeFilteredData: (state, { payload }) => {
       state.fileterdData = payload;
     },
+
     handleSearch: (state, { payload: { data, value } }) => {
       state.searchTerm = value;
       const filtered = data.filter((entry) => {
@@ -89,42 +92,58 @@ const GlobalStates = createSlice({
           });
       }
     },
+
     handleClearFilteredData: (state) => {
       state.fileterdData = [];
     },
+
     handleSuccess: () => {
       loginChannel.postMessage("");
       loginChannel.onmessage = (event) => {
         loginChannel.close();
       };
     },
+
     handleLogoutFromAllTabs: () => {
       logoutChannel.postMessage("");
       logoutChannel.onmessage = (event) => {
         logoutChannel.close();
       };
     },
+
     logoutAllTabsEventListener: () => {
       logoutChannel.onmessage = (event) => {
         logoutChannel.close();
         window.location.reload();
       };
     },
+
     loginAllTabsEventListener: () => {
       loginChannel.onmessage = (event) => {
         window.location.reload();
         loginChannel.close();
       };
     },
+
     handleChangeUserLanguage: (state, { payload }) => {
       state.language = payload;
       i18next.changeLanguage(payload);
     },
+
     handlerFilterNewsLetters: (state, { payload }) => {
       state.newsLetters = state.newsLetters?.slice().reverse();
     },
+
     handlerFilterMessages: (state, { payload }) => {
       state.messages = state.messages?.slice().reverse();
+    },
+
+    handleToggleSidebar: (state, { payload }) => {
+      state.isSidebarOpen = payload;
+    },
+
+    handleChagneActiveSidebarTab: (state, { payload }) => {
+      state.activeSidebarTab = payload;
     },
   },
   extraReducers: (builder) => {
@@ -172,6 +191,7 @@ export const {
   handleChangeUserLanguage,
   handlerFilterMessages,
   handlerFilterNewsLetters,
+  handleToggleSidebar,handleChagneActiveSidebarTab
 } = GlobalStates.actions;
 
 export default GlobalStates.reducer;

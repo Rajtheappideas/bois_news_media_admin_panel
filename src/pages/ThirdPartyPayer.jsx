@@ -1,79 +1,81 @@
 import React, { useState, useEffect } from "react";
-import Search from "../Search";
+import Search from "../components/Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { BsEye } from "react-icons/bs";
-import AddNewUser from "../Users/AddNewUser";
-import EditUserDetails from "../Users/EditUserDetails";
+import AddNewThirdPartyPayer from "../components/ThirdPartyPayer/AddNewThirdPartyPayer";
+import EditDetailsThirdPartyPayer from "../components/ThirdPartyPayer/EditDetailsThirdPartyPayer";
 import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
-import {
-  handleDeleteUSER,
-  handleChangeDeleteID,
-  handleFindUser,
-  handlerFilterUsers,
-  handleDeleteUser,
-} from "../../redux/UserSlice";
-import useAbortApiCall from "../../hooks/useAbortApiCall";
+import useAbortApiCall from "../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
-import ShowUsersDetailsOnly from "../Users/ShowUsersDetailsOnly";
+import { BsEye, BsFilterLeft } from "react-icons/bs";
+import {
+  handleChangeDeleteID,
+  handleDeletePAYER,
+  handleDeletePayer,
+  handleFindPayer,
+  handlerFilterPayers,
+} from "../redux/ThirdPartyPayerSlice";
+import ShowThirdPartyPayerDetails from "../components/ThirdPartyPayer/ShowThirdPartyPayerDetails";
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 
-const Users = () => {
-  const [showUserDetail, setShowUserDetail] = useState(false);
-  const [showAddNewUser, setShowAddNewUser] = useState(false);
+const ThirdPartyPayer = () => {
+  const [showAddnewPayer, setShowAddnewPayer] = useState(false);
+  const [showEditDetailsPayer, setShowEditDetailsPayer] = useState(false);
+  const [showPayerDetails, setShowPayerDetails] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
-  const [editUserId, setEditUserId] = useState(null);
-  const [showUserDetailsOnly, setShowUserDetailsOnly] = useState(false);
 
   const {
-    users,
+    payers,
     loading,
-    addNewUserLoading,
-    deleteUserLoading,
-    deleteUserID,
+    addNewPayerLoading,
+    deletePayerLoading,
+    deletePayerID,
     filterType,
-  } = useSelector((state) => state.root.users);
+  } = useSelector((state) => state.root.thirdPartyPayers);
+
   const { token, role } = useSelector((state) => state.root.auth);
-  const { fileterdData } = useSelector((state) => state.root.globalStates);
+  const { fileterdData ,isSidebarOpen} = useSelector((state) => state.root.globalStates);
+
+  const { AbortControllerRef } = useAbortApiCall();
 
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
 
-  const { AbortControllerRef } = useAbortApiCall();
-
   // pagination logic
-  const usersPerPage = 8;
-  const pageVisited = pageNumber * usersPerPage;
-  let displayUsers = [];
+  const payersPerPage = 8;
+  const pageVisited = pageNumber * payersPerPage;
+  let displayPayers = [];
   if (!loading) {
-    displayUsers =
-      users?.length > 0 && fileterdData.length === 0
-        ? users.slice(pageVisited, usersPerPage + pageVisited)
-        : fileterdData.slice(pageVisited, usersPerPage + pageVisited);
+    displayPayers =
+      payers?.length > 0 && fileterdData.length === 0
+        ? payers.slice(pageVisited, payersPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, payersPerPage + pageVisited);
   }
   const pageCount =
     fileterdData.length === 0
-      ? Math.ceil(users?.length / usersPerPage)
-      : Math.ceil(fileterdData?.length / usersPerPage);
+      ? Math.ceil(payers?.length / payersPerPage)
+      : Math.ceil(fileterdData?.length / payersPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
 
-  const handleDeleteruser = (id, name) => {
+  const handleDeletepayer = (id, name) => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteUSER({ id, token, signal: AbortControllerRef })
+        handleDeletePAYER({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
           if (res?.payload?.status === "success") {
-            dispatch(handleDeleteUser(id));
-            toast.success(` ${name} ${t("user Deleted Successfully.")}`);
+            dispatch(handleDeletePayer(id));
+            toast.success(`${name} ${t("payer Deleted Successfully")}.`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -90,37 +92,42 @@ const Users = () => {
 
   return (
     <>
-      {showUserDetail && !showAddNewUser && !showUserDetailsOnly && (
-        <EditUserDetails
-          setEditUserId={setEditUserId}
-          editUserId={editUserId}
-          setShowUserDetail={setShowUserDetail}
+      <Helmet title="Third-Party Payer | Bois News Media" />
+      <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
+        <Sidebar />
+        <section
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+            isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+          }`}
+        >
+          <Header />
+          <div className="lg:p-5 p-3 ">
+
+      {showAddnewPayer && !showEditDetailsPayer && !showPayerDetails && (
+        <AddNewThirdPartyPayer setShowAddnewPayer={setShowAddnewPayer} />
+      )}
+      {!showAddnewPayer && showEditDetailsPayer && !showPayerDetails && (
+        <EditDetailsThirdPartyPayer
+          setShowEditDetailsPayer={setShowEditDetailsPayer}
         />
       )}
-      {!showUserDetail && !showUserDetailsOnly && showAddNewUser && (
-        <AddNewUser setShowAddNewUser={setShowAddNewUser} />
+      {!showAddnewPayer && !showEditDetailsPayer && showPayerDetails && (
+        <ShowThirdPartyPayerDetails setShowPayerDetails={setShowPayerDetails} />
       )}
-
-      {!showUserDetail && !showAddNewUser && showUserDetailsOnly && (
-        <ShowUsersDetailsOnly setShowUserDetailsOnly={setShowUserDetailsOnly} />
-      )}
-
-      {!showUserDetail && !showAddNewUser && !showUserDetailsOnly && (
-        <div className="lg:space-y-5 select-none space-y-3 w-full">
+      {!showAddnewPayer && !showEditDetailsPayer && !showPayerDetails && (
+        <div className="lg:space-y-5 space-y-3 w-full">
           {/* search + buttons */}
           <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
             <div className="lg:w-1/3 md:w-1/2 w-full">
-              <Search data={users} />
+              <Search data={payers} />
             </div>
             <div>
               <select
                 name="filter"
-                onChange={(e) => {
-                  dispatch(handlerFilterUsers(e.target.value));
-                }}
-                value={filterType}
                 id="filter"
-                className="filter_dropdown outline-none"
+                onChange={(e) => dispatch(handlerFilterPayers(e.target.value))}
+                value={filterType}
+                className="filter_dropdown"
               >
                 <option value="newest">{t("newest")}</option>
                 <option value="oldest">{t("oldest")}</option>
@@ -128,7 +135,7 @@ const Users = () => {
               {role === "admin" && (
                 <button
                   className="gray_button"
-                  onClick={() => setShowAddNewUser(true)}
+                  onClick={() => setShowAddnewPayer(true)}
                 >
                   + {t("Add new")}
                 </button>
@@ -138,24 +145,23 @@ const Users = () => {
           {/* table */}
           <div className="shadow-sm outline-none rounded-2xl md:mt-5 mt-3 py-3 px-4 bg-white overflow-x-scroll scrollbar">
             <table className="border-none outline-none w-full overflow-scroll">
-              <thead className="w-full border-b border-gray-100 text-center select-none">
+              <thead className="w-full border-b border-gray-100 text-left">
                 <tr>
-                  <th className="p-4 whitespace-nowrap text-center">
+                  <th className="p-4 whitespace-nowrap">
                     {/* <input
                       type="checkbox"
                       className="rounded-lg inline-block mr-2 h-4 w-4"
-                      id="id"
+                      id="accountName"
                     /> */}
-                    <label htmlFor="id" className=" cursor-pointer">
-                      <span>ID</span>
+                    <label htmlFor="accountName">
+                      <span>{t("Account name")}</span>
                     </label>
                   </th>
-                  <th className="p-4 text-left">{t("Joining Date")}</th>
-                  <th className="p-4 text-left">{t("Name")}</th>
-                  <th className="p-4 text-left">{t("Email")}</th>
-                  <th className="p-4 text-left">{t("Phone")}</th>
-                  <th className="p-4 text-left">{t("Role")}</th>
-                  <th className="p-4">{t("Action")}</th>
+                  <th className="p-4">{t("Account number")}</th>
+                  <th className="p-4">{t("Postal code")}</th>
+                  <th className="p-4">{t("Billing country")}</th>
+                  <th className="p-4">{t("Status")}</th>
+                  <th className="p-4 text-center">{t("Action")}</th>
                 </tr>
               </thead>
               <tbody className="w-full">
@@ -163,45 +169,44 @@ const Users = () => {
                   <tr className="data_not_found_And_Loading">
                     <td colSpan="7">{t("Loading")}....</td>
                   </tr>
-                ) : users.length !== 0 && users !== undefined ? (
-                  displayUsers.map((user) => (
+                ) : payers?.length !== 0 && payers !== undefined ? (
+                  displayPayers.map((payer) => (
                     <tr
-                      key={user?._id}
-                      className="border-b last:border-none border-gray-200 w-full text-center"
+                      key={payer?._id}
+                      className="border-b last:border-none border-gray-200 w-full text-left pl-10 select-none"
                     >
                       <td className="p-4 whitespace-nowrap">
                         {/* <input
                           type="checkbox"
-                          id={user?.userId}
+                          id={payer?._id}
                           className="rounded-lg inline-block mr-2 w-4 h-4"
                         /> */}
-                        <label htmlFor={user?.userId}>
-                          <span className="font-bold text-center cursor-pointer">
-                            {user?.userId}
+                        <label htmlFor={payer?._id}>
+                          <span className="font-bold text-center">
+                            {payer?.accountName}
                           </span>
                         </label>
                       </td>
                       <td className="text-left p-4 whitespace-nowrap">
-                        {moment(user?.date).format("LL")}
+                        {payer?.email}
                       </td>
                       <td className="text-left p-4 whitespace-nowrap">
-                        {user?.name ?? "-"}
+                        {payer?.billingAddress?.zipCode ?? "-"}
                       </td>
                       <td className="text-left p-4 whitespace-nowrap">
-                        {user?.email ?? "-"}
+                        {payer?.billingAddress?.country ?? "-"}
                       </td>
                       <td className="text-left p-4 whitespace-nowrap">
-                        {user?.phone ?? "-"}
+                        {payer?.status ?? "-"}
                       </td>
-                      <td className="text-left p-4">{user?.role ?? "-"}</td>
                       <td className="flex items-center justify-center p-4">
                         {role === "admin" || role === "editor" ? (
                           <button
                             onClick={() => {
-                              setShowUserDetail(true);
-                              dispatch(handleFindUser(user?._id));
+                              setShowEditDetailsPayer(true);
+                              dispatch(handleFindPayer(payer?._id));
                             }}
-                            disabled={deleteUserLoading || loading}
+                            disabled={deletePayerLoading || loading}
                             type="button"
                             className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
                           >
@@ -214,10 +219,10 @@ const Users = () => {
                         ) : (
                           <button
                             onClick={() => {
-                              setShowUserDetailsOnly(true);
-                              dispatch(handleFindUser(user?._id));
+                              setShowPayerDetails(true);
+                              dispatch(handleFindPayer(payer?._id));
                             }}
-                            disabled={deleteUserLoading || loading}
+                            disabled={deletePayerLoading || loading}
                             type="button"
                             className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
                           >
@@ -234,13 +239,16 @@ const Users = () => {
                             type="button"
                             className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
                             onClick={() =>
-                              handleDeleteruser(user?._id, user?.name)
+                              handleDeletepayer(payer?._id, payer?.accountName)
                             }
                             disabled={
-                              addNewUserLoading || deleteUserLoading || loading
+                              addNewPayerLoading ||
+                              deletePayerLoading ||
+                              loading
                             }
                           >
-                            {deleteUserLoading && user?._id === deleteUserID ? (
+                            {deletePayerLoading &&
+                            payer?._id === deletePayerID ? (
                               "..."
                             ) : (
                               <RiDeleteBin6Line
@@ -256,7 +264,7 @@ const Users = () => {
                   ))
                 ) : (
                   <tr className="data_not_found_And_Loading">
-                    <td colSpan="7">{t("No users here")}.</td>
+                    <td colSpan="7">{t("No payers here")}.</td>
                   </tr>
                 )}
               </tbody>
@@ -264,18 +272,20 @@ const Users = () => {
           </div>
           {/* pagination */}
           <div className="flex items-center justify-between py-5">
-            <p className="font-medium capitalize md:text-base text-sm text-textBlack">
+            <p className="font-medium md:text-base text-sm text-textBlack">
               {t("Showing")}{" "}
               {fileterdData.length === 0
-                ? (pageNumber + 1) * usersPerPage > users?.length
-                  ? users?.length
-                  : (pageNumber + 1) * usersPerPage
-                : (pageNumber + 1) * usersPerPage > fileterdData?.length
+                ? (pageNumber + 1) * payersPerPage > payers?.length
+                  ? payers?.length
+                  : (pageNumber + 1) * payersPerPage
+                : (pageNumber + 1) * payersPerPage > fileterdData?.length
                 ? fileterdData?.length
-                : (pageNumber + 1) * usersPerPage}{" "}
+                : (pageNumber + 1) * payersPerPage}{" "}
               {t("from")}{" "}
-              {fileterdData?.length === 0 ? users?.length : fileterdData.length}{" "}
-              {t("users")}
+              {fileterdData?.length === 0
+                ? payers?.length
+                : fileterdData.length}{" "}
+              {t("Payers")}
             </p>
             <ReactPaginate
               onPageChange={changePage}
@@ -306,8 +316,10 @@ const Users = () => {
           </div>
         </div>
       )}
+          </div></section></div>
+
     </>
   );
 };
 
-export default Users;
+export default ThirdPartyPayer;

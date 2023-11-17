@@ -21,6 +21,26 @@ export const handleGetAllUsers = createAsyncThunk(
   }
 );
 
+export const handleGetUserbyId = createAsyncThunk(
+  "user/handleGetUserbyId",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`user/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const handleAddNewUser = createAsyncThunk(
   "user/handleAddNewUser",
   async (
@@ -144,6 +164,7 @@ const initialState = {
   users: [],
   filterType: "newest",
   singleUser: null,
+  singleUserGetLoading: false,
   addNewUserLoading: false,
   deleteUserLoading: false,
   EditUserLoading: false,
@@ -195,6 +216,25 @@ const UserSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.users = [];
+      state.error = payload ?? null;
+    });
+
+    // get  user by id
+    builder.addCase(handleGetUserbyId.pending, (state, {}) => {
+      state.singleUserGetLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleGetUserbyId.fulfilled, (state, { payload }) => {
+      state.singleUserGetLoading = false;
+      state.success = true;
+      state.singleUser = payload?.user;
+      state.error = null;
+    });
+    builder.addCase(handleGetUserbyId.rejected, (state, { payload }) => {
+      state.singleUserGetLoading = false;
+      state.success = false;
+      state.singleUser = null;
       state.error = payload ?? null;
     });
     // add new user

@@ -10,21 +10,20 @@ import BaseUrl from "../BaseUrl";
 import {
   handleLogoutFromAllTabs,
   handleChangeUserLanguage,
+  handleToggleSidebar,
 } from "../redux/GlobalStates";
 import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "react-router-dom";
 
-const Header = ({
-  openSidebar,
-  setOpenSidebar,
-  activeComponent,
-  setActiveComponent,
-}) => {
+const Header = () => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [stickyHeader, setStickyHeader] = useState(false);
 
   const { loading, user } = useSelector((state) => state.root.auth);
-  const { language } = useSelector((state) => state.root.globalStates);
+  const { language, isSidebarOpen } = useSelector(
+    (state) => state.root.globalStates
+  );
 
   const profileRef = useRef(null);
   const languageRef = useRef(null);
@@ -32,6 +31,9 @@ const Header = ({
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const title = location.pathname.split("/")[1];
 
   // for profile dropdown
   useEffect(() => {
@@ -88,18 +90,18 @@ const Header = ({
       {/* left side */}
       <div className="flex items-center flex-1 gap-x-2">
         <HiMenuAlt2
-          onClick={() => setOpenSidebar(!openSidebar)}
+          onClick={() => dispatch(handleToggleSidebar(!isSidebarOpen))}
           role="button"
           className="md:text-2xl text-xl"
         />
         <p className="font-bold lg:text-2xl text-textBlack md:text-xl text-sm capitalize">
-          {t(activeComponent)} <br className="md:hidden block" />{" "}
-          {t(activeComponent) !== t("dashboard") &&
-            t(activeComponent) !== t("profile") &&
-            t(activeComponent) !== t("tax & shipping") &&
-            t(activeComponent) !== t("promo codes") &&
-            t(activeComponent) !== t("newsLetter") &&
-            t(activeComponent) !== t("messages") &&
+          {t(title)} <br className="md:hidden block" />{" "}
+          {title==="" ? t("dashboard"):t(title) !== t("profile") &&
+            t(title) !== t("tax & shipping") &&
+            t(title) !== t("promo codes") &&
+            t(title) !== t("newsLetter") &&
+            t(title) !== t("messages") &&
+            title !== "" &&
             t("management")}
         </p>
       </div>
@@ -207,23 +209,25 @@ const Header = ({
               showProfileDropdown ? "scale-100" : "scale-0"
             } absolute md:top-11 top-8 md:left-16 left-5 shadow-2xl rounded-md p-2 z-10 md:min-w-[10rem] min-w-[7rem]`}
           >
-            <p
+            <Link
+              to="/profile"
               onClick={() => {
-                setActiveComponent(t("profile"));
+                // setActiveComponent(t("profile"));
                 setShowProfileDropdown(false);
               }}
-              className="hover:font-semibold duration-300 w-full capitalize p-1 rounded-md transition cursor-pointer"
+              className="hover:font-semibold duration-300 w-full block capitalize p-1 rounded-md transition cursor-pointer"
             >
               {t("profile")}
-            </p>
-            <button
+            </Link>
+            <Link
+              to="/change-password"
               onClick={() => {
-                setActiveComponent(t("change password"));
+                // setActiveComponent(t("change password"));
               }}
-              className="text-textBlack capitalize text-left w-full p-1 rounded-md hover:font-semibold transition cursor-pointer"
+              className="text-textBlack capitalize text-left w-full block p-1 rounded-md hover:font-semibold transition cursor-pointer"
             >
               {t("change password")}
-            </button>
+            </Link>
             <button
               disabled={loading}
               onClick={() => {

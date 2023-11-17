@@ -1,25 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
-import Search from "../Search";
+import Search from "../components/Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { HiOutlineDownload } from "react-icons/hi";
-import AddnewMagazine from "../Magazine/AddnewMagazine";
-import EditMagazineDetails from "../Magazine/EditMagazineDetails";
+import AddnewMagazine from "../components/Magazine/AddnewMagazine";
+import EditMagazineDetails from "../components/Magazine/EditMagazineDetails";
 import {
   handleChangeDeleteID,
   handleDeleteMAGAZINE,
   handleDeleteMagazine,
   handleFindMagazine,
+  handleGetAllMagazine,
   handlerFilterMagazine,
-} from "../../redux/MagazineSlice";
+} from "../redux/MagazineSlice";
 import { useDispatch, useSelector } from "react-redux";
-import useAbortApiCall from "../../hooks/useAbortApiCall";
+import useAbortApiCall from "../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
 import { BsEye } from "react-icons/bs";
-import ShowMagazineDetails from "../Magazine/ShowMagazineDetails";
-import BaseUrl from "../../BaseUrl";
+import ShowMagazineDetails from "../components/Magazine/ShowMagazineDetails";
+import BaseUrl from "../BaseUrl";
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
+import { handleLogout } from "../redux/AuthSlice";
+import { handleLogoutFromAllTabs } from "../redux/GlobalStates";
 
 const Magazine = () => {
   const [showAddnewMagazine, setshowAddnewMagazine] = useState(false);
@@ -39,7 +45,7 @@ const Magazine = () => {
   } = useSelector((state) => state.root.magazines);
 
   const { token, role } = useSelector((state) => state.root.auth);
-  const { fileterdData } = useSelector((state) => state.root.globalStates);
+  const { fileterdData,isSidebarOpen } = useSelector((state) => state.root.globalStates);
 
   const { AbortControllerRef } = useAbortApiCall();
 
@@ -108,9 +114,40 @@ const Magazine = () => {
       setPageNumber(0);
     }
   }, [fileterdData]);
+  
+  // fetch magainzes
+  useEffect(() => {
+    const response = dispatch(
+      handleGetAllMagazine({ token, signal: AbortControllerRef })
+    );
+    if (response) {
+      response.then((res) => {
+        if (
+          res?.payload?.status === "fail" &&
+          (res?.payload?.message === "Please provide authentication token." ||
+            res?.payload?.message === "Invalid token.")
+        ) {
+          dispatch(handleLogout());
+          dispatch(handleLogoutFromAllTabs());
+          toast.error("Please login again");
+        }
+      });
+    }
+  }, []);
 
   return (
     <>
+     <Helmet title="Magazines | Bois News Media" />
+      <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
+        <Sidebar />
+        <section
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+            isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+          }`}
+        >
+          <Header />
+          <div className="lg:p-5 p-3 ">
+
       {showAddnewMagazine && !showEditMagazine && !showMagazineDetails && (
         <AddnewMagazine setshowAddnewMagazine={setshowAddnewMagazine} />
       )}
@@ -190,7 +227,7 @@ const Magazine = () => {
                           className="rounded-lg inline-block mr-2 w-4 h-4"
                         /> */}
                         <label htmlFor={magazine?._id}>
-                          <span className="font-bold text-center cursor-pointer">
+                          <span className="font-bold text-center">
                             {magazine?.magazineId}
                           </span>
                         </label>
@@ -420,6 +457,8 @@ const Magazine = () => {
           </div>
         </div>
       )}
+          </div></section></div>
+
     </>
   );
 };

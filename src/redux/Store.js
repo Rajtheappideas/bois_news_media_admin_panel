@@ -26,14 +26,27 @@ const rootPersistConfig = {
     "orders",
     "subscriptions",
     "thirdPartyPayers",
-    "globalStates",
     "taxAndShipping",
     "promoCode",
+    "auth",
+    "globalStates",
   ],
 };
 
+const globalStatesPersistConfig = {
+  key: "globalStates",
+  storage,
+  whitelist: ["activeSidebarTab"],
+};
+
+const authPersistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["user", "role", "token", "verifyToken", "email"],
+};
+
 const rootReducer = combineReducers({
-  auth: AuthSlice,
+  auth: persistReducer(authPersistConfig, AuthSlice),
   users: UserSlice,
   subscribers: SubscriberSlice,
   prospects: ProspectSlice,
@@ -42,7 +55,7 @@ const rootReducer = combineReducers({
   orders: OrderSlice,
   subscriptions: SubscriptionSlice,
   thirdPartyPayers: ThirdPartyPayerSlice,
-  globalStates: GlobalStates,
+  globalStates: persistReducer(globalStatesPersistConfig, GlobalStates),
   taxAndShipping: TaxAndShippingSlice,
   promoCode: PromoCodeSlice,
 });
