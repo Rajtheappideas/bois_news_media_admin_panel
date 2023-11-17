@@ -25,7 +25,12 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
     if (updateLoading) return;
     toast.loading("Updating Status...");
     const response = dispatch(
-      handleUpdateOrderStatus({ status, id, token, signal: AbortControllerRef })
+      handleUpdateOrderStatus({
+        status,
+        id,
+        token,
+        signal: AbortControllerRef,
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -53,8 +58,12 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
       <td className="text-left p-4 whitespace-nowrap">
         {order?.subscriber?.fname} {order?.subscriber?.lname}
       </td>
-      <td className="text-left p-4 whitespace-nowrap">Cash</td>
-      <td className="text-left p-4 whitespace-nowrap">€ {parseFloat(order?.total).toFixed(2)}</td>
+      <td className="text-left p-4 whitespace-nowrap">
+        {order?.paymentMethod}
+      </td>
+      <td className="text-left p-4 whitespace-nowrap">
+        € {parseFloat(order?.total).toFixed(2)}
+      </td>
       {role === "viewer" ? (
         <td className="text-left p-4">{orderStatus}</td>
       ) : (

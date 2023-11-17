@@ -64,7 +64,7 @@ const PromoCode = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePromoCode({ id, token, signal: AbortControllerRef })
+        handleDeletePromoCode({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -82,6 +82,12 @@ const PromoCode = () => {
   useEffect(() => {
     return () => abortApiCall();
   }, []);
+
+  useEffect(() => {
+    if (fileterdData && fileterdData.length > 0) {
+      setPageNumber(0);
+    }
+  }, [fileterdData]);
 
   return (
     <>

@@ -49,20 +49,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
     status: yup.string().required(t("status is required")),
     description: yup.string().required(t("description is required")),
     magazineTitle: yup.string().required(t("select magazine")),
-    pdf: yup
-      .mixed()
-      .required(t("please upload file"))
-      .test(
-        "fileSize",
-        t("Only pdf up to 10MB are permitted."),
-        (files) =>
-          !files || // Check if `files` is defined
-          files.length === 0 || // Check if `files` is not an empty list
-          Array.from(files).every((file) => file.size <= 10000000)
-      )
-      .test("type", t("Only .pdf formats are accepted."), (value) => {
-        return value && value[0]?.type === "application/pdf";
-      }),
+
     stock: yup
       .string()
       .required(t("stock is required"))
@@ -118,7 +105,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
         id: _id,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -168,7 +155,7 @@ const EditMagazineDetails = ({ setshowEditMagazine }) => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef })
+        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {

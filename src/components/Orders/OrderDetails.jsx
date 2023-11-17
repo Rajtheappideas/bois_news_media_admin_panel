@@ -63,7 +63,8 @@ const OrderDetails = ({ setshowOrderDetails }) => {
             {t("Invoice")}
           </p>
           <p className="font-bold text-black md:text-lg">
-            {t("Status")}:<span className="text-green-500 ml-1">{singleOrder?.status}</span>
+            {t("Status")}:
+            <span className="text-green-500 ml-1">{singleOrder?.status}</span>
           </p>
         </div>
         {/*invoice details */}
@@ -82,7 +83,9 @@ const OrderDetails = ({ setshowOrderDetails }) => {
             <label htmlFor="payment_method" className="Label">
               {t("Payment method")}
             </label>
-            <p className="text-textBlack font-medium md:text-lg">Cash</p>
+            <p className="text-textBlack font-medium md:text-lg">
+              {singleOrder?.paymentMethod}
+            </p>
           </div>
           {/* Contact */}
           <div className="w-full md:space-y-2">
@@ -151,37 +154,75 @@ const OrderDetails = ({ setshowOrderDetails }) => {
           <div className="md:w-2/5 w-full md:space-y-3 space-y-2">
             <div className="w-full flex items-center justify-between">
               <p className="w-1/2 font-semibold uppercase">{t("sub total")}</p>
-              <p className="w-1/2 text-right">€ {parseFloat(singleOrder?.subtotal).toFixed(2)}</p>
+              <p className="w-1/2 text-right">
+                €&nbsp;
+                {Intl.NumberFormat("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(parseFloat(singleOrder?.subtotal))}
+              </p>
+            </div>
+            <div className="w-full flex items-center justify-between">
+              <p className="w-1/2 font-semibold uppercase">{"tax"}</p>
+              <p className="w-1/2 text-right">
+                {" "}
+                €&nbsp;
+                {Intl.NumberFormat("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(parseFloat(singleOrder?.tax))}
+              </p>
             </div>
             <div className="w-full flex items-center justify-between">
               <p className="w-1/2 font-semibold uppercase">
                 {t("shipping cost")}
               </p>
-              <p className="w-1/2 text-right">€ {singleOrder?.shipping}</p>
+              <p className="w-1/2 text-right">
+                €&nbsp;
+                {Intl.NumberFormat("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(parseFloat(singleOrder?.shipping))}
+              </p>
             </div>
+
             <div className="w-full flex items-center justify-between">
               <p className="w-1/2 font-semibold uppercase">{"discount"}</p>
-              <p className="w-1/2 text-right">€ {singleOrder?.discount}</p>
-            </div>
-            <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">
-                {"promo code discount"}{" "}
-                <span className="text-sm lowercase font-light">
-                  (code : {singleOrder?.promoCode})
-                </span>
-              </p>
               <p className="w-1/2 text-right">
-                € {singleOrder?.promoDiscount}{" "}
+                {" "}
+                €&nbsp;-
+                {Intl.NumberFormat("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(parseFloat(singleOrder?.discount))}
               </p>
             </div>
-            <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">{"tax"}</p>
-              <p className="w-1/2 text-right">€ {singleOrder?.tax}</p>
-            </div>
+            {singleOrder?.promoCode && (
+              <div className="w-full flex items-center justify-between">
+                <p className="w-1/2 font-semibold ">
+                  <span className="uppercase">{"promo code discount"} </span>
+                  <span className="text-sm font-light">
+                    (code : {singleOrder?.promoCode})
+                  </span>
+                </p>
+                <p className="w-1/2 text-right">
+                  €&nbsp;-
+                  {Intl.NumberFormat("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(parseFloat(singleOrder?.promoDiscount))}
+                </p>
+              </div>
+            )}
+
             <div className="w-full flex items-center justify-between border-t-2">
               <p className="w-1/2 font-bold ">{t("Total Amount")}</p>
               <p className="w-1/2 text-right font-bold">
-                € {parseFloat(singleOrder?.total).toFixed(2)}
+                €&nbsp;
+                {Intl.NumberFormat("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(parseFloat(singleOrder?.total))}
               </p>
             </div>
           </div>
