@@ -21,6 +21,25 @@ export const handleGetAllSubscribers = createAsyncThunk(
   }
 );
 
+export const handleGetSubscriberById = createAsyncThunk(
+  "user/handleGetSubscriberById",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`subscriber/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const handleAddNewSubscriber = createAsyncThunk(
   "user/handleAddNewSubscriber",
   async (
@@ -347,11 +366,13 @@ const initialState = {
   subscribers: [],
   addNewSubscriberLoading: false,
   singleSucriber: null,
+  singleSucriberLoading: false,
   deleteLoading: false,
   editLoading: false,
   deleteSubscriberID: null,
   deleteSubscriptionID: null,
   singleSubscription: null,
+  showMagazineDistributionPopup: false,
 };
 
 const SubscriberSlice = createSlice({
@@ -430,6 +451,14 @@ const SubscriberSlice = createSlice({
     handleClearSingleSubscription: (state, {}) => {
       state.singleSubscription = null;
     },
+
+    handleChangeSingleSubscriber: (state, { payload }) => {
+      state.singleSucriber = payload;
+    },
+
+    handleChangeMagazineDistributionPopup: (state, { payload }) => {
+      state.showMagazineDistributionPopup = payload;
+    },
   },
   extraReducers: (builder) => {
     // get all subscribers
@@ -446,6 +475,25 @@ const SubscriberSlice = createSlice({
     });
     builder.addCase(handleGetAllSubscribers.rejected, (state, { payload }) => {
       state.loading = false;
+      state.success = false;
+      state.subscribers = [];
+      state.error = payload ?? null;
+    });
+
+    // get subscriber by id
+    builder.addCase(handleGetSubscriberById.pending, (state, {}) => {
+      state.singleSucriberLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleGetSubscriberById.fulfilled, (state, { payload }) => {
+      state.singleSucriberLoading = false;
+      state.success = true;
+      state.singleSucriber = payload?.subscriber;
+      state.error = null;
+    });
+    builder.addCase(handleGetSubscriberById.rejected, (state, { payload }) => {
+      state.singleSucriberLoading = false;
       state.success = false;
       state.subscribers = [];
       state.error = payload ?? null;
@@ -605,6 +653,8 @@ export const {
   handleDeleteSubscription,
   handleFindSubscription,
   handleClearSingleSubscription,
+  handleChangeSingleSubscriber,
+  handleChangeMagazineDistributionPopup,
 } = SubscriberSlice.actions;
 
 export default SubscriberSlice.reducer;

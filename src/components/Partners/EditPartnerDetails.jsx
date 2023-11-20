@@ -74,7 +74,6 @@ const EditPartnerDetails = ({ setShowEditDetailsPartner }) => {
         .required(t("company is required")),
       civility: yup
         .string()
-        .max(200, t("Maximum character limit reached"))
         .required(t("civility is required")),
       address1: yup
         .string()

@@ -26,25 +26,31 @@ import { handleGetAllMagazine } from "./redux/MagazineSlice";
 import { handleGetPricing } from "./redux/TaxAndShippingSlice";
 import { handleGetAllOrder } from "./redux/OrderSlice";
 import { handleGetAllPromoCodes } from "./redux/PromoCodeSlice";
-import EditUserDetails from "./components/Users/EditUserDetails";
+import { handleGetAllSubscription } from "./redux/SubscriptionSlice";
+import { handleGetAllPayers } from "./redux/ThirdPartyPayerSlice";
 
-const Dashboard = lazy(() => import("./pages/Dashboard"));
 const SignIn = lazy(() => import("./pages/SignIn"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Magazine = lazy(() => import("./pages/Magazine"));
 const TaxtAndShippingCharges = lazy(() =>
   import("./pages/TaxtAndShippingCharges")
 );
-const Users = lazy(() => import("./pages/Users"));
-const Subscribers = lazy(() => import("./pages/Subscribers"));
+const Users = lazy(() => import("./pages/users/Users"));
+const EditUserDetails = lazy(() => import("./pages/users/EditUserDetails"));
+const EditSubscriberDetails = lazy(() =>
+  import("./pages/subscribers/EditSubscriberDetails")
+);
+const Subscribers = lazy(() => import("./pages/subscribers/Subscribers"));
 const Prospect = lazy(() => import("./pages/Prospect"));
 const Partners = lazy(() => import("./pages/Partners"));
 const ThirdPartyPayer = lazy(() => import("./pages/ThirdPartyPayer"));
-const Subcriptions = lazy(() => import("./pages/Subcriptions"));
+const Subscriptions = lazy(() => import("./pages/Subcriptions"));
 const Orders = lazy(() => import("./pages/Orders"));
 const PromoCode = lazy(() => import("./pages/PromoCode"));
 const MessagesList = lazy(() => import("./pages/MessagesList"));
@@ -86,10 +92,27 @@ function App() {
     dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllOrder({ token, signal: AbortControllerRef }));
     dispatch(handleGetAllPromoCodes({ token, signal: AbortControllerRef }));
-    // dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
-    // dispatch(handleGetNewsLetter({ token, signal: AbortControllerRef }));
-    // dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
   };
+
+  const privateRoutes = [
+    { path: "/", page: Dashboard },
+    { path: "/users", page: Users },
+    { path: "/users/:id", page: EditUserDetails },
+    { path: "/profile", page: Profile },
+    { path: "/magazines", page: Magazine },
+    { path: "/subscribers", page: Subscribers },
+    { path: "/subscribers/:id", page: EditSubscriberDetails },
+    { path: "/prospects", page: Prospect },
+    { path: "/partners", page: Partners },
+    { path: "/tax-shipping", page: TaxtAndShippingCharges },
+    { path: "/messages", page: MessagesList },
+    { path: "/orders", page: Orders },
+    { path: "/promo-codes", page: PromoCode },
+    { path: "/third-party-payer", page: ThirdPartyPayer },
+    { path: "/subscriptions", page: Subscriptions },
+  ];
 
   useEffect(() => {
     handleGetContent();
@@ -138,19 +161,26 @@ function App() {
               path="/reset-password"
               element={<ResetPassword />}
             />
-            <Route path="/*" element={<PageNotFound />} />
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-              caseSensitive
-            />
-            <Route caseSensitive path="/profile" element={<Profile />} />
+            {privateRoutes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <PrivateRoute>
+                    <route.page />
+                  </PrivateRoute>
+                }
+                caseSensitive
+              />
+            ))}
+
+            {/* <Route caseSensitive path="/profile" element={<Profile />} />
             <Route caseSensitive path="/users" element={<Users />} />
-            <Route caseSensitive path="/user/:id" element={<EditUserDetails />} />
+            <Route
+              caseSensitive
+              path="/user/:id"
+              element={<EditUserDetails />}
+            />
             <Route
               caseSensitive
               path="/subscribers"
@@ -176,7 +206,8 @@ function App() {
               element={<TaxtAndShippingCharges />}
             />
             <Route caseSensitive path="/promo-codes" element={<PromoCode />} />
-            <Route caseSensitive path="/messages" element={<MessagesList />} />
+            <Route caseSensitive path="/messages" element={<MessagesList />} /> */}
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

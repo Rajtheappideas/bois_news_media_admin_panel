@@ -195,8 +195,13 @@ const UserSlice = createSlice({
         state.users = findUser;
       }
     },
+
     handleChangeDeleteID: (state, { payload }) => {
       state.deleteUserID = payload;
+    },
+
+    handleChangeSingleUser: (state, { payload }) => {
+      state.singleUser = null;
     },
   },
   extraReducers: (builder) => {
@@ -298,7 +303,7 @@ export const {
   handlerFilterUsers,
   handleFindUser,
   handleDeleteUser,
-  handleChangeDeleteID,
+  handleChangeDeleteID,handleChangeSingleUser
 } = UserSlice.actions;
 
 export default UserSlice.reducer;

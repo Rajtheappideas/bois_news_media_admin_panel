@@ -52,7 +52,7 @@ const Profile = () => {
                       <img
                         src={BaseUrl.concat(user?.profile)}
                         alt="profile"
-                        className="rounded-full object-contain object-center border md:h-24 md:w-24 w-20 h-20"
+                        className="rounded-full object-contain object-center bg-cover bg-center inline-block border md:h-24 md:w-24 w-20 h-20"
                       />
                     ) : (
                       <FaUserCircle

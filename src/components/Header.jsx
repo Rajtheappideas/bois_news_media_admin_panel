@@ -88,7 +88,7 @@ const Header = () => {
       } lg:p-5 p-3 transition flex flex-wrap items-center md:justify-between gap-2 justify-center`}
     >
       {/* left side */}
-      <div className="flex items-center flex-1 gap-x-2">
+      <div className="flex items-center flex-1 gap-x-2 w-full">
         <HiMenuAlt2
           onClick={() => dispatch(handleToggleSidebar(!isSidebarOpen))}
           role="button"
@@ -96,13 +96,15 @@ const Header = () => {
         />
         <p className="font-bold lg:text-2xl text-textBlack md:text-xl text-sm capitalize">
           {t(title)} <br className="md:hidden block" />{" "}
-          {title==="" ? t("dashboard"):t(title) !== t("profile") &&
-            t(title) !== t("tax & shipping") &&
-            t(title) !== t("promo codes") &&
-            t(title) !== t("newsLetter") &&
-            t(title) !== t("messages") &&
-            title !== "" &&
-            t("management")}
+          {title === ""
+            ? t("dashboard")
+            : t(title) !== t("profile") &&
+              t(title) !== t("tax & shipping") &&
+              t(title) !== t("promo codes") &&
+              t(title) !== t("newsLetter") &&
+              t(title) !== t("messages") &&
+              title !== "" &&
+              t("management")}
         </p>
       </div>
       {/* right side profile */}

@@ -21,7 +21,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const Sidebar = ({}) => {
+const Sidebar = () => {
   const { user } = useSelector((state) => state.root.auth);
   const { isSidebarOpen, activeSidebarTab } = useSelector(
     (state) => state.root.globalStates
@@ -114,15 +114,18 @@ const Sidebar = ({}) => {
         <Link
           to="/profile"
           className="my-3 cursor-pointer xl:text-4xl text-2xl font-semibold text-center"
+          onClick={() => {
+            handleChangeTabTitle("profile");
+          }}
         >
           {user?.profile !== null && user?.profile !== undefined ? (
             <img
               src={BaseUrl.concat(user?.profile)}
               alt={user?.name}
-              className="md:h-14 md:w-14 h-9 w-9 mx-auto object-contain object-center border rounded-full text-sm bg-blend-multiply bg-transparent"
+              className="md:h-12 md:w-12 h-9 w-9 mx-auto object-contain object-center bg-cover bg-center border rounded-full text-sm"
             />
           ) : (
-            <FaUserAlt className="bg-gray-200 md:h-10 md:w-10 mx-auto h-6 w-6 p-1 rounded-md inline-block" />
+            <FaUserAlt className="bg-gray-200 md:h-10 md:w-10 mx-auto h-6 w-6 p-1 rounded-md" />
           )}
         </Link>
         <ul className="w-full space-y-3 text-sm mt-3">

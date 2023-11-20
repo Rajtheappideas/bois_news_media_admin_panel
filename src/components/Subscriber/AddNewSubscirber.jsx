@@ -56,17 +56,7 @@ const AddNewSubscirber = ({
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         t("LastName can only contain Latin letters.")
       ),
-    civility: yup
-      .string()
-      .required(t("Civility is required"))
-      .trim()
-      .max(60, t("Max character limit reached"))
-      .min(3, t("minimum three character required"))
-      .typeError(t("Only characters allowed"))
-      .matches(
-        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("Civility can only contain Latin letters.")
-      ),
+    civility: yup.string().required(t("Civility is required")),
     title: yup.string().trim().max(60, t("Max character limit reached")),
     email: yup.string().email().required(t("email is required.")).trim(),
     phone: yup.string().required(t("phone is required")),
@@ -161,6 +151,7 @@ const AddNewSubscirber = ({
       sameAsAbove: false,
       address1: "",
       baddress1: "",
+      thirdPartyPayer: undefined,
     },
   });
 
@@ -920,7 +911,7 @@ const AddNewSubscirber = ({
             <span className="error">{errors?.contactOrigin?.message}</span>
           </div>
         </div>
-        <hr className="my-1" />
+        {/* <hr className="my-1" /> */}
         {/* Magazine distribution */}
         {/* <div className="font-bold text-black md:text-xl flex flex-wrap w-full flex-row items-center justify-between gap-2">
           <p>{t("Magazine distribution")}</p>

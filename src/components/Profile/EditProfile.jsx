@@ -175,13 +175,15 @@ const EditProfile = ({ setShowProfileEdit }) => {
             <img
               src={prevImage}
               alt={name}
-              className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
+              className="rounded-full object-contain object-center bg-cover bg-center inline-block border md:h-24 md:w-24 w-20 h-20"
+
             />
           ) : profile !== null && profile !== undefined ? (
             <img
               src={Baseurl.concat(profile)}
               alt={name}
-              className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
+              className="rounded-full object-contain object-center bg-cover bg-center inline-block border md:h-24 md:w-24 w-20 h-20"
+
             />
           ) : (
             <FaUserCircle

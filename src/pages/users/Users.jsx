@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Search from "../components/Search";
+import Search from "../../components/Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { BsEye } from "react-icons/bs";
-import AddNewUser from "../components/Users/AddNewUser";
-import EditUserDetails from "../components/Users/EditUserDetails";
+import AddNewUser from "../../components/Users/AddNewUser";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import {
@@ -16,23 +15,21 @@ import {
   handleDeleteUser,
   handleGetAllUsers,
   handleGetUserbyId,
-} from "../redux/UserSlice";
-import useAbortApiCall from "../hooks/useAbortApiCall";
+} from "../../redux/UserSlice";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
-import ShowUsersDetailsOnly from "../components/Users/ShowUsersDetailsOnly";
+import ShowUsersDetailsOnly from "../../components/Users/ShowUsersDetailsOnly";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
-import { handleLogout } from "../redux/AuthSlice";
-import { handleLogoutFromAllTabs } from "../redux/GlobalStates";
+import Header from "../../components/Header";
+import Sidebar from "../../components/Sidebar";
+import { handleLogout } from "../../redux/AuthSlice";
+import { handleLogoutFromAllTabs } from "../../redux/GlobalStates";
 import { useNavigate } from "react-router-dom";
 
 const Users = () => {
-  const [showUserDetail, setShowUserDetail] = useState(false);
   const [showAddNewUser, setShowAddNewUser] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
-  const [editUserId, setEditUserId] = useState(null);
   const [showUserDetailsOnly, setShowUserDetailsOnly] = useState(false);
 
   const {
@@ -93,14 +90,16 @@ const Users = () => {
     }
   };
 
-  const handleFetchSingleUser = (id,userId) => {
+  const handleFetchSingleUser = (id, userId) => {
+    toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
       handleGetUserbyId({ id, token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          navigate(`/user/${userId}`);
+          toast.remove();
+          navigate(`/users/${userId}`, { state: { _id: id } });
         }
       });
     }
@@ -144,24 +143,17 @@ const Users = () => {
         >
           <Header />
           <div className="lg:p-5 p-3 ">
-            {showUserDetail && !showAddNewUser && !showUserDetailsOnly && (
-              <EditUserDetails
-                setEditUserId={setEditUserId}
-                editUserId={editUserId}
-                setShowUserDetail={setShowUserDetail}
-              />
-            )}
-            {!showUserDetail && !showUserDetailsOnly && showAddNewUser && (
+            {!showUserDetailsOnly && showAddNewUser && (
               <AddNewUser setShowAddNewUser={setShowAddNewUser} />
             )}
 
-            {!showUserDetail && !showAddNewUser && showUserDetailsOnly && (
+            {!showAddNewUser && showUserDetailsOnly && (
               <ShowUsersDetailsOnly
                 setShowUserDetailsOnly={setShowUserDetailsOnly}
               />
             )}
 
-            {!showUserDetail && !showAddNewUser && !showUserDetailsOnly && (
+            {!showAddNewUser && !showUserDetailsOnly && (
               <div className="lg:space-y-5 select-none space-y-3 w-full">
                 {/* search + buttons */}
                 <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
@@ -197,11 +189,6 @@ const Users = () => {
                     <thead className="w-full border-b border-gray-100 text-center select-none">
                       <tr>
                         <th className="p-4 whitespace-nowrap text-center">
-                          {/* <input
-                      type="checkbox"
-                      className="rounded-lg inline-block mr-2 h-4 w-4"
-                      id="id"
-                    /> */}
                           <label htmlFor="id">
                             <span>ID</span>
                           </label>
@@ -226,11 +213,6 @@ const Users = () => {
                             className="border-b last:border-none border-gray-200 w-full text-center"
                           >
                             <td className="p-4 whitespace-nowrap">
-                              {/* <input
-                          type="checkbox"
-                          id={user?.userId}
-                          className="rounded-lg inline-block mr-2 w-4 h-4"
-                        /> */}
                               <label htmlFor={user?.userId}>
                                 <span className="font-bold text-center ">
                                   {user?.userId}
@@ -256,8 +238,6 @@ const Users = () => {
                               {role === "admin" || role === "editor" ? (
                                 <button
                                   onClick={() => {
-                                    // setShowUserDetail(true);
-                                    // dispatch(handleFindUser(user?._id));
                                     handleFetchSingleUser(
                                       user?._id,
                                       user?.userId

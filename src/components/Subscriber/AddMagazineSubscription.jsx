@@ -9,17 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
 import {
+  handleChangeMagazineDistributionPopup,
   handleClearSingleSubscription,
   handleCreateSubsciption,
   handleEditSubsciption,
 } from "../../redux/SubscriberSlice";
 
-const AddMagazineSubscription = ({
-  handleClosePopup,
-  showMagazineDistrutionPopup,
-  selectedSubscriberId,
-  setSelectedSubscriberId,
-}) => {
+const AddMagazineSubscription = () => {
   const popupRef = useRef(null);
 
   const dispatch = useDispatch();
@@ -27,7 +23,8 @@ const AddMagazineSubscription = ({
 
   const { token } = useSelector((state) => state.root.auth);
   const { subscriptions } = useSelector((state) => state.root.subscriptions);
-  const { singleSubscription } = useSelector((state) => state.root.subscribers);
+  const { singleSubscription, showMagazineDistributionPopup, singleSucriber } =
+    useSelector((state) => state.root.subscribers);
 
   const { loading } = useSelector((state) => state.root.subscribers);
 
@@ -64,7 +61,7 @@ const AddMagazineSubscription = ({
   const onSubmit = (data) => {
     const { subscription, subState, prospectState, startDate, renewDate } =
       data;
-    if (selectedSubscriberId === null) {
+    if (singleSubscription !== null) {
       const response = dispatch(
         handleEditSubsciption({
           subState,
@@ -83,7 +80,7 @@ const AddMagazineSubscription = ({
             toast.success(t("Magazine Subscription edited Successfully."), {
               duration: 2000,
             });
-            handleClosePopup();
+            dispatch(handleChangeMagazineDistributionPopup(false));
             dispatch(handleClearSingleSubscription());
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
@@ -93,7 +90,7 @@ const AddMagazineSubscription = ({
     } else {
       const response = dispatch(
         handleCreateSubsciption({
-          subscriber: selectedSubscriberId,
+          subscriber: singleSucriber?._id,
           subscription,
           subState,
           prospectState,
@@ -109,8 +106,7 @@ const AddMagazineSubscription = ({
             toast.success(t("Magazine Subscription added Successfully."), {
               duration: 2000,
             });
-            handleClosePopup();
-            setSelectedSubscriberId(null);
+            dispatch(handleChangeMagazineDistributionPopup(false));
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -122,7 +118,8 @@ const AddMagazineSubscription = ({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event?.target)) {
-        handleClosePopup();
+        dispatch(handleChangeMagazineDistributionPopup(false));
+        dispatch(handleClearSingleSubscription());
       }
       document.addEventListener("click", handleClickOutside, true);
       return () => {
@@ -133,7 +130,8 @@ const AddMagazineSubscription = ({
   }, [handleClickOutside]);
 
   function handleClickOutside() {
-    handleClosePopup();
+    dispatch(handleChangeMagazineDistributionPopup(false));
+    dispatch(handleClearSingleSubscription());
   }
 
   return (
@@ -141,9 +139,9 @@ const AddMagazineSubscription = ({
       <ReactModal
         className={`overflow-hidden scrollbar bg-black/20 z-50 w-full min-h-screen max-h-screen inset-0 backdrop-blur-sm`}
         appElement={document.getElementById("root")}
-        isOpen={showMagazineDistrutionPopup}
+        isOpen={showMagazineDistributionPopup}
         onRequestClose={() => {
-          handleClosePopup();
+          dispatch(handleChangeMagazineDistributionPopup(false));
           dispatch(handleClearSingleSubscription());
         }}
         shouldCloseOnEsc={true}
@@ -157,11 +155,13 @@ const AddMagazineSubscription = ({
           {/* title + button */}
           <div className="flex items-center justify-between w-full">
             <p className="font-semibold text-lg select-none">
-              {t("Add magazine distribution")}
+              {singleSubscription === null
+                ? t("Add magazine distribution")
+                : "Edit magazine distribution"}
             </p>
             <button
               onClick={() => {
-                handleClosePopup();
+                dispatch(handleChangeMagazineDistributionPopup(false));
                 dispatch(handleClearSingleSubscription());
               }}
             >
