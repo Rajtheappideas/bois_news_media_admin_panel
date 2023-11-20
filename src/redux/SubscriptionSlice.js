@@ -21,6 +21,25 @@ export const handleGetAllSubscription = createAsyncThunk(
   }
 );
 
+export const handleGetSubscriptionById = createAsyncThunk(
+  "subscription/handleGetSubscriptionById",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`subscription/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const handleAddNewSubscription = createAsyncThunk(
   "subscription/handleAddNewSubscription",
   async (
@@ -119,6 +138,7 @@ const initialState = {
   subscriptions: [],
   filterType: "newest",
   singleSubscription: null,
+  singleSubscriptionLoading: false,
   addNewSubscriptionLoading: false,
   deleteSubscriptionLoading: false,
   editSubscriptionLoading: false,
@@ -156,6 +176,9 @@ const SubscriptionSlice = createSlice({
     handleChangeDeleteID: (state, { payload }) => {
       state.deleteSubscriptionID = payload;
     },
+    handleChangeSingleSubscription: (state, { payload }) => {
+      state.singleSubscription = payload;
+    },
   },
   extraReducers: (builder) => {
     // get all payers
@@ -179,6 +202,30 @@ const SubscriptionSlice = createSlice({
       state.subscriptions = [];
       state.error = payload ?? null;
     });
+    // get subscription by id
+    builder.addCase(handleGetSubscriptionById.pending, (state, {}) => {
+      state.singleSubscriptionLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(
+      handleGetSubscriptionById.fulfilled,
+      (state, { payload }) => {
+        state.singleSubscriptionLoading = false;
+        state.success = true;
+        state.singleSubscription = payload?.subscription;
+        state.error = null;
+      }
+    );
+    builder.addCase(
+      handleGetSubscriptionById.rejected,
+      (state, { payload }) => {
+        state.singleSubscriptionLoading = false;
+        state.success = false;
+        state.singleSubscription = null;
+        state.error = payload ?? null;
+      }
+    );
     // add new payer
     builder.addCase(handleAddNewSubscription.pending, (state, {}) => {
       state.addNewSubscriptionLoading = true;
@@ -249,6 +296,7 @@ export const {
   handleDeleteSubscription,
   handleFindSubscription,
   handlerFilterSubscription,
+  handleChangeSingleSubscription,
 } = SubscriptionSlice.actions;
 
 export default SubscriptionSlice.reducer;

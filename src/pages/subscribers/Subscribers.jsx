@@ -39,6 +39,7 @@ const Subscribers = () => {
     addNewSubscriberLoading,
     deleteSubscriberID,
     showMagazineDistributionPopup,
+    singleSucriberLoading,
   } = useSelector((state) => state.root.subscribers);
 
   const { token, role } = useSelector((state) => state.root.auth);
@@ -99,6 +100,7 @@ const Subscribers = () => {
   };
 
   const handleFetchSingleSubscriber = (id, subId) => {
+    if (singleSucriberLoading) return;
     toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
       handleGetSubscriberById({ id, token, signal: AbortControllerRef })
@@ -108,6 +110,8 @@ const Subscribers = () => {
         if (res?.payload?.status === "success") {
           toast.remove();
           navigate(`/subscribers/${subId}`, { state: { _id: id } });
+        } else {
+          toast.remove();
         }
       });
     }

@@ -495,7 +495,7 @@ const SubscriberSlice = createSlice({
     builder.addCase(handleGetSubscriberById.rejected, (state, { payload }) => {
       state.singleSucriberLoading = false;
       state.success = false;
-      state.subscribers = [];
+      state.singleSucriber = null
       state.error = payload ?? null;
     });
     // add new subscriber

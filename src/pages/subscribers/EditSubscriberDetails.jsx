@@ -55,9 +55,9 @@ const EditSubscriberDetails = () => {
 
   const { t } = useTranslation();
 
-  const { _id } = useLocation().state;
+  const state = useLocation().state;
 
-  const { AbortControllerRef } = useAbortApiCall();
+  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const EditSubscirberSchema = yup.object({
     fname: yup
@@ -301,7 +301,7 @@ const EditSubscriberDetails = () => {
         activityDomain,
         contactOrigin,
         clientCode,
-        id: _id,
+        id: state?._id,
         token,
         signal: AbortControllerRef,
       })
@@ -331,6 +331,7 @@ const EditSubscriberDetails = () => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteSubscriber(id));
             toast.success(` ${name} ${t("subscriber Deleted Successfully.")}`);
+            navigate("/subscribers");
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -348,7 +349,7 @@ const EditSubscriberDetails = () => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          dispatch(handleDeleteSubscription({ id, subscriberId: _id }));
+          dispatch(handleDeleteSubscription({ id, subscriberId: state?._id }));
           toast.success(` ${name} ${t("subscription Deleted Successfully.")}`);
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -361,7 +362,7 @@ const EditSubscriberDetails = () => {
     if (singleSucriber !== null) return;
     const response = dispatch(
       handleGetSubscriberById({
-        id: _id,
+        id: state?._id,
         token,
         signal: AbortControllerRef,
       })
@@ -389,12 +390,20 @@ const EditSubscriberDetails = () => {
 
   const handleShowMagazinePopupForEditSubscription = (subscriptionId) => {
     dispatch(handleChangeMagazineDistributionPopup(true));
-    dispatch(handleFindSubscription({ subscriberId: _id, subscriptionId }));
+    dispatch(
+      handleFindSubscription({ subscriberId: state?._id, subscriptionId })
+    );
   };
 
   // fetch subscriber
   useEffect(() => {
     handleFetchSingleSubscriber();
+    if (state === null) {
+      navigate("/subscribers");
+    }
+    return () => {
+      abortApiCall();
+    };
   }, []);
 
   return (
@@ -449,7 +458,7 @@ const EditSubscriberDetails = () => {
                       disabled={deleteLoading || editLoading}
                       onClick={() =>
                         handleDeletesubscriber(
-                          _id,
+                          state?._id,
                           singleSucriber?.fname.concat(singleSucriber?.lname)
                         )
                       }
@@ -863,11 +872,11 @@ const EditSubscriberDetails = () => {
                         payers.length > 0 &&
                         payers.map((payer) => (
                           <option
-                            key={payer?._id}
-                            value={payer?._id}
+                            key={payer?.state?._id}
+                            value={payer?.state?._id}
                             selected={
-                              payer?._id ===
-                              singleSucriber?.thirdPartyPayer?._id
+                              payer?.state?._id ===
+                              singleSucriber?.thirdPartyPayer?.state?._id
                             }
                           >
                             {payer?.accountName}
@@ -1096,7 +1105,7 @@ const EditSubscriberDetails = () => {
                       singleSucriber?.subscriptions.length > 0 ? (
                         singleSucriber?.subscriptions.map((subscription) => (
                           <tr
-                            key={subscription?._id}
+                            key={subscription?.state?._id}
                             className="border-b last:border-0 border-gray-200 w-full text-left"
                           >
                             <td className="p-4 whitespace-nowrap">
@@ -1113,7 +1122,7 @@ const EditSubscriberDetails = () => {
                               <button
                                 onClick={() =>
                                   handleShowMagazinePopupForEditSubscription(
-                                    subscription?._id
+                                    subscription?.state?._id
                                   )
                                 }
                                 type="button"
@@ -1132,13 +1141,13 @@ const EditSubscriberDetails = () => {
                         disabled={deleteLoading}
                         onClick={() =>
                           handleDeletesubscription(
-                            subscription?._id,
+                            subscription?.state?._id,
                             subscription?.subscription?.title
                           )
                         }
                       >
                         {deleteLoading &&
-                        subscription?._id === deleteSubscriptionID ? (
+                        subscription?.state?._id === deleteSubscriptionID ? (
                           "..."
                         ) : (
                           <RiDeleteBin6Line

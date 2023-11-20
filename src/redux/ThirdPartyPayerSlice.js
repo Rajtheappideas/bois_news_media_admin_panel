@@ -21,6 +21,25 @@ export const handleGetAllPayers = createAsyncThunk(
   }
 );
 
+export const handleGetPayerById = createAsyncThunk(
+  "thirdpartypayer/handleGetPayerById",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`payer/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const handleAddNewPayer = createAsyncThunk(
   "thirdpartypayer/handleAddNewPayer",
   async (
@@ -144,6 +163,7 @@ const initialState = {
   payers: [],
   filterType: "newest",
   singlePayer: null,
+  singlePayerLoading: false,
   addNewPayerLoading: false,
   deletePayerLoading: false,
   editPayerLoading: false,
@@ -177,6 +197,9 @@ const ThirdPartyPayerSlice = createSlice({
     handleChangeDeleteID: (state, { payload }) => {
       state.deletePayerID = payload;
     },
+    handleChangeSinglePayer: (state, { payload }) => {
+      state.singlePayer = payload;
+    },
   },
   extraReducers: (builder) => {
     // get all payers
@@ -195,6 +218,24 @@ const ThirdPartyPayerSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.payers = [];
+      state.error = payload ?? null;
+    });
+    // get payer by id
+    builder.addCase(handleGetPayerById.pending, (state, {}) => {
+      state.singlePayerLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleGetPayerById.fulfilled, (state, { payload }) => {
+      state.singlePayerLoading = false;
+      state.success = true;
+      state.singlePayer = payload?.payer;
+      state.error = null;
+    });
+    builder.addCase(handleGetPayerById.rejected, (state, { payload }) => {
+      state.singlePayerLoading = false;
+      state.success = false;
+      state.singlePayer = null;
       state.error = payload ?? null;
     });
     // add new payer
@@ -259,6 +300,7 @@ export const {
   handleDeletePayer,
   handleFindPayer,
   handlerFilterPayers,
+  handleChangeSinglePayer,
 } = ThirdPartyPayerSlice.actions;
 
 export default ThirdPartyPayerSlice.reducer;

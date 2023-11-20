@@ -21,6 +21,25 @@ export const handleGetAllProspects = createAsyncThunk(
   }
 );
 
+export const handleGetProspectById = createAsyncThunk(
+  "prospect/handleGetProspectById",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`prospect/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const handleAddNewProspect = createAsyncThunk(
   "prospect/handleAddNewProspect",
   async (
@@ -172,6 +191,7 @@ const initialState = {
   prospects: [],
   filterType: "newest",
   singleProspect: null,
+  singleProspectLoading: false,
   addNewProspectLoading: false,
   deleteProspectLoading: false,
   EditProspectLoading: false,
@@ -209,6 +229,10 @@ const ProspectSlice = createSlice({
     handleChangeDeleteID: (state, { payload }) => {
       state.deleteProspectID = payload;
     },
+
+    handleChangeSingleProspect: (state, { payload }) => {
+      state.singleProspect = payload;
+    },
   },
   extraReducers: (builder) => {
     // get all users
@@ -227,6 +251,24 @@ const ProspectSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.prospects = [];
+      state.error = payload ?? null;
+    });
+    // get prospect by id
+    builder.addCase(handleGetProspectById.pending, (state, {}) => {
+      state.singleProspectLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleGetProspectById.fulfilled, (state, { payload }) => {
+      state.singleProspectLoading = false;
+      state.success = true;
+      state.singleProspect = payload?.prospect;
+      state.error = null;
+    });
+    builder.addCase(handleGetProspectById.rejected, (state, { payload }) => {
+      state.singleProspectLoading = false;
+      state.success = false;
+      state.singleProspect = null;
       state.error = payload ?? null;
     });
     // add new prospect
@@ -291,6 +333,7 @@ export const {
   handleDeleteProspect,
   handleFindProspect,
   handlerFilterProspects,
+  handleChangeSingleProspect,
 } = ProspectSlice.actions;
 
 export default ProspectSlice.reducer;

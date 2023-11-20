@@ -21,6 +21,25 @@ export const handleGetAllPartners = createAsyncThunk(
   }
 );
 
+export const handleGetPartnerById = createAsyncThunk(
+  "partner/handleGetPartnerById",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`partner/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const handleAddNewPartner = createAsyncThunk(
   "partner/handleAddNewPartner",
   async (
@@ -172,6 +191,7 @@ const initialState = {
   partners: [],
   filterType: "newest",
   singlePartner: null,
+  singlePartnerLoading: false,
   addNewPartnerLoading: false,
   deletePartnerLoading: false,
   editPartnerLoading: false,
@@ -209,9 +229,12 @@ const PartnerSlice = createSlice({
     handleChangeDeleteID: (state, { payload }) => {
       state.deletePartnerID = payload;
     },
+    handleChangeSinglePartner: (state, { payload }) => {
+      state.singlePartner = payload;
+    },
   },
   extraReducers: (builder) => {
-    // get all users
+    // get all partners
     builder.addCase(handleGetAllPartners.pending, (state, {}) => {
       state.loading = true;
       state.success = false;
@@ -227,6 +250,24 @@ const PartnerSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.partners = [];
+      state.error = payload ?? null;
+    });
+    // get partner by id
+    builder.addCase(handleGetPartnerById.pending, (state, {}) => {
+      state.singlePartnerLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleGetPartnerById.fulfilled, (state, { payload }) => {
+      state.singlePartnerLoading = false;
+      state.success = true;
+      state.singlePartner = payload?.partner;
+      state.error = null;
+    });
+    builder.addCase(handleGetPartnerById.rejected, (state, { payload }) => {
+      state.singlePartnerLoading = false;
+      state.success = false;
+      state.singlePartner = null;
       state.error = payload ?? null;
     });
     // add new prospect
@@ -290,7 +331,7 @@ export const {
   handleChangeDeleteID,
   handleDeletePartner,
   handleFindPartner,
-  handlerFilterPartners,
+  handlerFilterPartners,handleChangeSinglePartner
 } = PartnerSlice.actions;
 
 export default PartnerSlice.reducer;

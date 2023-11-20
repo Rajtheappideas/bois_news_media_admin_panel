@@ -70,7 +70,8 @@ const GlobalStates = createSlice({
       const filtered = data.filter((entry) => {
         return Object.values(entry).some((val) => {
           return (
-            typeof val === "string" && val.toLocaleLowerCase().includes(value)
+            (typeof val === "string" || typeof val === "number") &&
+            val.toString().toLocaleLowerCase().includes(value)
           );
         });
       });
@@ -191,7 +192,8 @@ export const {
   handleChangeUserLanguage,
   handlerFilterMessages,
   handlerFilterNewsLetters,
-  handleToggleSidebar,handleChagneActiveSidebarTab
+  handleToggleSidebar,
+  handleChagneActiveSidebarTab,
 } = GlobalStates.actions;
 
 export default GlobalStates.reducer;

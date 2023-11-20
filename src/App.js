@@ -47,10 +47,22 @@ const EditSubscriberDetails = lazy(() =>
   import("./pages/subscribers/EditSubscriberDetails")
 );
 const Subscribers = lazy(() => import("./pages/subscribers/Subscribers"));
-const Prospect = lazy(() => import("./pages/Prospect"));
-const Partners = lazy(() => import("./pages/Partners"));
-const ThirdPartyPayer = lazy(() => import("./pages/ThirdPartyPayer"));
-const Subscriptions = lazy(() => import("./pages/Subcriptions"));
+const Prospect = lazy(() => import("./pages/prospects/Prospect"));
+const EditProspectDetails = lazy(() =>
+  import("./pages/prospects/EditProspectDetails")
+);
+const Partners = lazy(() => import("./pages/partners/Partners"));
+const EditPartnerDetails = lazy(() =>
+  import("./pages/partners/EditPartnerDetails")
+);
+const ThirdPartyPayer = lazy(() =>
+  import("./pages/third-party-payer/ThirdPartyPayer")
+);
+const EditDetailsThirdPartyPayer = lazy(() =>
+  import("./pages/third-party-payer/EditDetailsThirdPartyPayer")
+);
+const Subscriptions = lazy(() => import("./pages/subscriptions/Subcriptions"));
+const EditDetailsSubscription = lazy(() => import("./pages/subscriptions/EditDetailsSubscription"));
 const Orders = lazy(() => import("./pages/Orders"));
 const PromoCode = lazy(() => import("./pages/PromoCode"));
 const MessagesList = lazy(() => import("./pages/MessagesList"));
@@ -105,13 +117,17 @@ function App() {
     { path: "/subscribers", page: Subscribers },
     { path: "/subscribers/:id", page: EditSubscriberDetails },
     { path: "/prospects", page: Prospect },
+    { path: "/prospects/:id", page: EditProspectDetails },
     { path: "/partners", page: Partners },
+    { path: "/partners/:id", page: EditPartnerDetails },
     { path: "/tax-shipping", page: TaxtAndShippingCharges },
     { path: "/messages", page: MessagesList },
     { path: "/orders", page: Orders },
     { path: "/promo-codes", page: PromoCode },
     { path: "/third-party-payer", page: ThirdPartyPayer },
+    { path: "/third-party-payer/:id", page: EditDetailsThirdPartyPayer },
     { path: "/subscriptions", page: Subscriptions },
+    { path: "/subscriptions/:id", page:  EditDetailsSubscription},
   ];
 
   useEffect(() => {

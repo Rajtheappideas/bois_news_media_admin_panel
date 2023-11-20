@@ -1,43 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { HiPencil } from "react-icons/hi";
-import BaseUrl from "../../BaseUrl";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import { isPossiblePhoneNumber } from "react-phone-number-input";
-import { isValidPhoneNumber } from "react-phone-number-input";
-import useAbortApiCall from "../../hooks/useAbortApiCall";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
-import { FaUserCircle } from "react-icons/fa";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import {
+  isPossiblePhoneNumber,
+  isValidPhoneNumber,
+} from "react-phone-number-input";
 import {
   handleChangeDeleteID,
-  handleChangeSingleUser,
-  handleDeleteUSER,
-  handleDeleteUser,
-  handleEditUser,
-  handleFindUser,
-  handleGetUserbyId,
-} from "../../redux/UserSlice";
+  handleChangeSinglePayer,
+  handleDeletePAYER,
+  handleDeletePayer,
+  handleEditPayer,
+  handleFindPayer,
+  handleGetPayerById,
+} from "../../redux/ThirdPartyPayerSlice";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 
-const EditUserDetails = () => {
+const EditDetailsThirdPartyPayer = () => {
   const {
-    singleUser,
-    EditUserLoading,
-    deleteUserLoading,
-    singleUserGetLoading,
-  } = useSelector((state) => state.root.users);
-  const { token, role: userRole } = useSelector((state) => state.root.auth);
+    deletePayerLoading,
+    editPayerLoading,
+    singlePayer,
+    singlePayerLoading,
+  } = useSelector((state) => state.root.thirdPartyPayers);
+  const { token, role } = useSelector((state) => state.root.auth);
   const { isSidebarOpen } = useSelector((state) => state.root.globalStates);
-
-  const [prevImage, setPrevImage] = useState(null);
-  const [profileImage, setProfileImage] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,11 +43,10 @@ const EditUserDetails = () => {
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
-  const editUserSchema = yup.object({
-    name: yup
+  const editPayerSchema = yup.object({
+    accountName: yup
       .string()
       .required(t("Name is required"))
-      .trim()
       .max(60, t("Max character limit reached"))
       .min(1, t("minimum three character required"))
       .typeError(t("Only characters allowed"))
@@ -59,11 +54,11 @@ const EditUserDetails = () => {
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         t("Name can only contain Latin letters.")
       ),
-    address: yup
+    companyAddress: yup
       .string()
       .max(200, t("Maximum character limit reached"))
       .required(t("address is required")),
-    zipCode: yup.string().required(t("zipcode is required")),
+    zipCode: yup.string().required(t("zipcode is required")).trim(""),
     city: yup
       .string()
       .max(40, t("Maximum character limit reached"))
@@ -79,15 +74,13 @@ const EditUserDetails = () => {
         t("country can only contain Latin letters.")
       )
       .required(t("country is required")),
-    phone: yup.string().required(t("phone is required")),
-    role: yup.string().required(t("role is required.")),
-    profile: yup
-      .mixed()
-      .required(t("Image is required."))
-      .test(profileImage !== null, t("Image is required"), () => {
-        return true;
-      }),
-    company: yup.string().required(t("Company is required.")),
+    accountNumber: yup
+      .string()
+      .required(t("office Number is required"))
+      .max(15, t("maximum 15 numbers!!!")),
+    mobile: yup.string().required(t("mobile is required")),
+    email: yup.string().email().required(t("email is required.")).trim(),
+    status: yup.string().required(t("status is required.")),
   });
 
   const {
@@ -99,43 +92,53 @@ const EditUserDetails = () => {
     control,
   } = useForm({
     shouldFocusError: true,
-    resolver: yupResolver(editUserSchema),
     reValidateMode: "onChange",
+    mode: "onChange",
+    resolver: yupResolver(editPayerSchema),
     defaultValues: {
-      name: singleUser?.name,
-      email: singleUser?.email,
-      address: singleUser?.address,
-      phone: singleUser?.phone,
-      city: singleUser?.city,
-      country: singleUser?.country,
-      zipCode: singleUser?.zipCode,
-      profile: singleUser?.profile || profileImage,
-      company: singleUser?.company,
-      role: singleUser?.role,
+      status: singlePayer?.status,
+      accountName: singlePayer?.accountName,
+      email: singlePayer?.email,
+      mobile: singlePayer?.mobile,
+      accountNumber: singlePayer?.saccountNumbertaus,
+      companyAddress: singlePayer?.billingAddress?.companyAddress,
+      city: singlePayer?.billingAddress?.city,
+      country: singlePayer?.billingAddress?.country,
+      zipCode: singlePayer?.billingAddress?.zipCode,
     },
   });
 
   const onSubmit = (data) => {
-    const { name, phone, company, address, city, country, zipCode, role } =
-      data;
+    const {
+      accountName,
+      email,
+      mobile,
+      accountNumber,
+      companyAddress,
+      city,
+      country,
+      status,
+      zipCode,
+    } = data;
     if (!isDirty) {
       return true;
-    } else if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
-      toast.error(t("Phone is invalid"));
+    } else if (!isPossiblePhoneNumber(mobile) || !isValidPhoneNumber(mobile)) {
+      toast.remove();
+      toast.error(t("mobile phone is invalid"));
       return true;
     }
     const response = dispatch(
-      handleEditUser({
-        role,
-        name,
-        profile: profileImage ?? singleUser?.profile,
-        phone,
-        company,
-        address,
+      handleEditPayer({
+        status,
+        accountName,
+        email,
+        mobile,
+        accountNumber,
+        companyAddress,
         city,
-        zipCode,
         country,
-        id: singleUser?.state?._id,
+        zipCode,
+        id: state?._id,
         token,
         signal: AbortControllerRef,
       })
@@ -143,7 +146,7 @@ const EditUserDetails = () => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(t(`${name} ${t("user edited successfully.")}`), {
+          toast.success(`${accountName} ${t("payer edited Successfully")}.`, {
             duration: 2000,
           });
         } else if (res?.payload?.status === "error") {
@@ -153,26 +156,19 @@ const EditUserDetails = () => {
     }
   };
 
-  // image upload
-  const handleImageUpload = (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    setPrevImage(URL.createObjectURL(file));
-    setProfileImage(file);
-  };
-
-  const handleDeleteruser = (id, name) => {
+  const handleDeletepayer = () => {
     if (window.confirm(t("Are you sure?"))) {
-      dispatch(handleChangeDeleteID(id));
+      dispatch(handleChangeDeleteID(state?._id));
+
       const response = dispatch(
-        handleDeleteUSER({ id, token, signal: AbortControllerRef })
+        handleDeletePAYER({ id: state?._id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
           if (res?.payload?.status === "success") {
-            dispatch(handleDeleteUser(id));
-            toast.success(t(` ${name} user deleted successfully.`));
-            navigate("/users");
+            dispatch(handleDeletePayer(state?._id));
+            toast.success(`${singlePayer?.accountName} ${t("payer Deleted Successfully")}.`);
+            navigate("/third-party-payer");
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -181,20 +177,24 @@ const EditUserDetails = () => {
     }
   };
 
-  const handleFetchSingleUser = () => {
-    if (singleUser !== null) return;
+  const handleFetchSingleProspect = () => {
+    if (singlePayer !== null) return;
     const response = dispatch(
-      handleGetUserbyId({ id: state?._id, token, signal: AbortControllerRef })
+      handleGetPayerById({
+        id: state?._id,
+        token,
+        signal: AbortControllerRef,
+      })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status !== "success") {
-          navigate(`/users`);
+          navigate("/third-party-payer");
         } else {
-          const userDetails = res?.payload?.user;
-          for (const key in res?.payload?.user) {
+          const payerDetails = res?.payload?.payer;
+          for (const key in res?.payload?.payer) {
             if (Object.keys(getValues()).includes(key)) {
-              setValue(key, userDetails[key]);
+              setValue(key, payerDetails[key]);
             }
           }
         }
@@ -203,16 +203,15 @@ const EditUserDetails = () => {
   };
 
   const handleOnClickCancel = () => {
-    dispatch(handleChangeSingleUser());
-    navigate("/users");
+    dispatch(handleChangeSinglePayer());
+    navigate("/third-party-payer");
   };
 
-  // fetch user
   useEffect(() => {
-    handleFetchSingleUser();
     if (state === null) {
-      navigate("/users");
+      navigate("/third-party-payer");
     }
+    handleFetchSingleProspect();
     return () => {
       abortApiCall();
     };
@@ -220,7 +219,7 @@ const EditUserDetails = () => {
 
   return (
     <>
-      {singleUserGetLoading ? (
+      {singlePayerLoading ? (
         <div className="data_not_found_And_Loading">{t("Loading")}...</div>
       ) : (
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
@@ -238,46 +237,42 @@ const EditUserDetails = () => {
               {/* title + buttons */}
               <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
                 <p className="font-semibold text-left lg:text-xl text-lg">
-                  {t("Edit User")}
+                  {t("Third-party payer details")}
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button  ${
-                      deleteUserLoading ||
-                      (EditUserLoading && "cursor-not-allowed")
-                    }`}
-                    type="button"
+                    className={`gray_button ${
+                      (editPayerLoading || deletePayerLoading) &&
+                      "cursor-not-allowed"
+                    } `}
                     onClick={() => {
                       handleOnClickCancel();
                     }}
-                    disabled={deleteUserLoading || EditUserLoading}
+                    disabled={editPayerLoading || deletePayerLoading}
+                    type="button"
                   >
                     {t("Cancel")}
                   </button>
                   <button
-                    disabled={deleteUserLoading || EditUserLoading}
-                    className={`green_button  ${
-                      EditUserLoading && "cursor-not-allowed"
+                    className={`green_button ${
+                      (editPayerLoading || deletePayerLoading) &&
+                      "cursor-not-allowed"
                     }`}
+                    disabled={editPayerLoading || deletePayerLoading}
                     type="submit"
                   >
-                    {EditUserLoading ? t("Saving").concat("...") : t("Save")}
+                    {editPayerLoading ? t("Saving").concat("...") : t("Save")}
                   </button>
-                  {userRole === "admin" && (
+                  {role === "admin" && (
                     <button
-                      className={`red_button  ${
-                        deleteUserLoading && "cursor-not-allowed"
-                      }`}
+                      className={`red_button
+          ${(editPayerLoading || deletePayerLoading) && "cursor-not-allowed"}
+          `}
+                      onClick={() => handleDeletepayer()}
+                      disabled={editPayerLoading || deletePayerLoading}
                       type="button"
-                      onClick={() =>
-                        handleDeleteruser(
-                          singleUser?.state?._id,
-                          singleUser?.name
-                        )
-                      }
-                      disabled={deleteUserLoading || EditUserLoading}
                     >
-                      {deleteUserLoading
+                      {deletePayerLoading
                         ? t("Deleting").concat("...")
                         : t("Delete")}
                     </button>
@@ -286,115 +281,73 @@ const EditUserDetails = () => {
               </div>
               {/* main div */}
               <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-                <div className="relative md:w-24 w-20 block">
-                  {prevImage !== null ? (
-                    <img
-                      src={prevImage}
-                      alt={singleUser?.name}
-                      className="rounded-full border object-contain object-center bg-cover bg-center inline-block md:h-24 md:w-24 w-20 h-20"
-                    />
-                  ) : singleUser?.profile !== null &&
-                    singleUser?.profile !== undefined ? (
-                    <img
-                      src={BaseUrl.concat(singleUser?.profile)}
-                      alt={singleUser?.name}
-                      className="rounded-full border object-contain object-center bg-cover bg-center inline-block md:h-24 md:w-24 w-20 h-20"
-                    />
-                  ) : (
-                    <FaUserCircle
-                      size={30}
-                      color="lightgray"
-                      className="h-full w-full"
-                    />
-                  )}
-                  <input
-                    type="file"
-                    className="text-3xl cursor-pointer opacity-0 z-10 absolute bottom-0 right-0 rounded-full bg-red-600 text-white h-8 w-8 p-1"
-                    {...register("profile", {
-                      onChange: (e) => handleImageUpload(e),
-                    })}
-                    accept="image/*"
-                  />
-                  <HiPencil
-                    role="button"
-                    className="text-3xl absolute z-0 bottom-0 right-0 rounded-full bg-green-600 text-white h-8 w-8 p-1"
-                  />
-                </div>
-                <span className="error">
-                  {profileImage === null && errors?.profile?.message}
-                </span>
                 <p className="font-bold text-black md:text-xl">
-                  {t("personal details")}
+                  {t("Personal details")}
                 </p>
                 {/* personal details */}
                 <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
-                  {/* name */}
+                  {/* status */}
                   <div className="w-full space-y-2">
-                    <label htmlFor="name" className="Label">
-                      {t("User name")}
+                    <label htmlFor="status" className="Label">
+                      {t("status")}
                     </label>
-                    <input
-                      type="text"
-                      placeholder={t("Type here...")}
-                      className="input_field"
-                      {...register("name")}
-                    />
-                    <span role="alert" className="error">
-                      {errors?.name?.message}
-                    </span>
-                  </div>
-                  {/* role */}
-                  <div className="w-full space-y-2">
-                    <label htmlFor="role" className="Label">
-                      {t("Role")}
-                    </label>
-                    <select {...register("role")} className="input_field">
-                      <option value="editor">{t("Editor")}</option>
-                      <option value="admin">{t("Admin")}</option>
-                      <option value="viewer">{t("Viewer")}</option>
+                    <select {...register("status")} className="input_field">
+                      <option label="choose status"></option>
+                      <option value="active">{t("active")}</option>
+                      <option value="deactive">{t("deactive")}</option>
                     </select>
-                    <span role="alert" className="error">
-                      {errors?.role?.message}
-                    </span>
+                    <span className="error">{errors?.status?.message}</span>
                   </div>
-                  {/* company */}
+                  {/*account name */}
                   <div className="w-full space-y-2">
-                    <label htmlFor="company" className="Label">
-                      {t("company")}
+                    <label htmlFor="account_name" className="Label">
+                      {t("Account name")}
                     </label>
                     <input
                       type="text"
                       placeholder={t("Type here...")}
                       className="input_field"
-                      {...register("company")}
+                      {...register("accountName")}
                     />
-                    <span role="alert" className="error">
-                      {errors?.company?.message}
+                    <span className="error">
+                      {errors?.accountName?.message}
                     </span>
                   </div>
-                  {/* email */}
+                  {/* account number */}
+                  <div className="w-full space-y-2">
+                    <label htmlFor="account_number" className="Label">
+                      {t("account number")}
+                    </label>
+                    <input
+                      type="number"
+                      placeholder={t("Type here...")}
+                      className="input_field"
+                      {...register("accountNumber")}
+                    />
+                    <span className="error">
+                      {errors?.accountNumber?.message}
+                    </span>
+                  </div>
+                  {/*email */}
                   <div className="w-full space-y-2">
                     <label htmlFor="email" className="Label">
                       {t("email")}
                     </label>
                     <input
                       type="email"
-                      disabled
                       placeholder={t("Type here...")}
-                      className="input_field cursor-not-allowed"
+                      className="input_field"
                       {...register("email")}
                     />
-                    <span role="alert" className="error">
-                      {errors?.email?.message}
-                    </span>
+                    <span className="error">{errors?.email?.message}</span>
                   </div>
-                  {/* phone */}
+                  {/* mobile number */}
                   <div className="w-full space-y-2">
-                    <label htmlFor="phone" className="Label">
-                      {t("phone")}
+                    <label htmlFor="mobile_number" className="Label">
+                      {t("mobile number")}
                     </label>
                     <Controller
-                      name="phone"
+                      name="mobile"
                       control={control}
                       rules={{
                         validate: (value) => isValidPhoneNumber(value),
@@ -404,11 +357,11 @@ const EditUserDetails = () => {
                           country={"us"}
                           onChange={(value) => {
                             onChange((e) => {
-                              setValue("phone", "+".concat(value));
+                              setValue("mobile", "+".concat(value));
                             });
                           }}
+                          value={getValues().mobile}
                           autocompleteSearch={true}
-                          value={getValues("phone")}
                           countryCodeEditable={false}
                           enableSearch={true}
                           inputStyle={{
@@ -427,30 +380,28 @@ const EditUserDetails = () => {
                         />
                       )}
                     />
-                    <span role="alert" className="error">
-                      {errors?.phone?.message}
-                    </span>
+                    <span className="error">{errors?.mobile?.message}</span>
                   </div>
                 </div>
+
                 <hr className="my-1" />
-                {/* address */}
+                {/* billing address */}
                 <p className="font-bold text-black md:text-xl">
-                  {t("Address")}
+                  {t("Billing Address")}
                 </p>
                 <div className="w-full grid md:grid-cols-3 place-items-start items-center md:gap-5 gap-2">
-                  {/*company address */}
+                  {/* company  address  */}
                   <div className="w-full col-span-full space-y-2">
                     <label htmlFor="company_address" className="Label">
-                      {t("Company address")}
+                      {t("company address")}
                     </label>
                     <textarea
-                      type="text"
                       placeholder={t("Type here...")}
                       className="input_field min-h-[5rem] max-h-[15rem]"
-                      {...register("address")}
+                      {...register("companyAddress")}
                     />
-                    <span role="alert" className="error">
-                      {errors?.address?.message}
+                    <span className="error">
+                      {errors?.companyAddress?.message}
                     </span>
                   </div>
                   {/* city */}
@@ -464,9 +415,7 @@ const EditUserDetails = () => {
                       className="input_field"
                       {...register("city")}
                     />
-                    <span role="alert" className="error">
-                      {errors?.city?.message}
-                    </span>
+                    <span className="error">{errors?.city?.message}</span>
                   </div>
                   {/* country */}
                   <div className="w-full space-y-2">
@@ -478,14 +427,12 @@ const EditUserDetails = () => {
                       placeholder={t("Type here...")}
                       className="input_field"
                       {...register("country")}
-                    />{" "}
-                    <span role="alert" className="error">
-                      {errors?.country?.message}
-                    </span>
+                    />
+                    <span className="error">{errors?.country?.message}</span>
                   </div>
                   {/* zipcode */}
                   <div className="w-full space-y-2">
-                    <label htmlFor="zipCode" className="Label">
+                    <label htmlFor="zipcode" className="Label">
                       {t("zipcode")}
                     </label>
                     <input
@@ -496,9 +443,7 @@ const EditUserDetails = () => {
                       minLength={6}
                       {...register("zipCode")}
                     />
-                    <span role="alert" className="error">
-                      {errors?.zipCode?.message}
-                    </span>
+                    <span className="error">{errors?.zipCode?.message}</span>
                   </div>
                 </div>
               </div>
@@ -510,4 +455,4 @@ const EditUserDetails = () => {
   );
 };
 
-export default EditUserDetails;
+export default EditDetailsThirdPartyPayer;

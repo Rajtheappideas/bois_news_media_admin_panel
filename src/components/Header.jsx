@@ -95,7 +95,7 @@ const Header = () => {
           className="md:text-2xl text-xl"
         />
         <p className="font-bold lg:text-2xl text-textBlack md:text-xl text-sm capitalize">
-          {t(title)} <br className="md:hidden block" />{" "}
+          {t(title)}{" "}
           {title === ""
             ? t("dashboard")
             : t(title) !== t("profile") &&
@@ -103,8 +103,12 @@ const Header = () => {
               t(title) !== t("promo codes") &&
               t(title) !== t("newsLetter") &&
               t(title) !== t("messages") &&
-              title !== "" &&
-              t("management")}
+              title !== "" && (
+                <>
+                  <br className="md:hidden inline-block" />{" "}
+                  <span>{t("management")}</span>
+                </>
+              )}
         </p>
       </div>
       {/* right side profile */}

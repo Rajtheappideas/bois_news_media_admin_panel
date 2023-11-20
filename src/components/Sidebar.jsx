@@ -19,7 +19,7 @@ import {
   handleToggleSidebar,
 } from "../redux/GlobalStates";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const { user } = useSelector((state) => state.root.auth);
@@ -30,6 +30,8 @@ const Sidebar = () => {
   const sidebarRef = useRef(null);
 
   const dispatch = useDispatch();
+
+  const { pathname } = useLocation();
 
   const { t } = useTranslation();
 
@@ -42,7 +44,7 @@ const Sidebar = () => {
   };
 
   const handleChangeTabTitle = (name) => {
-    dispatch(handleChagneActiveSidebarTab(name));
+    dispatch(handleChagneActiveSidebarTab(name.toLocaleLowerCase()));
   };
 
   const sidebarList = [
@@ -53,18 +55,18 @@ const Sidebar = () => {
       icon: AiOutlineUsergroupAdd,
       url: "subscribers",
     },
-    { title: t("prospect"), icon: MdSavedSearch, url: "prospects" },
+    { title: t("prospects"), icon: MdSavedSearch, url: "prospects" },
     { title: t("partners"), icon: FaRegHandshake, url: "partners" },
     {
-      title: t("third-party payer"),
+      title: t("third-party-payer"),
       icon: TbUserDollar,
       url: "third-party-payer",
     },
     { title: t("subscriptions"), icon: CgNotes, url: "subscriptions" },
-    { title: t("magazine"), icon: GiWhiteBook, url: "magazines" },
+    { title: t("magazines"), icon: GiWhiteBook, url: "magazines" },
     { title: t("orders"), icon: BsCart3, url: "orders" },
     {
-      title: t("tax & shipping"),
+      title: t("tax-shipping"),
       icon: HiOutlineReceiptTax,
       url: "tax-shipping",
     },
@@ -101,6 +103,18 @@ const Sidebar = () => {
     handeCloseSidebar();
   }
 
+  useEffect(() => {
+    const url = pathname.split("/")[1];
+
+    if (pathname === "/") {
+      dispatch(handleChagneActiveSidebarTab("dashboard"));
+    } else if (
+      !url.toLocaleLowerCase().includes(activeSidebarTab.toLocaleLowerCase())
+    ) {
+      dispatch(handleChagneActiveSidebarTab(url.toLocaleLowerCase()));
+    }
+  }, [pathname]);
+
   return (
     <div
       className={`lg:sticky lg:top-0 ${
@@ -130,34 +144,39 @@ const Sidebar = () => {
         </Link>
         <ul className="w-full space-y-3 text-sm mt-3">
           {sidebarList.map((list) => (
-            <li
-              onClick={() => {
-                dispatch(handleClearFilteredData());
-                scrollToTop();
-                handleChangeTabTitle(list.title);
-              }}
+            <Link
+              to={`/${list.url}`}
+              className="flex items-center gap-2 w-full"
               key={list.title}
-              className={`flex items-center ${
-                isSidebarOpen ? "justify-start" : "justify-center"
-              } ${
-                activeSidebarTab === list.title
-                  ? "bg-primaryBlue text-white"
-                  : "text-textColor bg-white"
-              } xl:px-4 px-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
-              title={list.title}
             >
-              <Link to={`/${list.url}`} className="flex items-center gap-2">
+              <li
+                onClick={() => {
+                  dispatch(handleClearFilteredData());
+                  scrollToTop();
+                  handleChangeTabTitle(list.title);
+                }}
+                className={`flex items-center ${
+                  isSidebarOpen ? "justify-start" : "justify-center"
+                } ${
+                  activeSidebarTab.toLocaleLowerCase() ===
+                  list.title.toLocaleLowerCase()
+                    ? "bg-primaryBlue text-white"
+                    : "text-textColor bg-white"
+                } xl:px-4 px-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
+                title={list.title}
+              >
                 <list.icon
                   className={`${
-                    activeSidebarTab === list.title
+                    activeSidebarTab.toLocaleLowerCase() ===
+                    list.title.toLocaleLowerCase()
                       ? "text-white"
                       : "text-textColor"
                   }`}
                   size={25}
                 />
                 {isSidebarOpen && <span>{list?.title}</span>}
-              </Link>
-            </li>
+              </li>
+            </Link>
           ))}
           {isSidebarOpen && (
             <li className="text-textColor text-xs xl:pt-5 pt-2">
@@ -199,36 +218,33 @@ const Sidebar = () => {
         </p>
         <ul className="w-full space-y-2 md:text-base text-sm md:whitespace-nowrap">
           {sidebarList.map((list) => (
-            <li
-              onClick={() => {
-                handeCloseSidebar();
-                dispatch(handleClearFilteredData());
-                scrollToTop();
-              }}
-              key={list.title}
-              className={`flex items-center justify-start whitespace-nowrap
+            <Link key={list.title} to={`/${list.url}`}>
+              <li
+                onClick={() => {
+                  handeCloseSidebar();
+                  dispatch(handleClearFilteredData());
+                  scrollToTop();
+                }}
+                className={`flex items-center justify-start whitespace-nowrap
                ${
-                 document.title
-                   .split("|")[0]
-                   .toLocaleLowerCase()
-                   .includes(list.title.toLocaleLowerCase())
+                 activeSidebarTab.toLocaleLowerCase() ===
+                 list.title.toLocaleLowerCase()
                    ? "bg-primaryBlue text-white"
                    : "text-textColor bg-white"
                } px-2 md:py-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
-            >
-              <list.icon
-                className={`${
-                  document.title
-                    .split("|")[0]
-                    .toLocaleLowerCase()
-                    .includes(list.title.toLocaleLowerCase())
-                    ? "text-white"
-                    : "text-textColor"
-                }`}
-                size={25}
-              />
-              <Link to={`/${list.url}`}>{list?.title}</Link>
-            </li>
+              >
+                <list.icon
+                  className={`${
+                    activeSidebarTab.toLocaleLowerCase() ===
+                    list.title.toLocaleLowerCase()
+                      ? "text-white"
+                      : "text-textColor"
+                  }`}
+                  size={25}
+                />
+                {list?.title}
+              </li>
+            </Link>
           ))}
           <li className="text-textColor text-xs pt-1">
             Copyright © {new Date().getFullYear()}. All Rights Reserved By Bois

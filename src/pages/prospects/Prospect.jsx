@@ -2,87 +2,87 @@ import React, { useState, useEffect } from "react";
 import Search from "../../components/Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { BsEye } from "react-icons/bs";
-import AddNewUser from "../../components/Users/AddNewUser";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import AddNewProspect from "../../components/Prospect/AddNewProspect";
+import EditProspectDetails from "./EditProspectDetails";
 import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
 import {
-  handleDeleteUSER,
   handleChangeDeleteID,
-  handleFindUser,
-  handlerFilterUsers,
-  handleDeleteUser,
-  handleGetAllUsers,
-  handleGetUserbyId,
-} from "../../redux/UserSlice";
+  handleDeletePROSPECT,
+  handleDeleteProspect,
+  handleFindProspect,
+  handleGetAllProspects,
+  handleGetProspectById,
+  handlerFilterProspects,
+} from "../../redux/ProspectSlice";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import { toast } from "react-hot-toast";
-import ShowUsersDetailsOnly from "../../components/Users/ShowUsersDetailsOnly";
+import ShowProspectDetails from "../../components/Prospect/ShowProspectDetails";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
-import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
+import Header from "../../components/Header";
 import { handleLogout } from "../../redux/AuthSlice";
 import { handleLogoutFromAllTabs } from "../../redux/GlobalStates";
 import { useNavigate } from "react-router-dom";
 
-const Users = () => {
-  const [showAddNewUser, setShowAddNewUser] = useState(false);
+const Prospect = () => {
+  const [showAddNewProspect, setShowAddNewProspect] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
-  const [showUserDetailsOnly, setShowUserDetailsOnly] = useState(false);
+  const [showProspectDetails, setShowProspectDetails] = useState(false);
 
   const {
-    users,
+    prospects,
     loading,
-    addNewUserLoading,
-    deleteUserLoading,
-    deleteUserID,
-    filterType,
-    singleUserGetLoading,
-  } = useSelector((state) => state.root.users);
+    addNewProspectLoading,
+    deleteProspectLoading,
+    deleteProspectID,
+    filterType,singleProspectLoading
+  } = useSelector((state) => state.root.prospects);
+
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData, isSidebarOpen } = useSelector(
     (state) => state.root.globalStates
   );
+
+  const { AbortControllerRef } = useAbortApiCall();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { t } = useTranslation();
 
-  const { AbortControllerRef } = useAbortApiCall();
-
   // pagination logic
-  const usersPerPage = 8;
-  const pageVisited = pageNumber * usersPerPage;
-  let displayUsers = [];
+  const prospectsPerPage = 8;
+  const pageVisited = pageNumber * prospectsPerPage;
+  let displayProspects = [];
   if (!loading) {
-    displayUsers =
-      users?.length > 0 && fileterdData.length === 0
-        ? users.slice(pageVisited, usersPerPage + pageVisited)
-        : fileterdData.slice(pageVisited, usersPerPage + pageVisited);
+    displayProspects =
+      prospects?.length > 0 && fileterdData.length === 0
+        ? prospects.slice(pageVisited, prospectsPerPage + pageVisited)
+        : fileterdData.slice(pageVisited, prospectsPerPage + pageVisited);
   }
   const pageCount =
     fileterdData.length === 0
-      ? Math.ceil(users?.length / usersPerPage)
-      : Math.ceil(fileterdData?.length / usersPerPage);
+      ? Math.ceil(prospects?.length / prospectsPerPage)
+      : Math.ceil(fileterdData?.length / prospectsPerPage);
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
 
-  const handleDeleteruser = (id, name) => {
+  const handleDeleteprospect = (id, name) => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteUSER({ id, token, signal: AbortControllerRef })
+        handleDeletePROSPECT({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
           if (res?.payload?.status === "success") {
-            dispatch(handleDeleteUser(id));
-            toast.success(` ${name} ${t("user Deleted Successfully.")}`);
+            dispatch(handleDeleteProspect(id));
+            toast.success(`${name} ${t("prospect Deleted Successfully")}.`);
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
           }
@@ -91,17 +91,17 @@ const Users = () => {
     }
   };
 
-  const handleFetchSingleUser = (id, userId) => {
-    if (singleUserGetLoading) return;
+  const handleFetchSingleProspect = (id, userId) => {
+    if(singleProspectLoading)return
     toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
-      handleGetUserbyId({ id, token, signal: AbortControllerRef })
+      handleGetProspectById({ id, token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.remove();
-          navigate(`/users/${userId}`, { state: { _id: id } });
+          navigate(`/prospects/${userId}`, { state: { _id: id } });
         } else {
           toast.remove();
         }
@@ -115,10 +115,10 @@ const Users = () => {
     }
   }, [fileterdData]);
 
-  // fetch users
+  // fetch prospects
   useEffect(() => {
     const response = dispatch(
-      handleGetAllUsers({ token, signal: AbortControllerRef })
+      handleGetAllProspects({ token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
@@ -137,7 +137,7 @@ const Users = () => {
 
   return (
     <>
-      <Helmet title="Users | Bois News Media" />
+      <Helmet title="Prospects | Bois news media" />
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
         <section
@@ -147,32 +147,31 @@ const Users = () => {
         >
           <Header />
           <div className="lg:p-5 p-3 ">
-            {!showUserDetailsOnly && showAddNewUser && (
-              <AddNewUser setShowAddNewUser={setShowAddNewUser} />
+            {showAddNewProspect && !showProspectDetails && (
+              <AddNewProspect setShowAddNewProspect={setShowAddNewProspect} />
             )}
 
-            {!showAddNewUser && showUserDetailsOnly && (
-              <ShowUsersDetailsOnly
-                setShowUserDetailsOnly={setShowUserDetailsOnly}
+            {!showAddNewProspect && showProspectDetails && (
+              <ShowProspectDetails
+                setShowProspectDetails={setShowProspectDetails}
               />
             )}
-
-            {!showAddNewUser && !showUserDetailsOnly && (
-              <div className="lg:space-y-5 select-none space-y-3 w-full">
+            {!showAddNewProspect && !showProspectDetails && (
+              <div className="lg:space-y-5 space-y-3 w-full">
                 {/* search + buttons */}
                 <div className="w-full flex items-center justify-between md:flex-row flex-col gap-4">
                   <div className="lg:w-1/3 md:w-1/2 w-full">
-                    <Search data={users} />
+                    <Search data={prospects} />
                   </div>
                   <div>
                     <select
-                      name="filter"
                       onChange={(e) => {
-                        dispatch(handlerFilterUsers(e.target.value));
+                        dispatch(handlerFilterProspects(e.target.value));
                       }}
-                      value={filterType}
+                      name="filter"
                       id="filter"
-                      className="filter_dropdown outline-none"
+                      value={filterType}
+                      className="filter_dropdown"
                     >
                       <option value="newest">{t("newest")}</option>
                       <option value="oldest">{t("oldest")}</option>
@@ -180,7 +179,7 @@ const Users = () => {
                     {role === "admin" && (
                       <button
                         className="gray_button"
-                        onClick={() => setShowAddNewUser(true)}
+                        onClick={() => setShowAddNewProspect(true)}
                       >
                         + {t("Add new")}
                       </button>
@@ -192,16 +191,14 @@ const Users = () => {
                   <table className="border-none outline-none w-full overflow-scroll">
                     <thead className="w-full border-b border-gray-100 text-center select-none">
                       <tr>
-                        <th className="p-4 whitespace-nowrap text-center">
+                        <th className="p-4 whitespace-nowrap text-left pl-10">
                           <label htmlFor="id">
-                            <span>ID</span>
+                            <span>{t("Contact person")}</span>
                           </label>
                         </th>
-                        <th className="p-4 text-left">{t("Joining Date")}</th>
-                        <th className="p-4 text-left">{t("Name")}</th>
                         <th className="p-4 text-left">{t("Email")}</th>
                         <th className="p-4 text-left">{t("Phone")}</th>
-                        <th className="p-4 text-left">{t("Role")}</th>
+                        <th className="p-4 text-left">{t("city")}</th>
                         <th className="p-4">{t("Action")}</th>
                       </tr>
                     </thead>
@@ -210,44 +207,37 @@ const Users = () => {
                         <tr className="data_not_found_And_Loading">
                           <td colSpan="7">{t("Loading")}....</td>
                         </tr>
-                      ) : users.length !== 0 && users !== undefined ? (
-                        displayUsers.map((user) => (
+                      ) : prospects?.length !== 0 && prospects !== undefined ? (
+                        displayProspects.map((prospect) => (
                           <tr
-                            key={user?._id}
-                            className="border-b last:border-none border-gray-200 w-full text-center"
+                            key={prospect?._id}
+                            className="border-b last:border-none border-gray-200 w-full text-left pl-10 select-none"
                           >
-                            <td className="p-4 whitespace-nowrap">
-                              <label htmlFor={user?.userId}>
-                                <span className="font-bold text-center ">
-                                  {user?.userId}
-                                </span>
-                              </label>
+                            <td className="pl-10 whitespace-nowrap">
+                              <span className="font-bold text-center">
+                                {prospect?.fname} {prospect?.lname}
+                              </span>
                             </td>
                             <td className="text-left p-4 whitespace-nowrap">
-                              {moment(user?.date).format("LL")}
+                              {prospect?.email}
                             </td>
                             <td className="text-left p-4 whitespace-nowrap">
-                              {user?.name ?? "-"}
+                              {prospect?.mobile ?? "-"}
                             </td>
+
                             <td className="text-left p-4 whitespace-nowrap">
-                              {user?.email ?? "-"}
-                            </td>
-                            <td className="text-left p-4 whitespace-nowrap">
-                              {user?.phone ?? "-"}
-                            </td>
-                            <td className="text-left p-4">
-                              {user?.role ?? "-"}
+                              {prospect?.shippingAddress?.city ?? "-"}
                             </td>
                             <td className="flex items-center justify-center p-4">
                               {role === "admin" || role === "editor" ? (
                                 <button
                                   onClick={() => {
-                                    handleFetchSingleUser(
-                                      user?._id,
-                                      user?.userId
+                                    handleFetchSingleProspect(
+                                      prospect?._id,
+                                      prospect?.userId
                                     );
                                   }}
-                                  disabled={deleteUserLoading || loading}
+                                  disabled={deleteProspectLoading || loading}
                                   type="button"
                                   className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
                                 >
@@ -260,10 +250,10 @@ const Users = () => {
                               ) : (
                                 <button
                                   onClick={() => {
-                                    setShowUserDetailsOnly(true);
-                                    dispatch(handleFindUser(user?._id));
+                                    setShowProspectDetails(true);
+                                    dispatch(handleFindProspect(prospect?._id));
                                   }}
-                                  disabled={deleteUserLoading || loading}
+                                  disabled={deleteProspectLoading || loading}
                                   type="button"
                                   className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
                                 >
@@ -280,16 +270,19 @@ const Users = () => {
                                   type="button"
                                   className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
                                   onClick={() =>
-                                    handleDeleteruser(user?._id, user?.name)
+                                    handleDeleteprospect(
+                                      prospect?._id,
+                                      prospect?.name
+                                    )
                                   }
                                   disabled={
-                                    addNewUserLoading ||
-                                    deleteUserLoading ||
+                                    addNewProspectLoading ||
+                                    deleteProspectLoading ||
                                     loading
                                   }
                                 >
-                                  {deleteUserLoading &&
-                                  user?._id === deleteUserID ? (
+                                  {deleteProspectLoading &&
+                                  prospect?._id === deleteProspectID ? (
                                     "..."
                                   ) : (
                                     <RiDeleteBin6Line
@@ -305,7 +298,7 @@ const Users = () => {
                         ))
                       ) : (
                         <tr className="data_not_found_And_Loading">
-                          <td colSpan="7">{t("No users here")}.</td>
+                          <td colSpan="7">{t("No prospects here")}.</td>
                         </tr>
                       )}
                     </tbody>
@@ -313,20 +306,21 @@ const Users = () => {
                 </div>
                 {/* pagination */}
                 <div className="flex items-center justify-between py-5">
-                  <p className="font-medium capitalize md:text-base text-sm text-textBlack">
+                  <p className="font-medium md:text-base text-sm text-textBlack">
                     {t("Showing")}{" "}
                     {fileterdData.length === 0
-                      ? (pageNumber + 1) * usersPerPage > users?.length
-                        ? users?.length
-                        : (pageNumber + 1) * usersPerPage
-                      : (pageNumber + 1) * usersPerPage > fileterdData?.length
+                      ? (pageNumber + 1) * prospectsPerPage > prospects?.length
+                        ? prospects?.length
+                        : (pageNumber + 1) * prospectsPerPage
+                      : (pageNumber + 1) * prospectsPerPage >
+                        fileterdData?.length
                       ? fileterdData?.length
-                      : (pageNumber + 1) * usersPerPage}{" "}
+                      : (pageNumber + 1) * prospectsPerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
-                      ? users?.length
+                      ? prospects?.length
                       : fileterdData.length}{" "}
-                    {t("users")}
+                    {t("prospects")}
                   </p>
                   <ReactPaginate
                     onPageChange={changePage}
@@ -364,4 +358,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Prospect;
