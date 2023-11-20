@@ -116,17 +116,21 @@ const EditSubscriberDetails = () => {
         t("country can only contain Latin letters.")
       )
       .required(t("country is required")),
-    baddress1: yup.string().max(200, t("Maximum character limit reached")),
+    baddress1: yup
+      .string()
+      .max(200, t("Maximum character limit reached"))
+      .required(t("address1 is required")),
     baddress2: yup.string().max(200, t("Maximum character limit reached")),
     baddress3: yup.string().max(200, t("Maximum character limit reached")),
-    bzipCode: yup.string().max(6, t("max 6 number allowed")).trim(""),
+    bzipCode: yup.string().trim("").required(t("zipcode is required")),
     bcity: yup
       .string()
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         t("city can only contain Latin letters.")
-      ),
+      )
+      .required(t("city is required")),
     bprovince: yup
       .string()
       .matches(
@@ -138,7 +142,8 @@ const EditSubscriberDetails = () => {
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         t("country can only contain Latin letters.")
-      ),
+      )
+      .required(t("country is required")),
     sameAsAbove: yup.boolean(),
     thirdPartyPayer: yup.string(""),
     accountingContact: yup
@@ -753,6 +758,7 @@ const EditSubscriberDetails = () => {
                       {...register("baddress1")}
                       disabled={getValues("sameAsAbove")}
                     />
+                    <span className="error">{errors?.baddress1?.message}</span>
                   </div>
                   {/*address 2 */}
                   <div className="w-full col-span-full space-y-2">
@@ -794,6 +800,7 @@ const EditSubscriberDetails = () => {
                       {...register("bzipCode")}
                       disabled={getValues("sameAsAbove")}
                     />
+                    <span className="error">{errors?.bzipCode?.message}</span>
                   </div>
                   {/* city */}
                   <div className="w-full space-y-2">
@@ -807,6 +814,7 @@ const EditSubscriberDetails = () => {
                       {...register("bcity")}
                       disabled={getValues("sameAsAbove")}
                     />
+                    <span className="error">{errors?.bcity?.message}</span>
                   </div>
                   {/* province */}
                   <div className="w-full space-y-2">
@@ -833,6 +841,7 @@ const EditSubscriberDetails = () => {
                       {...register("bcountry")}
                       disabled={getValues("sameAsAbove")}
                     />
+                    <span className="error">{errors?.bcountry?.message}</span>
                   </div>
                 </div>
                 <hr className="my-1" />
