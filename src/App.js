@@ -38,7 +38,9 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Magazine = lazy(() => import("./pages/magazines/Magazine"));
-const EditMagazineDetails = lazy(() => import("./pages/magazines/EditMagazineDetails"));
+const EditMagazineDetails = lazy(() =>
+  import("./pages/magazines/EditMagazineDetails")
+);
 const TaxtAndShippingCharges = lazy(() =>
   import("./pages/TaxtAndShippingCharges")
 );
@@ -63,10 +65,13 @@ const EditDetailsThirdPartyPayer = lazy(() =>
   import("./pages/third-party-payer/EditDetailsThirdPartyPayer")
 );
 const Subscriptions = lazy(() => import("./pages/subscriptions/Subcriptions"));
-const EditDetailsSubscription = lazy(() => import("./pages/subscriptions/EditDetailsSubscription"));
+const EditDetailsSubscription = lazy(() =>
+  import("./pages/subscriptions/EditDetailsSubscription")
+);
 const Orders = lazy(() => import("./pages/orders/Orders"));
 const PromoCode = lazy(() => import("./pages/PromoCode"));
 const MessagesList = lazy(() => import("./pages/MessagesList"));
+const ChangePassword = lazy(() => import("./pages/ChangePassword"));
 
 function App() {
   const { token, user } = useSelector((state) => state.root.auth);
@@ -129,7 +134,8 @@ function App() {
     { path: "/third-party-payer", page: ThirdPartyPayer },
     { path: "/third-party-payer/:id", page: EditDetailsThirdPartyPayer },
     { path: "/subscriptions", page: Subscriptions },
-    { path: "/subscriptions/:id", page:  EditDetailsSubscription},
+    { path: "/subscriptions/:id", page: EditDetailsSubscription },
+    { path: "/change-password", page: ChangePassword },
   ];
 
   useEffect(() => {

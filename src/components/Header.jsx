@@ -103,6 +103,7 @@ const Header = () => {
               t(title) !== t("promo codes") &&
               t(title) !== t("newsLetter") &&
               t(title) !== t("messages") &&
+              t(title) !== t("change-password") &&
               title !== "" && (
                 <>
                   <br className="md:hidden inline-block" />{" "}
