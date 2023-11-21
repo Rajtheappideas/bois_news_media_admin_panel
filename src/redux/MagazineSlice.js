@@ -18,7 +18,26 @@ export const handleGetAllMagazine = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
+);
+
+export const handleGetMagazineById = createAsyncThunk(
+  "magazine/handleGetMagazineById",
+  async ({ id, token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl(`magazine/${id}`, {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
 );
 
 export const handleAddNewMagazine = createAsyncThunk(
@@ -36,7 +55,7 @@ export const handleAddNewMagazine = createAsyncThunk(
       token,
       signal,
     },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       signal.current = new AbortController();
@@ -66,7 +85,7 @@ export const handleAddNewMagazine = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 export const handleEditMagazine = createAsyncThunk(
@@ -85,7 +104,7 @@ export const handleEditMagazine = createAsyncThunk(
       token,
       signal,
     },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       signal.current = new AbortController();
@@ -115,7 +134,7 @@ export const handleEditMagazine = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 export const handleDeleteMAGAZINE = createAsyncThunk(
@@ -134,7 +153,7 @@ export const handleDeleteMAGAZINE = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  },
+  }
 );
 
 const initialState = {
@@ -144,6 +163,7 @@ const initialState = {
   magazines: [],
   filterType: "newest",
   singleMagazine: null,
+  singleMagazineLoading: false,
   addNewMagazineLoading: false,
   deleteMagazineLoading: false,
   editMagazineLoading: false,
@@ -161,7 +181,7 @@ const MagazineSlice = createSlice({
     handleFindMagazine: (state, { payload }) => {
       if (payload !== "") {
         const findMagazine = state.magazines.find(
-          (magazine) => magazine?._id === payload,
+          (magazine) => magazine?._id === payload
         );
         if (findMagazine) {
           state.singleMagazine = findMagazine;
@@ -172,7 +192,7 @@ const MagazineSlice = createSlice({
     },
     handleDeleteMagazine: (state, { payload }) => {
       const findMagazine = state.magazines.filter(
-        (magazine) => magazine?._id !== payload,
+        (magazine) => magazine?._id !== payload
       );
       if (findMagazine) {
         state.magazines = findMagazine;
@@ -180,6 +200,9 @@ const MagazineSlice = createSlice({
     },
     handleChangeDeleteID: (state, { payload }) => {
       state.deleteMagazineID = payload;
+    },
+    handleChangeSingleMagazine: (state, { payload }) => {
+      state.singleMagazine = payload;
     },
   },
   extraReducers: (builder) => {
@@ -199,6 +222,24 @@ const MagazineSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.magazines = [];
+      state.error = payload ?? null;
+    });
+    // get magainze by id
+    builder.addCase(handleGetMagazineById.pending, (state, {}) => {
+      state.singleMagazineLoading = true;
+      state.success = false;
+      state.error = null;
+    });
+    builder.addCase(handleGetMagazineById.fulfilled, (state, { payload }) => {
+      state.singleMagazineLoading = false;
+      state.success = true;
+      state.singleMagazine = payload?.magazine;
+      state.error = null;
+    });
+    builder.addCase(handleGetMagazineById.rejected, (state, { payload }) => {
+      state.singleMagazineLoading = false;
+      state.success = false;
+      state.singleMagazine = null;
       state.error = payload ?? null;
     });
     // add new payer
@@ -229,7 +270,7 @@ const MagazineSlice = createSlice({
       state.success = true;
       state.error = null;
       state.magazines = state.magazines.map((magazine) =>
-        magazine?._id === payload?.magazine?._id ? payload?.magazine : magazine,
+        magazine?._id === payload?.magazine?._id ? payload?.magazine : magazine
       );
     });
     builder.addCase(handleEditMagazine.rejected, (state, { payload }) => {
@@ -263,6 +304,7 @@ export const {
   handleDeleteMagazine,
   handleFindMagazine,
   handlerFilterMagazine,
+  handleChangeSingleMagazine,
 } = MagazineSlice.actions;
 
 export default MagazineSlice.reducer;

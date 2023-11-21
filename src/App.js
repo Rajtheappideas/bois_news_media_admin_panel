@@ -37,7 +37,8 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
-const Magazine = lazy(() => import("./pages/Magazine"));
+const Magazine = lazy(() => import("./pages/magazines/Magazine"));
+const EditMagazineDetails = lazy(() => import("./pages/magazines/EditMagazineDetails"));
 const TaxtAndShippingCharges = lazy(() =>
   import("./pages/TaxtAndShippingCharges")
 );
@@ -63,7 +64,7 @@ const EditDetailsThirdPartyPayer = lazy(() =>
 );
 const Subscriptions = lazy(() => import("./pages/subscriptions/Subcriptions"));
 const EditDetailsSubscription = lazy(() => import("./pages/subscriptions/EditDetailsSubscription"));
-const Orders = lazy(() => import("./pages/Orders"));
+const Orders = lazy(() => import("./pages/orders/Orders"));
 const PromoCode = lazy(() => import("./pages/PromoCode"));
 const MessagesList = lazy(() => import("./pages/MessagesList"));
 
@@ -114,6 +115,7 @@ function App() {
     { path: "/users/:id", page: EditUserDetails },
     { path: "/profile", page: Profile },
     { path: "/magazines", page: Magazine },
+    { path: "/magazines/:id", page: EditMagazineDetails },
     { path: "/subscribers", page: Subscribers },
     { path: "/subscribers/:id", page: EditSubscriberDetails },
     { path: "/prospects", page: Prospect },

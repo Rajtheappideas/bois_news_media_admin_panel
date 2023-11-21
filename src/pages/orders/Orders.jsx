@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Search from "../components/Search";
+import Search from "../../components/Search";
 import ReactPaginate from "react-paginate";
 import { BiChevronsLeft, BiChevronsRight } from "react-icons/bi";
-import OrderDetails from "../components/Orders/OrderDetails";
+import OrderDetails from "../../components/Orders/OrderDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { handleGetAllOrder, handlerFilterOrders } from "../redux/OrderSlice";
-import useAbortApiCall from "../hooks/useAbortApiCall";
-import SingleOrderList from "../components/Orders/SingleOrderList";
-import AddOrder from "../components/Orders/AddOrder";
+import { handleGetAllOrder, handlerFilterOrders } from "../../redux/OrderSlice";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
+import SingleOrderList from "../../components/Orders/SingleOrderList";
+import AddOrder from "../../components/Orders/AddOrder";
 import { Helmet } from "react-helmet";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
-import { handleLogout } from "../redux/AuthSlice";
-import { handleLogoutFromAllTabs } from "../redux/GlobalStates";
+import Sidebar from "../../components/Sidebar";
+import Header from "../../components/Header";
+import { handleLogout } from "../../redux/AuthSlice";
+import { handleLogoutFromAllTabs } from "../../redux/GlobalStates";
 import toast from "react-hot-toast";
 
 const Orders = () => {
