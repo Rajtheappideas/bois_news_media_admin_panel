@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hide_scrollbar {
+  overflow: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no_scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 0.5em !important;
+  height: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 6px #003F7A; */
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #003f7a;
+  width: 2px;
+  border-radius: 10px;
+}
+body::-webkit-scrollbar {
+  width: 0.5em !important;
+  height: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #003f7a;
+  width: 2px;
+  border-radius: 10px;
+}
+
+.filter_dropdown {
+  @apply md:mr-5 mr-3 capitalize outline-none font-semibold h-10 w-auto p-2 shadow-md rounded-md bg-white;
+}
+
+.error {
+  @apply text-red-600 font-medium text-sm capitalize;
+}
+
+.gray_button {
+  @apply bg-buttonGray capitalize text-white font-medium text-center md:min-w-[8rem] h-10 rounded-lg p-2 hover:bg-buttonGray/80 active:scale-95 transition;
+}
+
+.green_button {
+  @apply bg-buttonGreen capitalize text-white font-medium text-center md:min-w-[8rem] h-10 rounded-lg p-2 hover:bg-buttonGreen/80 active:scale-95 transition;
+}
+
+.red_button {
+  @apply bg-buttonRed capitalize text-white font-medium text-center md:min-w-[8rem] h-10 rounded-lg p-2 hover:bg-buttonRed/80 active:scale-95 transition;
+}
+
+.blue_button {
+  @apply bg-primaryBlue capitalize text-white font-medium text-center md:min-w-[8rem] h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition;
+}
+
+.input_field {
+  @apply outline-none w-full rounded-md border border-gray-300 p-2.5 focus:border-gray-400 focus:border-2;
+}
+
+.Label {
+  @apply text-textColor/60  font-medium block capitalize md:text-base text-sm;
+}
+
+.otp_Field {
+  @apply rounded-lg border font-bold md:text-base text-sm border-textColor md:h-12 md:w-12 h-8 w-8 outline-none text-center;
+}
+
+.data_not_found_And_Loading {
+  @apply text-center md:text-2xl capitalize text-lg font-semibold py-2;
+}
