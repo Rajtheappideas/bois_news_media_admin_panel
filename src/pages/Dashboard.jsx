@@ -28,9 +28,8 @@ const Dashboard = () => {
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
         <section
-          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-            isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-          }`}
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
         >
           <Header />
           <div className="grid lg:p-5 p-3 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 justify-items-stretch items-center place-items-start md:gap-5 gap-3">
@@ -65,8 +64,8 @@ const Dashboard = () => {
                   {loading
                     ? "-"
                     : subscribers?.length > 0
-                    ? subscribers?.length
-                    : "00"}
+                      ? subscribers?.length
+                      : "00"}
                 </div>
               </div>
             </Link>
@@ -85,8 +84,8 @@ const Dashboard = () => {
                   {loading
                     ? "-"
                     : prospects?.length > 0
-                    ? prospects?.length
-                    : "00"}
+                      ? prospects?.length
+                      : "00"}
                 </div>
               </div>
             </Link>
@@ -106,13 +105,13 @@ const Dashboard = () => {
                   {loading
                     ? "-"
                     : partners?.length > 0
-                    ? partners?.length
-                    : "00"}
+                      ? partners?.length
+                      : "00"}
                 </div>
               </div>
             </Link>
             {/* magazine */}
-            <Link to="/magazine">
+            <Link to="/magazines">
               <div className="w-full cursor-pointer bg-gradient-to-r flex items-center justify-between from-purpleGradientFrom to-purpleGradientTo hover:scale-105 transition text-white rounded-md h-auto p-6">
                 <div className="flex-1 tracking-wide">
                   <p className="p-1 w-10 h-10 rounded-full text-center leading-10 align-middle bg-black/20">
@@ -127,8 +126,8 @@ const Dashboard = () => {
                   {loading
                     ? "-"
                     : magazines?.length > 0
-                    ? magazines?.length
-                    : "00"}
+                      ? magazines?.length
+                      : "00"}
                 </div>
               </div>
             </Link>

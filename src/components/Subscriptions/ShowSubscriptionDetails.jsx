@@ -64,10 +64,10 @@ const ShowSubscriptionDetails = ({ setShowSubscriptionDetails }) => {
             </label>
             <p className="font-semibold">{status}</p>
           </div>
-          {/* discriptions */}
+          {/* descriptions */}
           <div className="w-full col-span-full space-y-2">
-            <label htmlFor="discriptions" className="Label">
-              {t("discriptions")}
+            <label htmlFor="descriptions" className="Label">
+              {t("descriptions")}
             </label>
 
             <p className="font-semibold">{description}</p>

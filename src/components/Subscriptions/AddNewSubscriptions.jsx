@@ -112,9 +112,8 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className={`gray_button ${
-              addNewSubscriptionLoading && "cursor-not-allowed"
-            } `}
+            className={`gray_button ${addNewSubscriptionLoading && "cursor-not-allowed"
+              } `}
             disabled={addNewSubscriptionLoading}
             onClick={() => setShowAddnewSubscription(false)}
             type="button"
@@ -122,9 +121,8 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
             {t("Cancel")}
           </button>
           <button
-            className={`green_button ${
-              addNewSubscriptionLoading && "cursor-not-allowed"
-            } `}
+            className={`green_button ${addNewSubscriptionLoading && "cursor-not-allowed"
+              } `}
             type="submit"
             disabled={addNewSubscriptionLoading}
           >
@@ -234,10 +232,10 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
             <span className="error">{errors?.price?.message}</span>
           </div>
 
-          {/* discriptions */}
+          {/* descriptions */}
           <div className="w-full col-span-full space-y-2">
-            <label htmlFor="discriptions" className="Label">
-              {t("discriptions")}
+            <label htmlFor="descriptions" className="Label">
+              {t("descriptions")}
             </label>
             <textarea
               placeholder="Type here..."
