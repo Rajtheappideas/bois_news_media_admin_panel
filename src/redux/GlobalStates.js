@@ -20,7 +20,7 @@ export const handleGetNewsLetter = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleGetCount = createAsyncThunk(
@@ -39,7 +39,7 @@ export const handleGetCount = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 export const handleGetMessages = createAsyncThunk(
@@ -58,7 +58,7 @@ export const handleGetMessages = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -71,8 +71,8 @@ const initialState = {
   messageLoading: false,
   isSidebarOpen: false,
   activeSidebarTab: "dashboard",
-  counts:null
-  countLoading:false
+  counts: null,
+  countLoading: false,
 };
 
 const logoutChannel = new BroadcastChannel("handleLogout");
