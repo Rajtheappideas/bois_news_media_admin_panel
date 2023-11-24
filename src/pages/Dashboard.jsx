@@ -1,15 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdSavedSearch } from "react-icons/md";
 import { FaRegHandshake } from "react-icons/fa";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { handleGetAllUsers } from "../redux/UserSlice";
+import useAbortApiCall from "../hooks/useAbortApiCall";
+import { handleLogout } from "../redux/AuthSlice";
+import {
+  handleGetMessages,
+  handleLogoutFromAllTabs,
+} from "../redux/GlobalStates";
+import { handleGetAllPartners } from "../redux/PartnerSlice";
+import { handleGetAllMagazine } from "../redux/MagazineSlice";
+import { handleGetAllOrder } from "../redux/OrderSlice";
+import toast from "react-hot-toast";
+import { handleGetAllSubscribers } from "../redux/SubscriberSlice";
+import { handleGetPricing } from "../redux/TaxAndShippingSlice";
+import { handleGetAllPromoCodes } from "../redux/PromoCodeSlice";
+import { handleGetAllProspects } from "../redux/ProspectSlice";
+import { handleGetAllSubscription } from "../redux/SubscriptionSlice";
+import { handleGetAllPayers } from "../redux/ThirdPartyPayerSlice";
 
 const Dashboard = () => {
   const { users, loading } = useSelector((state) => state.root.users);
@@ -19,8 +36,49 @@ const Dashboard = () => {
   const { orders } = useSelector((state) => state.root.orders);
   const { magazines } = useSelector((state) => state.root.magazines);
   const { isSidebarOpen } = useSelector((state) => state.root.globalStates);
+  const { token, user } = useSelector((state) => state.root.auth);
 
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const { AbortControllerRef } = useAbortApiCall();
+
+  const handleGetContent = () => {
+    if (user === null) {
+      return window.location.origin.concat("/sign-in");
+    }
+    const response = dispatch(
+      handleGetAllUsers({ token, signal: AbortControllerRef }),
+    );
+    if (response) {
+      response.then((res) => {
+        if (
+          res?.payload?.status === "fail" &&
+          (res?.payload?.message === "Please provide authentication token." ||
+            res?.payload?.message === "Invalid token.")
+        ) {
+          dispatch(handleLogout());
+          dispatch(handleLogoutFromAllTabs());
+          toast.error("Please login again");
+        }
+      });
+    }
+    dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
+    dispatch(handleGetPricing({ token, signal: AbortControllerRef }));
+    dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllOrder({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllPromoCodes({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
+    dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
+  };
+
+  useEffect(() => {
+    handleGetContent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -65,8 +123,8 @@ const Dashboard = () => {
                   {loading
                     ? "-"
                     : subscribers?.length > 0
-                    ? subscribers?.length
-                    : "00"}
+                      ? subscribers?.length
+                      : "00"}
                 </div>
               </div>
             </Link>
@@ -85,8 +143,8 @@ const Dashboard = () => {
                   {loading
                     ? "-"
                     : prospects?.length > 0
-                    ? prospects?.length
-                    : "00"}
+                      ? prospects?.length
+                      : "00"}
                 </div>
               </div>
             </Link>
@@ -106,8 +164,8 @@ const Dashboard = () => {
                   {loading
                     ? "-"
                     : partners?.length > 0
-                    ? partners?.length
-                    : "00"}
+                      ? partners?.length
+                      : "00"}
                 </div>
               </div>
             </Link>
@@ -127,8 +185,8 @@ const Dashboard = () => {
                   {loading
                     ? "-"
                     : magazines?.length > 0
-                    ? magazines?.length
-                    : "00"}
+                      ? magazines?.length
+                      : "00"}
                 </div>
               </div>
             </Link>

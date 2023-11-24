@@ -38,12 +38,13 @@ const Prospect = () => {
     addNewProspectLoading,
     deleteProspectLoading,
     deleteProspectID,
-    filterType,singleProspectLoading
+    filterType,
+    singleProspectLoading,
   } = useSelector((state) => state.root.prospects);
 
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData, isSidebarOpen } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
 
   const { AbortControllerRef } = useAbortApiCall();
@@ -76,7 +77,7 @@ const Prospect = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePROSPECT({ id, token, signal: AbortControllerRef })
+        handleDeletePROSPECT({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -92,10 +93,10 @@ const Prospect = () => {
   };
 
   const handleFetchSingleProspect = (id, userId) => {
-    if(singleProspectLoading)return
+    if (singleProspectLoading) return;
     toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
-      handleGetProspectById({ id, token, signal: AbortControllerRef })
+      handleGetProspectById({ id, token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -118,7 +119,7 @@ const Prospect = () => {
   // fetch prospects
   useEffect(() => {
     const response = dispatch(
-      handleGetAllProspects({ token, signal: AbortControllerRef })
+      handleGetAllProspects({ token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -133,6 +134,7 @@ const Prospect = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -234,7 +236,7 @@ const Prospect = () => {
                                   onClick={() => {
                                     handleFetchSingleProspect(
                                       prospect?._id,
-                                      prospect?.userId
+                                      prospect?.userId,
                                     );
                                   }}
                                   disabled={deleteProspectLoading || loading}
@@ -272,7 +274,7 @@ const Prospect = () => {
                                   onClick={() =>
                                     handleDeleteprospect(
                                       prospect?._id,
-                                      prospect?.name
+                                      prospect?.name,
                                     )
                                   }
                                   disabled={
@@ -313,9 +315,9 @@ const Prospect = () => {
                         ? prospects?.length
                         : (pageNumber + 1) * prospectsPerPage
                       : (pageNumber + 1) * prospectsPerPage >
-                        fileterdData?.length
-                      ? fileterdData?.length
-                      : (pageNumber + 1) * prospectsPerPage}{" "}
+                          fileterdData?.length
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * prospectsPerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? prospects?.length

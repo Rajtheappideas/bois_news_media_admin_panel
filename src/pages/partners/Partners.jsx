@@ -38,12 +38,13 @@ const Partners = () => {
     addNewPartnerLoading,
     deletePartnerLoading,
     deletePartnerID,
-    filterType,singlePartnerLoading
+    filterType,
+    singlePartnerLoading,
   } = useSelector((state) => state.root.partners);
 
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData, isSidebarOpen } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
 
   const { AbortControllerRef } = useAbortApiCall();
@@ -76,7 +77,7 @@ const Partners = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePARTNER({ id, token, signal: AbortControllerRef })
+        handleDeletePARTNER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -93,10 +94,10 @@ const Partners = () => {
   };
 
   const handleFetchSingleProspect = (id, userId) => {
-    if(singlePartnerLoading)return
+    if (singlePartnerLoading) return;
     toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
-      handleGetPartnerById({ id, token, signal: AbortControllerRef })
+      handleGetPartnerById({ id, token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -119,7 +120,7 @@ const Partners = () => {
   // fetch partners
   useEffect(() => {
     const response = dispatch(
-      handleGetAllPartners({ token, signal: AbortControllerRef })
+      handleGetAllPartners({ token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -134,6 +135,7 @@ const Partners = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -242,7 +244,7 @@ const Partners = () => {
                                   onClick={() => {
                                     handleFetchSingleProspect(
                                       partner?._id,
-                                      partner?.userId
+                                      partner?.userId,
                                     );
                                   }}
                                   disabled={deletePartnerLoading || loading}
@@ -280,7 +282,7 @@ const Partners = () => {
                                   onClick={() =>
                                     handleDeletepartner(
                                       partner?._id,
-                                      partner?.name
+                                      partner?.name,
                                     )
                                   }
                                   disabled={
@@ -321,9 +323,9 @@ const Partners = () => {
                         ? partners?.length
                         : (pageNumber + 1) * partnersPerPage
                       : (pageNumber + 1) * partnersPerPage >
-                        fileterdData?.length
-                      ? fileterdData?.length
-                      : (pageNumber + 1) * partnersPerPage}{" "}
+                          fileterdData?.length
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * partnersPerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? partners?.length

@@ -19,7 +19,7 @@ const TaxtAndShippingCharges = () => {
   const { token, role } = useSelector((state) => state.root.auth);
   const { isSidebarOpen } = useSelector((state) => state.root.globalStates);
   const { tax, loading, updateLoading, shipping } = useSelector(
-    (state) => state.root.taxAndShipping
+    (state) => state.root.taxAndShipping,
   );
 
   const { t } = useTranslation();
@@ -99,7 +99,7 @@ const TaxtAndShippingCharges = () => {
         shipping,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -119,6 +119,7 @@ const TaxtAndShippingCharges = () => {
     return () => {
       abortApiCall();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
