@@ -14,6 +14,7 @@ import { handleGetAllUsers } from "../redux/UserSlice";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import { handleLogout } from "../redux/AuthSlice";
 import {
+  handleGetCount,
   handleGetMessages,
   handleLogoutFromAllTabs,
 } from "../redux/GlobalStates";
@@ -35,7 +36,9 @@ const Dashboard = () => {
   const { partners } = useSelector((state) => state.root.partners);
   const { orders } = useSelector((state) => state.root.orders);
   const { magazines } = useSelector((state) => state.root.magazines);
-  const { isSidebarOpen } = useSelector((state) => state.root.globalStates);
+  const { isSidebarOpen, countLoading, counts } = useSelector(
+    (state) => state.root.globalStates,
+  );
   const { token, user } = useSelector((state) => state.root.auth);
 
   const { t } = useTranslation();
@@ -48,7 +51,7 @@ const Dashboard = () => {
       return window.location.origin.concat("/sign-in");
     }
     const response = dispatch(
-      handleGetAllUsers({ token, signal: AbortControllerRef }),
+      handleGetCount({ token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -63,16 +66,6 @@ const Dashboard = () => {
         }
       });
     }
-    dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
-    dispatch(handleGetPricing({ token, signal: AbortControllerRef }));
-    dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllOrder({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPromoCodes({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
   };
 
   useEffect(() => {
@@ -102,7 +95,7 @@ const Dashboard = () => {
                   <p className="font-normal text-lg capitalize">{t("users")}</p>
                 </div>
                 <div className="text-2xl font-semibold">
-                  {loading ? "-" : users?.length > 0 ? users?.length : "00"}
+                  {countLoading ? "-" : counts?.users}
                 </div>
               </div>
             </Link>
@@ -120,11 +113,8 @@ const Dashboard = () => {
                 </div>
                 <div className="text-2xl font-semibold">
                   {" "}
-                  {loading
-                    ? "-"
-                    : subscribers?.length > 0
-                      ? subscribers?.length
-                      : "00"}
+                  {countLoading ? "-" : counts?.subscribers}
+
                 </div>
               </div>
             </Link>
@@ -140,11 +130,8 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                  {loading
-                    ? "-"
-                    : prospects?.length > 0
-                      ? prospects?.length
-                      : "00"}
+                {countLoading ? "-" : counts?.prospects}
+
                 </div>
               </div>
             </Link>
@@ -161,11 +148,8 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                  {loading
-                    ? "-"
-                    : partners?.length > 0
-                      ? partners?.length
-                      : "00"}
+                {countLoading ? "-" : counts?.partners}
+
                 </div>
               </div>
             </Link>
@@ -182,11 +166,8 @@ const Dashboard = () => {
                 </div>
                 <div className="text-2xl font-semibold">
                   {" "}
-                  {loading
-                    ? "-"
-                    : magazines?.length > 0
-                      ? magazines?.length
-                      : "00"}
+                  {countLoading ? "-" : counts?.magazines}
+
                 </div>
               </div>
             </Link>
@@ -202,8 +183,8 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                  {" "}
-                  {loading ? "-" : orders?.length > 0 ? orders?.length : "00"}
+                {countLoading ? "-" : counts?.orders}
+
                 </div>
               </div>
             </Link>

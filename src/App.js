@@ -82,30 +82,6 @@ function App() {
 
   const { t } = useTranslation();
 
-  const handleGetContent = () => {
-    if (user === null) {
-      return window.location.origin.concat("/sign-in");
-    }
-    const response = dispatch(
-      handleGetPricing({ token, signal: AbortControllerRef }),
-    );
-    if (response) {
-      response.then((res) => {
-        if (
-          res?.payload?.status === "fail" &&
-          (res?.payload?.message === "Please provide authentication token." ||
-            res?.payload?.message === "Invalid token.")
-        ) {
-          dispatch(handleLogout());
-          dispatch(handleLogoutFromAllTabs());
-          toast.error("Please login again");
-        }
-      });
-    }
-    dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPromoCodes({ token, signal: AbortControllerRef }));
-  };
-
   const privateRoutes = [
     { path: "/", page: Dashboard },
     { path: "/users", page: Users },
@@ -131,7 +107,6 @@ function App() {
   ];
 
   useEffect(() => {
-    handleGetContent();
     dispatch(loginAllTabsEventListener());
     dispatch(logoutAllTabsEventListener());
     return () => {
