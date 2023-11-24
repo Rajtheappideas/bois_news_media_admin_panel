@@ -5,13 +5,18 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import { handleUpadtePricing } from "../redux/TaxAndShippingSlice";
+import {
+  handleGetPricing,
+  handleUpadtePricing,
+} from "../redux/TaxAndShippingSlice";
 import toast from "react-hot-toast";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { handleLogout } from "../redux/AuthSlice";
+import { handleLogoutFromAllTabs } from "../redux/GlobalStates";
 
 const TaxtAndShippingCharges = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -19,7 +24,7 @@ const TaxtAndShippingCharges = () => {
   const { token, role } = useSelector((state) => state.root.auth);
   const { isSidebarOpen } = useSelector((state) => state.root.globalStates);
   const { tax, loading, updateLoading, shipping } = useSelector(
-    (state) => state.root.taxAndShipping
+    (state) => state.root.taxAndShipping,
   );
 
   const { t } = useTranslation();
@@ -99,7 +104,7 @@ const TaxtAndShippingCharges = () => {
         shipping,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -116,9 +121,26 @@ const TaxtAndShippingCharges = () => {
   };
 
   useEffect(() => {
+    const response = dispatch(
+      handleGetPricing({ token, signal: AbortControllerRef }),
+    );
+    if (response) {
+      response.then((res) => {
+        if (
+          res?.payload?.status === "fail" &&
+          (res?.payload?.message === "Please provide authentication token." ||
+            res?.payload?.message === "Invalid token.")
+        ) {
+          dispatch(handleLogout());
+          dispatch(handleLogoutFromAllTabs());
+          toast.error("Please login again");
+        }
+      });
+    }
     return () => {
       abortApiCall();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,15 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdSavedSearch } from "react-icons/md";
 import { FaRegHandshake } from "react-icons/fa";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { handleGetAllUsers } from "../redux/UserSlice";
+import useAbortApiCall from "../hooks/useAbortApiCall";
+import { handleLogout } from "../redux/AuthSlice";
+import {
+  handleGetCount,
+  handleGetMessages,
+  handleLogoutFromAllTabs,
+} from "../redux/GlobalStates";
+import { handleGetAllPartners } from "../redux/PartnerSlice";
+import { handleGetAllMagazine } from "../redux/MagazineSlice";
+import { handleGetAllOrder } from "../redux/OrderSlice";
+import toast from "react-hot-toast";
+import { handleGetAllSubscribers } from "../redux/SubscriberSlice";
+import { handleGetPricing } from "../redux/TaxAndShippingSlice";
+import { handleGetAllPromoCodes } from "../redux/PromoCodeSlice";
+import { handleGetAllProspects } from "../redux/ProspectSlice";
+import { handleGetAllSubscription } from "../redux/SubscriptionSlice";
+import { handleGetAllPayers } from "../redux/ThirdPartyPayerSlice";
 
 const Dashboard = () => {
   const { users, loading } = useSelector((state) => state.root.users);
@@ -18,9 +36,42 @@ const Dashboard = () => {
   const { partners } = useSelector((state) => state.root.partners);
   const { orders } = useSelector((state) => state.root.orders);
   const { magazines } = useSelector((state) => state.root.magazines);
-  const { isSidebarOpen } = useSelector((state) => state.root.globalStates);
+  const { isSidebarOpen, countLoading, counts } = useSelector(
+    (state) => state.root.globalStates,
+  );
+  const { token, user } = useSelector((state) => state.root.auth);
 
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const { AbortControllerRef } = useAbortApiCall();
+
+  const handleGetContent = () => {
+    if (user === null) {
+      return window.location.origin.concat("/sign-in");
+    }
+    const response = dispatch(
+      handleGetCount({ token, signal: AbortControllerRef }),
+    );
+    if (response) {
+      response.then((res) => {
+        if (
+          res?.payload?.status === "fail" &&
+          (res?.payload?.message === "Please provide authentication token." ||
+            res?.payload?.message === "Invalid token.")
+        ) {
+          dispatch(handleLogout());
+          dispatch(handleLogoutFromAllTabs());
+          toast.error("Please login again");
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    handleGetContent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -43,7 +94,7 @@ const Dashboard = () => {
                   <p className="font-normal text-lg capitalize">{t("users")}</p>
                 </div>
                 <div className="text-2xl font-semibold">
-                  {loading ? "-" : users?.length > 0 ? users?.length : "00"}
+                  {countLoading ? "-" : counts?.users}
                 </div>
               </div>
             </Link>
@@ -61,11 +112,8 @@ const Dashboard = () => {
                 </div>
                 <div className="text-2xl font-semibold">
                   {" "}
-                  {loading
-                    ? "-"
-                    : subscribers?.length > 0
-                      ? subscribers?.length
-                      : "00"}
+                  {countLoading ? "-" : counts?.subscribers}
+
                 </div>
               </div>
             </Link>
@@ -81,11 +129,8 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                  {loading
-                    ? "-"
-                    : prospects?.length > 0
-                      ? prospects?.length
-                      : "00"}
+                {countLoading ? "-" : counts?.prospects}
+
                 </div>
               </div>
             </Link>
@@ -102,11 +147,8 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                  {loading
-                    ? "-"
-                    : partners?.length > 0
-                      ? partners?.length
-                      : "00"}
+                {countLoading ? "-" : counts?.partners}
+
                 </div>
               </div>
             </Link>
@@ -123,11 +165,8 @@ const Dashboard = () => {
                 </div>
                 <div className="text-2xl font-semibold">
                   {" "}
-                  {loading
-                    ? "-"
-                    : magazines?.length > 0
-                      ? magazines?.length
-                      : "00"}
+                  {countLoading ? "-" : counts?.magazines}
+
                 </div>
               </div>
             </Link>
@@ -143,8 +182,8 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                  {" "}
-                  {loading ? "-" : orders?.length > 0 ? orders?.length : "00"}
+                {countLoading ? "-" : counts?.orders}
+
                 </div>
               </div>
             </Link>

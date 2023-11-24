@@ -69,7 +69,7 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("FirstName can only contain Latin letters.")
+        t("FirstName can only contain Latin letters."),
       ),
     lname: yup
       .string()
@@ -80,7 +80,7 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("LastName can only contain Latin letters.")
+        t("LastName can only contain Latin letters."),
       ),
     civility: yup.string().required(t("Civility is required")),
     title: yup.string().trim().max(60, t("Max character limit reached")),
@@ -100,20 +100,20 @@ const EditSubscriberDetails = () => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .required(t("city is required")),
     province: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters.")
+        t("province can only contain Latin letters."),
       ),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .required(t("country is required")),
     baddress1: yup
@@ -128,20 +128,20 @@ const EditSubscriberDetails = () => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters.")
+        t("city can only contain Latin letters."),
       )
       .required(t("city is required")),
     bprovince: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters.")
+        t("province can only contain Latin letters."),
       ),
     bcountry: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters.")
+        t("country can only contain Latin letters."),
       )
       .required(t("country is required")),
     sameAsAbove: yup.boolean(),
@@ -152,7 +152,7 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("accountContactName can only contain Latin letters.")
+        t("accountContactName can only contain Latin letters."),
       ),
     accountingEmail: yup.string().email(),
     accountingPhone: yup.string(),
@@ -304,14 +304,14 @@ const EditSubscriberDetails = () => {
         id: state?._id,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(
             ` ${fname.concat(lname)} ${t("subscriber edited successfully.")}`,
-            { duration: 2000 }
+            { duration: 2000 },
           );
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -324,7 +324,7 @@ const EditSubscriberDetails = () => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
-        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -344,7 +344,7 @@ const EditSubscriberDetails = () => {
     dispatch(handleChangeDeleteSubscriptionID(id));
 
     const response = dispatch(
-      handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef })
+      handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -365,7 +365,7 @@ const EditSubscriberDetails = () => {
         id: state?._id,
         token,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -391,7 +391,7 @@ const EditSubscriberDetails = () => {
   const handleShowMagazinePopupForEditSubscription = (subscriptionId) => {
     dispatch(handleChangeMagazineDistributionPopup(true));
     dispatch(
-      handleFindSubscription({ subscriberId: state?._id, subscriptionId })
+      handleFindSubscription({ subscriberId: state?._id, subscriptionId }),
     );
   };
 
@@ -404,6 +404,7 @@ const EditSubscriberDetails = () => {
     return () => {
       abortApiCall();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -459,7 +460,7 @@ const EditSubscriberDetails = () => {
                       onClick={() =>
                         handleDeletesubscriber(
                           state?._id,
-                          singleSucriber?.fname.concat(singleSucriber?.lname)
+                          singleSucriber?.fname.concat(singleSucriber?.lname),
                         )
                       }
                     >
@@ -1122,7 +1123,7 @@ const EditSubscriberDetails = () => {
                               <button
                                 onClick={() =>
                                   handleShowMagazinePopupForEditSubscription(
-                                    subscription?.state?._id
+                                    subscription?.state?._id,
                                   )
                                 }
                                 type="button"

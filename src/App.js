@@ -38,35 +38,35 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Magazine = lazy(() => import("./pages/magazines/Magazine"));
-const EditMagazineDetails = lazy(() =>
-  import("./pages/magazines/EditMagazineDetails")
+const EditMagazineDetails = lazy(
+  () => import("./pages/magazines/EditMagazineDetails"),
 );
-const TaxtAndShippingCharges = lazy(() =>
-  import("./pages/TaxtAndShippingCharges")
+const TaxtAndShippingCharges = lazy(
+  () => import("./pages/TaxtAndShippingCharges"),
 );
 const Users = lazy(() => import("./pages/users/Users"));
 const EditUserDetails = lazy(() => import("./pages/users/EditUserDetails"));
-const EditSubscriberDetails = lazy(() =>
-  import("./pages/subscribers/EditSubscriberDetails")
+const EditSubscriberDetails = lazy(
+  () => import("./pages/subscribers/EditSubscriberDetails"),
 );
 const Subscribers = lazy(() => import("./pages/subscribers/Subscribers"));
 const Prospect = lazy(() => import("./pages/prospects/Prospect"));
-const EditProspectDetails = lazy(() =>
-  import("./pages/prospects/EditProspectDetails")
+const EditProspectDetails = lazy(
+  () => import("./pages/prospects/EditProspectDetails"),
 );
 const Partners = lazy(() => import("./pages/partners/Partners"));
-const EditPartnerDetails = lazy(() =>
-  import("./pages/partners/EditPartnerDetails")
+const EditPartnerDetails = lazy(
+  () => import("./pages/partners/EditPartnerDetails"),
 );
-const ThirdPartyPayer = lazy(() =>
-  import("./pages/third-party-payer/ThirdPartyPayer")
+const ThirdPartyPayer = lazy(
+  () => import("./pages/third-party-payer/ThirdPartyPayer"),
 );
-const EditDetailsThirdPartyPayer = lazy(() =>
-  import("./pages/third-party-payer/EditDetailsThirdPartyPayer")
+const EditDetailsThirdPartyPayer = lazy(
+  () => import("./pages/third-party-payer/EditDetailsThirdPartyPayer"),
 );
 const Subscriptions = lazy(() => import("./pages/subscriptions/Subcriptions"));
-const EditDetailsSubscription = lazy(() =>
-  import("./pages/subscriptions/EditDetailsSubscription")
+const EditDetailsSubscription = lazy(
+  () => import("./pages/subscriptions/EditDetailsSubscription"),
 );
 const Orders = lazy(() => import("./pages/orders/Orders"));
 const PromoCode = lazy(() => import("./pages/PromoCode"));
@@ -81,38 +81,6 @@ function App() {
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
-
-  const handleGetContent = () => {
-    if (user === null) {
-      return window.location.origin.concat("/sign-in");
-    }
-    const response = dispatch(
-      handleGetAllUsers({ token, signal: AbortControllerRef })
-    );
-    if (response) {
-      response.then((res) => {
-        if (
-          res?.payload?.status === "fail" &&
-          (res?.payload?.message === "Please provide authentication token." ||
-            res?.payload?.message === "Invalid token.")
-        ) {
-          dispatch(handleLogout());
-          dispatch(handleLogoutFromAllTabs());
-          toast.error("Please login again");
-        }
-      });
-    }
-    dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllProspects({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPartners({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
-    dispatch(handleGetPricing({ token, signal: AbortControllerRef }));
-    dispatch(handleGetMessages({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllOrder({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPromoCodes({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
-  };
 
   const privateRoutes = [
     { path: "/", page: Dashboard },
@@ -139,12 +107,12 @@ function App() {
   ];
 
   useEffect(() => {
-    handleGetContent();
     dispatch(loginAllTabsEventListener());
     dispatch(logoutAllTabsEventListener());
     return () => {
       abortApiCall();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -16,11 +16,11 @@ import { useTranslation } from "react-i18next";
 
 const ResetPassword = () => {
   const [showSuccessComponent, setShowSuccessComponent] = useState(false);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const {  user, verifyToken, email, error } = useSelector(
-    (state) => state.root.auth
+  const { user, verifyToken, email, error } = useSelector(
+    (state) => state.root.auth,
   );
 
   const dispatch = useDispatch();
@@ -37,8 +37,8 @@ const ResetPassword = () => {
       .matches(
         /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
         t(
-          "Minimum 6 characters, at least one special character, at least one digit"
-        )
+          "Minimum 6 characters, at least one special character, at least one digit",
+        ),
       )
       .trim(),
     confirmPassword: yup
@@ -58,7 +58,7 @@ const ResetPassword = () => {
 
   const onSubmit = (data) => {
     const { password } = data;
-    setLoading(true)
+    setLoading(true);
 
     const response = dispatch(
       handleResetPassword({
@@ -66,23 +66,21 @@ const ResetPassword = () => {
         password,
         verifyToken,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(t("Password Reset successfully."), { duration: 4000 });
           setShowSuccessComponent(true);
-    setLoading(true)
+          setLoading(true);
 
           window.localStorage.clear();
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
-    setLoading(true)
-
+          setLoading(true);
         }
-    setLoading(true)
-
+        setLoading(true);
       });
     }
   };
@@ -93,9 +91,9 @@ const ResetPassword = () => {
       navigate("/");
     }
     return () => {
-
       abortApiCall();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

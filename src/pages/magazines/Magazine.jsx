@@ -48,7 +48,7 @@ const Magazine = () => {
 
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData, isSidebarOpen } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
 
   const { AbortControllerRef } = useAbortApiCall();
@@ -83,7 +83,7 @@ const Magazine = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef })
+        handleDeleteMAGAZINE({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -102,7 +102,7 @@ const Magazine = () => {
     if (singleMagazineLoading) return;
     toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
-      handleGetMagazineById({ id, token, signal: AbortControllerRef })
+      handleGetMagazineById({ id, token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -141,7 +141,7 @@ const Magazine = () => {
   // fetch magainzes
   useEffect(() => {
     const response = dispatch(
-      handleGetAllMagazine({ token, signal: AbortControllerRef })
+      handleGetAllMagazine({ token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -156,6 +156,7 @@ const Magazine = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -267,7 +268,7 @@ const Magazine = () => {
                                   onClick={() => {
                                     handleFetchSingleMagazine(
                                       magazine?._id,
-                                      magazine?.magazineId
+                                      magazine?.magazineId,
                                     );
                                   }}
                                   disabled={deleteMagazineLoading || loading}
@@ -337,7 +338,7 @@ const Magazine = () => {
                                     <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                       <a
                                         href={BaseUrl.concat(
-                                          magazine?.digitalSubscribers
+                                          magazine?.digitalSubscribers,
                                         )}
                                         download
                                         target="_blank"
@@ -350,7 +351,7 @@ const Magazine = () => {
                                     <li className="hover:bg-gray-200 transition  break-words whitespace-normal duration-100 cursor-pointer p-1">
                                       <a
                                         href={BaseUrl.concat(
-                                          magazine?.paperSubscribers
+                                          magazine?.paperSubscribers,
                                         )}
                                         download
                                         target="_blank"
@@ -364,7 +365,7 @@ const Magazine = () => {
                                     <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                       <a
                                         href={BaseUrl.concat(
-                                          magazine?.paperProspectsPartners
+                                          magazine?.paperProspectsPartners,
                                         )}
                                         download
                                         target="_blank"
@@ -379,7 +380,7 @@ const Magazine = () => {
                                     <li className="hover:bg-gray-200 break-words  whitespace-normal transition duration-100 cursor-pointer p-1">
                                       <a
                                         href={BaseUrl.concat(
-                                          magazine?.digitalProspectsPartners
+                                          magazine?.digitalProspectsPartners,
                                         )}
                                         download
                                         target="_blank"
@@ -399,7 +400,7 @@ const Magazine = () => {
                                   onClick={() =>
                                     handleDeletemagazine(
                                       magazine?._id,
-                                      magazine?.title
+                                      magazine?.title,
                                     )
                                   }
                                   disabled={
@@ -440,9 +441,9 @@ const Magazine = () => {
                         ? magazines?.length
                         : (pageNumber + 1) * magazinePerPage
                       : (pageNumber + 1) * magazinePerPage >
-                        fileterdData?.length
-                      ? fileterdData?.length
-                      : (pageNumber + 1) * magazinePerPage}{" "}
+                          fileterdData?.length
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * magazinePerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? magazines?.length

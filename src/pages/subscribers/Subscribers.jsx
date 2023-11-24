@@ -44,7 +44,7 @@ const Subscribers = () => {
 
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData, isSidebarOpen } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
 
   const { AbortControllerRef } = useAbortApiCall();
@@ -84,7 +84,7 @@ const Subscribers = () => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
-        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -103,7 +103,7 @@ const Subscribers = () => {
     if (singleSucriberLoading) return;
     toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
-      handleGetSubscriberById({ id, token, signal: AbortControllerRef })
+      handleGetSubscriberById({ id, token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -126,7 +126,7 @@ const Subscribers = () => {
   // fetch subscribers
   useEffect(() => {
     const response = dispatch(
-      handleGetAllSubscribers({ token, signal: AbortControllerRef })
+      handleGetAllSubscribers({ token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -141,6 +141,7 @@ const Subscribers = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -249,7 +250,7 @@ const Subscribers = () => {
                                     // );
                                     handleFetchSingleSubscriber(
                                       subscriber?._id,
-                                      subscriber?.userId
+                                      subscriber?.userId,
                                     );
                                   }}
                                   type="button"
@@ -266,7 +267,7 @@ const Subscribers = () => {
                                   onClick={() => {
                                     setShowSubscriberDetails(true);
                                     dispatch(
-                                      handleFindSubscriber(subscriber?._id)
+                                      handleFindSubscriber(subscriber?._id),
                                     );
                                   }}
                                   type="button"
@@ -288,8 +289,8 @@ const Subscribers = () => {
                                     handleDeletesubscriber(
                                       subscriber?._id,
                                       subscriber?.fname.concat(
-                                        subscriber?.lname
-                                      )
+                                        subscriber?.lname,
+                                      ),
                                     )
                                   }
                                   disabled={
@@ -331,9 +332,9 @@ const Subscribers = () => {
                         ? subscribers?.length
                         : (pageNumber + 1) * subscribersPerPage
                       : (pageNumber + 1) * subscribersPerPage >
-                        fileterdData?.length
-                      ? fileterdData?.length
-                      : (pageNumber + 1) * subscribersPerPage}{" "}
+                          fileterdData?.length
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * subscribersPerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? subscribers?.length

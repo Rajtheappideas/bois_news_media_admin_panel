@@ -22,16 +22,16 @@ const Orders = () => {
   const [showAddOrder, setShowAddOrder] = useState(false);
 
   const { orders, loading, filterType } = useSelector(
-    (state) => state.root.orders
+    (state) => state.root.orders,
   );
   const { fileterdData, isSidebarOpen } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
   const { role, token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
 
-  const { abortApiCall ,AbortControllerRef} = useAbortApiCall();
+  const { abortApiCall, AbortControllerRef } = useAbortApiCall();
 
   const { t } = useTranslation();
 
@@ -55,6 +55,7 @@ const Orders = () => {
 
   useEffect(() => {
     return () => abortApiCall();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -63,11 +64,10 @@ const Orders = () => {
     }
   }, [fileterdData]);
 
-  
   // fetch orders
   useEffect(() => {
     const response = dispatch(
-      handleGetAllOrder({ token, signal: AbortControllerRef })
+      handleGetAllOrder({ token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -82,6 +82,7 @@ const Orders = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -179,8 +180,8 @@ const Orders = () => {
                         ? orders?.length
                         : (pageNumber + 1) * ordersPerPage
                       : (pageNumber + 1) * ordersPerPage > fileterdData?.length
-                      ? fileterdData?.length
-                      : (pageNumber + 1) * ordersPerPage}{" "}
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * ordersPerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? orders?.length

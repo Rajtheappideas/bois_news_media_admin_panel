@@ -6,25 +6,34 @@ import { useDispatch, useSelector } from "react-redux";
 import Search from "../components/Search";
 import { BiChevronsLeft, BiChevronsRight } from "react-icons/bi";
 import ReactPaginate from "react-paginate";
-import { handlerFilterMessages } from "../redux/GlobalStates";
+import {
+  handleGetMessages,
+  handleLogoutFromAllTabs,
+  handlerFilterMessages,
+} from "../redux/GlobalStates";
 import { BsEye } from "react-icons/bs";
 import MessgeDetails from "../components/MessgeDetails";
 import { Helmet } from "react-helmet";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import useAbortApiCall from "../hooks/useAbortApiCall";
+import { handleLogout } from "../redux/AuthSlice";
+import toast from "react-hot-toast";
 
 const MessagesList = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const [showMessageDetails, setShowMessageDetails] = useState(false);
   const [singleMessage, setSingleMessage] = useState(null);
 
-  const { messages, messageLoading, fileterdData ,isSidebarOpen} = useSelector(
-    (state) => state.root.globalStates
+  const { messages, messageLoading, fileterdData, isSidebarOpen } = useSelector(
+    (state) => state.root.globalStates,
   );
+  const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
+  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   // pagination logic
   const messagePerPage = 8;
@@ -57,6 +66,27 @@ const MessagesList = () => {
       setPageNumber(0);
     }
   }, [fileterdData]);
+
+  useEffect(() => {
+    const response = dispatch(
+      handleGetMessages({ token, signal: AbortControllerRef }),
+    );
+    if (response) {
+      response.then((res) => {
+        if (
+          res?.payload?.status === "fail" &&
+          (res?.payload?.message === "Please provide authentication token." ||
+            res?.payload?.message === "Invalid token.")
+        ) {
+          dispatch(handleLogout());
+          dispatch(handleLogoutFromAllTabs());
+          toast.error("Please login again");
+        }
+      });
+    }
+    return () => abortApiCall();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -167,8 +197,8 @@ const MessagesList = () => {
                         ? messages?.length
                         : (pageNumber + 1) * messagePerPage
                       : (pageNumber + 1) * messagePerPage > fileterdData?.length
-                      ? fileterdData?.length
-                      : (pageNumber + 1) * messagePerPage}{" "}
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * messagePerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? messages?.length

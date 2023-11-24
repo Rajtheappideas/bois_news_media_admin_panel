@@ -20,7 +20,26 @@ export const handleGetNewsLetter = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
+);
+
+export const handleGetCount = createAsyncThunk(
+  "global/handleGetCount",
+  async ({ token, signal }, { rejectWithValue }) => {
+    try {
+      signal.current = new AbortController();
+      const response = await GetUrl("dashboard", {
+        signal: signal.current.signal,
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  },
 );
 
 export const handleGetMessages = createAsyncThunk(
@@ -39,7 +58,7 @@ export const handleGetMessages = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -52,6 +71,8 @@ const initialState = {
   messageLoading: false,
   isSidebarOpen: false,
   activeSidebarTab: "dashboard",
+  counts: null,
+  countLoading: false,
 };
 
 const logoutChannel = new BroadcastChannel("handleLogout");
@@ -161,6 +182,22 @@ const GlobalStates = createSlice({
     builder.addCase(handleGetNewsLetter.rejected, (state, { payload }) => {
       state.newsLetterLoading = false;
       state.newsLetters = null;
+      state.error = payload ?? null;
+    });
+
+    // get count
+    builder.addCase(handleGetCount.pending, (state, {}) => {
+      state.countLoading = true;
+      state.error = null;
+    });
+    builder.addCase(handleGetCount.fulfilled, (state, { payload }) => {
+      state.countLoading = false;
+      state.counts = payload?.data;
+      state.error = null;
+    });
+    builder.addCase(handleGetCount.rejected, (state, { payload }) => {
+      state.countLoading = false;
+      state.counts = null;
       state.error = payload ?? null;
     });
     // get all message

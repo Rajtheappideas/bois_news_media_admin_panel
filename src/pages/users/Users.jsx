@@ -43,7 +43,7 @@ const Users = () => {
   } = useSelector((state) => state.root.users);
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData, isSidebarOpen } = useSelector(
-    (state) => state.root.globalStates
+    (state) => state.root.globalStates,
   );
 
   const dispatch = useDispatch();
@@ -76,7 +76,7 @@ const Users = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeleteUSER({ id, token, signal: AbortControllerRef })
+        handleDeleteUSER({ id, token, signal: AbortControllerRef }),
       );
       if (response) {
         response.then((res) => {
@@ -95,7 +95,7 @@ const Users = () => {
     if (singleUserGetLoading) return;
     toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
-      handleGetUserbyId({ id, token, signal: AbortControllerRef })
+      handleGetUserbyId({ id, token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -118,7 +118,7 @@ const Users = () => {
   // fetch users
   useEffect(() => {
     const response = dispatch(
-      handleGetAllUsers({ token, signal: AbortControllerRef })
+      handleGetAllUsers({ token, signal: AbortControllerRef }),
     );
     if (response) {
       response.then((res) => {
@@ -133,6 +133,7 @@ const Users = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -244,7 +245,7 @@ const Users = () => {
                                   onClick={() => {
                                     handleFetchSingleUser(
                                       user?._id,
-                                      user?.userId
+                                      user?.userId,
                                     );
                                   }}
                                   disabled={deleteUserLoading || loading}
@@ -320,8 +321,8 @@ const Users = () => {
                         ? users?.length
                         : (pageNumber + 1) * usersPerPage
                       : (pageNumber + 1) * usersPerPage > fileterdData?.length
-                      ? fileterdData?.length
-                      : (pageNumber + 1) * usersPerPage}{" "}
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * usersPerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? users?.length

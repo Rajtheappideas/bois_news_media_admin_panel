@@ -68,7 +68,7 @@ const OTPVerify = ({ email }) => {
         email,
         otp: Object.values(numberField).join(""),
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -91,7 +91,7 @@ const OTPVerify = ({ email }) => {
       handleForgotPassword({
         email,
         signal: AbortControllerRef,
-      })
+      }),
     );
     if (response) {
       response.then((res) => {
@@ -123,6 +123,7 @@ const OTPVerify = ({ email }) => {
     return () => {
       abortApiCall();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -163,7 +164,7 @@ const OTPVerify = ({ email }) => {
                 "stepOne",
                 e.target.value.length > 1
                   ? e.target.value.slice(-1)
-                  : e.target.value.trim()
+                  : e.target.value.trim(),
               );
             }}
             value={numberField?.stepOne}
@@ -184,7 +185,7 @@ const OTPVerify = ({ email }) => {
                 "stepTwo",
                 e.target.value.length > 1
                   ? e.target.value.slice(-1)
-                  : e.target.value.trim()
+                  : e.target.value.trim(),
               )
             }
             onKeyUp={(e) => handleInputFocus(e)}
@@ -205,7 +206,7 @@ const OTPVerify = ({ email }) => {
                 "stepThree",
                 e.target.value.length > 1
                   ? e.target.value.slice(-1)
-                  : e.target.value.trim()
+                  : e.target.value.trim(),
               )
             }
             onKeyUp={(e) => handleInputFocus(e)}
@@ -226,7 +227,7 @@ const OTPVerify = ({ email }) => {
                 "stepFour",
                 e.target.value.length > 1
                   ? e.target.value.slice(-1)
-                  : e.target.value.trim()
+                  : e.target.value.trim(),
               )
             }
             onKeyUp={(e) => handleInputFocus(e)}
@@ -247,7 +248,7 @@ const OTPVerify = ({ email }) => {
                 "stepFive",
                 e.target.value.length > 1
                   ? e.target.value.slice(-1)
-                  : e.target.value.trim()
+                  : e.target.value.trim(),
               )
             }
             onKeyUp={(e) => handleInputFocus(e)}
@@ -268,7 +269,7 @@ const OTPVerify = ({ email }) => {
                 "stepSix",
                 e.target.value.length > 1
                   ? e.target.value.slice(-1)
-                  : e.target.value.trim()
+                  : e.target.value.trim(),
               )
             }
             onKeyUp={(e) => handleInputFocus(e)}
