@@ -32,12 +32,15 @@ export const handleGetMagazineById = createAsyncThunk(
           Authorization: token,
         },
       });
-      return response.data?.map(magazine => {
-        return {
-          ...magazine,
-          image: magazine.image ? 'https://boisnewsmedia-assets.s3.eu-west-3.amazonaws.com/' + magazine.image : undefined
+
+      if (response?.data?.payload?.magazine) {
+        response.data.payload.magazine = {
+          ...response.data.payload.magazine,
+          image: magazine.image ? process.env.PUBLIC_S3_URL + magazine.image : undefined
         }
-      });
+      }
+
+      return response.data;
     } catch (error) {
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
