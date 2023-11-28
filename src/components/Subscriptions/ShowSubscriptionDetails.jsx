@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import BaseUrl from "../../BaseUrl";
+import { PublicS3Url } from "../../BaseUrl";
 
 const ShowSubscriptionDetails = ({ setShowSubscriptionDetails }) => {
   const { singleSubscription } = useSelector(
@@ -33,7 +33,7 @@ const ShowSubscriptionDetails = ({ setShowSubscriptionDetails }) => {
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
         <div className="relative md:w-24 w-20 block">
           <img
-            src={BaseUrl.concat(image)}
+            src={PublicS3Url.concat(image)}
             alt=""
             className="rounded-full md:h-24 md:w-24 w-20 h-20 border"
           />

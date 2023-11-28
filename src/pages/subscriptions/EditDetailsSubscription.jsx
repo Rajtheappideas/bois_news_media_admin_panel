@@ -16,7 +16,7 @@ import {
   handleEditSubscription,
   handleGetSubscriptionById,
 } from "../../redux/SubscriptionSlice";
-import BaseUrl from "../../BaseUrl";
+import { PublicS3Url } from "../../BaseUrl";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
@@ -254,7 +254,7 @@ const EditDetailsSubscription = () => {
                 <div className="relative md:w-24 w-20 block">
                   {prevImage === null ? (
                     <img
-                      src={BaseUrl.concat(state?.image)}
+                      src={PublicS3Url.concat(state?.image)}
                       alt=""
                       className="rounded-full md:h-24 md:w-24 w-20 h-20 border"
                     />

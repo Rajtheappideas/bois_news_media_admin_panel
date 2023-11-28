@@ -11,7 +11,7 @@ import { HiOutlineXMark } from "react-icons/hi2";
 import { SlEnvolopeLetter } from "react-icons/sl";
 import { HiOutlineReceiptTax } from "react-icons/hi";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
-import BaseUrl from "../BaseUrl";
+import { PublicS3Url } from "../BaseUrl";
 import { useDispatch, useSelector } from "react-redux";
 import {
   handleChagneActiveSidebarTab,
@@ -117,9 +117,8 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`lg:sticky lg:top-0 ${
-        isSidebarOpen ? "xl:w-2/12 lg:w-1/5" : "lg:w-[10%]"
-      } h-auto capitalize `}
+      className={`lg:sticky lg:top-0 ${isSidebarOpen ? "xl:w-2/12 lg:w-1/5" : "lg:w-[10%]"
+        } h-auto capitalize `}
     >
       {/* for desktop */}
       <div
@@ -134,7 +133,7 @@ const Sidebar = () => {
         >
           {user?.profile !== null && user?.profile !== undefined ? (
             <img
-              src={BaseUrl.concat(user?.profile)}
+              src={PublicS3Url.concat(user?.profile)}
               alt={user?.name}
               className="md:h-12 md:w-12 h-9 w-9 mx-auto object-contain object-center bg-cover bg-center border rounded-full text-sm"
             />
@@ -155,23 +154,20 @@ const Sidebar = () => {
                   scrollToTop();
                   handleChangeTabTitle(list.title);
                 }}
-                className={`flex items-center ${
-                  isSidebarOpen ? "justify-start" : "justify-center"
-                } ${
-                  activeSidebarTab.toLocaleLowerCase() ===
-                  list.title.toLocaleLowerCase()
+                className={`flex items-center ${isSidebarOpen ? "justify-start" : "justify-center"
+                  } ${activeSidebarTab.toLocaleLowerCase() ===
+                    list.title.toLocaleLowerCase()
                     ? "bg-primaryBlue text-white"
                     : "text-textColor bg-white"
-                } xl:px-4 px-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
+                  } xl:px-4 px-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
                 title={list.title}
               >
                 <list.icon
-                  className={`${
-                    activeSidebarTab.toLocaleLowerCase() ===
-                    list.title.toLocaleLowerCase()
+                  className={`${activeSidebarTab.toLocaleLowerCase() ===
+                      list.title.toLocaleLowerCase()
                       ? "text-white"
                       : "text-textColor"
-                  }`}
+                    }`}
                   size={25}
                 />
                 {isSidebarOpen && <span>{list?.title}</span>}
@@ -189,9 +185,8 @@ const Sidebar = () => {
       {/* for tablet / mobile */}
       <div
         ref={sidebarRef}
-        className={`min-h-screen max-h-[90vh] overflow-y-scroll scrollbar inset-0 absolute md:w-1/2 w-4/5 z-50 bg-white ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-[100%]"
-        } px-4 transition duration-300 ease-in-out lg:hidden block py-3 shadow-xl`}
+        className={`min-h-screen max-h-[90vh] overflow-y-scroll scrollbar inset-0 absolute md:w-1/2 w-4/5 z-50 bg-white ${isSidebarOpen ? "translate-x-0" : "-translate-x-[100%]"
+          } px-4 transition duration-300 ease-in-out lg:hidden block py-3 shadow-xl`}
       >
         {/* profile image */}
         <p
@@ -202,7 +197,7 @@ const Sidebar = () => {
         >
           {user?.profile !== null && user?.profile !== undefined ? (
             <img
-              src={BaseUrl.concat(user?.profile)}
+              src={PublicS3Url.concat(user?.profile)}
               alt={user?.name}
               className="md:h-16 md:w-16 h-14 w-14 object-contain object-center border rounded-full text-sm bg-blend-multiply bg-transparent"
             />
@@ -226,20 +221,18 @@ const Sidebar = () => {
                   scrollToTop();
                 }}
                 className={`flex items-center justify-start whitespace-nowrap
-               ${
-                 activeSidebarTab.toLocaleLowerCase() ===
-                 list.title.toLocaleLowerCase()
-                   ? "bg-primaryBlue text-white"
-                   : "text-textColor bg-white"
-               } px-2 md:py-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
+               ${activeSidebarTab.toLocaleLowerCase() ===
+                    list.title.toLocaleLowerCase()
+                    ? "bg-primaryBlue text-white"
+                    : "text-textColor bg-white"
+                  } px-2 md:py-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
               >
                 <list.icon
-                  className={`${
-                    activeSidebarTab.toLocaleLowerCase() ===
-                    list.title.toLocaleLowerCase()
+                  className={`${activeSidebarTab.toLocaleLowerCase() ===
+                      list.title.toLocaleLowerCase()
                       ? "text-white"
                       : "text-textColor"
-                  }`}
+                    }`}
                   size={25}
                 />
                 {list?.title}

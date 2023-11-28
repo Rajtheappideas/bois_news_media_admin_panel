@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { handleEditProfile } from "../../redux/AuthSlice";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
-import Baseurl from "../../BaseUrl";
+import { PublicS3Url } from "../../BaseUrl";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
@@ -180,7 +180,7 @@ const EditProfile = ({ setShowProfileEdit }) => {
             />
           ) : profile !== null && profile !== undefined ? (
             <img
-              src={Baseurl.concat(profile)}
+              src={PublicS3Url.concat(profile)}
               alt={name}
               className="rounded-full object-contain object-center bg-cover bg-center inline-block border md:h-24 md:w-24 w-20 h-20"
 

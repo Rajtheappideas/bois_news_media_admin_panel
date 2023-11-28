@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HiPencil } from "react-icons/hi";
-import BaseUrl from "../../BaseUrl";
+import { PublicS3Url } from "../../BaseUrl";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
@@ -227,9 +227,8 @@ const EditUserDetails = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-            }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
           >
             <Header />
             <form
@@ -243,10 +242,9 @@ const EditUserDetails = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button  ${
-                      deleteUserLoading ||
+                    className={`gray_button  ${deleteUserLoading ||
                       (EditUserLoading && "cursor-not-allowed")
-                    }`}
+                      }`}
                     type="button"
                     onClick={() => {
                       handleOnClickCancel();
@@ -257,18 +255,16 @@ const EditUserDetails = () => {
                   </button>
                   <button
                     disabled={deleteUserLoading || EditUserLoading}
-                    className={`green_button  ${
-                      EditUserLoading && "cursor-not-allowed"
-                    }`}
+                    className={`green_button  ${EditUserLoading && "cursor-not-allowed"
+                      }`}
                     type="submit"
                   >
                     {EditUserLoading ? t("Saving").concat("...") : t("Save")}
                   </button>
                   {userRole === "admin" && (
                     <button
-                      className={`red_button  ${
-                        deleteUserLoading && "cursor-not-allowed"
-                      }`}
+                      className={`red_button  ${deleteUserLoading && "cursor-not-allowed"
+                        }`}
                       type="button"
                       onClick={() =>
                         handleDeleteruser(
@@ -297,7 +293,7 @@ const EditUserDetails = () => {
                   ) : singleUser?.profile !== null &&
                     singleUser?.profile !== undefined ? (
                     <img
-                      src={BaseUrl.concat(singleUser?.profile)}
+                      src={PublicS3Url.concat(singleUser?.profile)}
                       alt={singleUser?.name}
                       className="rounded-full border object-contain object-center bg-cover bg-center inline-block md:h-24 md:w-24 w-20 h-20"
                     />

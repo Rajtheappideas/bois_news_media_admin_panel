@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import BaseUrl from "../../BaseUrl";
+import { PublicS3Url } from "../../BaseUrl";
 import { useTranslation } from "react-i18next";
 
 const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
@@ -45,24 +45,12 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
             </label>
             <div className="relative md:w-24 w-20 h-24 block">
               <img
-                src={BaseUrl.concat(image)}
+                src={PublicS3Url.concat(image)}
                 alt="image"
                 className="rounded-full object-contain object-center md:h-24 md:w-24 w-20 h-20 border"
               />
             </div>
           </div>
-          {/* pdf */}
-          {/* <div className="text-center">
-            <label htmlFor="pdf" className="Label">
-              Pdf
-            </label>
-
-            <div className="relative md:w-24 w-20 h-24">
-              <p className="text-sm text-center absolute z-0 bottom-0 right-0 rounded-full bg-gray-300 text-black md:h-24 md:w-24 w-20 h-20 p-5">
-                <span className="block">{BaseUrl.concat(pdf)}</span>
-              </p>
-            </div>
-          </div> */}
         </div>
         <p className="font-bold text-black md:text-xl">
           {t("Magazine details")}
@@ -72,42 +60,42 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
-            {t("title")}
+              {t("title")}
             </label>
             <p className="font-semibold">{title}</p>
           </div>
           {/* price */}
           <div className="w-full space-y-2">
             <label htmlFor="price" className="Label">
-            {t("price")}
+              {t("price")}
             </label>
             <p className="font-semibold">{price}</p>
           </div>
           {/* stock */}
           <div className="w-full space-y-2">
             <label htmlFor="stock" className="Label">
-            {t("stock")}
+              {t("stock")}
             </label>
             <p className="font-semibold">{stock}</p>
           </div>
           {/* status */}
           <div className="w-full space-y-2">
             <label htmlFor="status" className="Label">
-            {t("status")}
+              {t("status")}
             </label>
             <p className="font-semibold">{status}</p>
           </div>
           {/* magazines */}
           <div className="w-full space-y-2">
             <label htmlFor="magazineTitle" className="Label">
-            {t("Magazine")}
+              {t("Magazine")}
             </label>
             <p className="font-semibold">{magazineTitle}</p>
           </div>
           {/* summary */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="summary" className="Label">
-            {t("summary")}
+              {t("summary")}
             </label>
             <p className="font-semibold">{description}</p>
           </div>
