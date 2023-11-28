@@ -34,7 +34,7 @@ export const handleGetMagazineById = createAsyncThunk(
       });
 
       if (response?.data?.payload?.magazine) {
-        response.data.payload.magazine.image = response.data.payload.magazine.image ? process.env.PUBLIC_S3_URL + magazine.image : undefined;
+        response.data.payload.magazine.image = response.data.payload.magazine.image ? process.env.PUBLIC_S3_URL + response.data.payload.magazine.image : undefined;
       }
 
       return response.data;
