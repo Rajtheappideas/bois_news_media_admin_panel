@@ -16,7 +16,7 @@ import {
   handleEditMagazine,
   handleGetMagazineById,
 } from "../../redux/MagazineSlice";
-import BaseUrl from "../../BaseUrl";
+import { PublicS3Url } from "../../BaseUrl";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
@@ -223,9 +223,8 @@ const EditMagazineDetails = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-            }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
           >
             <Header />
 
@@ -248,10 +247,9 @@ const EditMagazineDetails = () => {
             </a>
           </button> */}
                   <button
-                    className={`gray_button ${
-                      (editMagazineLoading || deleteMagazineLoading) &&
+                    className={`gray_button ${(editMagazineLoading || deleteMagazineLoading) &&
                       "cursor-not-allowed"
-                    } `}
+                      } `}
                     onClick={() => handleOnClickCancel()}
                     type="button"
                     disabled={editMagazineLoading || deleteMagazineLoading}
@@ -259,10 +257,9 @@ const EditMagazineDetails = () => {
                     {t("Cancel")}
                   </button>
                   <button
-                    className={`green_button ${
-                      (editMagazineLoading || deleteMagazineLoading) &&
+                    className={`green_button ${(editMagazineLoading || deleteMagazineLoading) &&
                       "cursor-not-allowed"
-                    } `}
+                      } `}
                     type="submit"
                     disabled={editMagazineLoading || deleteMagazineLoading}
                   >
@@ -272,10 +269,9 @@ const EditMagazineDetails = () => {
                   </button>
                   {role === "admin" && (
                     <button
-                      className={`red_button ${
-                        (editMagazineLoading || deleteMagazineLoading) &&
+                      className={`red_button ${(editMagazineLoading || deleteMagazineLoading) &&
                         "cursor-not-allowed"
-                      } `}
+                        } `}
                       type="button"
                       disabled={editMagazineLoading || deleteMagazineLoading}
                       onClick={() => handleDeletemagazine(singleMagazine?._id)}
@@ -297,7 +293,7 @@ const EditMagazineDetails = () => {
                     <div className="relative md:w-24 w-20 h-24 block">
                       {prevImage === null ? (
                         <img
-                          src={BaseUrl.concat(singleMagazine?.image)}
+                          src={PublicS3Url.concat(singleMagazine?.image)}
                           alt=""
                           className="rounded-full object-contain object-center md:h-24 md:w-24 w-20 h-20 border"
                         />

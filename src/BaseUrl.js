@@ -4,6 +4,9 @@ const language = JSON.parse(window.localStorage.getItem("lang"));
 
 export default axios.defaults.baseURL = "http://boisnewsbackend-env-prod.eba-5tri2bm5.eu-west-3.elasticbeanstalk.com";
 
+export const PublicS3Url = "https://boisnewsmedia-assets.s3.eu-west-3.amazonaws.com/";
+
+
 export const PostUrl = axios.create({
   baseURL: "http://boisnewsbackend-env-prod.eba-5tri2bm5.eu-west-3.elasticbeanstalk.com/api/admin",
   method: "POST",
