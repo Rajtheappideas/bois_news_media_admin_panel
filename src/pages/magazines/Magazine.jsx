@@ -323,26 +323,26 @@ const Magazine = () => {
                                 >
                                   <ul className="space-y-1 text-sm">
                                     <li className="hover:bg-gray-200 transition duration-100 cursor-pointer p-1">
-                                      <DownloadButton fileName={magazine?.pdf} label="Magazine pdf" />
+                                      <DownloadButton filePath={magazine?.pdf} label="Magazine pdf" />
                                     </li>
                                     <hr />
                                     <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
-                                      <DownloadButton fileName={magazine?.digitalSubscribers} label="Routing file (digital subscribers)" />
+                                      <DownloadButton filePath={magazine?.digitalSubscribers} label="Routing file (digital subscribers)" />
                                     </li>
                                     <hr />
                                     <li className="hover:bg-gray-200 transition  break-words whitespace-normal duration-100 cursor-pointer p-1">
-                                      <DownloadButton fileName={magazine?.paperSubscribers} label="Routing file (paper subscribers)" />
+                                      <DownloadButton filePath={magazine?.paperSubscribers} label="Routing file (paper subscribers)" />
                                     </li>
                                     <hr />
 
                                     <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
-                                      <DownloadButton fileName={magazine?.paperProspectsPartners} label="Routing file (paper partners &
+                                      <DownloadButton filePath={magazine?.paperProspectsPartners} label="Routing file (paper partners &
                                         prospects)" />
                                     </li>
                                     <hr />
 
                                     <li className="hover:bg-gray-200 break-words  whitespace-normal transition duration-100 cursor-pointer p-1">
-                                      <DownloadButton fileName={magazine?.digitalProspectsPartners} label=" Routing file (digital partners &
+                                      <DownloadButton filePath={magazine?.digitalProspectsPartners} label=" Routing file (digital partners &
                                         prospects)" />
                                     </li>
                                   </ul>
