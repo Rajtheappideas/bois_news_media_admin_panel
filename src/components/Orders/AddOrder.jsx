@@ -158,9 +158,8 @@ const AddOrder = ({ setShowAddOrder }) => {
           </p>
           <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
             <button
-              className={`gray_button ${
-                createLoading && "cursor-not-allowed"
-              }`}
+              className={`gray_button ${createLoading && "cursor-not-allowed"
+                }`}
               onClick={() => setShowAddOrder(false)}
               disabled={createLoading}
               type="reset"
@@ -168,9 +167,8 @@ const AddOrder = ({ setShowAddOrder }) => {
               {t("Cancel")}
             </button>
             <button
-              className={`green_button ${
-                createLoading && "cursor-not-allowed"
-              }`}
+              className={`green_button ${createLoading && "cursor-not-allowed"
+                }`}
               type="submit"
               disabled={createLoading}
             >
@@ -194,9 +192,8 @@ const AddOrder = ({ setShowAddOrder }) => {
               />
 
               <div
-                className={`absolute ${
-                  searchResult.length > 0 ? "scale-100" : "scale-0"
-                } transition-all duration-300 top-12 w-full max-h-80 overflow-y-scroll scrollbar left-0 bg-white z-10 shadow-md rounded-lg space-y-2`}
+                className={`absolute ${searchResult.length > 0 ? "scale-100" : "scale-0"
+                  } transition-all duration-300 top-12 w-full max-h-80 overflow-y-scroll scrollbar left-0 bg-white z-10 shadow-md rounded-lg space-y-2`}
               >
                 {searchResult.map((r) => (
                   <p
@@ -304,7 +301,7 @@ const AddOrder = ({ setShowAddOrder }) => {
               </label>
               {selectedSubscriber?.thirdPartyPayer !== null
                 ? selectedSubscriber?.thirdPartyPayer?.billingAddress
-                    ?.companyAddress ?? "-"
+                  ?.companyAddress ?? "-"
                 : selectedSubscriber?.billingAddress?.address1 ?? "-"}
             </div>
             {/* city */}
@@ -314,7 +311,7 @@ const AddOrder = ({ setShowAddOrder }) => {
               </label>
               {selectedSubscriber?.thirdPartyPayer !== null
                 ? selectedSubscriber?.thirdPartyPayer?.billingAddress?.city ??
-                  "-"
+                "-"
                 : selectedSubscriber?.billingAddress?.city ?? "-"}
             </div>
             {/* country */}
@@ -324,7 +321,7 @@ const AddOrder = ({ setShowAddOrder }) => {
               </label>
               {selectedSubscriber?.thirdPartyPayer !== null
                 ? selectedSubscriber?.thirdPartyPayer?.billingAddress
-                    ?.country ?? "-"
+                  ?.country ?? "-"
                 : selectedSubscriber?.billingAddress?.country ?? "-"}
             </div>
             {/* zipcode */}
@@ -334,7 +331,7 @@ const AddOrder = ({ setShowAddOrder }) => {
               </label>
               {selectedSubscriber?.thirdPartyPayer !== null
                 ? selectedSubscriber?.thirdPartyPayer?.billingAddress
-                    ?.zipCode ?? "-"
+                  ?.zipCode ?? "-"
                 : selectedSubscriber?.billingAddress?.zipCode ?? "-"}
             </div>
           </div>

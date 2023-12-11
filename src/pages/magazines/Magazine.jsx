@@ -5,7 +5,6 @@ import { BiChevronsLeft, BiChevronsRight, BiPencil } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { HiOutlineDownload } from "react-icons/hi";
 import AddnewMagazine from "../../components/Magazine/AddnewMagazine";
-import EditMagazineDetails from "./EditMagazineDetails";
 import {
   handleChangeDeleteID,
   handleDeleteMAGAZINE,
@@ -28,6 +27,7 @@ import Header from "../../components/Header";
 import { handleLogout } from "../../redux/AuthSlice";
 import { handleLogoutFromAllTabs } from "../../redux/GlobalStates";
 import { useNavigate } from "react-router-dom";
+import DownloadButton from "../../components/DownloadButton";
 
 const Magazine = () => {
   const [showAddnewMagazine, setshowAddnewMagazine] = useState(false);
@@ -165,9 +165,8 @@ const Magazine = () => {
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
         <section
-          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-            isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-          }`}
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
         >
           <Header />
           <div className="lg:p-5 p-3 ">
@@ -315,80 +314,36 @@ const Magazine = () => {
                                   />
                                 </button>
                                 <p
-                                  className={`origin-center ${
-                                    showDownloadDropdown &&
+                                  className={`origin-center ${showDownloadDropdown &&
                                     downloadDropdownId === magazine?._id
-                                      ? "scale-100"
-                                      : "scale-0"
-                                  } absolute z-10 -top-16 md:-left-6 -left-16 shadow-md rounded-lg bg-white w-44 whitespace-nowrap h-auto p-3 transition`}
+                                    ? "scale-100"
+                                    : "scale-0"
+                                    } absolute z-10 -top-16 md:-left-6 -left-16 shadow-md rounded-lg bg-white w-44 whitespace-nowrap h-auto p-3 transition`}
                                   ref={downloadRef}
                                 >
                                   <ul className="space-y-1 text-sm">
                                     <li className="hover:bg-gray-200 transition duration-100 cursor-pointer p-1">
-                                      <a
-                                        href={BaseUrl.concat(magazine?.pdf)}
-                                        download
-                                        target="_blank"
-                                        rel="noreferrer"
-                                      >
-                                        Magazine pdf
-                                      </a>
+                                      <DownloadButton fileName={magazine?.pdf} label="Magazine pdf" />
                                     </li>
                                     <hr />
                                     <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
-                                      <a
-                                        href={BaseUrl.concat(
-                                          magazine?.digitalSubscribers,
-                                        )}
-                                        download
-                                        target="_blank"
-                                        rel="noreferrer"
-                                      >
-                                        Routing file (digital subscribers)
-                                      </a>
+                                      <DownloadButton fileName={magazine?.digitalSubscribers} label="Routing file (digital subscribers)" />
                                     </li>
                                     <hr />
                                     <li className="hover:bg-gray-200 transition  break-words whitespace-normal duration-100 cursor-pointer p-1">
-                                      <a
-                                        href={BaseUrl.concat(
-                                          magazine?.paperSubscribers,
-                                        )}
-                                        download
-                                        target="_blank"
-                                        rel="noreferrer"
-                                      >
-                                        Routing file (paper subscribers)
-                                      </a>
+                                      <DownloadButton fileName={magazine?.paperSubscribers} label="Routing file (paper subscribers)" />
                                     </li>
                                     <hr />
 
                                     <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
-                                      <a
-                                        href={BaseUrl.concat(
-                                          magazine?.paperProspectsPartners,
-                                        )}
-                                        download
-                                        target="_blank"
-                                        rel="noreferrer"
-                                      >
-                                        Routing file (paper partners &
-                                        prospects)
-                                      </a>
+                                      <DownloadButton fileName={magazine?.paperProspectsPartners} label="Routing file (paper partners &
+                                        prospects)" />
                                     </li>
                                     <hr />
 
                                     <li className="hover:bg-gray-200 break-words  whitespace-normal transition duration-100 cursor-pointer p-1">
-                                      <a
-                                        href={BaseUrl.concat(
-                                          magazine?.digitalProspectsPartners,
-                                        )}
-                                        download
-                                        target="_blank"
-                                        rel="noreferrer"
-                                      >
-                                        Routing file (digital partners &
-                                        prospects)
-                                      </a>
+                                      <DownloadButton fileName={magazine?.digitalProspectsPartners} label=" Routing file (digital partners &
+                                        prospects)" />
                                     </li>
                                   </ul>
                                 </p>
@@ -410,7 +365,7 @@ const Magazine = () => {
                                   }
                                 >
                                   {deleteMagazineLoading &&
-                                  magazine?._id === deleteMagazineID ? (
+                                    magazine?._id === deleteMagazineID ? (
                                     "..."
                                   ) : (
                                     <RiDeleteBin6Line
@@ -441,7 +396,7 @@ const Magazine = () => {
                         ? magazines?.length
                         : (pageNumber + 1) * magazinePerPage
                       : (pageNumber + 1) * magazinePerPage >
-                          fileterdData?.length
+                        fileterdData?.length
                         ? fileterdData?.length
                         : (pageNumber + 1) * magazinePerPage}{" "}
                     {t("from")}{" "}
