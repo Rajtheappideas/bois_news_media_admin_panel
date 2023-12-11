@@ -12,7 +12,7 @@ const DownloadButton = ({ filePath, label }) => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: token,
                 },
             });
 
