@@ -254,7 +254,7 @@ const EditDetailsSubscription = () => {
                 <div className="relative md:w-24 w-20 block">
                   {prevImage === null ? (
                     <img
-                      src={PublicS3Url.concat(state?.image)}
+                      src={PublicS3Url.concat(singleSubscription?.image)}
                       alt=""
                       className="rounded-full md:h-24 md:w-24 w-20 h-20 border"
                     />
