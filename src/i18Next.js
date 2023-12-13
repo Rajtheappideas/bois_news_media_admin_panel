@@ -8,7 +8,7 @@ i18next
   .use(initReactI18next)
   .use(LanguageDetector)
   .init({
-    supportedLngs: ["en", "fr"],
+    supportedLngs: ["fr", "en"],
     resources: {
       en: {
         translation: translationEn,
@@ -17,7 +17,7 @@ i18next
         translation: translationFr,
       },
     },
-    fallbackLng: "en",
+    fallbackLng: "fr",
     detection: { order: ["path", "cookie", "htmlTag"], caches: ["cookie"] },
     react: { useSuspense: true },
     backend: {
