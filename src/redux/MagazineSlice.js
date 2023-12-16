@@ -45,7 +45,8 @@ export const handleAddNewMagazine = createAsyncThunk(
   async (
     {
       title,
-      price,
+      priceDigital,
+      pricePaper,
       magazineTitle,
       pdf,
       stock,
@@ -62,7 +63,8 @@ export const handleAddNewMagazine = createAsyncThunk(
       const response = await PostUrl("magazine", {
         data: {
           title,
-          price,
+          priceDigital,
+          pricePaper,
           magazineTitle,
           pdf,
           stock,
@@ -93,7 +95,8 @@ export const handleEditMagazine = createAsyncThunk(
   async (
     {
       title,
-      price,
+      priceDigital,
+      pricePaper,
       magazineTitle,
       pdf,
       stock,
@@ -111,7 +114,8 @@ export const handleEditMagazine = createAsyncThunk(
       const response = await PostUrl(`magazine/${id}`, {
         data: {
           title,
-          price,
+          priceDigital,
+          pricePaper,
           magazineTitle,
           pdf,
           stock,

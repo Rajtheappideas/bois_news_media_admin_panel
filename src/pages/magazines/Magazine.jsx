@@ -221,7 +221,8 @@ const Magazine = () => {
                           </label>
                         </th>
                         <th className="md:p-4 p-2">{t("Magazine name")}</th>
-                        <th className="md:p-4 p-2">{t("Price")}</th>
+                        <th className="md:p-4 p-2">{t("Digital Price")}</th>
+                        <th className="md:p-4 p-2">{t("Paper Price")}</th>
                         <th className="md:p-4 p-2">{t("Stock")}</th>
                         <th className="md:p-4 p-2 text-center">
                           {t("Status")}
@@ -253,7 +254,10 @@ const Magazine = () => {
                               {magazine?.title}
                             </td>
                             <td className="text-left md:p-4 p-2 whitespace-nowrap">
-                              $ {magazine?.price}
+                              $ {magazine?.priceDigital}
+                            </td>
+                            <td className="text-left md:p-4 p-2 whitespace-nowrap">
+                              $ {magazine?.pricePaper}
                             </td>
 
                             <td className="text-left md:p-4 p-2 whitespace-nowrap">

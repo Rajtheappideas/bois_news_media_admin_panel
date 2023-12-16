@@ -43,7 +43,17 @@ export const handleGetSubscriptionById = createAsyncThunk(
 export const handleAddNewSubscription = createAsyncThunk(
   "subscription/handleAddNewSubscription",
   async (
-    { title, price, status, description, image, magazineTitle, token, signal },
+    {
+      title,
+      priceDigital,
+      pricePaper,
+      status,
+      description,
+      image,
+      magazineTitle,
+      token,
+      signal,
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -51,7 +61,8 @@ export const handleAddNewSubscription = createAsyncThunk(
       const response = await PostUrl("subscription", {
         data: {
           title,
-          price,
+          priceDigital,
+          pricePaper,
           status,
           description,
           image,
@@ -76,7 +87,8 @@ export const handleEditSubscription = createAsyncThunk(
   async (
     {
       title,
-      price,
+      priceDigital,
+      pricePaper,
       status,
       description,
       image,
@@ -92,7 +104,8 @@ export const handleEditSubscription = createAsyncThunk(
       const response = await PostUrl(`subscription/${id}`, {
         data: {
           title,
-          price,
+          priceDigital,
+          pricePaper,
           status,
           description,
           image,

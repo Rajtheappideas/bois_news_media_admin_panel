@@ -154,7 +154,7 @@ const Dashboard = () => {
               </div>
             </Link>
             {/* magazine */}
-            <Link to="/magazine">
+            <Link to="/magazines">
               <div className="w-full cursor-pointer bg-gradient-to-r flex items-center justify-between from-purpleGradientFrom to-purpleGradientTo hover:scale-105 transition text-white rounded-md h-auto p-6">
                 <div className="flex-1 tracking-wide">
                   <p className="p-1 w-10 h-10 rounded-full text-center leading-10 align-middle bg-black/20">
