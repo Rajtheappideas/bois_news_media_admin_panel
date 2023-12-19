@@ -416,9 +416,8 @@ const EditSubscriberDetails = () => {
           {showMagazineDistributionPopup && <AddMagazineSubscription />}
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-            }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
           >
             <Header />
             <form
@@ -432,9 +431,8 @@ const EditSubscriberDetails = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button ${
-                      (editLoading || deleteLoading) && "cursor-not-allowed"
-                    }`}
+                    className={`gray_button ${(editLoading || deleteLoading) && "cursor-not-allowed"
+                      }`}
                     onClick={() => {
                       handleOnClickCancel();
                     }}
@@ -443,9 +441,8 @@ const EditSubscriberDetails = () => {
                     {t("Cancel")}
                   </button>
                   <button
-                    className={`green_button ${
-                      (editLoading || deleteLoading) && "cursor-not-allowed"
-                    } `}
+                    className={`green_button ${(editLoading || deleteLoading) && "cursor-not-allowed"
+                      } `}
                     disabled={deleteLoading || editLoading}
                     type="submit"
                   >
@@ -453,9 +450,8 @@ const EditSubscriberDetails = () => {
                   </button>
                   {role === "admin" && (
                     <button
-                      className={`red_button ${
-                        (editLoading || deleteLoading) && "cursor-not-allowed"
-                      }`}
+                      className={`red_button ${(editLoading || deleteLoading) && "cursor-not-allowed"
+                        }`}
                       disabled={deleteLoading || editLoading}
                       onClick={() =>
                         handleDeletesubscriber(
@@ -1103,10 +1099,10 @@ const EditSubscriberDetails = () => {
                     </thead>
                     <tbody className="w-full">
                       {singleSucriber?.subscriptions !== undefined &&
-                      singleSucriber?.subscriptions.length > 0 ? (
+                        singleSucriber?.subscriptions.length > 0 ? (
                         singleSucriber?.subscriptions.map((subscription) => (
                           <tr
-                            key={subscription?.state?._id}
+                            key={subscription?._id}
                             className="border-b last:border-0 border-gray-200 w-full text-left"
                           >
                             <td className="p-4 whitespace-nowrap">
@@ -1123,7 +1119,7 @@ const EditSubscriberDetails = () => {
                               <button
                                 onClick={() =>
                                   handleShowMagazinePopupForEditSubscription(
-                                    subscription?.state?._id,
+                                    subscription?._id,
                                   )
                                 }
                                 type="button"
@@ -1136,28 +1132,28 @@ const EditSubscriberDetails = () => {
                                   className="inline-block mr-1"
                                 />
                               </button>
-                              {/* <button
-                        type="button"
-                        className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                        disabled={deleteLoading}
-                        onClick={() =>
-                          handleDeletesubscription(
-                            subscription?.state?._id,
-                            subscription?.subscription?.title
-                          )
-                        }
-                      >
-                        {deleteLoading &&
-                        subscription?.state?._id === deleteSubscriptionID ? (
-                          "..."
-                        ) : (
-                          <RiDeleteBin6Line
-                            color="red"
-                            size={30}
-                            className="inline-block"
-                          />
-                        )}
-                      </button> */}
+                              {<button
+                                type="button"
+                                className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
+                                disabled={deleteLoading}
+                                onClick={() =>
+                                  handleDeletesubscription(
+                                    subscription?._id,
+                                    subscription?.subscription?.title
+                                  )
+                                }
+                              >
+                                {deleteLoading &&
+                                  subscription?._id === deleteSubscriptionID ? (
+                                  "..."
+                                ) : (
+                                  <RiDeleteBin6Line
+                                    color="red"
+                                    size={30}
+                                    className="inline-block"
+                                  />
+                                )}
+                              </button>}
                             </td>
                           </tr>
                         ))

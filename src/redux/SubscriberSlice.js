@@ -267,9 +267,7 @@ export const handleCreateSubsciption = createAsyncThunk(
       subscriber,
       subscription,
       subState,
-      prospectState,
-      startDate,
-      renewDate,
+      remainingIssues,
       token,
       signal,
     },
@@ -282,9 +280,7 @@ export const handleCreateSubsciption = createAsyncThunk(
           subscriber,
           subscription,
           subState,
-          prospectState,
-          startDate,
-          renewDate,
+          remainingIssues,
         },
         signal: signal.current.signal,
         headers: {
@@ -305,10 +301,8 @@ export const handleEditSubsciption = createAsyncThunk(
   async (
     {
       subState,
-      prospectState,
-      startDate,
-      renewDate,
       subscription,
+      remainingIssues,
       id,
       token,
       signal,
@@ -321,9 +315,7 @@ export const handleEditSubsciption = createAsyncThunk(
         data: {
           subscription,
           subState,
-          prospectState,
-          startDate,
-          renewDate,
+          remainingIssues
         },
         signal: signal.current.signal,
         headers: {
@@ -405,11 +397,11 @@ const SubscriberSlice = createSlice({
       const findSubcription = state.subscribers.map((subscriber) =>
         subscriber._id === payload?.subscriberId
           ? {
-              ...subscriber,
-              subscriptions: subscriber.subscriptions.filter(
-                (subscription) => subscription?._id !== payload?.id
-              ),
-            }
+            ...subscriber,
+            subscriptions: subscriber.subscriptions.filter(
+              (subscription) => subscription?._id !== payload?.id
+            ),
+          }
           : subscriber
       );
       if (findSubcription) {
@@ -448,7 +440,7 @@ const SubscriberSlice = createSlice({
       }
     },
 
-    handleClearSingleSubscription: (state, {}) => {
+    handleClearSingleSubscription: (state, { }) => {
       state.singleSubscription = null;
     },
 
@@ -462,7 +454,7 @@ const SubscriberSlice = createSlice({
   },
   extraReducers: (builder) => {
     // get all subscribers
-    builder.addCase(handleGetAllSubscribers.pending, (state, {}) => {
+    builder.addCase(handleGetAllSubscribers.pending, (state, { }) => {
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -481,7 +473,7 @@ const SubscriberSlice = createSlice({
     });
 
     // get subscriber by id
-    builder.addCase(handleGetSubscriberById.pending, (state, {}) => {
+    builder.addCase(handleGetSubscriberById.pending, (state, { }) => {
       state.singleSucriberLoading = true;
       state.success = false;
       state.error = null;
@@ -499,7 +491,7 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // add new subscriber
-    builder.addCase(handleAddNewSubscriber.pending, (state, {}) => {
+    builder.addCase(handleAddNewSubscriber.pending, (state, { }) => {
       state.addNewSubscriberLoading = true;
       state.success = false;
       state.error = null;
@@ -516,7 +508,7 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // create subscriptin
-    builder.addCase(handleCreateSubsciption.pending, (state, {}) => {
+    builder.addCase(handleCreateSubsciption.pending, (state, { }) => {
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -528,12 +520,12 @@ const SubscriberSlice = createSlice({
       state.subscribers = state.subscribers.map((subscriber) =>
         subscriber?._id === payload?.subscription?.subscriber
           ? {
-              ...subscriber,
-              subscriptions: [
-                ...subscriber?.subscriptions,
-                payload?.subscription,
-              ],
-            }
+            ...subscriber,
+            subscriptions: [
+              ...subscriber?.subscriptions,
+              payload?.subscription,
+            ],
+          }
           : subscriber
       );
       state.singleSucriber = {
@@ -550,7 +542,7 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // edit subscriptin
-    builder.addCase(handleEditSubsciption.pending, (state, {}) => {
+    builder.addCase(handleEditSubsciption.pending, (state, { }) => {
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -562,13 +554,13 @@ const SubscriberSlice = createSlice({
       state.subscribers = state.subscribers.map((subscriber) =>
         subscriber?._id === payload?.subscription?.subscriber
           ? {
-              ...subscriber,
-              subscriptions: subscriber?.subscriptions.map((s) =>
-                s?._id === payload?.subscription?._id
-                  ? payload?.subscription
-                  : s
-              ),
-            }
+            ...subscriber,
+            subscriptions: subscriber?.subscriptions.map((s) =>
+              s?._id === payload?.subscription?._id
+                ? payload?.subscription
+                : s
+            ),
+          }
           : subscriber
       );
       state.singleSucriber = {
@@ -584,7 +576,7 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // edit subscriber
-    builder.addCase(handleEditSubscriber.pending, (state, {}) => {
+    builder.addCase(handleEditSubscriber.pending, (state, { }) => {
       state.editLoading = true;
       state.success = false;
       state.error = null;
@@ -605,7 +597,7 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // delete subscirber
-    builder.addCase(handleDeleteSUBSCRIBER.pending, (state, {}) => {
+    builder.addCase(handleDeleteSUBSCRIBER.pending, (state, { }) => {
       state.deleteLoading = true;
       state.success = false;
       state.error = null;
@@ -623,7 +615,7 @@ const SubscriberSlice = createSlice({
       state.deleteSubscriberID = null;
     });
     // delete subscription
-    builder.addCase(handleDeleteSUBSCRIPTION.pending, (state, {}) => {
+    builder.addCase(handleDeleteSUBSCRIPTION.pending, (state, { }) => {
       state.deleteLoading = true;
       state.success = false;
       state.error = null;
