@@ -51,7 +51,8 @@ const EditDetailsSubscription = () => {
     title: yup.string().required(t("title is required")),
     status: yup.string().required(t("status is required")),
     description: yup.string().required(t("description is required")),
-    price: yup.string().required(t("price is required")),
+    priceDigital: yup.string().required(t("digital price is required")),
+    pricePaper: yup.string().required(t("paper price is required")),
     image: yup
       .mixed()
       .required(t("Image is required."))
@@ -74,7 +75,8 @@ const EditDetailsSubscription = () => {
     resolver: yupResolver(editSubscriptionSchema),
     defaultValues: {
       title: singleSubscription?.title,
-      price: singleSubscription?.price,
+      priceDigital: singleSubscription?.priceDigital,
+      pricePaper: singleSubscription?.pricePaper,
       status: singleSubscription?.status,
       description: singleSubscription?.description,
       image: singleSubscription?.image,
@@ -83,14 +85,22 @@ const EditDetailsSubscription = () => {
   });
 
   const onSubmit = (data) => {
-    const { title, price, description, status, magazineTitle } = data;
+    const {
+      title,
+      priceDigital,
+      pricePaper,
+      description,
+      status,
+      magazineTitle,
+    } = data;
     if (!isDirty) {
       return true;
     }
     const response = dispatch(
       handleEditSubscription({
         title,
-        price,
+        priceDigital,
+        pricePaper,
         status,
         description,
         image: subscriptionImage,
@@ -191,8 +201,9 @@ const EditDetailsSubscription = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-              }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
           >
             <Header />
             <form
@@ -206,9 +217,10 @@ const EditDetailsSubscription = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button ${(editSubscriptionLoading || deleteSubscriptionLoading) &&
+                    className={`gray_button ${
+                      (editSubscriptionLoading || deleteSubscriptionLoading) &&
                       "cursor-not-allowed"
-                      } `}
+                    } `}
                     disabled={
                       deleteSubscriptionLoading || editSubscriptionLoading
                     }
@@ -218,9 +230,10 @@ const EditDetailsSubscription = () => {
                     {t("Cancel")}
                   </button>
                   <button
-                    className={`green_button ${(editSubscriptionLoading || deleteSubscriptionLoading) &&
+                    className={`green_button ${
+                      (editSubscriptionLoading || deleteSubscriptionLoading) &&
                       "cursor-not-allowed"
-                      } `}
+                    } `}
                     disabled={
                       deleteSubscriptionLoading || editSubscriptionLoading
                     }
@@ -232,10 +245,11 @@ const EditDetailsSubscription = () => {
                   </button>
                   {role === "admin" && (
                     <button
-                      className={`red_button ${(editSubscriptionLoading ||
-                        deleteSubscriptionLoading) &&
+                      className={`red_button ${
+                        (editSubscriptionLoading ||
+                          deleteSubscriptionLoading) &&
                         "cursor-not-allowed"
-                        } `}
+                      } `}
                       disabled={
                         deleteSubscriptionLoading || editSubscriptionLoading
                       }
@@ -333,18 +347,33 @@ const EditDetailsSubscription = () => {
                       {errors?.magazineTitle?.message}
                     </span>
                   </div>
-                  {/* price */}
+                  {/*digital price */}
                   <div className="w-full space-y-2">
-                    <label htmlFor="price" className="Label">
-                      {t("price")}
+                    <label htmlFor="digital_price" className="Label">
+                      {t("Digital price")}
                     </label>
                     <input
                       type="number"
-                      placeholder="Type here..."
+                      placeholder={t("Type here...")}
                       className="input_field"
-                      {...register("price")}
+                      {...register("priceDigital")}
                     />
-                    <span className="error">{errors?.price?.message}</span>
+                    <span className="error">
+                      {errors?.priceDigital?.message}
+                    </span>
+                  </div>
+                  {/*paper price */}
+                  <div className="w-full space-y-2">
+                    <label htmlFor="paper_price" className="Label">
+                      {t("Paper price")}
+                    </label>
+                    <input
+                      type="number"
+                      placeholder={t("Type here...")}
+                      className="input_field"
+                      {...register("pricePaper")}
+                    />
+                    <span className="error">{errors?.pricePaper?.message}</span>
                   </div>
 
                   {/* descriptions */}

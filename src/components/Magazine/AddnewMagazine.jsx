@@ -53,7 +53,8 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
       .required(t("stock is required"))
 
       .typeError(t("stock is required")),
-    price: yup.string().required(t("price is required")),
+    priceDigital: yup.string().required(t("digital price is required")),
+    pricePaper: yup.string().required(t("paper price is required")),
     image: yup
       .mixed()
       .required(t("Image is required."))
@@ -79,11 +80,20 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
   });
 
   const onSubmit = (data) => {
-    const { title, price, stock, description, status, magazineTitle } = data;
+    const {
+      title,
+      priceDigital,
+      pricePaper,
+      stock,
+      description,
+      status,
+      magazineTitle,
+    } = data;
     const response = dispatch(
       handleAddNewMagazine({
         title,
-        price,
+        priceDigital,
+        pricePaper,
         magazineTitle,
         pdf: magazinePdf,
         stock,
@@ -279,18 +289,31 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
             />
             <span className="error">{errors?.title?.message}</span>
           </div>
-          {/* price */}
+          {/*digital price */}
           <div className="w-full space-y-2">
-            <label htmlFor="price" className="Label">
-              {t("price")}
+            <label htmlFor="digital_price" className="Label">
+              {t("Digital price")}
             </label>
             <input
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
-              {...register("price")}
+              {...register("priceDigital")}
             />
-            <span className="error">{errors?.price?.message}</span>
+            <span className="error">{errors?.priceDigital?.message}</span>
+          </div>
+          {/*paper price */}
+          <div className="w-full space-y-2">
+            <label htmlFor="paper_price" className="Label">
+              {t("Paper price")}
+            </label>
+            <input
+              type="number"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("pricePaper")}
+            />
+            <span className="error">{errors?.pricePaper?.message}</span>
           </div>
           {/* stock */}
           <div className="w-full space-y-2">
