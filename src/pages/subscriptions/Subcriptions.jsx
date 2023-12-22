@@ -205,7 +205,8 @@ const Subcriptions = () => {
                         <th className="p-4 md:pl-28">
                           {t("Subscriptions name")}
                         </th>
-                        <th className="p-4 md:pr-20">{t("Price")}</th>
+                        <th className="p-4 md:pr-20">{t("Digital Price")}</th>
+                        <th className="p-4 md:pr-20">{t("Paper Price")}</th>
                         <th className="p-4">{t("Status")}</th>
                         <th className="p-4 text-center">{t("Action")}</th>
                       </tr>
@@ -233,7 +234,10 @@ const Subcriptions = () => {
                               {subscription?.title}
                             </td>
                             <td className="text-left p-4 md:pr-20 whitespace-nowrap">
-                              $ {subscription?.price}
+                              $ {subscription?.priceDigital}
+                            </td>
+                            <td className="text-left p-4 md:pr-20 whitespace-nowrap">
+                              $ {subscription?.pricePaper}
                             </td>
 
                             <td className="text-left p-4 whitespace-nowrap">
