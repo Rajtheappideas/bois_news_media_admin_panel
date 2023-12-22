@@ -8,6 +8,7 @@ export const PublicS3Url = "https://boisnewsmedia-assets.s3.eu-west-3.amazonaws.
 
 
 export const PostUrl = axios.create({
+  // baseURL: "https://boisnewsmedia.onrender.com/api/admin",
   baseURL: "https://api.boisnewsmedia.com/api/admin",
   method: "POST",
   headers: {
@@ -17,6 +18,7 @@ export const PostUrl = axios.create({
 });
 
 export const GetUrl = axios.create({
+  // baseURL: "https://boisnewsmedia.onrender.com/api/admin",
   baseURL: "https://api.boisnewsmedia.com/api/admin",
   method: "GET",
   headers: {
