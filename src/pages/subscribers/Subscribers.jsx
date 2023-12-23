@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import EditSubscriberDetails from "./EditSubscriberDetails";
 import AddNewSubscirber from "../../components/Subscriber/AddNewSubscirber";
 import Search from "../../components/Search";
 import ReactPaginate from "react-paginate";
@@ -185,9 +184,8 @@ const Subscribers = () => {
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
         <section
-          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-            isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-          }`}
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
         >
           <Header />
           <div className="lg:p-5 p-3 ">
@@ -334,7 +332,7 @@ const Subscribers = () => {
                                   }
                                 >
                                   {deleteLoading &&
-                                  subscriber?._id === deleteSubscriberID ? (
+                                    subscriber?._id === deleteSubscriberID ? (
                                     "..."
                                   ) : (
                                     <RiDeleteBin6Line
