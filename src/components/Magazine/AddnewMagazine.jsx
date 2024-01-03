@@ -164,9 +164,8 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className={`gray_button  ${
-              addNewMagazineLoading && "cursor-not-allowed"
-            }`}
+            className={`gray_button  ${addNewMagazineLoading && "cursor-not-allowed"
+              }`}
             onClick={() => setshowAddnewMagazine(false)}
             type="button"
             disabled={addNewMagazineLoading}
@@ -174,9 +173,8 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
             {t("Cancel")}
           </button>
           <button
-            className={`green_button ${
-              addNewMagazineLoading && "cursor-not-allowed"
-            }`}
+            className={`green_button ${addNewMagazineLoading && "cursor-not-allowed"
+              }`}
             type="submit"
             disabled={addNewMagazineLoading}
           >
@@ -298,6 +296,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
+              step="0.1"
               {...register("priceDigital")}
             />
             <span className="error">{errors?.priceDigital?.message}</span>
@@ -311,6 +310,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
+              step="0.1"
               {...register("pricePaper")}
             />
             <span className="error">{errors?.pricePaper?.message}</span>

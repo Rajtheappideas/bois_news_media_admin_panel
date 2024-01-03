@@ -201,9 +201,8 @@ const EditDetailsSubscription = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-            }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
           >
             <Header />
             <form
@@ -217,10 +216,9 @@ const EditDetailsSubscription = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button ${
-                      (editSubscriptionLoading || deleteSubscriptionLoading) &&
+                    className={`gray_button ${(editSubscriptionLoading || deleteSubscriptionLoading) &&
                       "cursor-not-allowed"
-                    } `}
+                      } `}
                     disabled={
                       deleteSubscriptionLoading || editSubscriptionLoading
                     }
@@ -230,10 +228,9 @@ const EditDetailsSubscription = () => {
                     {t("Cancel")}
                   </button>
                   <button
-                    className={`green_button ${
-                      (editSubscriptionLoading || deleteSubscriptionLoading) &&
+                    className={`green_button ${(editSubscriptionLoading || deleteSubscriptionLoading) &&
                       "cursor-not-allowed"
-                    } `}
+                      } `}
                     disabled={
                       deleteSubscriptionLoading || editSubscriptionLoading
                     }
@@ -245,11 +242,10 @@ const EditDetailsSubscription = () => {
                   </button>
                   {role === "admin" && (
                     <button
-                      className={`red_button ${
-                        (editSubscriptionLoading ||
-                          deleteSubscriptionLoading) &&
+                      className={`red_button ${(editSubscriptionLoading ||
+                        deleteSubscriptionLoading) &&
                         "cursor-not-allowed"
-                      } `}
+                        } `}
                       disabled={
                         deleteSubscriptionLoading || editSubscriptionLoading
                       }
@@ -356,6 +352,7 @@ const EditDetailsSubscription = () => {
                       type="number"
                       placeholder={t("Type here...")}
                       className="input_field"
+                      step="0.1"
                       {...register("priceDigital")}
                     />
                     <span className="error">
@@ -371,6 +368,7 @@ const EditDetailsSubscription = () => {
                       type="number"
                       placeholder={t("Type here...")}
                       className="input_field"
+                      step="0.1"
                       {...register("pricePaper")}
                     />
                     <span className="error">{errors?.pricePaper?.message}</span>

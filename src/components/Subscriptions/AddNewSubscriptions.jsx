@@ -121,9 +121,8 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className={`gray_button ${
-              addNewSubscriptionLoading && "cursor-not-allowed"
-            } `}
+            className={`gray_button ${addNewSubscriptionLoading && "cursor-not-allowed"
+              } `}
             disabled={addNewSubscriptionLoading}
             onClick={() => setShowAddnewSubscription(false)}
             type="button"
@@ -131,9 +130,8 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
             {t("Cancel")}
           </button>
           <button
-            className={`green_button ${
-              addNewSubscriptionLoading && "cursor-not-allowed"
-            } `}
+            className={`green_button ${addNewSubscriptionLoading && "cursor-not-allowed"
+              } `}
             type="submit"
             disabled={addNewSubscriptionLoading}
           >
@@ -238,6 +236,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
+              step="0.1"
               {...register("priceDigital")}
             />
             <span className="error">{errors?.priceDigital?.message}</span>
@@ -251,6 +250,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
+              step="0.1"
               {...register("pricePaper")}
             />
             <span className="error">{errors?.pricePaper?.message}</span>

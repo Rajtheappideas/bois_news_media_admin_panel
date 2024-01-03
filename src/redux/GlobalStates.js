@@ -64,7 +64,7 @@ export const handleGetMessages = createAsyncThunk(
 const initialState = {
   searchTerm: "",
   fileterdData: [],
-  language: JSON.parse(window.localStorage.getItem("lang")) ?? "en",
+  language: JSON.parse(window.localStorage.getItem("lang")) ?? "fr",
   newsLetters: [],
   messages: [],
   newsLetterLoading: false,
@@ -170,7 +170,7 @@ const GlobalStates = createSlice({
   },
   extraReducers: (builder) => {
     // get all news letter
-    builder.addCase(handleGetNewsLetter.pending, (state, {}) => {
+    builder.addCase(handleGetNewsLetter.pending, (state, { }) => {
       state.newsLetterLoading = true;
       state.error = null;
     });
@@ -186,7 +186,7 @@ const GlobalStates = createSlice({
     });
 
     // get count
-    builder.addCase(handleGetCount.pending, (state, {}) => {
+    builder.addCase(handleGetCount.pending, (state, { }) => {
       state.countLoading = true;
       state.error = null;
     });
@@ -201,7 +201,7 @@ const GlobalStates = createSlice({
       state.error = payload ?? null;
     });
     // get all message
-    builder.addCase(handleGetMessages.pending, (state, {}) => {
+    builder.addCase(handleGetMessages.pending, (state, { }) => {
       state.messageLoading = true;
       state.error = null;
     });
