@@ -236,7 +236,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
-              step="0.1"
+              step="0.0001"
               {...register("priceDigital")}
             />
             <span className="error">{errors?.priceDigital?.message}</span>
@@ -250,7 +250,7 @@ const AddNewSubscriptions = ({ setShowAddnewSubscription }) => {
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
-              step="0.1"
+              step="0.0001"
               {...register("pricePaper")}
             />
             <span className="error">{errors?.pricePaper?.message}</span>

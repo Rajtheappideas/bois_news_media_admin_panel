@@ -352,7 +352,7 @@ const EditDetailsSubscription = () => {
                       type="number"
                       placeholder={t("Type here...")}
                       className="input_field"
-                      step="0.1"
+                      step="0.0001"
                       {...register("priceDigital")}
                     />
                     <span className="error">
@@ -368,7 +368,7 @@ const EditDetailsSubscription = () => {
                       type="number"
                       placeholder={t("Type here...")}
                       className="input_field"
-                      step="0.1"
+                      step="0.0001"
                       {...register("pricePaper")}
                     />
                     <span className="error">{errors?.pricePaper?.message}</span>
