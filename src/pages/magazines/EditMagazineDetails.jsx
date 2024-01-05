@@ -25,7 +25,6 @@ import Header from "../../components/Header";
 const EditMagazineDetails = () => {
   const [prevImage, setPrevImage] = useState(null);
   const [magazineImage, setmagazineImage] = useState(null);
-  const [magazinePdf, setMagazinePdf] = useState(null);
 
   const {
     singleMagazine,
@@ -55,7 +54,9 @@ const EditMagazineDetails = () => {
       .string()
       .required(t("stock is required"))
       .typeError(t("stock is required")),
-    price: yup.string().required(t("price is required")),
+    priceDigital: yup.string().required(t("price is required")),
+    pricePaper: yup.string().required(t("price is required")),
+
     image: yup
       .mixed()
       .required(t("Image is required."))
@@ -139,26 +140,6 @@ const EditMagazineDetails = () => {
     setmagazineImage(file);
   };
 
-  // file upload
-  const handleFileUpload = (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    // setPrevImage(URL.createObjectURL(file));
-    setMagazinePdf(file);
-  };
-
-  const units = ["bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"];
-
-  function niceBytes(x) {
-    let l = 0,
-      n = parseInt(x, 10) || 0;
-
-    while (n >= 1024 && ++l) {
-      n = n / 1024;
-    }
-
-    return n.toFixed(n < 10 && l > 0 ? 1 : 0) + " " + units[l];
-  }
 
   const handleDeletemagazine = (id) => {
     if (window.confirm(t("Are you sure?"))) {
