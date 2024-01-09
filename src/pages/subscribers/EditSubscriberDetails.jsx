@@ -963,7 +963,7 @@ const EditSubscriberDetails = () => {
                       {t("VAT Number")}{" "}
                     </label>
                     <input
-                      type="number"
+                      type="text"
                       placeholder={t("Type here...")}
                       className="input_field"
                       {...register("VATnumber")}
