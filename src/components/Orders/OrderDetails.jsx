@@ -108,7 +108,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               {t("Company")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">
-              {singleOrder?.companyName}
+              {singleOrder?.companyName ?? singleOrder?.billingAddress?.companyName ?? singleOrder?.shippingAddress?.companyName}
             </p>
             <p className="text-textBlack font-medium md:text-lg">
               {singleOrder?.VAT}
