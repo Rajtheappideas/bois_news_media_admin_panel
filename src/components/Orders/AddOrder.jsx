@@ -36,6 +36,7 @@ const AddOrder = ({ setShowAddOrder }) => {
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const addNewUserSchema = yup.object({
+    companyName: yup.string(),
     VAT: yup.string(),
     purchaseOrder: yup.string(),
     orderNotes: yup.string(),
@@ -58,7 +59,7 @@ const AddOrder = ({ setShowAddOrder }) => {
   });
 
   const onSubmit = (data) => {
-    const { VAT, purchaseOrder, orderNotes, paymentMethod, status } = data;
+    const { VAT, companyName, purchaseOrder, orderNotes, paymentMethod, status } = data;
     toast.remove();
     if (!selectedSubscriber) return toast.error("select the subscriber");
     if (items.length === 0) {
@@ -69,6 +70,7 @@ const AddOrder = ({ setShowAddOrder }) => {
         subscriber: selectedSubscriber?._id,
         items,
         VAT,
+        companyName,
         purchaseOrder,
         orderNotes,
         paymentMethod,
@@ -137,6 +139,12 @@ const AddOrder = ({ setShowAddOrder }) => {
   useEffect(() => {
     handleSearchSubscriber();
   }, [searchRef]);
+
+
+  useEffect(() => {
+    setValue("VAT", selectedSubscriber?.billingSupplement?.VATnumber)
+    setValue("companyName", selectedSubscriber?.company)
+  }, [selectedSubscriber])
 
   return (
     <>
@@ -352,6 +360,18 @@ const AddOrder = ({ setShowAddOrder }) => {
               />
               <span className="error">{errors?.purchaseOrder?.message}</span>
             </div>
+            {/* Company name */}
+            <div className="w-full space-y-2">
+              <label htmlFor="Company_Name" className="Label">
+                {t("Company Name")} (optional)
+              </label>
+              <input
+                type="text"
+                placeholder={t("Type here...")}
+                className="input_field"
+                {...register("companyName")}
+              />
+            </div>
             {/* VAT Number */}
             <div className="w-full space-y-2">
               <label htmlFor="VAT_number" className="Label">
@@ -365,7 +385,7 @@ const AddOrder = ({ setShowAddOrder }) => {
               />
             </div>
             {/* notes */}
-            <div className="w-full space-y-2 col-span-full">
+            <div className="w-full space-y-2">
               <label htmlFor="note" className="Label">
                 {t("Order Note")} (optional)
               </label>

@@ -28,6 +28,7 @@ export const handleCreateOrder = createAsyncThunk(
       subscriber,
       items,
       VAT,
+      companyName,
       purchaseOrder,
       orderNotes,
       paymentMethod,
@@ -44,6 +45,7 @@ export const handleCreateOrder = createAsyncThunk(
           subscriber,
           items,
           VAT,
+          companyName,
           purchaseOrder,
           orderNotes,
           paymentMethod,
@@ -122,7 +124,7 @@ const OrderSlice = createSlice({
   },
   extraReducers: (builder) => {
     // get all payers
-    builder.addCase(handleGetAllOrder.pending, (state, {}) => {
+    builder.addCase(handleGetAllOrder.pending, (state, { }) => {
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -140,7 +142,7 @@ const OrderSlice = createSlice({
       state.error = payload ?? null;
     });
     // create order
-    builder.addCase(handleCreateOrder.pending, (state, {}) => {
+    builder.addCase(handleCreateOrder.pending, (state, { }) => {
       state.createLoading = true;
       state.success = false;
       state.error = null;
@@ -157,7 +159,7 @@ const OrderSlice = createSlice({
       state.error = payload ?? null;
     });
     // update order status
-    builder.addCase(handleUpdateOrderStatus.pending, (state, {}) => {
+    builder.addCase(handleUpdateOrderStatus.pending, (state, { }) => {
       state.updateLoading = true;
       state.success = false;
       state.error = null;

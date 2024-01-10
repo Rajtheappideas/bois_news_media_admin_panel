@@ -68,7 +68,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
           </p>
         </div>
         {/*invoice details */}
-        <div className="w-full grid xl:grid-cols-4 md:grid-cols-2 place-items-start items-start md:gap-5 gap-2">
+        <div className="w-full grid xl:grid-cols-5 md:grid-cols-2 place-items-start items-start md:gap-5 gap-2">
           {/* date */}
           <div className="w-full md:space-y-2">
             <label htmlFor="date" className="Label">
@@ -102,6 +102,20 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               {singleOrder?.subscriber?.phone}
             </p>
           </div>
+          {/* Contact */}
+          {singleOrder?.VAT ? <div className="w-full md:space-y-2">
+            <label htmlFor="Contact" className="Label">
+              {t("Company")}
+            </label>
+            <p className="text-textBlack font-medium md:text-lg">
+              {singleOrder?.companyName}
+            </p>
+            <p className="text-textBlack font-medium md:text-lg">
+              {singleOrder?.VAT}
+            </p>
+          </div> : null
+          }
+
           {/* Address */}
           <div className="w-full md:space-y-2">
             <label htmlFor="Address" className="Label">
@@ -156,21 +170,10 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               <p className="w-1/2 font-semibold uppercase">{t("sub total")}</p>
               <p className="w-1/2 text-right">
                 €&nbsp;
-                {Intl.NumberFormat("en-US", {
+                {Intl.NumberFormat("fr-FR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 }).format(parseFloat(singleOrder?.subtotal))}
-              </p>
-            </div>
-            <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">{"tax"}</p>
-              <p className="w-1/2 text-right">
-                {" "}
-                €&nbsp;
-                {Intl.NumberFormat("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }).format(parseFloat(singleOrder?.tax))}
               </p>
             </div>
             <div className="w-full flex items-center justify-between">
@@ -179,19 +182,29 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               </p>
               <p className="w-1/2 text-right">
                 €&nbsp;
-                {Intl.NumberFormat("en-US", {
+                {Intl.NumberFormat("fr-FR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 }).format(parseFloat(singleOrder?.shipping))}
               </p>
             </div>
-
+            <div className="w-full flex items-center justify-between">
+              <p className="w-1/2 font-semibold uppercase">{"tax"}</p>
+              <p className="w-1/2 text-right">
+                {" "}
+                €&nbsp;
+                {Intl.NumberFormat("fr-FR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(parseFloat(singleOrder?.tax))}
+              </p>
+            </div>
             <div className="w-full flex items-center justify-between">
               <p className="w-1/2 font-semibold uppercase">{"discount"}</p>
               <p className="w-1/2 text-right">
                 {" "}
                 €&nbsp;-
-                {Intl.NumberFormat("en-US", {
+                {Intl.NumberFormat("fr-FR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 }).format(parseFloat(singleOrder?.discount))}
@@ -207,7 +220,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
                 </p>
                 <p className="w-1/2 text-right">
                   €&nbsp;-
-                  {Intl.NumberFormat("en-US", {
+                  {Intl.NumberFormat("fr-FR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }).format(parseFloat(singleOrder?.promoDiscount))}
@@ -219,7 +232,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               <p className="w-1/2 font-bold ">{t("Total Amount")}</p>
               <p className="w-1/2 text-right font-bold">
                 €&nbsp;
-                {Intl.NumberFormat("en-US", {
+                {Intl.NumberFormat("fr-FR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 }).format(parseFloat(singleOrder?.total))}
