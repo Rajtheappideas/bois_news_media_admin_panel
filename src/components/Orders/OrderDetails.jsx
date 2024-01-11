@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { BiPrinter } from "react-icons/bi";
@@ -16,6 +16,10 @@ const OrderDetails = ({ setshowOrderDetails }) => {
   const { t } = useTranslation();
 
   const printComponentRef = useRef();
+
+  function getProductTitle(item) {
+    return `${t(item?.itemType)} ${t(item?.support)} ${item?.title}`;
+  }
 
   return (
     <div className="w-full lg:space-y-5 space-y-3">
@@ -152,7 +156,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
                     className="border-b border-gray-200 w-full text-center"
                   >
                     <td className="p-4 whitespace-nowrap">{i + 1}</td>
-                    <td className="p-4 whitespace-nowrap">{item?.title}</td>
+                    <td className="p-4 whitespace-nowrap">{getProductTitle(item)}</td>
                     <td className="p-4 whitespace-nowrap">{item?.quantity}</td>
                     <td className="p-4 whitespace-nowrap">€ {item?.price}</td>
                     <td className="p-4 whitespace-nowrap">
