@@ -64,11 +64,15 @@ const OrderDetails = ({ setshowOrderDetails }) => {
       >
         <div>
           <p className="font-bold text-black md:text-4xl text-xl">
-            {t("Invoice")}
+            {t("Invoice")} {singleOrder?.invoiceId}
           </p>
           <p className="font-bold text-black md:text-lg">
             {t("Status")}:
             <span className="text-green-500 ml-1">{singleOrder?.status}</span>
+          </p>
+          <p className="font-bold text-black md:text-lg">
+            {t("Order No")}:
+            <span className="text-gray-600 ml-1">{singleOrder?.orderId}</span>
           </p>
         </div>
         {/*invoice details */}
@@ -171,7 +175,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
           <div className="md:w-3/5 w-0" />
           <div className="md:w-2/5 w-full md:space-y-3 space-y-2">
             <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">{t("sub total")}</p>
+              <p className="w-1/2 font-semibold uppercase">{t("Sous total")}</p>
               <p className="w-1/2 text-right">
                 €&nbsp;
                 {Intl.NumberFormat("fr-FR", {
@@ -193,7 +197,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               </p>
             </div>
             <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">{"tax"}</p>
+              <p className="w-1/2 font-semibold uppercase">{t("tax")}</p>
               <p className="w-1/2 text-right">
                 {" "}
                 €&nbsp;
@@ -204,7 +208,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               </p>
             </div>
             <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">{"discount"}</p>
+              <p className="w-1/2 font-semibold uppercase">{t("discount")}</p>
               <p className="w-1/2 text-right">
                 {" "}
                 €&nbsp;-

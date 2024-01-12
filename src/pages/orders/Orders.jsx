@@ -91,9 +91,8 @@ const Orders = () => {
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
         <section
-          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-            isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-          }`}
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
         >
           <Header />
           <div className="lg:p-5 p-3 ">
@@ -140,7 +139,7 @@ const Orders = () => {
                     <thead className="w-full border-b border-gray-100 text-left">
                       <tr>
                         <th className="p-4 whitespace-nowrap">
-                          <span>Invoice Id</span>
+                          <span>Order Id</span>
                         </th>
                         <th className="p-4">{t("Order date & time")}</th>
                         <th className="p-4">{t("Customer name")}</th>
