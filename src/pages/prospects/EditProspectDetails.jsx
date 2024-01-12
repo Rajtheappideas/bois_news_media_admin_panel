@@ -291,9 +291,8 @@ const EditProspectDetails = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-            }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
           >
             <Header />
             <form
@@ -324,10 +323,9 @@ const EditProspectDetails = () => {
                   </button>
                   {role === "admin" && (
                     <button
-                      className={`red_button ${
-                        (EditProspectLoading || deleteProspectLoading) &&
+                      className={`red_button ${(EditProspectLoading || deleteProspectLoading) &&
                         "cursor-not-allowed"
-                      }`}
+                        }`}
                       disabled={deleteProspectLoading || EditProspectLoading}
                       onClick={() =>
                         handleDeleteprospect(
@@ -474,7 +472,7 @@ const EditProspectDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
-                          country={"us"}
+                          country={"fr"}
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("mobile", "+".concat(value));

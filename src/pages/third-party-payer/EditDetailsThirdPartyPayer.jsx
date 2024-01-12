@@ -225,9 +225,8 @@ const EditDetailsThirdPartyPayer = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
-              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-            }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
           >
             <Header />
             <form
@@ -241,10 +240,9 @@ const EditDetailsThirdPartyPayer = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button ${
-                      (editPayerLoading || deletePayerLoading) &&
+                    className={`gray_button ${(editPayerLoading || deletePayerLoading) &&
                       "cursor-not-allowed"
-                    } `}
+                      } `}
                     onClick={() => {
                       handleOnClickCancel();
                     }}
@@ -254,10 +252,9 @@ const EditDetailsThirdPartyPayer = () => {
                     {t("Cancel")}
                   </button>
                   <button
-                    className={`green_button ${
-                      (editPayerLoading || deletePayerLoading) &&
+                    className={`green_button ${(editPayerLoading || deletePayerLoading) &&
                       "cursor-not-allowed"
-                    }`}
+                      }`}
                     disabled={editPayerLoading || deletePayerLoading}
                     type="submit"
                   >
@@ -354,7 +351,7 @@ const EditDetailsThirdPartyPayer = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
-                          country={"us"}
+                          country={"fr"}
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("mobile", "+".concat(value));

@@ -398,7 +398,7 @@ const EditUserDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
-                          country={"us"}
+                          country={"fr"}
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("phone", "+".concat(value));

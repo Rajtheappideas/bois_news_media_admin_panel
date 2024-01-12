@@ -575,7 +575,7 @@ const EditSubscriberDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
-                          country={"us"}
+                          country={"fr"}
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("phone", "+".concat(value));
@@ -616,7 +616,7 @@ const EditSubscriberDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
-                          country={"us"}
+                          country={"fr"}
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("mobile", "+".concat(value));
@@ -931,7 +931,7 @@ const EditSubscriberDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
-                          country={"us"}
+                          country={"fr"}
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("accountingPhone", "+".concat(value));

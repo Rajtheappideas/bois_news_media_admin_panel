@@ -347,7 +347,7 @@ const AddNewProspect = ({ setShowAddNewProspect }) => {
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput
-                  country={"us"}
+                  country={"fr"}
                   onChange={(value) => {
                     onChange((e) => {
                       setValue("mobile", "+".concat(value));
