@@ -22,10 +22,10 @@ const Orders = () => {
   const [showAddOrder, setShowAddOrder] = useState(false);
 
   const { orders, loading, filterType } = useSelector(
-    (state) => state.root.orders,
+    (state) => state.root.orders
   );
   const { fileterdData, isSidebarOpen } = useSelector(
-    (state) => state.root.globalStates,
+    (state) => state.root.globalStates
   );
   const { role, token } = useSelector((state) => state.root.auth);
 
@@ -67,7 +67,7 @@ const Orders = () => {
   // fetch orders
   useEffect(() => {
     const response = dispatch(
-      handleGetAllOrder({ token, signal: AbortControllerRef }),
+      handleGetAllOrder({ token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
@@ -91,8 +91,9 @@ const Orders = () => {
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
         <section
-          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-            }`}
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+            isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+          }`}
         >
           <Header />
           <div className="lg:p-5 p-3 ">
@@ -159,6 +160,7 @@ const Orders = () => {
                           <SingleOrderList
                             key={order?._id}
                             order={order}
+                            setShowAddOrder={setShowAddOrder}
                             setshowOrderDetails={setshowOrderDetails}
                           />
                         ))
@@ -179,8 +181,8 @@ const Orders = () => {
                         ? orders?.length
                         : (pageNumber + 1) * ordersPerPage
                       : (pageNumber + 1) * ordersPerPage > fileterdData?.length
-                        ? fileterdData?.length
-                        : (pageNumber + 1) * ordersPerPage}{" "}
+                      ? fileterdData?.length
+                      : (pageNumber + 1) * ordersPerPage}{" "}
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? orders?.length

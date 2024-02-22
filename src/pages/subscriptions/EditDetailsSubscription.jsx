@@ -1,6 +1,6 @@
 import React from "react";
 import { HiPencil } from "react-icons/hi";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,8 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
+import JoditEditor from "jodit-react";
+import RichTextEditor from "../../components/RichTextEditor";
 
 const EditDetailsSubscription = () => {
   const [prevImage, setPrevImage] = useState(null);
@@ -51,8 +53,13 @@ const EditDetailsSubscription = () => {
     title: yup.string().required(t("title is required")),
     status: yup.string().required(t("status is required")),
     description: yup.string().required(t("description is required")),
+    detailDescription: yup
+      .string()
+      .required(t("detail description is required")),
     priceDigital: yup.string().required(t("digital price is required")),
-    pricePaper: yup.string().required(t("paper price is required")),
+    pricePaperFrance: yup.string().required(t("paper price is required")),
+    pricePaperEEC: yup.string().required(t("paper price is required")),
+    pricePaperRestOfWorld: yup.string().required(t("paper price is required")),
     image: yup
       .mixed()
       .required(t("Image is required."))
@@ -67,6 +74,7 @@ const EditDetailsSubscription = () => {
     handleSubmit,
     getValues,
     setValue,
+    control,
     formState: { errors, isDirty },
   } = useForm({
     shouldFocusError: true,
@@ -76,9 +84,12 @@ const EditDetailsSubscription = () => {
     defaultValues: {
       title: singleSubscription?.title,
       priceDigital: singleSubscription?.priceDigital,
-      pricePaper: singleSubscription?.pricePaper,
+      pricePaperEEC: singleSubscription?.pricePaperEEC,
+      pricePaperRestOfWorld: singleSubscription?.pricePaperRestOfWorld,
+      pricePaperFrance: singleSubscription?.pricePaperFrance,
       status: singleSubscription?.status,
       description: singleSubscription?.description,
+      detailDescription: singleSubscription?.detailDescription,
       image: singleSubscription?.image,
       magazineTitle: singleSubscription?.magazineTitle,
     },
@@ -88,10 +99,13 @@ const EditDetailsSubscription = () => {
     const {
       title,
       priceDigital,
-      pricePaper,
+      pricePaperEEC,
+      pricePaperRestOfWorld,
+      pricePaperFrance,
       description,
       status,
       magazineTitle,
+      detailDescription,
     } = data;
     if (!isDirty) {
       return true;
@@ -100,9 +114,12 @@ const EditDetailsSubscription = () => {
       handleEditSubscription({
         title,
         priceDigital,
-        pricePaper,
+        pricePaperEEC,
+        pricePaperRestOfWorld,
+        pricePaperFrance,
         status,
         description,
+        detailDescription,
         image: subscriptionImage,
         magazineTitle,
         id: state?._id,
@@ -142,7 +159,7 @@ const EditDetailsSubscription = () => {
         response.then((res) => {
           if (res?.payload?.status === "success") {
             dispatch(handleDeleteSubscription(id));
-            toast.success(`${name} ${t("subscription Deleted Successfully")}.`);
+            toast.success(`${singleSubscription?.title} ${t("subscription Deleted Successfully")}.`);
             navigate("/subscriptions");
           } else if (res?.payload?.status === "error") {
             toast.error(res?.payload?.message);
@@ -193,6 +210,7 @@ const EditDetailsSubscription = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   return (
     <>
       {singleSubscriptionLoading ? (
@@ -201,8 +219,9 @@ const EditDetailsSubscription = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-              }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
           >
             <Header />
             <form
@@ -216,9 +235,10 @@ const EditDetailsSubscription = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button ${(editSubscriptionLoading || deleteSubscriptionLoading) &&
+                    className={`gray_button ${
+                      (editSubscriptionLoading || deleteSubscriptionLoading) &&
                       "cursor-not-allowed"
-                      } `}
+                    } `}
                     disabled={
                       deleteSubscriptionLoading || editSubscriptionLoading
                     }
@@ -228,9 +248,10 @@ const EditDetailsSubscription = () => {
                     {t("Cancel")}
                   </button>
                   <button
-                    className={`green_button ${(editSubscriptionLoading || deleteSubscriptionLoading) &&
+                    className={`green_button ${
+                      (editSubscriptionLoading || deleteSubscriptionLoading) &&
                       "cursor-not-allowed"
-                      } `}
+                    } `}
                     disabled={
                       deleteSubscriptionLoading || editSubscriptionLoading
                     }
@@ -242,10 +263,11 @@ const EditDetailsSubscription = () => {
                   </button>
                   {role === "admin" && (
                     <button
-                      className={`red_button ${(editSubscriptionLoading ||
-                        deleteSubscriptionLoading) &&
+                      className={`red_button ${
+                        (editSubscriptionLoading ||
+                          deleteSubscriptionLoading) &&
                         "cursor-not-allowed"
-                        } `}
+                      } `}
                       disabled={
                         deleteSubscriptionLoading || editSubscriptionLoading
                       }
@@ -359,26 +381,62 @@ const EditDetailsSubscription = () => {
                       {errors?.priceDigital?.message}
                     </span>
                   </div>
-                  {/*paper price */}
+                  {/*france paper price */}
                   <div className="w-full space-y-2">
                     <label htmlFor="paper_price" className="Label">
-                      {t("Paper price")}
+                      {t("France paper price")}
                     </label>
                     <input
                       type="number"
                       placeholder={t("Type here...")}
                       className="input_field"
                       step="0.0001"
-                      {...register("pricePaper")}
+                      {...register("pricePaperFrance")}
                     />
-                    <span className="error">{errors?.pricePaper?.message}</span>
+                    <span className="error">
+                      {errors?.pricePaperFrance?.message}
+                    </span>
                   </div>
-
+                  {/*eec paper price */}
+                  <div className="w-full space-y-2">
+                    <label htmlFor="paper_price" className="Label">
+                      {t(
+                        "EEC/Switzerland/France Overseas Territories paper price"
+                      )}
+                    </label>
+                    <input
+                      type="number"
+                      placeholder={t("Type here...")}
+                      className="input_field"
+                      step="0.0001"
+                      {...register("pricePaperEEC")}
+                    />
+                    <span className="error">
+                      {errors?.pricePaperEEC?.message}
+                    </span>
+                  </div>
+                  {/*rest paper price */}
+                  <div className="w-full space-y-2">
+                    <label htmlFor="paper_price" className="Label">
+                      {t("Rest of the world paper price")}
+                    </label>
+                    <input
+                      type="number"
+                      placeholder={t("Type here...")}
+                      className="input_field"
+                      step="0.0001"
+                      {...register("pricePaperRestOfWorld")}
+                    />
+                    <span className="error">
+                      {errors?.pricePaperRestOfWorld?.message}
+                    </span>
+                  </div>
                   {/* descriptions */}
                   <div className="w-full col-span-full space-y-2">
-                    <label htmlFor="descriptions" className="Label">
-                      {t("descriptions")}
+                    <label htmlFor="description" className="Label">
+                      {t("description")}
                     </label>
+
                     <textarea
                       placeholder="Type here..."
                       className="input_field"
@@ -386,6 +444,27 @@ const EditDetailsSubscription = () => {
                     />
                     <span className="error">
                       {errors?.description?.message}
+                    </span>
+                  </div>
+                  {/* detail descriptions */}
+                  <div className="w-full col-span-full space-y-2">
+                    <label htmlFor="detailDescription" className="Label">
+                      {t("Detail description")}
+                    </label>
+                    <Controller
+                      control={control}
+                      name={"detailDescription"}
+                      render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <RichTextEditor
+                          onBlur={onBlur}
+                          value={value}
+                          setValue={setValue}
+                        />
+                      )}
+                    />
+
+                    <span className="error">
+                      {errors?.detailDescription?.message}
                     </span>
                   </div>
                 </div>

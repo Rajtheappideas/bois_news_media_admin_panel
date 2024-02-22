@@ -188,6 +188,7 @@ const AuthSlice = createSlice({
     handleLogout: (state) => {
       state.loading = true;
       state.user = null;
+      state.token = null;
       window.location.href = window.location.origin.concat("/sign-in");
       toast.success("Logout Successfully.", { duration: 3000 });
       state.loading = false;
@@ -195,9 +196,9 @@ const AuthSlice = createSlice({
     handleStoreUserEmail: (state, { payload }) => {
       state.email = payload;
     },
-    handleChangeLoading:(state)=>{
-      state.loading=false
-    }
+    handleChangeLoading: (state) => {
+      state.loading = false;
+    },
   },
   extraReducers: (builder) => {
     // register user
@@ -213,7 +214,7 @@ const AuthSlice = createSlice({
       state.error = null;
       state.role = payload?.user?.role;
       state.token = payload?.token;
-       state.verifyToken = null;
+      state.verifyToken = null;
       state.email = null;
     });
     builder.addCase(handleRegisterUser.rejected, (state, { payload }) => {
@@ -223,7 +224,7 @@ const AuthSlice = createSlice({
       state.error = payload ?? null;
       state.role = null;
       state.token = null;
-       state.verifyToken = null;
+      state.verifyToken = null;
       state.email = null;
     });
     // login user
@@ -249,7 +250,7 @@ const AuthSlice = createSlice({
       state.error = payload ?? null;
       state.role = null;
       state.token = null;
-       state.verifyToken = null;
+      state.verifyToken = null;
       state.email = null;
     });
     // forgot password
@@ -261,7 +262,7 @@ const AuthSlice = createSlice({
     builder.addCase(handleForgotPassword.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.success = true;
-      state.user =null
+      state.user = null;
       state.error = null;
       state.role = null;
       state.token = null;
@@ -385,6 +386,7 @@ const AuthSlice = createSlice({
   },
 });
 
-export const { handleLogout, handleStoreUserEmail,handleChangeLoading } = AuthSlice.actions;
+export const { handleLogout, handleStoreUserEmail, handleChangeLoading } =
+  AuthSlice.actions;
 
 export default AuthSlice.reducer;

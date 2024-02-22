@@ -53,6 +53,7 @@ export const handleAddNewMagazine = createAsyncThunk(
       stock,
       status,
       description,
+      detailDescription,
       image,
       token,
       signal,
@@ -72,6 +73,7 @@ export const handleAddNewMagazine = createAsyncThunk(
           status,
           description,
           image,
+          detailDescription,
         },
         signal: signal.current.signal,
         headers: {
@@ -103,6 +105,7 @@ export const handleEditMagazine = createAsyncThunk(
       stock,
       status,
       description,
+      detailDescription,
       image,
       id,
       token,
@@ -123,6 +126,7 @@ export const handleEditMagazine = createAsyncThunk(
           status,
           description,
           image,
+          detailDescription,
         },
         signal: signal.current.signal,
         headers: {
@@ -212,7 +216,7 @@ const MagazineSlice = createSlice({
   },
   extraReducers: (builder) => {
     // get all payers
-    builder.addCase(handleGetAllMagazine.pending, (state, { }) => {
+    builder.addCase(handleGetAllMagazine.pending, (state, {}) => {
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -230,7 +234,7 @@ const MagazineSlice = createSlice({
       state.error = payload ?? null;
     });
     // get magainze by id
-    builder.addCase(handleGetMagazineById.pending, (state, { }) => {
+    builder.addCase(handleGetMagazineById.pending, (state, {}) => {
       state.singleMagazineLoading = true;
       state.success = false;
       state.error = null;
@@ -248,7 +252,7 @@ const MagazineSlice = createSlice({
       state.error = payload ?? null;
     });
     // add new payer
-    builder.addCase(handleAddNewMagazine.pending, (state, { }) => {
+    builder.addCase(handleAddNewMagazine.pending, (state, {}) => {
       state.addNewMagazineLoading = true;
       state.success = false;
       state.error = null;
@@ -265,7 +269,7 @@ const MagazineSlice = createSlice({
       state.error = payload ?? null;
     });
     // edit payer
-    builder.addCase(handleEditMagazine.pending, (state, { }) => {
+    builder.addCase(handleEditMagazine.pending, (state, {}) => {
       state.editMagazineLoading = true;
       state.success = false;
       state.error = null;
@@ -284,7 +288,7 @@ const MagazineSlice = createSlice({
       state.error = payload ?? null;
     });
     // delete payer
-    builder.addCase(handleDeleteMAGAZINE.pending, (state, { }) => {
+    builder.addCase(handleDeleteMAGAZINE.pending, (state, {}) => {
       state.deleteMagazineLoading = true;
       state.success = false;
       state.error = null;

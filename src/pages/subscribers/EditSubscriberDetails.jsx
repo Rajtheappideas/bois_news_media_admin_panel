@@ -34,6 +34,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import AddMagazineSubscription from "../../components/Subscriber/AddMagazineSubscription";
+import { handleGetAllPayers } from "../../redux/ThirdPartyPayerSlice";
 
 const EditSubscriberDetails = () => {
   const {
@@ -69,7 +70,7 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("FirstName can only contain Latin letters."),
+        t("FirstName can only contain Latin letters.")
       ),
     lname: yup
       .string()
@@ -80,7 +81,7 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("LastName can only contain Latin letters."),
+        t("LastName can only contain Latin letters.")
       ),
     civility: yup.string().required(t("Civility is required")),
     title: yup.string().trim().max(60, t("Max character limit reached")),
@@ -100,20 +101,20 @@ const EditSubscriberDetails = () => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters."),
+        t("city can only contain Latin letters.")
       )
       .required(t("city is required")),
     province: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters."),
+        t("province can only contain Latin letters.")
       ),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters."),
+        t("country can only contain Latin letters.")
       )
       .required(t("country is required")),
     baddress1: yup
@@ -128,20 +129,20 @@ const EditSubscriberDetails = () => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("city can only contain Latin letters."),
+        t("city can only contain Latin letters.")
       )
       .required(t("city is required")),
     bprovince: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("province can only contain Latin letters."),
+        t("province can only contain Latin letters.")
       ),
     bcountry: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("country can only contain Latin letters."),
+        t("country can only contain Latin letters.")
       )
       .required(t("country is required")),
     sameAsAbove: yup.boolean(),
@@ -152,7 +153,7 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        t("accountContactName can only contain Latin letters."),
+        t("accountContactName can only contain Latin letters.")
       ),
     accountingEmail: yup.string().email(),
     accountingPhone: yup.string(),
@@ -185,7 +186,7 @@ const EditSubscriberDetails = () => {
       company: singleSucriber?.company,
       phone: singleSucriber?.phone,
       mobile: singleSucriber?.mobile,
-      thirdPartyPayer: singleSucriber?.thirdPartyPayer || undefined,
+      thirdPartyPayer: singleSucriber?.thirdPartyPayer?._id,
       title: singleSucriber?.title,
       email: singleSucriber?.email,
       civility: singleSucriber?.civility,
@@ -266,6 +267,7 @@ const EditSubscriberDetails = () => {
       toast.error("Phone is invalid");
       return true;
     }
+
     const response = dispatch(
       handleEditSubscriber({
         fname,
@@ -304,14 +306,14 @@ const EditSubscriberDetails = () => {
         id: state?._id,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(
             ` ${fname.concat(lname)} ${t("subscriber edited successfully.")}`,
-            { duration: 2000 },
+            { duration: 2000 }
           );
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -324,7 +326,7 @@ const EditSubscriberDetails = () => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
-        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef }),
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -344,7 +346,7 @@ const EditSubscriberDetails = () => {
     dispatch(handleChangeDeleteSubscriptionID(id));
 
     const response = dispatch(
-      handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef }),
+      handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
@@ -365,7 +367,7 @@ const EditSubscriberDetails = () => {
         id: state?._id,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {
@@ -391,7 +393,7 @@ const EditSubscriberDetails = () => {
   const handleShowMagazinePopupForEditSubscription = (subscriptionId) => {
     dispatch(handleChangeMagazineDistributionPopup(true));
     dispatch(
-      handleFindSubscription({ subscriberId: state?._id, subscriptionId }),
+      handleFindSubscription({ subscriberId: state?._id, subscriptionId })
     );
   };
 
@@ -401,6 +403,9 @@ const EditSubscriberDetails = () => {
     if (state === null) {
       navigate("/subscribers");
     }
+
+    dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
+
     return () => {
       abortApiCall();
     };
@@ -416,8 +421,9 @@ const EditSubscriberDetails = () => {
           {showMagazineDistributionPopup && <AddMagazineSubscription />}
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-              }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
           >
             <Header />
             <form
@@ -431,8 +437,9 @@ const EditSubscriberDetails = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button ${(editLoading || deleteLoading) && "cursor-not-allowed"
-                      }`}
+                    className={`gray_button ${
+                      (editLoading || deleteLoading) && "cursor-not-allowed"
+                    }`}
                     onClick={() => {
                       handleOnClickCancel();
                     }}
@@ -441,8 +448,9 @@ const EditSubscriberDetails = () => {
                     {t("Cancel")}
                   </button>
                   <button
-                    className={`green_button ${(editLoading || deleteLoading) && "cursor-not-allowed"
-                      } `}
+                    className={`green_button ${
+                      (editLoading || deleteLoading) && "cursor-not-allowed"
+                    } `}
                     disabled={deleteLoading || editLoading}
                     type="submit"
                   >
@@ -450,13 +458,14 @@ const EditSubscriberDetails = () => {
                   </button>
                   {role === "admin" && (
                     <button
-                      className={`red_button ${(editLoading || deleteLoading) && "cursor-not-allowed"
-                        }`}
+                      className={`red_button ${
+                        (editLoading || deleteLoading) && "cursor-not-allowed"
+                      }`}
                       disabled={deleteLoading || editLoading}
                       onClick={() =>
                         handleDeletesubscriber(
                           state?._id,
-                          singleSucriber?.fname.concat(singleSucriber?.lname),
+                          singleSucriber?.fname.concat(singleSucriber?.lname)
                         )
                       }
                     >
@@ -869,11 +878,10 @@ const EditSubscriberDetails = () => {
                         payers.length > 0 &&
                         payers.map((payer) => (
                           <option
-                            key={payer?.state?._id}
-                            value={payer?.state?._id}
+                            key={payer?._id}
+                            value={payer?._id}
                             selected={
-                              payer?.state?._id ===
-                              singleSucriber?.thirdPartyPayer?.state?._id
+                              payer?._id == singleSucriber?.thirdPartyPayer?._id
                             }
                           >
                             {payer?.accountName}
@@ -1099,7 +1107,7 @@ const EditSubscriberDetails = () => {
                     </thead>
                     <tbody className="w-full">
                       {singleSucriber?.subscriptions !== undefined &&
-                        singleSucriber?.subscriptions.length > 0 ? (
+                      singleSucriber?.subscriptions.length > 0 ? (
                         singleSucriber?.subscriptions.map((subscription) => (
                           <tr
                             key={subscription?._id}
@@ -1119,7 +1127,7 @@ const EditSubscriberDetails = () => {
                               <button
                                 onClick={() =>
                                   handleShowMagazinePopupForEditSubscription(
-                                    subscription?._id,
+                                    subscription?._id
                                   )
                                 }
                                 type="button"
@@ -1132,28 +1140,30 @@ const EditSubscriberDetails = () => {
                                   className="inline-block mr-1"
                                 />
                               </button>
-                              {<button
-                                type="button"
-                                className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
-                                disabled={deleteLoading}
-                                onClick={() =>
-                                  handleDeletesubscription(
-                                    subscription?._id,
-                                    subscription?.subscription?.title
-                                  )
-                                }
-                              >
-                                {deleteLoading &&
+                              {
+                                <button
+                                  type="button"
+                                  className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
+                                  disabled={deleteLoading}
+                                  onClick={() =>
+                                    handleDeletesubscription(
+                                      subscription?._id,
+                                      subscription?.subscription?.title
+                                    )
+                                  }
+                                >
+                                  {deleteLoading &&
                                   subscription?._id === deleteSubscriptionID ? (
-                                  "..."
-                                ) : (
-                                  <RiDeleteBin6Line
-                                    color="red"
-                                    size={30}
-                                    className="inline-block"
-                                  />
-                                )}
-                              </button>}
+                                    "..."
+                                  ) : (
+                                    <RiDeleteBin6Line
+                                      color="red"
+                                      size={30}
+                                      className="inline-block"
+                                    />
+                                  )}
+                                </button>
+                              }
                             </td>
                           </tr>
                         ))

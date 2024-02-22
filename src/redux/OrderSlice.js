@@ -123,7 +123,7 @@ const OrderSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // get all payers
+    // get all orders
     builder.addCase(handleGetAllOrder.pending, (state, { }) => {
       state.loading = true;
       state.success = false;

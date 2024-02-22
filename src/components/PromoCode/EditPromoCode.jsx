@@ -12,11 +12,29 @@ import { useEffect } from "react";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import toast from "react-hot-toast";
 import moment from "moment";
+import { handleGetAllSubscription } from "../../redux/SubscriptionSlice";
+import Select from "react-select";
+import Animated from "react-select/animated";
 
 const EditPromoCode = ({ setShowEditPromoCode }) => {
   const { createAndUpdateLoading, singlePromoCode } = useSelector(
     (state) => state.root.promoCode
   );
+
+  const { subscriptions, loading } = useSelector(
+    (state) => state.root.subscriptions
+  );
+
+  const { subscribers } = useSelector((state) => state.root.subscribers);
+
+  const subscriberOptions = subscribers.map((subscriber) => {
+    return {
+      value: subscriber?._id,
+      label: subscriber?.fname.concat(subscriber?.lname),
+    };
+  });
+
+  const animatedComponents = Animated();
 
   const { token } = useSelector((s) => s.root.auth);
 
@@ -31,6 +49,10 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
       .required(t("code is required"))
       .min(2, t("minimum two character required")),
     expireDate: yup.date().required(t("date is required")),
+    subscribers: yup.array(),
+    subscriptoin: yup.string(),
+    maxUsage: yup.string(),
+    totalMaxUsage: yup.string(),
     discountPercentage: yup
       .number()
       .positive()
@@ -52,6 +74,8 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    getValues,
     formState: { errors, isDirty },
   } = useForm({
     shouldFocusError: true,
@@ -62,19 +86,34 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
       code: singlePromoCode?.code,
       discountPercentage: singlePromoCode?.discountPercentage,
       expireDate: moment(singlePromoCode?.expireDate).format("YYYY-MM-DD"),
+      subscriptoin: singlePromoCode?.subscription,
+      maxUsage: singlePromoCode?.maxUsage,
+      totalMaxUsage: singlePromoCode?.totalMaxUsage,
+      subscribers: singlePromoCode?.subscribers,
     },
   });
 
   const onSubmit = (data) => {
-    const { code, discountPercentage, expireDate } = data;
+    const {
+      code,
+      discountPercentage,
+      expireDate,
+      subscription,
+      maxUsage,
+      totalMaxUsage,
+      subscribers,
+    } = data;
 
-    if (!isDirty) return;
     const response = dispatch(
       handleEditPromoCode({
         code,
         id: singlePromoCode?._id,
         discountPercentage,
         expireDate,
+        subscription,
+        maxUsage,
+        totalMaxUsage,
+        subscribers: subscribers.map((sub) => sub?.value),
         token,
         signal: AbortControllerRef,
       })
@@ -96,6 +135,12 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
     return () => {
       abortApiCall();
     };
+  }, []);
+
+  // fetch subscriptions
+  useEffect(() => {
+    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -178,6 +223,76 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
               {...register("discountPercentage")}
             />
             <span className="error">{errors?.discountPercentage?.message}</span>
+          </div>
+          {/* subscriptoin */}
+          <div className="w-full space-y-2">
+            <label htmlFor="subscription" className="Label">
+              {t("subscription")}
+            </label>
+            <select
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("subscription")}
+            >
+              <option label="select subscription"></option>
+              {subscriptions.map((subscription) => (
+                <option
+                  selected={subscription?._id === singlePromoCode?.subscription}
+                  key={subscription?._id}
+                  value={subscription?._id}
+                >
+                  {subscription?.title}
+                </option>
+              ))}
+            </select>
+            <span className="error">{errors?.subscription?.message}</span>
+          </div>
+          {/* subscriber */}
+          <div className="w-full space-y-2">
+            <label htmlFor="Subscriber" className="Label">
+              {t("Subscriber")}
+            </label>
+            <Select
+              options={subscriberOptions}
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              onChange={(e) => {
+                setValue("subscribers", e);
+              }}
+              defaultValue={subscriberOptions.filter((sub) =>
+                getValues().subscribers.some((subs) => sub.value === subs)
+              )}
+            />
+
+            <span className="error">{errors?.subscribers?.message}</span>
+          </div>
+          {/* max usage */}
+          <div className="w-full space-y-2">
+            <label htmlFor="maxUsage" className="Label">
+              {t("Max Usage")}
+            </label>
+            <input
+              type="number"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("maxUsage")}
+            />
+            <span className="error">{errors?.maxUsage?.message}</span>
+          </div>
+          {/* total max usage */}
+          <div className="w-full space-y-2">
+            <label htmlFor="totalMaxUsage" className="Label">
+              {t("Total max usage")}
+            </label>
+            <input
+              type="number"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("totalMaxUsage")}
+            />
+            <span className="error">{errors?.totalMaxUsage?.message}</span>
           </div>
         </div>
       </div>

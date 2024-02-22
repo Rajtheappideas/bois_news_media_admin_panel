@@ -1,7 +1,7 @@
 import React from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { FaFileUpload } from "react-icons/fa";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { handleAddNewMagazine } from "../../redux/MagazineSlice";
 import { BsCloudUploadFill } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
+import RichTextEditor from "../RichTextEditor";
 
 const AddnewMagazine = ({ setshowAddnewMagazine }) => {
   const [prevImage, setPrevImage] = useState(null);
@@ -33,6 +34,9 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     title: yup.string().required(t("title is required")),
     status: yup.string().required(t("status is required")),
     description: yup.string().required(t("description is required")),
+    detailDescription: yup
+      .string()
+      .required(t("detail description is required")),
     magazineTitle: yup.string().required(t("select magazine")),
     pdf: yup
       .mixed()
@@ -68,6 +72,8 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     handleSubmit,
     formState: { errors },
     getValues,
+    setValue,
+    control,
   } = useForm({
     shouldFocusError: true,
     reValidateMode: "onChange",
@@ -88,6 +94,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
       description,
       status,
       magazineTitle,
+      detailDescription,
     } = data;
     const response = dispatch(
       handleAddNewMagazine({
@@ -99,6 +106,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
         stock,
         status,
         description,
+        detailDescription,
         image: magazineImage,
         token,
         signal: AbortControllerRef,
@@ -107,6 +115,7 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
+          toast.remove();
           toast.success(` ${title} ${t("magazine added Successfully")}.`, {
             duration: 3000,
           });
@@ -164,8 +173,9 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
-            className={`gray_button  ${addNewMagazineLoading && "cursor-not-allowed"
-              }`}
+            className={`gray_button  ${
+              addNewMagazineLoading && "cursor-not-allowed"
+            }`}
             onClick={() => setshowAddnewMagazine(false)}
             type="button"
             disabled={addNewMagazineLoading}
@@ -173,8 +183,9 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
             {t("Cancel")}
           </button>
           <button
-            className={`green_button ${addNewMagazineLoading && "cursor-not-allowed"
-              }`}
+            className={`green_button ${
+              addNewMagazineLoading && "cursor-not-allowed"
+            }`}
             type="submit"
             disabled={addNewMagazineLoading}
           >
@@ -354,17 +365,31 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
             </select>
             <span className="error">{errors?.magazineTitle?.message}</span>
           </div>
+          {/* description */}
+          <div className="w-full col-span-full space-y-2">
+            <label htmlFor="description" className="Label">
+              {t("description")}
+            </label>
+            <textarea {...register("description")} className="input_field" />
+            <span className="error">{errors?.description?.message}</span>
+          </div>
           {/* summary */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="summary" className="Label">
               {t("summary")}
             </label>
-            <textarea
-              placeholder={t("Type here...")}
-              {...register("description")}
-              className="input_field"
+            <Controller
+              control={control}
+              name={"detailDescription"}
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <RichTextEditor
+                  onBlur={onBlur}
+                  value={value}
+                  setValue={setValue}
+                />
+              )}
             />
-            <span className="error">{errors?.description?.message}</span>
+            <span className="error">{errors?.detailDescription?.message}</span>
           </div>
         </div>
       </div>

@@ -37,7 +37,7 @@ const Dashboard = () => {
   const { orders } = useSelector((state) => state.root.orders);
   const { magazines } = useSelector((state) => state.root.magazines);
   const { isSidebarOpen, countLoading, counts } = useSelector(
-    (state) => state.root.globalStates,
+    (state) => state.root.globalStates
   );
   const { token, user } = useSelector((state) => state.root.auth);
 
@@ -51,7 +51,7 @@ const Dashboard = () => {
       return window.location.origin.concat("/sign-in");
     }
     const response = dispatch(
-      handleGetCount({ token, signal: AbortControllerRef }),
+      handleGetCount({ token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
@@ -67,7 +67,7 @@ const Dashboard = () => {
       });
     }
   };
-
+ 
   useEffect(() => {
     handleGetContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,8 +79,9 @@ const Dashboard = () => {
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
         <section
-          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-            }`}
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+            isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+          }`}
         >
           <Header />
           <div className="grid lg:p-5 p-3 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 justify-items-stretch items-center place-items-start md:gap-5 gap-3">
@@ -113,7 +114,6 @@ const Dashboard = () => {
                 <div className="text-2xl font-semibold">
                   {" "}
                   {countLoading ? "-" : counts?.subscribers}
-
                 </div>
               </div>
             </Link>
@@ -129,8 +129,7 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                {countLoading ? "-" : counts?.prospects}
-
+                  {countLoading ? "-" : counts?.prospects}
                 </div>
               </div>
             </Link>
@@ -147,8 +146,7 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                {countLoading ? "-" : counts?.partners}
-
+                  {countLoading ? "-" : counts?.partners}
                 </div>
               </div>
             </Link>
@@ -166,7 +164,6 @@ const Dashboard = () => {
                 <div className="text-2xl font-semibold">
                   {" "}
                   {countLoading ? "-" : counts?.magazines}
-
                 </div>
               </div>
             </Link>
@@ -182,8 +179,7 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
-                {countLoading ? "-" : counts?.orders}
-
+                  {countLoading ? "-" : counts?.orders}
                 </div>
               </div>
             </Link>

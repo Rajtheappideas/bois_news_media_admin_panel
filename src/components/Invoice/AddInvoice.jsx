@@ -1,40 +1,34 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { HiPencil } from "react-icons/hi";
-import { FaUserCircle } from "react-icons/fa";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import useAbortApiCall from "../../hooks/useAbortApiCall";
-import { toast } from "react-hot-toast";
-import { handleAddNewUser } from "../../redux/UserSlice";
-import "react-phone-input-2/lib/style.css";
-import {
-  isPossiblePhoneNumber,
-  isValidPhoneNumber,
-} from "react-phone-number-input";
-import { useTranslation } from "react-i18next";
-import AddItemsPopup from "./AddItemsPopup";
-import { AiOutlineClose } from "react-icons/ai";
-import { handleCreateOrder } from "../../redux/OrderSlice";
-import { handleGetAllSubscribers } from "../../redux/SubscriberSlice";
+import React, { useEffect, useRef, useState } from "react";
+import { handleGetAllOrder } from "../../redux/OrderSlice";
 import { handleLogout } from "../../redux/AuthSlice";
 import { handleLogoutFromAllTabs } from "../../redux/GlobalStates";
-import { handleGetAllSubscription } from "../../redux/SubscriptionSlice";
-import { handleGetAllMagazine } from "../../redux/MagazineSlice";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
+import { AiOutlineClose } from "react-icons/ai";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { handleCreateAndEditInvoice } from "../../redux/InvoiceSlice";
 
-const AddOrder = ({ setShowAddOrder }) => {
-  const [selectedSubscriber, setSelectedSubscriber] = useState(null);
+const AddInvoice = ({ setShowAddInvoice, orderId, setOrderId }) => {
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
-  const [items, setItems] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
 
-  const { createLoading } = useSelector((state) => state.root.orders);
-  const { subscribers } = useSelector((state) => state.root.subscribers);
+  const { orders } = useSelector((state) => state.root.orders);
+
+  const { loading, updateLoading } = useSelector((state) => state.root.invoice);
+
   const { token } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   const searchRef = useRef(null);
+  const selectRef = useRef(null);
 
   const { t } = useTranslation();
 
@@ -44,9 +38,9 @@ const AddOrder = ({ setShowAddOrder }) => {
     companyName: yup.string(),
     VAT: yup.string(),
     purchaseOrder: yup.string(),
-    orderNotes: yup.string(),
+    //     orderNotes: yup.string(),
     paymentMethod: yup.string().required("payment method is required"),
-    status: yup.string().required("status is required"),
+    //     status: yup.string().required("status is required"),
   });
 
   const {
@@ -64,29 +58,24 @@ const AddOrder = ({ setShowAddOrder }) => {
   });
 
   const onSubmit = (data) => {
-    const {
-      VAT,
-      companyName,
-      purchaseOrder,
-      orderNotes,
-      paymentMethod,
-      status,
-    } = data;
+    const { VAT, companyName, purchaseOrder, paymentMethod } = data;
     toast.remove();
-    if (!selectedSubscriber) return toast.error("select the subscriber");
-    if (items.length === 0) {
-      return toast.error("Add at least one product to items");
-    }
+    if (!selectedOrder) return toast.error("select the order");
+
+    if (selectedOrder?.invoiceGenerated)
+      return toast.error("Invoice already generated");
+    const findOrder = orders.find(
+      (order) => order?.orderId === selectedOrder?.orderId
+    );
     const response = dispatch(
-      handleCreateOrder({
-        subscriber: selectedSubscriber?._id,
-        items,
+      handleCreateAndEditInvoice({
+        orderId: findOrder?._id,
+        subscriberId: selectedOrder?.subscriber?._id,
         VAT,
+        items: selectedOrder?.items,
         companyName,
         purchaseOrder,
-        orderNotes,
         paymentMethod,
-        status,
         token,
         signal: AbortControllerRef,
       })
@@ -94,10 +83,11 @@ const AddOrder = ({ setShowAddOrder }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
-          toast.success(`${t("order created successfully.")}`, {
+          toast.success(`${t("invoice created successfully.")}`, {
             duration: 2000,
           });
-          setShowAddOrder(false);
+          setShowAddInvoice(false);
+          navigate("/invoices", { state: null });
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
         }
@@ -105,67 +95,47 @@ const AddOrder = ({ setShowAddOrder }) => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      abortApiCall();
-    };
-  }, []);
-
-  const handleSearchSubscriber = (e) => {
+  const handleSearchOrder = (e) => {
     if (!searchRef.current?.value || !e) {
       setSearchResult([]);
-      setSelectedSubscriber(null);
+      setSelectedOrder(null);
       return;
     }
-    const findSubscriber = subscribers.filter((s) => {
+    const findOrder = orders.filter((order) => {
       return (
-        s.fname?.toLocaleLowerCase()?.includes(e) ||
-        s?.lname?.toLocaleLowerCase()?.includes(e)
+        order?.subscriber?.fname?.toLocaleLowerCase()?.includes(e) ||
+        order?.subscriber?.lname?.toLocaleLowerCase()?.includes(e) ||
+        order?.orderId?.toLocaleLowerCase()?.includes(e)
       );
     });
-    if (findSubscriber?.length > 0) {
-      setSearchResult(findSubscriber);
+    if (findOrder?.length > 0) {
+      setSearchResult(findOrder);
     } else {
       setSearchResult([]);
     }
   };
 
-  const handleChangeSubscriber = (value) => {
-    if (!value) return setSelectedSubscriber(null);
-    setSelectedSubscriber(subscribers.find((s) => s._id === value));
+  const handleChangeOrder = (value, inputType) => {
+    if (!value) return setSelectedOrder(null);
+    if (inputType === "search") {
+      selectRef.current.value = "";
+    }
+    setSelectedOrder(orders.find((s) => s._id === value));
     searchRef.current.value = "";
     setSearchResult([]);
   };
 
-  const handleChangeItems = (val) => {
-    if (!val) return;
-    setItems([...items, val]);
-  };
-
-  const handleRemoveItem = (id) => {
-    const filteredArr = items.filter((item) => item?.itemId !== id);
-    if (filteredArr) {
-      setItems(filteredArr);
-    }
-  };
-
-  const handleOnclickAdditems = () => {
-    if (selectedSubscriber === null) {
-      return toast.error("Please select subscriber.");
-    } else {
-      setShowPopup(true);
-    }
-  };
-
   useEffect(() => {
-    handleSearchSubscriber();
+    handleSearchOrder();
   }, [searchRef]);
 
   useEffect(() => {
-    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
-    dispatch(handleGetAllMagazine({ token, signal: AbortControllerRef }));
+    if (orderId !== null) {
+      const findOrder = orders.find((order) => order?.orderId === orderId);
+      setSelectedOrder(findOrder);
+    }
     const response = dispatch(
-      handleGetAllSubscribers({ token, signal: AbortControllerRef })
+      handleGetAllOrder({ token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
@@ -180,64 +150,75 @@ const AddOrder = ({ setShowAddOrder }) => {
         }
       });
     }
+    return () => {
+      abortApiCall();
+    };
   }, []);
 
   useEffect(() => {
-    setValue("VAT", selectedSubscriber?.billingSupplement?.VATnumber);
-    setValue("companyName", selectedSubscriber?.company);
-  }, [selectedSubscriber]);
+    setValue("VAT", selectedOrder?.VAT);
+    setValue("companyName", selectedOrder?.billingAddress?.companyName);
+    setValue("purchaseOrder", selectedOrder?.purchaseOrder);
+    setValue("paymentMethod", selectedOrder?.paymentMethod);
+  }, [selectedOrder]);
 
   return (
     <>
-      {showPopup && (
+      {/* {showPopup && (
         <AddItemsPopup
           handleChangeItems={handleChangeItems}
           setShowPopup={setShowPopup}
           showPopup={showPopup}
           selectedSubscriber={selectedSubscriber}
         />
-      )}
+      )} */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full lg:space-y-5 space-y-3"
+        className="w-full lg:space-y-5 space-y-3 lg:p-5 p-3"
       >
         {/* title + buttons */}
         <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
           <p className="font-semibold text-left lg:text-xl text-lg">
-            {t("Add new order")}
+            {t("Add new invoice")}
           </p>
           <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
             <button
-              className={`gray_button ${createLoading && "cursor-not-allowed"}`}
-              onClick={() => setShowAddOrder(false)}
-              disabled={createLoading}
+              className={`gray_button ${
+                (loading || updateLoading) && "cursor-not-allowed"
+              }`}
+              onClick={() => {
+                setShowAddInvoice(false);
+                setOrderId(null);
+                navigate("/invoices", { state: null });
+              }}
+              disabled={loading || updateLoading}
               type="reset"
             >
               {t("Cancel")}
             </button>
             <button
               className={`green_button ${
-                createLoading && "cursor-not-allowed"
+                (loading || updateLoading) && "cursor-not-allowed"
               }`}
               type="submit"
-              disabled={createLoading}
+              disabled={loading || updateLoading}
             >
-              {createLoading ? t("Submitting").concat("...") : t("Submit")}
+              {updateLoading ? t("Submitting").concat("...") : t("Submit")}
             </button>
           </div>
         </div>
         {/* main div */}
         <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
-          {/* search + dropdown subscriber */}
+          {/* search + dropdown order */}
           <div className="w-full flex md:flex-row flex-col items-center justify-between md:gap-3 gap-1">
             <div className="md:w-1/2 w-full relative">
               <input
                 ref={searchRef}
                 type="text"
-                placeholder={t("search subscriber")}
+                placeholder={t("search order by name & order id")}
                 className="input_field"
                 onChange={(e) => {
-                  handleSearchSubscriber(e.target.value.toLocaleLowerCase());
+                  handleSearchOrder(e.target.value.toLocaleLowerCase());
                 }}
               />
 
@@ -246,13 +227,14 @@ const AddOrder = ({ setShowAddOrder }) => {
                   searchResult.length > 0 ? "scale-100" : "scale-0"
                 } transition-all duration-300 top-12 w-full max-h-80 overflow-y-scroll scrollbar left-0 bg-white z-10 shadow-md rounded-lg space-y-2`}
               >
-                {searchResult.map((r) => (
+                {searchResult.map((order) => (
                   <p
                     key={searchResult?._id}
                     className="cursor-pointer hover:bg-gray-100 p-3"
-                    onClick={() => handleChangeSubscriber(r?._id)}
+                    onClick={() => handleChangeOrder(order?._id, "search")}
                   >
-                    {r?.fname}&nbsp;{r?.lname}
+                    {order?.subscriber?.fname}&nbsp;{order?.subscriber?.lname} (
+                    {order?.orderId})
                   </p>
                 ))}
               </div>
@@ -261,21 +243,32 @@ const AddOrder = ({ setShowAddOrder }) => {
             <div className="md:w-1/2  w-full">
               <select
                 onChange={(e) => {
-                  handleChangeSubscriber(e.target.value);
+                  handleChangeOrder(e.target.value, "select");
                 }}
+                ref={selectRef}
                 name="select_subscriber"
                 className="input_field"
               >
-                <option label="select subscriber"></option>
-                {subscribers.map((subscriber) => (
-                  <option key={subscriber?._id} value={subscriber?._id}>
-                    {subscriber?.fname}&nbsp;
-                    {subscriber?.lname}
+                <option label="select order"></option>
+                {orders.map((order) => (
+                  <option key={order?._id} value={order?._id}>
+                    {order?.orderId}
                   </option>
                 ))}
               </select>
             </div>
           </div>
+          <p className="font-bold text-black md:text-xl capitalize">
+            {t("Order ID")}
+          </p>
+          {/* order id */}
+          <div className="w-full space-y-2">
+            <label htmlFor="orderId" className="Label">
+              {t("orderId")}
+            </label>
+            {selectedOrder?.orderId ?? "-"}
+          </div>
+          <hr className="my-1" />
           <p className="font-bold text-black md:text-xl capitalize">
             {t("subscriber details")}
           </p>
@@ -286,22 +279,22 @@ const AddOrder = ({ setShowAddOrder }) => {
               <label htmlFor="name" className="Label">
                 {t("name")}
               </label>
-              {selectedSubscriber?.fname ?? "-"}&nbsp;{" "}
-              {selectedSubscriber?.lname}
+              {selectedOrder?.subscriber?.fname ?? "-"}&nbsp;{" "}
+              {selectedOrder?.subscriber?.lname}
             </div>
             {/* email */}
             <div className="w-full space-y-2">
               <label htmlFor="email" className="Label">
                 {t("email")}
               </label>
-              {selectedSubscriber?.email ?? "-"}
+              {selectedOrder?.subscriber?.email ?? "-"}
             </div>
             {/* phone */}
             <div className="w-full space-y-2">
               <label htmlFor="phone" className="Label">
                 {t("phone")}
               </label>
-              {selectedSubscriber?.phone ?? "-"}
+              {selectedOrder?.subscriber?.phone ?? "-"}
             </div>
           </div>
           <hr className="my-1" />
@@ -315,35 +308,35 @@ const AddOrder = ({ setShowAddOrder }) => {
               <label htmlFor="address" className="Label">
                 {t("address")}
               </label>
-              {selectedSubscriber?.shippingAddress?.address1 ?? "-"}
+              {selectedOrder?.shippingAddress?.address1 ?? "-"}
             </div>
             {/* city */}
             <div className="w-full space-y-2">
               <label htmlFor="city" className="Label">
                 {t("city")}
               </label>
-              {selectedSubscriber?.shippingAddress?.city ?? "-"}
+              {selectedOrder?.shippingAddress?.city ?? "-"}
             </div>
             {/* province */}
             <div className="w-full space-y-2">
               <label htmlFor="province" className="Label">
                 {t("province")}
               </label>
-              {selectedSubscriber?.shippingAddress?.province ?? "-"}
+              {selectedOrder?.shippingAddress?.province ?? "-"}
             </div>
             {/* country */}
             <div className="w-full space-y-2">
               <label htmlFor="country" className="Label">
                 {t("country")}
               </label>
-              {selectedSubscriber?.shippingAddress?.country ?? "-"}
+              {selectedOrder?.shippingAddress?.country ?? "-"}
             </div>
             {/* zipcode */}
             <div className="w-full space-y-2">
               <label htmlFor="zipcode" className="Label">
                 {t("zipcode")}
               </label>
-              {selectedSubscriber?.shippingAddress?.zipCode ?? "-"}
+              {selectedOrder?.shippingAddress?.zipCode ?? "-"}
             </div>
           </div>
           <hr className="my-1" />
@@ -357,50 +350,35 @@ const AddOrder = ({ setShowAddOrder }) => {
               <label htmlFor="address" className="Label">
                 {t("address")}
               </label>
-              {selectedSubscriber?.thirdPartyPayer !== null
-                ? selectedSubscriber?.thirdPartyPayer?.billingAddress
-                    ?.companyAddress ?? "-"
-                : selectedSubscriber?.billingAddress?.address1 ?? "-"}
+              {selectedOrder?.billingAddress?.address1 ?? "-"}
             </div>
             {/* city */}
             <div className="w-full space-y-2">
               <label htmlFor="city" className="Label">
                 {t("city")}
               </label>
-              {selectedSubscriber?.thirdPartyPayer !== null
-                ? selectedSubscriber?.thirdPartyPayer?.billingAddress?.city ??
-                  "-"
-                : selectedSubscriber?.billingAddress?.city ?? "-"}
+              {selectedOrder?.billingAddress?.city ?? "-"}
             </div>
             {/* province */}
             <div className="w-full space-y-2">
               <label htmlFor="province" className="Label">
                 {t("province")}
               </label>
-              {selectedSubscriber?.thirdPartyPayer !== null
-                ? selectedSubscriber?.thirdPartyPayer?.billingAddress
-                    ?.province ?? "-"
-                : selectedSubscriber?.billingAddress?.province ?? "-"}
+              {selectedOrder?.billingAddress?.province ?? "-"}
             </div>
             {/* country */}
             <div className="w-full space-y-2">
               <label htmlFor="country" className="Label">
                 {t("country")}
               </label>
-              {selectedSubscriber?.thirdPartyPayer !== null
-                ? selectedSubscriber?.thirdPartyPayer?.billingAddress
-                    ?.country ?? "-"
-                : selectedSubscriber?.billingAddress?.country ?? "-"}
+              {selectedOrder?.billingAddress?.country ?? "-"}
             </div>
             {/* zipcode */}
             <div className="w-full space-y-2">
               <label htmlFor="zipcode" className="Label">
                 {t("zipcode")}
               </label>
-              {selectedSubscriber?.thirdPartyPayer !== null
-                ? selectedSubscriber?.thirdPartyPayer?.billingAddress
-                    ?.zipCode ?? "-"
-                : selectedSubscriber?.billingAddress?.zipCode ?? "-"}
+              {selectedOrder?.billingAddress?.zipCode ?? "-"}
             </div>
           </div>
           <hr className="my-1" />
@@ -445,7 +423,7 @@ const AddOrder = ({ setShowAddOrder }) => {
               />
             </div>
             {/* notes */}
-            <div className="w-full space-y-2">
+            {/* <div className="w-full space-y-2">
               <label htmlFor="note" className="Label">
                 {t("Order Note")} (optional)
               </label>
@@ -456,7 +434,7 @@ const AddOrder = ({ setShowAddOrder }) => {
                 {...register("orderNotes")}
               />
               <span className="error">{errors?.orderNotes?.message}</span>
-            </div>
+            </div> */}
           </div>
           <hr className="my-1" />
           <div className="w-full flex items-center gap-3">
@@ -477,7 +455,7 @@ const AddOrder = ({ setShowAddOrder }) => {
               </select>
               <span className="error">{errors?.paymentMethod?.message}</span>
             </div>
-            <div className="md:w-1/2 w-full space-y-2">
+            {/* <div className="md:w-1/2 w-full space-y-2">
               <p className="font-bold text-black md:text-xl capitalize">
                 {t("status")}
               </p>
@@ -493,11 +471,11 @@ const AddOrder = ({ setShowAddOrder }) => {
                 <option value="Delivered">Delivered</option>
               </select>
               <span className="error">{errors?.status?.message}</span>
-            </div>
+            </div> */}
           </div>
-          <hr className="my-1" />
+          {/* <hr className="my-1" /> */}
           {/* items */}
-          <p className="font-bold capitalize text-black md:text-xl flex items-center justify-between">
+          {/* <p className="font-bold capitalize text-black md:text-xl flex items-center justify-between">
             <span>{t("items")}</span>
             <button
               className="gray_button text-base"
@@ -558,11 +536,11 @@ const AddOrder = ({ setShowAddOrder }) => {
                   ))}
               </tbody>
             </table>
-          </div>
+          </div> */}
         </div>
       </form>
     </>
   );
 };
 
-export default AddOrder;
+export default AddInvoice;

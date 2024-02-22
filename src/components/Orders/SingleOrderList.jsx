@@ -9,8 +9,10 @@ import {
   handleUpdateOrderStatus,
 } from "../../redux/OrderSlice";
 import { BsEye } from "react-icons/bs";
+import { FaFileInvoice } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const SingleOrderList = ({ order, setshowOrderDetails }) => {
+const SingleOrderList = ({ order, setshowOrderDetails, setShowAddOrder }) => {
   const [orderStatus, setOrderStatus] = useState("On Hold");
 
   const { updateLoading } = useSelector((state) => state.root.orders);
@@ -18,7 +20,10 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
   const { token, role } = useSelector((state) => state.root.auth);
 
   const { AbortControllerRef } = useAbortApiCall();
+
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const hanldeChangeOrderStatus = (id, status) => {
     if (role !== "admin") return;
@@ -30,7 +35,7 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
         id,
         token,
         signal: AbortControllerRef,
-      }),
+      })
     );
     if (response) {
       response.then((res) => {
@@ -43,6 +48,14 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
       });
     }
   };
+
+  function handleGenerateInvoice() {
+    if (order?.invoiceGenerated) {
+      toast.remove();
+      return toast.error("Invoice already generated.");
+    }
+    return navigate(`/invoices`, { state: { orderId: order?.orderId } });
+  }
 
   useEffect(() => {
     setOrderStatus(order?.status);
@@ -86,16 +99,16 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
       )}
 
       <td className="flex items-center justify-start p-4">
-        {/* <button
-            type="button"
-            className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
-          >
-            <BiPrinter
-              color="gray"
-              size={30}
-              className="inline-block mr-1"
-            />
-          </button> */}
+        <button
+          type="button"
+          className="hover:bg-blue-200 p-1 rounded-full h-10 w-10"
+          title="generate invoice"
+          onClick={() => {
+            handleGenerateInvoice();
+          }}
+        >
+          <FaFileInvoice color="blue" size={25} className="inline-block" />
+        </button>
         <button
           onClick={() => {
             dispatch(handleFindSingleOrder(order?._id));

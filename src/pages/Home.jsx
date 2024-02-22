@@ -58,7 +58,7 @@ const Home = () => {
       return navigate("/sign-in");
     }
     const response = dispatch(
-      handleGetAllUsers({ token, signal: AbortControllerRef }),
+      handleGetAllUsers({ token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
@@ -131,11 +131,11 @@ const Home = () => {
             {activeComponent === t("change password") && <ChangePassword />}
             {activeComponent === t("messages") && <MessagesList />}
             {/* {activeComponent === t("newsLetter") && <NewsLetterList />} */}
-            {/* {activeComponent === t("tax & shipping") && (
+          {/* {activeComponent === t("tax & shipping") && (
               <TaxtAndShippingCharges />
             )} */}
-            {/* {activeComponent === t("promo codes") && <PromoCode />}
-          </div> */} 
+          {/* {activeComponent === t("promo codes") && <PromoCode />}
+          </div> */}
         </section>
       </div>
     </>

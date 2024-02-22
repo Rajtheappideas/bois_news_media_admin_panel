@@ -17,17 +17,7 @@ import {
 } from "./redux/GlobalStates";
 import { useTranslation } from "react-i18next";
 import useAbortApiCall from "./hooks/useAbortApiCall";
-import { handleGetAllUsers } from "./redux/UserSlice";
-import { handleLogout } from "./redux/AuthSlice";
-import { handleGetAllSubscribers } from "./redux/SubscriberSlice";
-import { handleGetAllProspects } from "./redux/ProspectSlice";
-import { handleGetAllPartners } from "./redux/PartnerSlice";
-import { handleGetAllMagazine } from "./redux/MagazineSlice";
-import { handleGetPricing } from "./redux/TaxAndShippingSlice";
-import { handleGetAllOrder } from "./redux/OrderSlice";
-import { handleGetAllPromoCodes } from "./redux/PromoCodeSlice";
-import { handleGetAllSubscription } from "./redux/SubscriptionSlice";
-import { handleGetAllPayers } from "./redux/ThirdPartyPayerSlice";
+import EditInvoice from "./pages/invoices/EditInvoice";
 
 const SignIn = lazy(() => import("./pages/SignIn"));
 const SignUp = lazy(() => import("./pages/SignUp"));
@@ -38,37 +28,38 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Magazine = lazy(() => import("./pages/magazines/Magazine"));
-const EditMagazineDetails = lazy(
-  () => import("./pages/magazines/EditMagazineDetails"),
+const EditMagazineDetails = lazy(() =>
+  import("./pages/magazines/EditMagazineDetails")
 );
-const TaxtAndShippingCharges = lazy(
-  () => import("./pages/TaxtAndShippingCharges"),
+const TaxtAndShippingCharges = lazy(() =>
+  import("./pages/TaxtAndShippingCharges")
 );
 const Users = lazy(() => import("./pages/users/Users"));
 const EditUserDetails = lazy(() => import("./pages/users/EditUserDetails"));
-const EditSubscriberDetails = lazy(
-  () => import("./pages/subscribers/EditSubscriberDetails"),
+const EditSubscriberDetails = lazy(() =>
+  import("./pages/subscribers/EditSubscriberDetails")
 );
 const Subscribers = lazy(() => import("./pages/subscribers/Subscribers"));
 const Prospect = lazy(() => import("./pages/prospects/Prospect"));
-const EditProspectDetails = lazy(
-  () => import("./pages/prospects/EditProspectDetails"),
+const EditProspectDetails = lazy(() =>
+  import("./pages/prospects/EditProspectDetails")
 );
 const Partners = lazy(() => import("./pages/partners/Partners"));
-const EditPartnerDetails = lazy(
-  () => import("./pages/partners/EditPartnerDetails"),
+const EditPartnerDetails = lazy(() =>
+  import("./pages/partners/EditPartnerDetails")
 );
-const ThirdPartyPayer = lazy(
-  () => import("./pages/third-party-payer/ThirdPartyPayer"),
+const ThirdPartyPayer = lazy(() =>
+  import("./pages/third-party-payer/ThirdPartyPayer")
 );
-const EditDetailsThirdPartyPayer = lazy(
-  () => import("./pages/third-party-payer/EditDetailsThirdPartyPayer"),
+const EditDetailsThirdPartyPayer = lazy(() =>
+  import("./pages/third-party-payer/EditDetailsThirdPartyPayer")
 );
 const Subscriptions = lazy(() => import("./pages/subscriptions/Subcriptions"));
-const EditDetailsSubscription = lazy(
-  () => import("./pages/subscriptions/EditDetailsSubscription"),
+const EditDetailsSubscription = lazy(() =>
+  import("./pages/subscriptions/EditDetailsSubscription")
 );
 const Orders = lazy(() => import("./pages/orders/Orders"));
+const Invoices = lazy(() => import("./pages/invoices/Invoices"));
 const PromoCode = lazy(() => import("./pages/PromoCode"));
 const MessagesList = lazy(() => import("./pages/MessagesList"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
@@ -103,6 +94,8 @@ function App() {
     { path: "/third-party-payer/:id", page: EditDetailsThirdPartyPayer },
     { path: "/subscriptions", page: Subscriptions },
     { path: "/subscriptions/:id", page: EditDetailsSubscription },
+    { path: "/invoices", page: Invoices },
+    { path: "/invoice/:id", page: EditInvoice },
     { path: "/change-password", page: ChangePassword },
   ];
 
@@ -165,40 +158,6 @@ function App() {
                 caseSensitive
               />
             ))}
-
-            {/* <Route caseSensitive path="/profile" element={<Profile />} />
-            <Route caseSensitive path="/users" element={<Users />} />
-            <Route
-              caseSensitive
-              path="/user/:id"
-              element={<EditUserDetails />}
-            />
-            <Route
-              caseSensitive
-              path="/subscribers"
-              element={<Subscribers />}
-            />
-            <Route caseSensitive path="/prospects" element={<Prospect />} />
-            <Route caseSensitive path="/partners" element={<Partners />} />
-            <Route
-              caseSensitive
-              path="/third-party-payer"
-              element={<ThirdPartyPayer />}
-            />
-            <Route
-              caseSensitive
-              path="/subscriptions"
-              element={<Subcriptions />}
-            />
-            <Route caseSensitive path="/magazines" element={<Magazine />} />
-            <Route caseSensitive path="/orders" element={<Orders />} />
-            <Route
-              caseSensitive
-              path="/tax-shipping"
-              element={<TaxtAndShippingCharges />}
-            />
-            <Route caseSensitive path="/promo-codes" element={<PromoCode />} />
-            <Route caseSensitive path="/messages" element={<MessagesList />} /> */}
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>

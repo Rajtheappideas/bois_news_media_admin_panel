@@ -203,6 +203,9 @@
   "Subscription details": "Subscription details",
   "price": "price",
   "descriptions": "descriptions",
+  "France paper price": "France paper price",
+  "Rest of the world paper price": "Rest of the world paper price",
+  "EEC/Switzerland/France Overseas Territories paper price": "EEC/Switzerland/France Overseas Territories paper price",
   "//magazine_comment": "----------------magazine----------------",
   "Magazine name": "Magazine name",
   "Stock": "Stock",
@@ -243,6 +246,8 @@
   "shipping cost": "shipping cost",
   "discount": "discount",
   "Total Amount": "Total Amount",
+  "Order No": "Order ID",
+  "Generate invoice": "Generate invoice",
   "//profile_comment": "----------------profile----------------",
   "Edit profile": "Edit profile",
   "name": "name",
@@ -326,5 +331,7 @@
   "Edit": "Edit",
   "Tax Charges": "Tax Charges",
   "Shipping Charges": "Shipping Charges",
-  "paper": "paper"
+  "paper": "paper",
+  "//invoices": "---------------------------------------invoices--------------------------",
+  "invoices": "invoices"
 }

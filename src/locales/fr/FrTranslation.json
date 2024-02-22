@@ -203,6 +203,9 @@
   "Subscription details": "Détails de l'abonnement",
   "price": "Prix",
   "descriptions": "Descriptions",
+  "France paper price": "Prix ​​du papier en France",
+  "Rest of the world paper price": "Prix ​​du papier dans le reste du monde",
+  "EEC/Switzerland/France Overseas Territories paper price": "Prix ​​du papier CEE/Suisse/France Outre-mer",
   "//magazine_comment": "----------------magazine----------------",
   "Magazine name": "Nom du magazine",
   "Stock": "Stock",
@@ -244,6 +247,7 @@
   "shipping cost": "frais de port",
   "discount": "réduction",
   "Total Amount": "Montant total",
+  "Generate invoice": "Générer une facture",
   "//profile_comment": "----------------profil----------------",
   "Edit profile": "Modifier le profil",
   "name": "nom",
@@ -326,5 +330,7 @@
   "Edit": "Modifier",
   "Tax Charges": "Frais de taxes",
   "Shipping Charges": "Frais d'expédition",
-  "paper": "papier"
+  "paper": "papier",
+  "//invoices": "---------------------------------------invoices--------------------------",
+  "invoices": "factures"
 }

@@ -13,25 +13,7 @@ import ThirdPartyPayerSlice from "./ThirdPartyPayerSlice";
 import GlobalStates from "./GlobalStates";
 import TaxAndShippingSlice from "./TaxAndShippingSlice";
 import PromoCodeSlice from "./PromoCodeSlice";
-
-const rootPersistConfig = {
-  key: "root",
-  storage,
-  blacklist: [
-    "users",
-    "subscribers",
-    "prospects",
-    "magazines",
-    "partners",
-    "orders",
-    "subscriptions",
-    "thirdPartyPayers",
-    "taxAndShipping",
-    "promoCode",
-    "auth",
-    "globalStates",
-  ],
-};
+import InvoiceSlice from "./InvoiceSlice";
 
 const globalStatesPersistConfig = {
   key: "globalStates",
@@ -58,12 +40,13 @@ const rootReducer = combineReducers({
   globalStates: persistReducer(globalStatesPersistConfig, GlobalStates),
   taxAndShipping: TaxAndShippingSlice,
   promoCode: PromoCodeSlice,
+  invoice: InvoiceSlice,
 });
 
-const persisteRoot = persistReducer(rootPersistConfig, rootReducer);
+// const persisteRoot = persistReducer(rootPersistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: { root: persisteRoot },
+  reducer: { root: rootReducer },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
   devTools: process.env.NODE_ENV !== "production",

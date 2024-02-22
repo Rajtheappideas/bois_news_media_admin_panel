@@ -1,6 +1,6 @@
 import React from "react";
 import { HiPencil } from "react-icons/hi";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
+import RichTextEditor from "../../components/RichTextEditor";
 
 const EditMagazineDetails = () => {
   const [prevImage, setPrevImage] = useState(null);
@@ -48,6 +49,9 @@ const EditMagazineDetails = () => {
     title: yup.string().required(t("title is required")),
     status: yup.string().required(t("status is required")),
     description: yup.string().required(t("description is required")),
+    detailDescription: yup
+      .string()
+      .required(t("detail description is required")),
     magazineTitle: yup.string().required(t("select magazine")),
 
     stock: yup
@@ -83,6 +87,7 @@ const EditMagazineDetails = () => {
       pricePaper: singleMagazine?.pricePaper,
       status: singleMagazine?.status,
       description: singleMagazine?.description,
+      detailDescription: singleMagazine?.detailDescription,
       image: singleMagazine?.image,
       stock: singleMagazine?.stock,
       magazineTitle: singleMagazine?.magazineTitle,
@@ -99,6 +104,7 @@ const EditMagazineDetails = () => {
       description,
       status,
       magazineTitle,
+      detailDescription,
     } = data;
     if (!isDirty) {
       return true;
@@ -113,6 +119,7 @@ const EditMagazineDetails = () => {
         stock,
         status,
         description,
+        detailDescription,
         image: magazineImage,
         id: state?._id,
         token,
@@ -122,6 +129,7 @@ const EditMagazineDetails = () => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
+          toast.remove();
           toast.success(` ${title} ${t("magazine edited Successfully")}.`, {
             duration: 3000,
           });
@@ -139,7 +147,6 @@ const EditMagazineDetails = () => {
     setPrevImage(URL.createObjectURL(file));
     setmagazineImage(file);
   };
-
 
   const handleDeletemagazine = (id) => {
     if (window.confirm(t("Are you sure?"))) {
@@ -214,8 +221,9 @@ const EditMagazineDetails = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
-            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
-              }`}
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
+              isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
           >
             <Header />
 
@@ -230,9 +238,10 @@ const EditMagazineDetails = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
-                    className={`gray_button ${(editMagazineLoading || deleteMagazineLoading) &&
+                    className={`gray_button ${
+                      (editMagazineLoading || deleteMagazineLoading) &&
                       "cursor-not-allowed"
-                      } `}
+                    } `}
                     onClick={() => handleOnClickCancel()}
                     type="button"
                     disabled={editMagazineLoading || deleteMagazineLoading}
@@ -240,9 +249,10 @@ const EditMagazineDetails = () => {
                     {t("Cancel")}
                   </button>
                   <button
-                    className={`green_button ${(editMagazineLoading || deleteMagazineLoading) &&
+                    className={`green_button ${
+                      (editMagazineLoading || deleteMagazineLoading) &&
                       "cursor-not-allowed"
-                      } `}
+                    } `}
                     type="submit"
                     disabled={editMagazineLoading || deleteMagazineLoading}
                   >
@@ -252,9 +262,10 @@ const EditMagazineDetails = () => {
                   </button>
                   {role === "admin" && (
                     <button
-                      className={`red_button ${(editMagazineLoading || deleteMagazineLoading) &&
+                      className={`red_button ${
+                        (editMagazineLoading || deleteMagazineLoading) &&
                         "cursor-not-allowed"
-                        } `}
+                      } `}
                       type="button"
                       disabled={editMagazineLoading || deleteMagazineLoading}
                       onClick={() => handleDeletemagazine(singleMagazine?._id)}
@@ -402,16 +413,35 @@ const EditMagazineDetails = () => {
                   </div>
                   {/* summary */}
                   <div className="w-full col-span-full space-y-2">
+                    <label htmlFor="description" className="Label">
+                      {t("description")}
+                    </label>
+                    <textarea
+                      {...register("description")}
+                      className="input_field"
+                    ></textarea>
+                    <span className="error">
+                      {errors?.description?.message}
+                    </span>
+                  </div>
+                  {/* summary */}
+                  <div className="w-full col-span-full space-y-2">
                     <label htmlFor="summary" className="Label">
                       {t("summary")}
                     </label>
-                    <textarea
-                      placeholder={t("Type here...")}
-                      {...register("description")}
-                      className="input_field"
+                    <Controller
+                      control={control}
+                      name={"detailDescription"}
+                      render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <RichTextEditor
+                          onBlur={onBlur}
+                          value={value}
+                          setValue={setValue}
+                        />
+                      )}
                     />
                     <span className="error">
-                      {errors?.description?.message}
+                      {errors?.detailDescription?.message}
                     </span>
                   </div>
                 </div>

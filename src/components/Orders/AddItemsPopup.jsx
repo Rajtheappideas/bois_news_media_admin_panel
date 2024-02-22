@@ -8,13 +8,54 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
-const AddItemsPopup = ({ setShowPopup, showPopup, handleChangeItems }) => {
+const AddItemsPopup = ({
+  setShowPopup,
+  showPopup,
+  handleChangeItems,
+  selectedSubscriber,
+}) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const { t } = useTranslation();
 
   const { subscriptions } = useSelector((state) => state.root.subscriptions);
   const { magazines } = useSelector((state) => state.root.magazines);
+  const { eec_switzerland_overseas_territories } = useSelector(
+    (state) => state.root.globalStates
+  );
+
+  const lowerCaseStatesAndCountries = eec_switzerland_overseas_territories.map(
+    (state) => state.toLowerCase()
+  );
+
+  function CheckConutryAndState(type, support) {
+    if (type === "subscription") {
+      if (support === "paper") {
+        if (
+          lowerCaseStatesAndCountries.includes(
+            selectedSubscriber?.shippingAddress?.province.toLowerCase()
+          ) ||
+          lowerCaseStatesAndCountries.includes(
+            selectedSubscriber?.shippingAddress?.country.toLowerCase()
+          )
+        ) {
+          return selectedProduct?.pricePaperEEC;
+        } else if (
+          selectedSubscriber?.shippingAddress?.country.toLowerCase() ===
+          "france"
+        ) {
+          return selectedProduct?.pricePaperFrance;
+        } else {
+          return selectedProduct?.pricePaperRestOfWorld;
+        }
+      } else {
+        return selectedProduct?.priceDigital;
+      }
+    } else {
+      if (support === "paper") return selectedProduct?.pricePaper;
+      return selectedProduct?.priceDigital;
+    }
+  }
 
   const createSubscribptionSchema = yup.object({
     subscription: yup.string(),
@@ -29,6 +70,7 @@ const AddItemsPopup = ({ setShowPopup, showPopup, handleChangeItems }) => {
     watch,
     reset,
     resetField,
+    getValues,
     formState: { errors },
   } = useForm({
     shouldFocusError: true,
@@ -40,7 +82,6 @@ const AddItemsPopup = ({ setShowPopup, showPopup, handleChangeItems }) => {
       support: "",
     },
   });
-
   const onSubmit = (data) => {
     const { subscription, magazine, quantity, support } = data;
     if (!magazine && !subscription) {
@@ -53,7 +94,9 @@ const AddItemsPopup = ({ setShowPopup, showPopup, handleChangeItems }) => {
       itemType: subscription ? "Subscription" : "Magazine",
       itemId: subscription ? subscription : magazine,
       title: selectedProduct?.title,
-      price: selectedProduct?.price,
+      price: subscription
+      ? CheckConutryAndState("subscription", support)
+      : CheckConutryAndState("magazine", support),
     };
     handleChangeItems(val);
     reset();

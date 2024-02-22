@@ -46,13 +46,16 @@ export const handleAddNewSubscription = createAsyncThunk(
     {
       title,
       priceDigital,
-      pricePaper,
+      pricePaperEEC,
+      pricePaperFrance,
+      pricePaperRestOfWorld,
       status,
       description,
       image,
       magazineTitle,
       token,
       signal,
+      detailDescription,
     },
     { rejectWithValue }
   ) => {
@@ -62,11 +65,14 @@ export const handleAddNewSubscription = createAsyncThunk(
         data: {
           title,
           priceDigital,
-          pricePaper,
+          pricePaperEEC,
+          pricePaperFrance,
+          pricePaperRestOfWorld,
           status,
           description,
           image,
           magazineTitle,
+          detailDescription,
         },
         signal: signal.current.signal,
         headers: {
@@ -88,7 +94,9 @@ export const handleEditSubscription = createAsyncThunk(
     {
       title,
       priceDigital,
-      pricePaper,
+      pricePaperEEC,
+      pricePaperRestOfWorld,
+      pricePaperFrance,
       status,
       description,
       image,
@@ -96,6 +104,7 @@ export const handleEditSubscription = createAsyncThunk(
       id,
       token,
       signal,
+      detailDescription,
     },
     { rejectWithValue }
   ) => {
@@ -105,11 +114,14 @@ export const handleEditSubscription = createAsyncThunk(
         data: {
           title,
           priceDigital,
-          pricePaper,
+          pricePaperEEC,
+          pricePaperRestOfWorld,
+          pricePaperFrance,
           status,
           description,
           image,
           magazineTitle,
+          detailDescription,
         },
         signal: signal.current.signal,
         headers: {
@@ -251,7 +263,7 @@ const SubscriptionSlice = createSlice({
         state.addNewSubscriptionLoading = false;
         state.success = true;
         state.error = null;
-        state.subscriptions = [payload?.subscription, ...state.subscriptions];
+        state.subscriptions = [...state.subscriptions, payload?.subscription];
       }
     );
     builder.addCase(handleAddNewSubscription.rejected, (state, { payload }) => {

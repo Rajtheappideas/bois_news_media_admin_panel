@@ -16,7 +16,10 @@ import {
 } from "../redux/PromoCodeSlice";
 import toast from "react-hot-toast";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { handleChangeDeleteID } from "../redux/SubscriptionSlice";
+import {
+  handleChangeDeleteID,
+  handleGetAllSubscription,
+} from "../redux/SubscriptionSlice";
 import CreatePromoCode from "../components/PromoCode/CreatePromoCode";
 import ShowPromoCodeDetails from "../components/PromoCode/ShowPromoCodeDetails";
 import { Helmet } from "react-helmet";
@@ -24,6 +27,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { handleLogoutFromAllTabs } from "../redux/GlobalStates";
 import { handleLogout } from "../redux/AuthSlice";
+import { handleGetAllSubscribers } from "../redux/SubscriberSlice";
 
 const PromoCode = () => {
   const [showEditPromoCode, setShowEditPromoCode] = useState(false);
@@ -39,7 +43,7 @@ const PromoCode = () => {
     deletePromoCodeId,
   } = useSelector((state) => state.root.promoCode);
   const { fileterdData, isSidebarOpen } = useSelector(
-    (state) => state.root.globalStates,
+    (state) => state.root.globalStates
   );
   const { role, token } = useSelector((state) => state.root.auth);
 
@@ -72,7 +76,7 @@ const PromoCode = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
-        handleDeletePromoCode({ id, token, signal: AbortControllerRef }),
+        handleDeletePromoCode({ id, token, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
@@ -89,7 +93,7 @@ const PromoCode = () => {
 
   useEffect(() => {
     const response = dispatch(
-      handleGetAllPromoCodes({ token, signal: AbortControllerRef }),
+      handleGetAllPromoCodes({ token, signal: AbortControllerRef })
     );
     if (response) {
       response.then((res) => {
@@ -104,6 +108,12 @@ const PromoCode = () => {
         }
       });
     }
+
+    // fetch subscriptions
+    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
+    //fetch subscribers
+    dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
+
     return () => abortApiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -205,7 +215,7 @@ const PromoCode = () => {
                                     onClick={() => {
                                       setShowEditPromoCode(true);
                                       dispatch(
-                                        handleFindSinglePromoCode(promo?._id),
+                                        handleFindSinglePromoCode(promo?._id)
                                       );
                                     }}
                                     disabled={
@@ -227,7 +237,7 @@ const PromoCode = () => {
                                     onClick={() => {
                                       setShowPromoCodeDetails(true);
                                       dispatch(
-                                        handleFindSinglePromoCode(promo?._id),
+                                        handleFindSinglePromoCode(promo?._id)
                                       );
                                     }}
                                     disabled={
@@ -291,8 +301,8 @@ const PromoCode = () => {
                           ? promoCodes?.length
                           : (pageNumber + 1) * promoPerPage
                         : (pageNumber + 1) * promoPerPage > fileterdData?.length
-                          ? fileterdData?.length
-                          : (pageNumber + 1) * promoPerPage}{" "}
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * promoPerPage}{" "}
                       {t("from")}{" "}
                       {fileterdData?.length === 0
                         ? promoCodes?.length

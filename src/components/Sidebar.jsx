@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { BiHome, BiMessageSquareDots } from "react-icons/bi";
 import { MdSavedSearch } from "react-icons/md";
-import { FaRegHandshake, FaUserAlt } from "react-icons/fa";
+import { FaFileInvoiceDollar, FaRegHandshake, FaUserAlt } from "react-icons/fa";
 import { TbUserDollar } from "react-icons/tb";
 import { CgNotes } from "react-icons/cg";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
 import { RiCoupon3Line } from "react-icons/ri";
 import { HiOutlineXMark } from "react-icons/hi2";
-import { SlEnvolopeLetter } from "react-icons/sl";
-import { HiOutlineReceiptTax } from "react-icons/hi";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
 import { PublicS3Url } from "../BaseUrl";
 import { useDispatch, useSelector } from "react-redux";
@@ -65,11 +63,12 @@ const Sidebar = () => {
     { title: t("subscriptions"), icon: CgNotes, url: "subscriptions" },
     { title: t("magazines"), icon: GiWhiteBook, url: "magazines" },
     { title: t("orders"), icon: BsCart3, url: "orders" },
-    {
-      title: t("tax-shipping"),
-      icon: HiOutlineReceiptTax,
-      url: "tax-shipping",
-    },
+    { title: t("invoices"), icon: FaFileInvoiceDollar, url: "invoices" },
+    // {
+    //   title: t("tax-shipping"),
+    //   icon: HiOutlineReceiptTax,
+    //   url: "tax-shipping",
+    // },
     { title: t("promo-codes"), icon: RiCoupon3Line, url: "promo-codes" },
     { title: t("messages"), icon: BiMessageSquareDots, url: "messages" },
     // { title: t("newsLetter"), icon: SlEnvolopeLetter },
@@ -117,8 +116,9 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`lg:sticky lg:top-0 ${isSidebarOpen ? "xl:w-2/12 lg:w-1/5" : "lg:w-[10%]"
-        } h-auto capitalize `}
+      className={`lg:sticky lg:top-0 ${
+        isSidebarOpen ? "xl:w-2/12 lg:w-1/5" : "lg:w-[10%]"
+      } h-auto capitalize `}
     >
       {/* for desktop */}
       <div
@@ -154,20 +154,23 @@ const Sidebar = () => {
                   scrollToTop();
                   handleChangeTabTitle(list.title);
                 }}
-                className={`flex items-center ${isSidebarOpen ? "justify-start" : "justify-center"
-                  } ${activeSidebarTab.toLocaleLowerCase() ===
-                    list.title.toLocaleLowerCase()
+                className={`flex items-center ${
+                  isSidebarOpen ? "justify-start" : "justify-center"
+                } ${
+                  activeSidebarTab.toLocaleLowerCase() ===
+                  list.title.toLocaleLowerCase()
                     ? "bg-primaryBlue text-white"
                     : "text-textColor bg-white"
-                  } xl:px-4 px-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
+                } xl:px-4 px-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
                 title={list.title}
               >
                 <list.icon
-                  className={`${activeSidebarTab.toLocaleLowerCase() ===
-                      list.title.toLocaleLowerCase()
+                  className={`${
+                    activeSidebarTab.toLocaleLowerCase() ===
+                    list.title.toLocaleLowerCase()
                       ? "text-white"
                       : "text-textColor"
-                    }`}
+                  }`}
                   size={25}
                 />
                 {isSidebarOpen && <span>{list?.title}</span>}
@@ -185,8 +188,9 @@ const Sidebar = () => {
       {/* for tablet / mobile */}
       <div
         ref={sidebarRef}
-        className={`min-h-screen max-h-[90vh] overflow-y-scroll scrollbar inset-0 absolute md:w-1/2 w-4/5 z-50 bg-white ${isSidebarOpen ? "translate-x-0" : "-translate-x-[100%]"
-          } px-4 transition duration-300 ease-in-out lg:hidden block py-3 shadow-xl`}
+        className={`min-h-screen max-h-[90vh] overflow-y-scroll scrollbar inset-0 absolute md:w-1/2 w-4/5 z-50 bg-white ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-[100%]"
+        } px-4 transition duration-300 ease-in-out lg:hidden block py-3 shadow-xl`}
       >
         {/* profile image */}
         <p
@@ -221,18 +225,20 @@ const Sidebar = () => {
                   scrollToTop();
                 }}
                 className={`flex items-center justify-start whitespace-nowrap
-               ${activeSidebarTab.toLocaleLowerCase() ===
-                    list.title.toLocaleLowerCase()
-                    ? "bg-primaryBlue text-white"
-                    : "text-textColor bg-white"
-                  } px-2 md:py-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
+               ${
+                 activeSidebarTab.toLocaleLowerCase() ===
+                 list.title.toLocaleLowerCase()
+                   ? "bg-primaryBlue text-white"
+                   : "text-textColor bg-white"
+               } px-2 md:py-2 py-1 rounded-md xl:gap-x-5 gap-x-2 w-full font-medium cursor-pointer`}
               >
                 <list.icon
-                  className={`${activeSidebarTab.toLocaleLowerCase() ===
-                      list.title.toLocaleLowerCase()
+                  className={`${
+                    activeSidebarTab.toLocaleLowerCase() ===
+                    list.title.toLocaleLowerCase()
                       ? "text-white"
                       : "text-textColor"
-                    }`}
+                  }`}
                   size={25}
                 />
                 {list?.title}

@@ -180,7 +180,6 @@ const Subscribers = () => {
   return (
     <>
       <Helmet title="Subscribers | Bois news media" />
-
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
         <section
@@ -226,7 +225,7 @@ const Subscribers = () => {
                       <tr>
                         <th className="pl-10 whitespace-nowrap text-left">
                           <label htmlFor="id">
-                            <span>ID</span>
+                            <span>SubscriberID</span>
                           </label>
                         </th>
                         <th className="p-4 pl-10 text-left">{t("Title")}</th>
@@ -249,9 +248,9 @@ const Subscribers = () => {
                             className="border-b last:border-none border-gray-200 w-full text-left pl-10 select-none"
                           >
                             <td className="pl-10 whitespace-nowrap">
-                              <label htmlFor={subscriber?.userId}>
+                              <label htmlFor={subscriber?.subscriberId}>
                                 <span className="font-bold text-center">
-                                  {subscriber?.userId}
+                                  {subscriber?.subscriberId}
                                 </span>
                               </label>
                             </td>
