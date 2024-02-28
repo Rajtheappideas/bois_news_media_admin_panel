@@ -17,7 +17,6 @@ import {
 } from "./redux/GlobalStates";
 import { useTranslation } from "react-i18next";
 import useAbortApiCall from "./hooks/useAbortApiCall";
-<<<<<<< HEAD
 import { handleGetAllUsers } from "./redux/UserSlice";
 import { handleLogout } from "./redux/AuthSlice";
 import { handleGetAllSubscribers } from "./redux/SubscriberSlice";
@@ -29,9 +28,6 @@ import { handleGetAllOrder } from "./redux/OrderSlice";
 import { handleGetAllPromoCodes } from "./redux/PromoCodeSlice";
 import { handleGetAllSubscription } from "./redux/SubscriptionSlice";
 import { handleGetAllPayers } from "./redux/ThirdPartyPayerSlice";
-=======
-import EditInvoice from "./pages/invoices/EditInvoice";
->>>>>>> raj_appideas
 
 const SignIn = lazy(() => import("./pages/SignIn"));
 const SignUp = lazy(() => import("./pages/SignUp"));
@@ -42,7 +38,6 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Magazine = lazy(() => import("./pages/magazines/Magazine"));
-<<<<<<< HEAD
 const EditMagazineDetails = lazy(
   () => import("./pages/magazines/EditMagazineDetails"),
 );
@@ -74,40 +69,6 @@ const EditDetailsSubscription = lazy(
   () => import("./pages/subscriptions/EditDetailsSubscription"),
 );
 const Orders = lazy(() => import("./pages/orders/Orders"));
-=======
-const EditMagazineDetails = lazy(() =>
-  import("./pages/magazines/EditMagazineDetails")
-);
-const TaxtAndShippingCharges = lazy(() =>
-  import("./pages/TaxtAndShippingCharges")
-);
-const Users = lazy(() => import("./pages/users/Users"));
-const EditUserDetails = lazy(() => import("./pages/users/EditUserDetails"));
-const EditSubscriberDetails = lazy(() =>
-  import("./pages/subscribers/EditSubscriberDetails")
-);
-const Subscribers = lazy(() => import("./pages/subscribers/Subscribers"));
-const Prospect = lazy(() => import("./pages/prospects/Prospect"));
-const EditProspectDetails = lazy(() =>
-  import("./pages/prospects/EditProspectDetails")
-);
-const Partners = lazy(() => import("./pages/partners/Partners"));
-const EditPartnerDetails = lazy(() =>
-  import("./pages/partners/EditPartnerDetails")
-);
-const ThirdPartyPayer = lazy(() =>
-  import("./pages/third-party-payer/ThirdPartyPayer")
-);
-const EditDetailsThirdPartyPayer = lazy(() =>
-  import("./pages/third-party-payer/EditDetailsThirdPartyPayer")
-);
-const Subscriptions = lazy(() => import("./pages/subscriptions/Subcriptions"));
-const EditDetailsSubscription = lazy(() =>
-  import("./pages/subscriptions/EditDetailsSubscription")
-);
-const Orders = lazy(() => import("./pages/orders/Orders"));
-const Invoices = lazy(() => import("./pages/invoices/Invoices"));
->>>>>>> raj_appideas
 const PromoCode = lazy(() => import("./pages/PromoCode"));
 const MessagesList = lazy(() => import("./pages/MessagesList"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
@@ -142,11 +103,6 @@ function App() {
     { path: "/third-party-payer/:id", page: EditDetailsThirdPartyPayer },
     { path: "/subscriptions", page: Subscriptions },
     { path: "/subscriptions/:id", page: EditDetailsSubscription },
-<<<<<<< HEAD
-=======
-    { path: "/invoices", page: Invoices },
-    { path: "/invoice/:id", page: EditInvoice },
->>>>>>> raj_appideas
     { path: "/change-password", page: ChangePassword },
   ];
 
@@ -209,7 +165,6 @@ function App() {
                 caseSensitive
               />
             ))}
-<<<<<<< HEAD
 
             {/* <Route caseSensitive path="/profile" element={<Profile />} />
             <Route caseSensitive path="/users" element={<Users />} />
@@ -244,8 +199,6 @@ function App() {
             />
             <Route caseSensitive path="/promo-codes" element={<PromoCode />} />
             <Route caseSensitive path="/messages" element={<MessagesList />} /> */}
-=======
->>>>>>> raj_appideas
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
