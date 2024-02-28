@@ -14,6 +14,8 @@ import GlobalStates from "./GlobalStates";
 import TaxAndShippingSlice from "./TaxAndShippingSlice";
 import PromoCodeSlice from "./PromoCodeSlice";
 import InvoiceSlice from "./InvoiceSlice";
+import CategoryAndTagsSlice from "./CategoryAndTagsSlice";
+import ArticleSlice from "./ArticleSlice";
 
 const globalStatesPersistConfig = {
   key: "globalStates",
@@ -41,6 +43,8 @@ const rootReducer = combineReducers({
   taxAndShipping: TaxAndShippingSlice,
   promoCode: PromoCodeSlice,
   invoice: InvoiceSlice,
+  categoryandtag: CategoryAndTagsSlice,
+  article: ArticleSlice,
 });
 
 // const persisteRoot = persistReducer(rootPersistConfig, rootReducer);
