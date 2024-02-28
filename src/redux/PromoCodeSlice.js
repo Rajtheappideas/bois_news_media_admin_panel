@@ -24,16 +24,41 @@ export const handleGetAllPromoCodes = createAsyncThunk(
 export const handleCreatePromoCode = createAsyncThunk(
   "magazine/handleCreatePromoCode",
   async (
+<<<<<<< HEAD
     { code, discountPercentage, expireDate, token, signal },
+=======
+    {
+      code,
+      discountPercentage,
+      expireDate,
+      subscription,
+      maxUsage,
+      totalMaxUsage,
+      subscribers,
+      token,
+      signal,
+    },
+>>>>>>> raj_appideas
     { rejectWithValue }
   ) => {
     try {
       signal.current = new AbortController();
+<<<<<<< HEAD
+=======
+
+>>>>>>> raj_appideas
       const response = await PostUrl("promo", {
         data: {
           code,
           discountPercentage,
           expireDate,
+<<<<<<< HEAD
+=======
+          maxUsage,
+          totalMaxUsage,
+          subscription,
+          subscribers,
+>>>>>>> raj_appideas
         },
         headers: { Authorization: token },
         signal: signal.current.signal,
@@ -49,7 +74,22 @@ export const handleCreatePromoCode = createAsyncThunk(
 export const handleEditPromoCode = createAsyncThunk(
   "promoCode/handleEditPromoCode",
   async (
+<<<<<<< HEAD
     { code, id, discountPercentage, expireDate, token, signal },
+=======
+    {
+      code,
+      id,
+      discountPercentage,
+      expireDate,
+      maxUsage,
+      totalMaxUsage,
+      subscription,
+      subscribers,
+      token,
+      signal,
+    },
+>>>>>>> raj_appideas
     { rejectWithValue }
   ) => {
     try {
@@ -59,6 +99,13 @@ export const handleEditPromoCode = createAsyncThunk(
           code,
           discountPercentage,
           expireDate,
+<<<<<<< HEAD
+=======
+          maxUsage,
+          totalMaxUsage,
+          subscription,
+          subscribers,
+>>>>>>> raj_appideas
         },
         signal: signal.current.signal,
         headers: {

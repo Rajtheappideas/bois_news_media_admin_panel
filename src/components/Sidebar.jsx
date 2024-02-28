@@ -1,17 +1,29 @@
+<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from "react";
 import { BiHome, BiMessageSquareDots } from "react-icons/bi";
 import { MdSavedSearch } from "react-icons/md";
 import { FaRegHandshake, FaUserAlt } from "react-icons/fa";
+=======
+import React, { useEffect, useRef } from "react";
+import { BiHome, BiMessageSquareDots } from "react-icons/bi";
+import { MdSavedSearch } from "react-icons/md";
+import { FaFileInvoiceDollar, FaRegHandshake, FaUserAlt } from "react-icons/fa";
+>>>>>>> raj_appideas
 import { TbUserDollar } from "react-icons/tb";
 import { CgNotes } from "react-icons/cg";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
 import { RiCoupon3Line } from "react-icons/ri";
 import { HiOutlineXMark } from "react-icons/hi2";
+<<<<<<< HEAD
 import { SlEnvolopeLetter } from "react-icons/sl";
 import { HiOutlineReceiptTax } from "react-icons/hi";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
 import BaseUrl from "../BaseUrl";
+=======
+import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
+import { PublicS3Url } from "../BaseUrl";
+>>>>>>> raj_appideas
 import { useDispatch, useSelector } from "react-redux";
 import {
   handleChagneActiveSidebarTab,
@@ -65,11 +77,20 @@ const Sidebar = () => {
     { title: t("subscriptions"), icon: CgNotes, url: "subscriptions" },
     { title: t("magazines"), icon: GiWhiteBook, url: "magazines" },
     { title: t("orders"), icon: BsCart3, url: "orders" },
+<<<<<<< HEAD
     {
       title: t("tax-shipping"),
       icon: HiOutlineReceiptTax,
       url: "tax-shipping",
     },
+=======
+    { title: t("invoices"), icon: FaFileInvoiceDollar, url: "invoices" },
+    // {
+    //   title: t("tax-shipping"),
+    //   icon: HiOutlineReceiptTax,
+    //   url: "tax-shipping",
+    // },
+>>>>>>> raj_appideas
     { title: t("promo-codes"), icon: RiCoupon3Line, url: "promo-codes" },
     { title: t("messages"), icon: BiMessageSquareDots, url: "messages" },
     // { title: t("newsLetter"), icon: SlEnvolopeLetter },
@@ -134,7 +155,11 @@ const Sidebar = () => {
         >
           {user?.profile !== null && user?.profile !== undefined ? (
             <img
+<<<<<<< HEAD
               src={BaseUrl.concat(user?.profile)}
+=======
+              src={PublicS3Url.concat(user?.profile)}
+>>>>>>> raj_appideas
               alt={user?.name}
               className="md:h-12 md:w-12 h-9 w-9 mx-auto object-contain object-center bg-cover bg-center border rounded-full text-sm"
             />
@@ -202,7 +227,11 @@ const Sidebar = () => {
         >
           {user?.profile !== null && user?.profile !== undefined ? (
             <img
+<<<<<<< HEAD
               src={BaseUrl.concat(user?.profile)}
+=======
+              src={PublicS3Url.concat(user?.profile)}
+>>>>>>> raj_appideas
               alt={user?.name}
               className="md:h-16 md:w-16 h-14 w-14 object-contain object-center border rounded-full text-sm bg-blend-multiply bg-transparent"
             />

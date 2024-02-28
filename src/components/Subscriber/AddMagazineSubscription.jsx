@@ -33,12 +33,16 @@ const AddMagazineSubscription = () => {
   const createSubscribptionSchema = yup.object({
     subscription: yup.string().required(t("subscription is required")).trim(),
     subState: yup.string().required(t("substate is required")).trim(),
+<<<<<<< HEAD
     // prospectState: yup
     //   .string()
     //   .required(t("prospect state is required"))
     //   .trim(),
     // renewDate: yup.string().required(t("renew date is required")).trim(),
     // startDate: yup.string().required(t("start date is required")).trim(),
+=======
+
+>>>>>>> raj_appideas
   });
 
   const {
@@ -50,25 +54,41 @@ const AddMagazineSubscription = () => {
     shouldFocusError: true,
     resolver: yupResolver(createSubscribptionSchema),
     defaultValues: {
+<<<<<<< HEAD
       prospectState: singleSubscription?.prospectState ?? "",
       // renewDate: singleSubscription?.renewDate.split("T")[0] ?? "",
       // startDate: singleSubscription?.startDate.split("T")[0] ?? "",
       subscription: singleSubscription?.subscription?._id ?? "",
       subState: singleSubscription?.subState ?? "",
+=======
+      subscription: singleSubscription?.subscription?._id ?? "",
+      subState: singleSubscription?.subState ?? "",
+      remainingIssues: singleSubscription?.remainingIssues ?? "",
+
+>>>>>>> raj_appideas
     },
   });
 
   const onSubmit = (data) => {
+<<<<<<< HEAD
     const { subscription, subState, prospectState, startDate, renewDate } =
+=======
+    const { subscription, subState, remainingIssues } =
+>>>>>>> raj_appideas
       data;
     if (singleSubscription !== null) {
       const response = dispatch(
         handleEditSubsciption({
           subState,
+<<<<<<< HEAD
           prospectState,
           startDate,
           renewDate,
           subscription,
+=======
+          subscription,
+          remainingIssues,
+>>>>>>> raj_appideas
           id: singleSubscription?._id,
           token,
           signal: AbortControllerRef,
@@ -93,9 +113,13 @@ const AddMagazineSubscription = () => {
           subscriber: singleSucriber?._id,
           subscription,
           subState,
+<<<<<<< HEAD
           prospectState,
           startDate,
           renewDate,
+=======
+          remainingIssues,
+>>>>>>> raj_appideas
           token,
           signal: AbortControllerRef,
         })
@@ -124,7 +148,11 @@ const AddMagazineSubscription = () => {
       document.addEventListener("click", handleClickOutside, true);
       return () => {
         document.removeEventListener("click", handleClickOutside, true);
+<<<<<<< HEAD
         document.removeEventListener("resize", () => {});
+=======
+        document.removeEventListener("resize", () => { });
+>>>>>>> raj_appideas
       };
     };
   }, [handleClickOutside]);
@@ -152,7 +180,10 @@ const AddMagazineSubscription = () => {
           ref={popupRef}
           className={`bg-white overflow-y-scroll scrollbar max-h-[80%] select-none p-4 xl:w-2/5 md:w-1/2 w-11/12 rounded-md absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 md:space-y-3 space-y-1`}
         >
+<<<<<<< HEAD
           {/* title + button */}
+=======
+>>>>>>> raj_appideas
           <div className="flex items-center justify-between w-full">
             <p className="font-semibold text-lg select-none">
               {singleSubscription === null
@@ -168,7 +199,10 @@ const AddMagazineSubscription = () => {
               <AiOutlineClose size={30} />
             </button>
           </div>
+<<<<<<< HEAD
           {/* subscription */}
+=======
+>>>>>>> raj_appideas
           <label htmlFor="subscription" className="Label">
             {t("Subcscription")}
           </label>
@@ -186,7 +220,10 @@ const AddMagazineSubscription = () => {
               ))}
           </select>
           <span className="error">{errors?.subscription?.message}</span>
+<<<<<<< HEAD
           {/* sub / prospect state */}
+=======
+>>>>>>> raj_appideas
           <div className="w-full flex md:flex-row flex-col items-center justify-start gap-3">
             <div className="md:space-y-2 space-y-1 w-full">
               <label htmlFor="sub_state" className="Label">
@@ -200,6 +237,7 @@ const AddMagazineSubscription = () => {
               </select>
               <span className="error">{errors?.subState?.message}</span>
             </div>
+<<<<<<< HEAD
             {/* <div className="md:space-y-2 space-y-1 md:w-1/2 w-full">
               <label htmlFor="prospect_state" className="Label">
                 {t("Prospect state")}
@@ -244,6 +282,21 @@ const AddMagazineSubscription = () => {
             </div>
           </div> */}
           {/* button */}
+=======
+          </div>
+
+          <div className="w-full flex md:flex-row flex-col items-center justify-start gap-3">
+            <div className="md:space-y-2 space-y-1 w-full">
+              <label htmlFor="remaining_issues" className="Label">
+                {t("Remaining Issues")}
+              </label>
+              <input type="number"  {...register("remainingIssues", {
+                valueAsNumber: true,
+              })} className="input_field" />
+              <span className="error">{errors?.remainingIssues?.message}</span>
+            </div>
+          </div>
+>>>>>>> raj_appideas
           <button
             type="submit"
             className="bg-primaryBlue text-white font-medium text-center md:h-12 h-10 rounded-lg p-2 hover:bg-primaryBlue/80 active:scale-95 transition w-full"

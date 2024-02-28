@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { HiPencil } from "react-icons/hi";
+<<<<<<< HEAD
 import BaseUrl from "../../BaseUrl";
+=======
+import { PublicS3Url } from "../../BaseUrl";
+>>>>>>> raj_appideas
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
@@ -135,7 +139,11 @@ const EditUserDetails = () => {
         city,
         zipCode,
         country,
+<<<<<<< HEAD
         id: singleUser?.state?._id,
+=======
+        id: singleUser?._id,
+>>>>>>> raj_appideas
         token,
         signal: AbortControllerRef,
       })
@@ -227,9 +235,14 @@ const EditUserDetails = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
+<<<<<<< HEAD
             className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
               isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
             }`}
+=======
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
+>>>>>>> raj_appideas
           >
             <Header />
             <form
@@ -243,10 +256,16 @@ const EditUserDetails = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
+<<<<<<< HEAD
                     className={`gray_button  ${
                       deleteUserLoading ||
                       (EditUserLoading && "cursor-not-allowed")
                     }`}
+=======
+                    className={`gray_button  ${deleteUserLoading ||
+                      (EditUserLoading && "cursor-not-allowed")
+                      }`}
+>>>>>>> raj_appideas
                     type="button"
                     onClick={() => {
                       handleOnClickCancel();
@@ -257,18 +276,28 @@ const EditUserDetails = () => {
                   </button>
                   <button
                     disabled={deleteUserLoading || EditUserLoading}
+<<<<<<< HEAD
                     className={`green_button  ${
                       EditUserLoading && "cursor-not-allowed"
                     }`}
+=======
+                    className={`green_button  ${EditUserLoading && "cursor-not-allowed"
+                      }`}
+>>>>>>> raj_appideas
                     type="submit"
                   >
                     {EditUserLoading ? t("Saving").concat("...") : t("Save")}
                   </button>
                   {userRole === "admin" && (
                     <button
+<<<<<<< HEAD
                       className={`red_button  ${
                         deleteUserLoading && "cursor-not-allowed"
                       }`}
+=======
+                      className={`red_button  ${deleteUserLoading && "cursor-not-allowed"
+                        }`}
+>>>>>>> raj_appideas
                       type="button"
                       onClick={() =>
                         handleDeleteruser(
@@ -297,7 +326,11 @@ const EditUserDetails = () => {
                   ) : singleUser?.profile !== null &&
                     singleUser?.profile !== undefined ? (
                     <img
+<<<<<<< HEAD
                       src={BaseUrl.concat(singleUser?.profile)}
+=======
+                      src={PublicS3Url.concat(singleUser?.profile)}
+>>>>>>> raj_appideas
                       alt={singleUser?.name}
                       className="rounded-full border object-contain object-center bg-cover bg-center inline-block md:h-24 md:w-24 w-20 h-20"
                     />
@@ -402,7 +435,11 @@ const EditUserDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
+<<<<<<< HEAD
                           country={"us"}
+=======
+                          country={"fr"}
+>>>>>>> raj_appideas
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("phone", "+".concat(value));

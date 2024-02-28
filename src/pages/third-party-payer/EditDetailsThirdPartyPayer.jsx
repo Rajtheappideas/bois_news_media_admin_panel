@@ -225,9 +225,14 @@ const EditDetailsThirdPartyPayer = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
+<<<<<<< HEAD
             className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
               isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
             }`}
+=======
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
+>>>>>>> raj_appideas
           >
             <Header />
             <form
@@ -241,10 +246,16 @@ const EditDetailsThirdPartyPayer = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
                   <button
+<<<<<<< HEAD
                     className={`gray_button ${
                       (editPayerLoading || deletePayerLoading) &&
                       "cursor-not-allowed"
                     } `}
+=======
+                    className={`gray_button ${(editPayerLoading || deletePayerLoading) &&
+                      "cursor-not-allowed"
+                      } `}
+>>>>>>> raj_appideas
                     onClick={() => {
                       handleOnClickCancel();
                     }}
@@ -254,10 +265,16 @@ const EditDetailsThirdPartyPayer = () => {
                     {t("Cancel")}
                   </button>
                   <button
+<<<<<<< HEAD
                     className={`green_button ${
                       (editPayerLoading || deletePayerLoading) &&
                       "cursor-not-allowed"
                     }`}
+=======
+                    className={`green_button ${(editPayerLoading || deletePayerLoading) &&
+                      "cursor-not-allowed"
+                      }`}
+>>>>>>> raj_appideas
                     disabled={editPayerLoading || deletePayerLoading}
                     type="submit"
                   >
@@ -354,7 +371,11 @@ const EditDetailsThirdPartyPayer = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
+<<<<<<< HEAD
                           country={"us"}
+=======
+                          country={"fr"}
+>>>>>>> raj_appideas
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("mobile", "+".concat(value));

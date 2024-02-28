@@ -32,6 +32,10 @@ export const handleGetMagazineById = createAsyncThunk(
           Authorization: token,
         },
       });
+<<<<<<< HEAD
+=======
+
+>>>>>>> raj_appideas
       return response.data;
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -52,6 +56,10 @@ export const handleAddNewMagazine = createAsyncThunk(
       stock,
       status,
       description,
+<<<<<<< HEAD
+=======
+      detailDescription,
+>>>>>>> raj_appideas
       image,
       token,
       signal,
@@ -71,6 +79,10 @@ export const handleAddNewMagazine = createAsyncThunk(
           status,
           description,
           image,
+<<<<<<< HEAD
+=======
+          detailDescription,
+>>>>>>> raj_appideas
         },
         signal: signal.current.signal,
         headers: {
@@ -102,6 +114,10 @@ export const handleEditMagazine = createAsyncThunk(
       stock,
       status,
       description,
+<<<<<<< HEAD
+=======
+      detailDescription,
+>>>>>>> raj_appideas
       image,
       id,
       token,
@@ -122,6 +138,10 @@ export const handleEditMagazine = createAsyncThunk(
           status,
           description,
           image,
+<<<<<<< HEAD
+=======
+          detailDescription,
+>>>>>>> raj_appideas
         },
         signal: signal.current.signal,
         headers: {

@@ -73,6 +73,10 @@ const Partners = () => {
   };
 
   const handleDeletepartner = (id, name) => {
+<<<<<<< HEAD
+=======
+    console.log(name);
+>>>>>>> raj_appideas
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
 
@@ -282,7 +286,11 @@ const Partners = () => {
                                   onClick={() =>
                                     handleDeletepartner(
                                       partner?._id,
+<<<<<<< HEAD
                                       partner?.name,
+=======
+                                      partner?.fname.concat(partner?.lname),
+>>>>>>> raj_appideas
                                     )
                                   }
                                   disabled={

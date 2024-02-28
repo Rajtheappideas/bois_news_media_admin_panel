@@ -15,10 +15,16 @@ import { useTranslation } from "react-i18next";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
+<<<<<<< HEAD
   const [loading,setLoading] = useState(false)
 
 
   const {  user, error } = useSelector((state) => state.root.auth);
+=======
+  const [loading, setLoading] = useState(false);
+
+  const { user, error } = useSelector((state) => state.root.auth);
+>>>>>>> raj_appideas
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,6 +48,10 @@ const SignUp = () => {
     name: yup.string().required(t("Name is required")).trim(),
   });
 
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> raj_appideas
   const {
     register,
     handleSubmit,
@@ -53,7 +63,11 @@ const SignUp = () => {
 
   const onSubmit = (data) => {
     const { email, name, role, password } = data;
+<<<<<<< HEAD
     setLoading(true)
+=======
+    setLoading(true);
+>>>>>>> raj_appideas
     const response = dispatch(
       handleRegisterUser({
         name,
@@ -68,6 +82,7 @@ const SignUp = () => {
         if (res?.payload?.status === "success") {
           toast.success(t("Sign up Successfully."), { duration: 2000 });
           dispatch(handleSuccess());
+<<<<<<< HEAD
     setLoading(false)
     
     navigate("/");
@@ -78,6 +93,17 @@ const SignUp = () => {
   setLoading(false)
   
 });
+=======
+          setLoading(false);
+
+          navigate("/");
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+          setLoading(false);
+        }
+        setLoading(false);
+      });
+>>>>>>> raj_appideas
     }
   };
 
@@ -87,7 +113,10 @@ const SignUp = () => {
       navigate("/");
     }
     return () => {
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
       abortApiCall();
     };
   }, []);

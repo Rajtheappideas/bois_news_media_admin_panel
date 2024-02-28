@@ -1,6 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
+<<<<<<< HEAD
 import BaseUrl from "../../BaseUrl";
+=======
+import { PublicS3Url } from "../../BaseUrl";
+>>>>>>> raj_appideas
 import { useTranslation } from "react-i18next";
 
 const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
@@ -45,12 +49,17 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
             </label>
             <div className="relative md:w-24 w-20 h-24 block">
               <img
+<<<<<<< HEAD
                 src={BaseUrl.concat(image)}
+=======
+                src={PublicS3Url.concat(image)}
+>>>>>>> raj_appideas
                 alt="image"
                 className="rounded-full object-contain object-center md:h-24 md:w-24 w-20 h-20 border"
               />
             </div>
           </div>
+<<<<<<< HEAD
           {/* pdf */}
           {/* <div className="text-center">
             <label htmlFor="pdf" className="Label">
@@ -63,6 +72,8 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
               </p>
             </div>
           </div> */}
+=======
+>>>>>>> raj_appideas
         </div>
         <p className="font-bold text-black md:text-xl">
           {t("Magazine details")}
@@ -72,42 +83,66 @@ const ShowMagazineDetails = ({ setShowMagazineDetails }) => {
           {/* title */}
           <div className="w-full space-y-2">
             <label htmlFor="title" className="Label">
+<<<<<<< HEAD
             {t("title")}
+=======
+              {t("title")}
+>>>>>>> raj_appideas
             </label>
             <p className="font-semibold">{title}</p>
           </div>
           {/* price */}
           <div className="w-full space-y-2">
             <label htmlFor="price" className="Label">
+<<<<<<< HEAD
             {t("price")}
+=======
+              {t("price")}
+>>>>>>> raj_appideas
             </label>
             <p className="font-semibold">{price}</p>
           </div>
           {/* stock */}
           <div className="w-full space-y-2">
             <label htmlFor="stock" className="Label">
+<<<<<<< HEAD
             {t("stock")}
+=======
+              {t("stock")}
+>>>>>>> raj_appideas
             </label>
             <p className="font-semibold">{stock}</p>
           </div>
           {/* status */}
           <div className="w-full space-y-2">
             <label htmlFor="status" className="Label">
+<<<<<<< HEAD
             {t("status")}
+=======
+              {t("status")}
+>>>>>>> raj_appideas
             </label>
             <p className="font-semibold">{status}</p>
           </div>
           {/* magazines */}
           <div className="w-full space-y-2">
             <label htmlFor="magazineTitle" className="Label">
+<<<<<<< HEAD
             {t("Magazine")}
+=======
+              {t("Magazine")}
+>>>>>>> raj_appideas
             </label>
             <p className="font-semibold">{magazineTitle}</p>
           </div>
           {/* summary */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="summary" className="Label">
+<<<<<<< HEAD
             {t("summary")}
+=======
+              {t("summary")}
+>>>>>>> raj_appideas
             </label>
             <p className="font-semibold">{description}</p>
           </div>

@@ -1,7 +1,11 @@
 import React from "react";
 import { handleFindUser } from "../../redux/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
+<<<<<<< HEAD
 import BaseUrl from "../../BaseUrl";
+=======
+import { PublicS3Url } from "../../BaseUrl";
+>>>>>>> raj_appideas
 import { useTranslation } from "react-i18next";
 
 const ShowUsersDetailsOnly = ({ setShowUserDetailsOnly }) => {
@@ -45,7 +49,11 @@ const ShowUsersDetailsOnly = ({ setShowUserDetailsOnly }) => {
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
         <div className="relative md:w-24 w-20 block">
           <img
+<<<<<<< HEAD
             src={BaseUrl.concat(profile)}
+=======
+            src={PublicS3Url.concat(profile)}
+>>>>>>> raj_appideas
             alt={name}
             className="rounded-full border object-contain object-center md:h-24 md:w-24 w-20 h-20"
           />

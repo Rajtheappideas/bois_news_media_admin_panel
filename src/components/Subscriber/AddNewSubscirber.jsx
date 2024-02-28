@@ -325,17 +325,27 @@ const AddNewSubscirber = ({
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
+<<<<<<< HEAD
             className={`gray_button ${
               addNewSubscriberLoading && "cursor-not-allowed"
             }`}
+=======
+            className={`gray_button ${addNewSubscriberLoading && "cursor-not-allowed"
+              }`}
+>>>>>>> raj_appideas
             onClick={() => setShowAddNewSubscriber(false)}
           >
             {t("Cancel")}
           </button>
           <button
+<<<<<<< HEAD
             className={`green_button ${
               addNewSubscriberLoading && "cursor-not-allowed"
             }`}
+=======
+            className={`green_button ${addNewSubscriberLoading && "cursor-not-allowed"
+              }`}
+>>>>>>> raj_appideas
             type="submit"
           >
             {addNewSubscriberLoading ? t("Saving").concat("...") : t("Save")}
@@ -450,7 +460,11 @@ const AddNewSubscirber = ({
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput
+<<<<<<< HEAD
                   country={"us"}
+=======
+                  country={"fr"}
+>>>>>>> raj_appideas
                   onChange={(value) => {
                     onChange((e) => {
                       setValue("phone", "+".concat(value));
@@ -490,7 +504,11 @@ const AddNewSubscirber = ({
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput
+<<<<<<< HEAD
                   country={"us"}
+=======
+                  country={"fr"}
+>>>>>>> raj_appideas
                   onChange={(value) => {
                     onChange((e) => {
                       setValue("mobile", "+".concat(value));
@@ -794,7 +812,11 @@ const AddNewSubscirber = ({
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput
+<<<<<<< HEAD
                   country={"us"}
+=======
+                  country={"fr"}
+>>>>>>> raj_appideas
                   onChange={(value) => {
                     onChange((e) => {
                       setValue("accountingPhone", "+".concat(value));

@@ -1,7 +1,11 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+<<<<<<< HEAD
 import BaseUrl from "../../BaseUrl";
+=======
+import { PublicS3Url } from "../../BaseUrl";
+>>>>>>> raj_appideas
 
 const ShowSubscriptionDetails = ({ setShowSubscriptionDetails }) => {
   const { singleSubscription } = useSelector(
@@ -33,7 +37,11 @@ const ShowSubscriptionDetails = ({ setShowSubscriptionDetails }) => {
       <div className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-3">
         <div className="relative md:w-24 w-20 block">
           <img
+<<<<<<< HEAD
             src={BaseUrl.concat(image)}
+=======
+            src={PublicS3Url.concat(image)}
+>>>>>>> raj_appideas
             alt=""
             className="rounded-full md:h-24 md:w-24 w-20 h-20 border"
           />
@@ -64,10 +72,17 @@ const ShowSubscriptionDetails = ({ setShowSubscriptionDetails }) => {
             </label>
             <p className="font-semibold">{status}</p>
           </div>
+<<<<<<< HEAD
           {/* discriptions */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="discriptions" className="Label">
               {t("discriptions")}
+=======
+          {/* descriptions */}
+          <div className="w-full col-span-full space-y-2">
+            <label htmlFor="descriptions" className="Label">
+              {t("descriptions")}
+>>>>>>> raj_appideas
             </label>
 
             <p className="font-semibold">{description}</p>

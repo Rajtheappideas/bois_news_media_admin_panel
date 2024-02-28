@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+<<<<<<< HEAD
 import EditSubscriberDetails from "./EditSubscriberDetails";
+=======
+>>>>>>> raj_appideas
 import AddNewSubscirber from "../../components/Subscriber/AddNewSubscirber";
 import Search from "../../components/Search";
 import ReactPaginate from "react-paginate";
@@ -26,6 +29,11 @@ import Header from "../../components/Header";
 import { handleLogout } from "../../redux/AuthSlice";
 import { handleLogoutFromAllTabs } from "../../redux/GlobalStates";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
+=======
+import { handleGetAllPayers } from "../../redux/ThirdPartyPayerSlice";
+import { handleGetAllSubscription } from "../../redux/SubscriptionSlice";
+>>>>>>> raj_appideas
 
 const Subscribers = () => {
   const [showAddNewSubscriber, setShowAddNewSubscriber] = useState(false);
@@ -44,7 +52,11 @@ const Subscribers = () => {
 
   const { token, role } = useSelector((state) => state.root.auth);
   const { fileterdData, isSidebarOpen } = useSelector(
+<<<<<<< HEAD
     (state) => state.root.globalStates,
+=======
+    (state) => state.root.globalStates
+>>>>>>> raj_appideas
   );
 
   const { AbortControllerRef } = useAbortApiCall();
@@ -84,7 +96,11 @@ const Subscribers = () => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
+<<<<<<< HEAD
         handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef }),
+=======
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
       );
       if (response) {
         response.then((res) => {
@@ -103,7 +119,11 @@ const Subscribers = () => {
     if (singleSucriberLoading) return;
     toast.loading("Fetching...", { duration: Infinity });
     const response = dispatch(
+<<<<<<< HEAD
       handleGetSubscriberById({ id, token, signal: AbortControllerRef }),
+=======
+      handleGetSubscriberById({ id, token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -126,7 +146,11 @@ const Subscribers = () => {
   // fetch subscribers
   useEffect(() => {
     const response = dispatch(
+<<<<<<< HEAD
       handleGetAllSubscribers({ token, signal: AbortControllerRef }),
+=======
+      handleGetAllSubscribers({ token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -141,12 +165,48 @@ const Subscribers = () => {
         }
       });
     }
+<<<<<<< HEAD
+=======
+    const responsePayer = dispatch(
+      handleGetAllPayers({ token, signal: AbortControllerRef })
+    );
+    if (responsePayer) {
+      responsePayer.then((res) => {
+        if (
+          res?.payload?.status === "fail" &&
+          (res?.payload?.message === "Please provide authentication token." ||
+            res?.payload?.message === "Invalid token.")
+        ) {
+          dispatch(handleLogout());
+          dispatch(handleLogoutFromAllTabs());
+          toast.error("Please login again");
+        }
+      });
+    }
+    const responseSubscription = dispatch(
+      handleGetAllSubscription({ token, signal: AbortControllerRef })
+    );
+    if (responseSubscription) {
+      responseSubscription.then((res) => {
+        if (
+          res?.payload?.status === "fail" &&
+          (res?.payload?.message === "Please provide authentication token." ||
+            res?.payload?.message === "Invalid token.")
+        ) {
+          dispatch(handleLogout());
+          dispatch(handleLogoutFromAllTabs());
+          toast.error("Please login again");
+        }
+      });
+    }
+>>>>>>> raj_appideas
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
       <Helmet title="Subscribers | Bois news media" />
+<<<<<<< HEAD
 
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
         <Sidebar />
@@ -154,6 +214,13 @@ const Subscribers = () => {
           className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
             isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
           }`}
+=======
+      <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
+        <Sidebar />
+        <section
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
+>>>>>>> raj_appideas
         >
           <Header />
           <div className="lg:p-5 p-3 ">
@@ -194,7 +261,11 @@ const Subscribers = () => {
                       <tr>
                         <th className="pl-10 whitespace-nowrap text-left">
                           <label htmlFor="id">
+<<<<<<< HEAD
                             <span>ID</span>
+=======
+                            <span>SubscriberID</span>
+>>>>>>> raj_appideas
                           </label>
                         </th>
                         <th className="p-4 pl-10 text-left">{t("Title")}</th>
@@ -217,15 +288,25 @@ const Subscribers = () => {
                             className="border-b last:border-none border-gray-200 w-full text-left pl-10 select-none"
                           >
                             <td className="pl-10 whitespace-nowrap">
+<<<<<<< HEAD
                               <label htmlFor={subscriber?.userId}>
                                 <span className="font-bold text-center">
                                   {subscriber?.userId}
+=======
+                              <label htmlFor={subscriber?.subscriberId}>
+                                <span className="font-bold text-center">
+                                  {subscriber?.subscriberId}
+>>>>>>> raj_appideas
                                 </span>
                               </label>
                             </td>
 
                             <td className="text-left p-4 pl-10 whitespace-nowrap">
+<<<<<<< HEAD
                               {subscriber?.title !== ""
+=======
+                              {subscriber?.title
+>>>>>>> raj_appideas
                                 ? subscriber?.title
                                 : "-"}
                             </td>
@@ -250,7 +331,11 @@ const Subscribers = () => {
                                     // );
                                     handleFetchSingleSubscriber(
                                       subscriber?._id,
+<<<<<<< HEAD
                                       subscriber?.userId,
+=======
+                                      subscriber?.userId
+>>>>>>> raj_appideas
                                     );
                                   }}
                                   type="button"
@@ -267,7 +352,11 @@ const Subscribers = () => {
                                   onClick={() => {
                                     setShowSubscriberDetails(true);
                                     dispatch(
+<<<<<<< HEAD
                                       handleFindSubscriber(subscriber?._id),
+=======
+                                      handleFindSubscriber(subscriber?._id)
+>>>>>>> raj_appideas
                                     );
                                   }}
                                   type="button"
@@ -289,8 +378,13 @@ const Subscribers = () => {
                                     handleDeletesubscriber(
                                       subscriber?._id,
                                       subscriber?.fname.concat(
+<<<<<<< HEAD
                                         subscriber?.lname,
                                       ),
+=======
+                                        subscriber?.lname
+                                      )
+>>>>>>> raj_appideas
                                     )
                                   }
                                   disabled={
@@ -300,7 +394,11 @@ const Subscribers = () => {
                                   }
                                 >
                                   {deleteLoading &&
+<<<<<<< HEAD
                                   subscriber?._id === deleteSubscriberID ? (
+=======
+                                    subscriber?._id === deleteSubscriberID ? (
+>>>>>>> raj_appideas
                                     "..."
                                   ) : (
                                     <RiDeleteBin6Line
@@ -332,9 +430,15 @@ const Subscribers = () => {
                         ? subscribers?.length
                         : (pageNumber + 1) * subscribersPerPage
                       : (pageNumber + 1) * subscribersPerPage >
+<<<<<<< HEAD
                           fileterdData?.length
                         ? fileterdData?.length
                         : (pageNumber + 1) * subscribersPerPage}{" "}
+=======
+                        fileterdData?.length
+                      ? fileterdData?.length
+                      : (pageNumber + 1) * subscribersPerPage}{" "}
+>>>>>>> raj_appideas
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? subscribers?.length

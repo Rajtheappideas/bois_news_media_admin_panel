@@ -34,6 +34,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import AddMagazineSubscription from "../../components/Subscriber/AddMagazineSubscription";
+<<<<<<< HEAD
+=======
+import { handleGetAllPayers } from "../../redux/ThirdPartyPayerSlice";
+>>>>>>> raj_appideas
 
 const EditSubscriberDetails = () => {
   const {
@@ -69,7 +73,11 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("FirstName can only contain Latin letters."),
+=======
+        t("FirstName can only contain Latin letters.")
+>>>>>>> raj_appideas
       ),
     lname: yup
       .string()
@@ -80,7 +88,11 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("LastName can only contain Latin letters."),
+=======
+        t("LastName can only contain Latin letters.")
+>>>>>>> raj_appideas
       ),
     civility: yup.string().required(t("Civility is required")),
     title: yup.string().trim().max(60, t("Max character limit reached")),
@@ -100,20 +112,32 @@ const EditSubscriberDetails = () => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("city can only contain Latin letters."),
+=======
+        t("city can only contain Latin letters.")
+>>>>>>> raj_appideas
       )
       .required(t("city is required")),
     province: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("province can only contain Latin letters."),
+=======
+        t("province can only contain Latin letters.")
+>>>>>>> raj_appideas
       ),
     country: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("country can only contain Latin letters."),
+=======
+        t("country can only contain Latin letters.")
+>>>>>>> raj_appideas
       )
       .required(t("country is required")),
     baddress1: yup
@@ -128,20 +152,32 @@ const EditSubscriberDetails = () => {
       .max(40, t("Maximum character limit reached"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("city can only contain Latin letters."),
+=======
+        t("city can only contain Latin letters.")
+>>>>>>> raj_appideas
       )
       .required(t("city is required")),
     bprovince: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("province can only contain Latin letters."),
+=======
+        t("province can only contain Latin letters.")
+>>>>>>> raj_appideas
       ),
     bcountry: yup
       .string()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("country can only contain Latin letters."),
+=======
+        t("country can only contain Latin letters.")
+>>>>>>> raj_appideas
       )
       .required(t("country is required")),
     sameAsAbove: yup.boolean(),
@@ -152,7 +188,11 @@ const EditSubscriberDetails = () => {
       .typeError(t("Only characters allowed"))
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+<<<<<<< HEAD
         t("accountContactName can only contain Latin letters."),
+=======
+        t("accountContactName can only contain Latin letters.")
+>>>>>>> raj_appideas
       ),
     accountingEmail: yup.string().email(),
     accountingPhone: yup.string(),
@@ -185,7 +225,11 @@ const EditSubscriberDetails = () => {
       company: singleSucriber?.company,
       phone: singleSucriber?.phone,
       mobile: singleSucriber?.mobile,
+<<<<<<< HEAD
       thirdPartyPayer: singleSucriber?.thirdPartyPayer || undefined,
+=======
+      thirdPartyPayer: singleSucriber?.thirdPartyPayer?._id,
+>>>>>>> raj_appideas
       title: singleSucriber?.title,
       email: singleSucriber?.email,
       civility: singleSucriber?.civility,
@@ -266,6 +310,10 @@ const EditSubscriberDetails = () => {
       toast.error("Phone is invalid");
       return true;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> raj_appideas
     const response = dispatch(
       handleEditSubscriber({
         fname,
@@ -304,14 +352,22 @@ const EditSubscriberDetails = () => {
         id: state?._id,
         token,
         signal: AbortControllerRef,
+<<<<<<< HEAD
       }),
+=======
+      })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
           toast.success(
             ` ${fname.concat(lname)} ${t("subscriber edited successfully.")}`,
+<<<<<<< HEAD
             { duration: 2000 },
+=======
+            { duration: 2000 }
+>>>>>>> raj_appideas
           );
         } else if (res?.payload?.status === "error") {
           toast.error(res?.payload?.message);
@@ -324,7 +380,11 @@ const EditSubscriberDetails = () => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
       const response = dispatch(
+<<<<<<< HEAD
         handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef }),
+=======
+        handleDeleteSUBSCRIBER({ id, token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
       );
       if (response) {
         response.then((res) => {
@@ -344,7 +404,11 @@ const EditSubscriberDetails = () => {
     dispatch(handleChangeDeleteSubscriptionID(id));
 
     const response = dispatch(
+<<<<<<< HEAD
       handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef }),
+=======
+      handleDeleteSUBSCRIPTION({ id, token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -365,7 +429,11 @@ const EditSubscriberDetails = () => {
         id: state?._id,
         token,
         signal: AbortControllerRef,
+<<<<<<< HEAD
       }),
+=======
+      })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -391,7 +459,11 @@ const EditSubscriberDetails = () => {
   const handleShowMagazinePopupForEditSubscription = (subscriptionId) => {
     dispatch(handleChangeMagazineDistributionPopup(true));
     dispatch(
+<<<<<<< HEAD
       handleFindSubscription({ subscriberId: state?._id, subscriptionId }),
+=======
+      handleFindSubscription({ subscriberId: state?._id, subscriptionId })
+>>>>>>> raj_appideas
     );
   };
 
@@ -401,6 +473,12 @@ const EditSubscriberDetails = () => {
     if (state === null) {
       navigate("/subscribers");
     }
+<<<<<<< HEAD
+=======
+
+    dispatch(handleGetAllPayers({ token, signal: AbortControllerRef }));
+
+>>>>>>> raj_appideas
     return () => {
       abortApiCall();
     };
@@ -460,7 +538,11 @@ const EditSubscriberDetails = () => {
                       onClick={() =>
                         handleDeletesubscriber(
                           state?._id,
+<<<<<<< HEAD
                           singleSucriber?.fname.concat(singleSucriber?.lname),
+=======
+                          singleSucriber?.fname.concat(singleSucriber?.lname)
+>>>>>>> raj_appideas
                         )
                       }
                     >
@@ -579,7 +661,11 @@ const EditSubscriberDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
+<<<<<<< HEAD
                           country={"us"}
+=======
+                          country={"fr"}
+>>>>>>> raj_appideas
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("phone", "+".concat(value));
@@ -620,7 +706,11 @@ const EditSubscriberDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
+<<<<<<< HEAD
                           country={"us"}
+=======
+                          country={"fr"}
+>>>>>>> raj_appideas
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("mobile", "+".concat(value));
@@ -873,11 +963,18 @@ const EditSubscriberDetails = () => {
                         payers.length > 0 &&
                         payers.map((payer) => (
                           <option
+<<<<<<< HEAD
                             key={payer?.state?._id}
                             value={payer?.state?._id}
                             selected={
                               payer?.state?._id ===
                               singleSucriber?.thirdPartyPayer?.state?._id
+=======
+                            key={payer?._id}
+                            value={payer?._id}
+                            selected={
+                              payer?._id == singleSucriber?.thirdPartyPayer?._id
+>>>>>>> raj_appideas
                             }
                           >
                             {payer?.accountName}
@@ -935,7 +1032,11 @@ const EditSubscriberDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
+<<<<<<< HEAD
                           country={"us"}
+=======
+                          country={"fr"}
+>>>>>>> raj_appideas
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("accountingPhone", "+".concat(value));
@@ -967,7 +1068,11 @@ const EditSubscriberDetails = () => {
                       {t("VAT Number")}{" "}
                     </label>
                     <input
+<<<<<<< HEAD
                       type="number"
+=======
+                      type="text"
+>>>>>>> raj_appideas
                       placeholder={t("Type here...")}
                       className="input_field"
                       {...register("VATnumber")}
@@ -1106,7 +1211,11 @@ const EditSubscriberDetails = () => {
                       singleSucriber?.subscriptions.length > 0 ? (
                         singleSucriber?.subscriptions.map((subscription) => (
                           <tr
+<<<<<<< HEAD
                             key={subscription?.state?._id}
+=======
+                            key={subscription?._id}
+>>>>>>> raj_appideas
                             className="border-b last:border-0 border-gray-200 w-full text-left"
                           >
                             <td className="p-4 whitespace-nowrap">
@@ -1123,7 +1232,11 @@ const EditSubscriberDetails = () => {
                               <button
                                 onClick={() =>
                                   handleShowMagazinePopupForEditSubscription(
+<<<<<<< HEAD
                                     subscription?.state?._id,
+=======
+                                    subscription?._id
+>>>>>>> raj_appideas
                                   )
                                 }
                                 type="button"
@@ -1136,6 +1249,7 @@ const EditSubscriberDetails = () => {
                                   className="inline-block mr-1"
                                 />
                               </button>
+<<<<<<< HEAD
                               {/* <button
                         type="button"
                         className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
@@ -1158,6 +1272,32 @@ const EditSubscriberDetails = () => {
                           />
                         )}
                       </button> */}
+=======
+                              {
+                                <button
+                                  type="button"
+                                  className="hover:bg-red-200 p-1 rounded-full h-10 w-10"
+                                  disabled={deleteLoading}
+                                  onClick={() =>
+                                    handleDeletesubscription(
+                                      subscription?._id,
+                                      subscription?.subscription?.title
+                                    )
+                                  }
+                                >
+                                  {deleteLoading &&
+                                  subscription?._id === deleteSubscriptionID ? (
+                                    "..."
+                                  ) : (
+                                    <RiDeleteBin6Line
+                                      color="red"
+                                      size={30}
+                                      className="inline-block"
+                                    />
+                                  )}
+                                </button>
+                              }
+>>>>>>> raj_appideas
                             </td>
                           </tr>
                         ))

@@ -290,9 +290,14 @@ const EditPartnerDetails = () => {
         <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
           <Sidebar />
           <section
+<<<<<<< HEAD
             className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
               isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
             }`}
+=======
+            className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+              }`}
+>>>>>>> raj_appideas
           >
             <Header />
             <form
@@ -321,10 +326,16 @@ const EditPartnerDetails = () => {
                   </button>
                   {role === "admin" && (
                     <button
+<<<<<<< HEAD
                       className={`red_button ${
                         (editPartnerLoading || deletePartnerLoading) &&
                         "cursor-not-allowed"
                       }`}
+=======
+                      className={`red_button ${(editPartnerLoading || deletePartnerLoading) &&
+                        "cursor-not-allowed"
+                        }`}
+>>>>>>> raj_appideas
                       disabled={deletePartnerLoading || editPartnerLoading}
                       onClick={() => handleDeletepartner(state?._id)}
                     >
@@ -466,7 +477,11 @@ const EditPartnerDetails = () => {
                       }}
                       render={({ field: { onChange, value } }) => (
                         <PhoneInput
+<<<<<<< HEAD
                           country={"us"}
+=======
+                          country={"fr"}
+>>>>>>> raj_appideas
                           onChange={(value) => {
                             onChange((e) => {
                               setValue("mobile", "+".concat(value));

@@ -28,6 +28,10 @@ export const handleCreateOrder = createAsyncThunk(
       subscriber,
       items,
       VAT,
+<<<<<<< HEAD
+=======
+      companyName,
+>>>>>>> raj_appideas
       purchaseOrder,
       orderNotes,
       paymentMethod,
@@ -44,6 +48,10 @@ export const handleCreateOrder = createAsyncThunk(
           subscriber,
           items,
           VAT,
+<<<<<<< HEAD
+=======
+          companyName,
+>>>>>>> raj_appideas
           purchaseOrder,
           orderNotes,
           paymentMethod,
@@ -121,8 +129,13 @@ const OrderSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+<<<<<<< HEAD
     // get all payers
     builder.addCase(handleGetAllOrder.pending, (state, {}) => {
+=======
+    // get all orders
+    builder.addCase(handleGetAllOrder.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -140,7 +153,11 @@ const OrderSlice = createSlice({
       state.error = payload ?? null;
     });
     // create order
+<<<<<<< HEAD
     builder.addCase(handleCreateOrder.pending, (state, {}) => {
+=======
+    builder.addCase(handleCreateOrder.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.createLoading = true;
       state.success = false;
       state.error = null;
@@ -157,7 +174,11 @@ const OrderSlice = createSlice({
       state.error = payload ?? null;
     });
     // update order status
+<<<<<<< HEAD
     builder.addCase(handleUpdateOrderStatus.pending, (state, {}) => {
+=======
+    builder.addCase(handleUpdateOrderStatus.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.updateLoading = true;
       state.success = false;
       state.error = null;

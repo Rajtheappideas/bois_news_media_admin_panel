@@ -274,7 +274,11 @@ const Prospect = () => {
                                   onClick={() =>
                                     handleDeleteprospect(
                                       prospect?._id,
+<<<<<<< HEAD
                                       prospect?.name,
+=======
+                                      prospect?.fname.concat(prospect?.lname),
+>>>>>>> raj_appideas
                                     )
                                   }
                                   disabled={

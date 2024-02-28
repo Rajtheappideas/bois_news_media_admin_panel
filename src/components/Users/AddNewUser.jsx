@@ -165,9 +165,14 @@ const AddNewUser = ({ setShowAddNewUser }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
+<<<<<<< HEAD
             className={`gray_button ${
               addNewUserLoading && "cursor-not-allowed"
             }`}
+=======
+            className={`gray_button ${addNewUserLoading && "cursor-not-allowed"
+              }`}
+>>>>>>> raj_appideas
             onClick={() => setShowAddNewUser(false)}
             disabled={addNewUserLoading}
             type="reset"
@@ -175,9 +180,14 @@ const AddNewUser = ({ setShowAddNewUser }) => {
             {t("Cancel")}
           </button>
           <button
+<<<<<<< HEAD
             className={`green_button ${
               addNewUserLoading && "cursor-not-allowed"
             }`}
+=======
+            className={`green_button ${addNewUserLoading && "cursor-not-allowed"
+              }`}
+>>>>>>> raj_appideas
             type="submit"
             disabled={addNewUserLoading}
           >
@@ -292,7 +302,11 @@ const AddNewUser = ({ setShowAddNewUser }) => {
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput
+<<<<<<< HEAD
                   country={"us"}
+=======
+                  country={"fr"}
+>>>>>>> raj_appideas
                   onChange={(value) => {
                     onChange((e) => {
                       setValue("phone", "+".concat(value));

@@ -148,18 +148,28 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
         </p>
         <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
           <button
+<<<<<<< HEAD
             className={`gray_button  ${
               addNewPayerLoading && "cursor-not-allowed"
             } `}
+=======
+            className={`gray_button  ${addNewPayerLoading && "cursor-not-allowed"
+              } `}
+>>>>>>> raj_appideas
             onClick={() => setShowAddnewPayer(false)}
             disabled={addNewPayerLoading}
           >
             {t("Cancel")}
           </button>
           <button
+<<<<<<< HEAD
             className={`green_button ${
               addNewPayerLoading && "cursor-not-allowed"
             } `}
+=======
+            className={`green_button ${addNewPayerLoading && "cursor-not-allowed"
+              } `}
+>>>>>>> raj_appideas
             disabled={addNewPayerLoading}
             type="submit"
           >
@@ -238,7 +248,11 @@ const AddNewThirdPartyPayer = ({ setShowAddnewPayer }) => {
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput
+<<<<<<< HEAD
                   country={"us"}
+=======
+                  country={"fr"}
+>>>>>>> raj_appideas
                   onChange={(value) => {
                     onChange((e) => {
                       setValue("mobile", "+".concat(value));

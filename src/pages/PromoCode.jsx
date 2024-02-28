@@ -16,7 +16,14 @@ import {
 } from "../redux/PromoCodeSlice";
 import toast from "react-hot-toast";
 import { RiDeleteBin6Line } from "react-icons/ri";
+<<<<<<< HEAD
 import { handleChangeDeleteID } from "../redux/SubscriptionSlice";
+=======
+import {
+  handleChangeDeleteID,
+  handleGetAllSubscription,
+} from "../redux/SubscriptionSlice";
+>>>>>>> raj_appideas
 import CreatePromoCode from "../components/PromoCode/CreatePromoCode";
 import ShowPromoCodeDetails from "../components/PromoCode/ShowPromoCodeDetails";
 import { Helmet } from "react-helmet";
@@ -24,6 +31,10 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { handleLogoutFromAllTabs } from "../redux/GlobalStates";
 import { handleLogout } from "../redux/AuthSlice";
+<<<<<<< HEAD
+=======
+import { handleGetAllSubscribers } from "../redux/SubscriberSlice";
+>>>>>>> raj_appideas
 
 const PromoCode = () => {
   const [showEditPromoCode, setShowEditPromoCode] = useState(false);
@@ -39,7 +50,11 @@ const PromoCode = () => {
     deletePromoCodeId,
   } = useSelector((state) => state.root.promoCode);
   const { fileterdData, isSidebarOpen } = useSelector(
+<<<<<<< HEAD
     (state) => state.root.globalStates,
+=======
+    (state) => state.root.globalStates
+>>>>>>> raj_appideas
   );
   const { role, token } = useSelector((state) => state.root.auth);
 
@@ -72,7 +87,11 @@ const PromoCode = () => {
       dispatch(handleChangeDeleteID(id));
 
       const response = dispatch(
+<<<<<<< HEAD
         handleDeletePromoCode({ id, token, signal: AbortControllerRef }),
+=======
+        handleDeletePromoCode({ id, token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
       );
       if (response) {
         response.then((res) => {
@@ -89,7 +108,11 @@ const PromoCode = () => {
 
   useEffect(() => {
     const response = dispatch(
+<<<<<<< HEAD
       handleGetAllPromoCodes({ token, signal: AbortControllerRef }),
+=======
+      handleGetAllPromoCodes({ token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -104,6 +127,15 @@ const PromoCode = () => {
         }
       });
     }
+<<<<<<< HEAD
+=======
+
+    // fetch subscriptions
+    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
+    //fetch subscribers
+    dispatch(handleGetAllSubscribers({ token, signal: AbortControllerRef }));
+
+>>>>>>> raj_appideas
     return () => abortApiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -205,7 +237,11 @@ const PromoCode = () => {
                                     onClick={() => {
                                       setShowEditPromoCode(true);
                                       dispatch(
+<<<<<<< HEAD
                                         handleFindSinglePromoCode(promo?._id),
+=======
+                                        handleFindSinglePromoCode(promo?._id)
+>>>>>>> raj_appideas
                                       );
                                     }}
                                     disabled={
@@ -227,7 +263,11 @@ const PromoCode = () => {
                                     onClick={() => {
                                       setShowPromoCodeDetails(true);
                                       dispatch(
+<<<<<<< HEAD
                                         handleFindSinglePromoCode(promo?._id),
+=======
+                                        handleFindSinglePromoCode(promo?._id)
+>>>>>>> raj_appideas
                                       );
                                     }}
                                     disabled={
@@ -291,8 +331,13 @@ const PromoCode = () => {
                           ? promoCodes?.length
                           : (pageNumber + 1) * promoPerPage
                         : (pageNumber + 1) * promoPerPage > fileterdData?.length
+<<<<<<< HEAD
                           ? fileterdData?.length
                           : (pageNumber + 1) * promoPerPage}{" "}
+=======
+                        ? fileterdData?.length
+                        : (pageNumber + 1) * promoPerPage}{" "}
+>>>>>>> raj_appideas
                       {t("from")}{" "}
                       {fileterdData?.length === 0
                         ? promoCodes?.length

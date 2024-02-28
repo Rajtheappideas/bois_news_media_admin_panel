@@ -14,7 +14,10 @@
   "profile": "profile",
   "english": "english",
   "french": "french",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//common_comment": "----------------common----------------",
   "Loading": "Loading",
   "Showing": "Showing",
@@ -61,7 +64,10 @@
   "mobile phone": "mobile phone",
   "address": "address",
   "Search...": "Search...",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//error_comment": "----------------errors----------------",
   "Enter a word": "Enter a word",
   "Name is required": "Name is required",
@@ -83,7 +89,10 @@
   "Image is required.": "Image is required.",
   "Image is required": "Image is required",
   "Company is required.": "Company is required.",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//users_comment": "----------------users----------------",
   "Joining Date": "Joining Date",
   "No users here": "No users here",
@@ -93,7 +102,10 @@
   "user added successfully.": "user added successfully.",
   "user Deleted Successfully.": "user Deleted Successfully.",
   "user edited successfully.": "user edited successfully.",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//subscribers_comment": "----------------subscribers----------------",
   "Import": "Import",
   "Title": "Title",
@@ -139,7 +151,10 @@
   "Company registration number": "Company registration number",
   "Add magazine distribution": "Add magazine distribution",
   "Subcscription": "Subcscription",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//partners_comment": "----------------partners----------------",
   "partner Deleted Successfully": "partner Deleted Successfully",
   "No partners here": "No partners here",
@@ -164,7 +179,10 @@
   "Partner details": "Partner details",
   "Contact Info": "Contact Info",
   "Basic Info": "Basic Info",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//prospects_comment": "----------------prospects----------------",
   "prospects": "Prospects",
   "Contact person": "Contact person",
@@ -174,7 +192,11 @@
   "Add new prospect": "Add new prospect",
   "Prospect Info": "Prospect Info",
   "mobile number": "mobile number",
+<<<<<<< HEAD
 
+=======
+  "No prospects here": "No prospects here",
+>>>>>>> raj_appideas
   "//payers_comment": "----------------payers----------------",
   "payer Deleted Successfully": "payer Deleted Successfully",
   "Account name": "Account name",
@@ -192,7 +214,10 @@
   "account number": "account number",
   "payer edited Successfully": "payer edited Successfully",
   "Third-party payer details": "Third-party payer details",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//subscription_comment": "----------------subscription----------------",
   "subscription Deleted Successfully": "subscription Deleted Successfully",
   "Subscriptions name": "Subscriptions name",
@@ -210,8 +235,15 @@
   "Add new subscriptions": "Add new subscriptions",
   "Subscription details": "Subscription details",
   "price": "price",
+<<<<<<< HEAD
   "discriptions": "discriptions",
 
+=======
+  "descriptions": "descriptions",
+  "France paper price": "France paper price",
+  "Rest of the world paper price": "Rest of the world paper price",
+  "EEC/Switzerland/France Overseas Territories paper price": "EEC/Switzerland/France Overseas Territories paper price",
+>>>>>>> raj_appideas
   "//magazine_comment": "----------------magazine----------------",
   "Magazine name": "Magazine name",
   "Stock": "Stock",
@@ -232,7 +264,10 @@
   "magazine Deleted Successfully": "magazine Deleted Successfully",
   "Magazine details": "Magazine details",
   "Download": "Download",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//orders_comment": "----------------orders----------------",
   "Order date & time": "Order date & time",
   "Customer name": "Customer name",
@@ -253,12 +288,20 @@
   "shipping cost": "shipping cost",
   "discount": "discount",
   "Total Amount": "Total Amount",
+<<<<<<< HEAD
 
+=======
+  "Order No": "Order ID",
+  "Generate invoice": "Generate invoice",
+>>>>>>> raj_appideas
   "//profile_comment": "----------------profile----------------",
   "Edit profile": "Edit profile",
   "name": "name",
   "Personal Details": "Personal Details",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//signin_comment": "----------------signin----------------",
   "Password is required": "Password is required",
   "Sign in Successfully.": "Sign in Successfully.",
@@ -274,7 +317,10 @@
   "Forgot password": "Forgot password",
   "Don’t have an account": "Don’t have an account",
   "Register Now": "Register Now",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//signup_comment": "----------------signup----------------",
   "Minimum 6 characters, at least one special character at least one digit": "Minimum 6 characters, at least one special character, at least one digit",
   "Sign up Successfully.": "Sign up Successfully.",
@@ -287,7 +333,10 @@
   "Sign up": "Sign up",
   "Already have an account": "Already have an account",
   "Sign in": "Sign in",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//forgotpassword_comment": "----------------forgot----------------",
   "Check your mails.": "Check your mails.",
   "Forgot-password": "Forgot-password",
@@ -325,22 +374,38 @@
   "Change Password": "Change Password",
   "Go to home": "Go to home",
   "Please sign-in first!!!": "Please sign-in first!!!",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//messages": "---------------------------------messages--------------------",
   "Message Details": "Message Details",
   "Comments": "Comments",
   "Comment": "Comment",
   "No messages here": "No messages here",
   "messages": "messages",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//newsletter": "---------------------------------newsletter--------------------",
   "No newsletter here": "No newsletter here",
   "newsLetters": "newsLetters",
   "newsLetter": "newsLetter",
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
   "//tax & shipping": "---------------------------------tax & shipping-----------------------",
   "Tax & Shipping Charges": "Tax & Shipping Charges",
   "Edit": "Edit",
   "Tax Charges": "Tax Charges",
+<<<<<<< HEAD
   "Shipping Charges": "Shipping Charges"
+=======
+  "Shipping Charges": "Shipping Charges",
+  "paper": "paper",
+  "//invoices": "---------------------------------------invoices--------------------------",
+  "invoices": "invoices"
+>>>>>>> raj_appideas
 }

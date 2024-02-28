@@ -46,13 +46,23 @@ export const handleAddNewSubscription = createAsyncThunk(
     {
       title,
       priceDigital,
+<<<<<<< HEAD
       pricePaper,
+=======
+      pricePaperEEC,
+      pricePaperFrance,
+      pricePaperRestOfWorld,
+>>>>>>> raj_appideas
       status,
       description,
       image,
       magazineTitle,
       token,
       signal,
+<<<<<<< HEAD
+=======
+      detailDescription,
+>>>>>>> raj_appideas
     },
     { rejectWithValue }
   ) => {
@@ -62,11 +72,21 @@ export const handleAddNewSubscription = createAsyncThunk(
         data: {
           title,
           priceDigital,
+<<<<<<< HEAD
           pricePaper,
+=======
+          pricePaperEEC,
+          pricePaperFrance,
+          pricePaperRestOfWorld,
+>>>>>>> raj_appideas
           status,
           description,
           image,
           magazineTitle,
+<<<<<<< HEAD
+=======
+          detailDescription,
+>>>>>>> raj_appideas
         },
         signal: signal.current.signal,
         headers: {
@@ -88,7 +108,13 @@ export const handleEditSubscription = createAsyncThunk(
     {
       title,
       priceDigital,
+<<<<<<< HEAD
       pricePaper,
+=======
+      pricePaperEEC,
+      pricePaperRestOfWorld,
+      pricePaperFrance,
+>>>>>>> raj_appideas
       status,
       description,
       image,
@@ -96,6 +122,10 @@ export const handleEditSubscription = createAsyncThunk(
       id,
       token,
       signal,
+<<<<<<< HEAD
+=======
+      detailDescription,
+>>>>>>> raj_appideas
     },
     { rejectWithValue }
   ) => {
@@ -105,11 +135,21 @@ export const handleEditSubscription = createAsyncThunk(
         data: {
           title,
           priceDigital,
+<<<<<<< HEAD
           pricePaper,
+=======
+          pricePaperEEC,
+          pricePaperRestOfWorld,
+          pricePaperFrance,
+>>>>>>> raj_appideas
           status,
           description,
           image,
           magazineTitle,
+<<<<<<< HEAD
+=======
+          detailDescription,
+>>>>>>> raj_appideas
         },
         signal: signal.current.signal,
         headers: {
@@ -251,7 +291,11 @@ const SubscriptionSlice = createSlice({
         state.addNewSubscriptionLoading = false;
         state.success = true;
         state.error = null;
+<<<<<<< HEAD
         state.subscriptions = [payload?.subscription, ...state.subscriptions];
+=======
+        state.subscriptions = [...state.subscriptions, payload?.subscription];
+>>>>>>> raj_appideas
       }
     );
     builder.addCase(handleAddNewSubscription.rejected, (state, { payload }) => {

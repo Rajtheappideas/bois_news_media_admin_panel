@@ -341,7 +341,11 @@ const AddNewPartner = ({ setShowAddnewPartner }) => {
               }}
               render={({ field: { onChange, value } }) => (
                 <PhoneInput
+<<<<<<< HEAD
                   country={"us"}
+=======
+                  country={"fr"}
+>>>>>>> raj_appideas
                   onChange={(value) => {
                     onChange((e) => {
                       setValue("mobile", "+".concat(value));

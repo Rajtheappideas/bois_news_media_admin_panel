@@ -1,6 +1,10 @@
 import React from "react";
 import { HiPencil } from "react-icons/hi";
+<<<<<<< HEAD
 import { useForm } from "react-hook-form";
+=======
+import { Controller, useForm } from "react-hook-form";
+>>>>>>> raj_appideas
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,16 +20,27 @@ import {
   handleEditMagazine,
   handleGetMagazineById,
 } from "../../redux/MagazineSlice";
+<<<<<<< HEAD
 import BaseUrl from "../../BaseUrl";
+=======
+import { PublicS3Url } from "../../BaseUrl";
+>>>>>>> raj_appideas
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
+<<<<<<< HEAD
+=======
+import RichTextEditor from "../../components/RichTextEditor";
+>>>>>>> raj_appideas
 
 const EditMagazineDetails = () => {
   const [prevImage, setPrevImage] = useState(null);
   const [magazineImage, setmagazineImage] = useState(null);
+<<<<<<< HEAD
   const [magazinePdf, setMagazinePdf] = useState(null);
+=======
+>>>>>>> raj_appideas
 
   const {
     singleMagazine,
@@ -49,14 +64,26 @@ const EditMagazineDetails = () => {
     title: yup.string().required(t("title is required")),
     status: yup.string().required(t("status is required")),
     description: yup.string().required(t("description is required")),
+<<<<<<< HEAD
+=======
+    detailDescription: yup
+      .string()
+      .required(t("detail description is required")),
+>>>>>>> raj_appideas
     magazineTitle: yup.string().required(t("select magazine")),
 
     stock: yup
       .string()
       .required(t("stock is required"))
       .typeError(t("stock is required")),
+<<<<<<< HEAD
     priceDigital: yup.string().required(t("digital price is required")),
     pricePaper: yup.string().required(t("paper price is required")),
+=======
+    priceDigital: yup.string().required(t("price is required")),
+    pricePaper: yup.string().required(t("price is required")),
+
+>>>>>>> raj_appideas
     image: yup
       .mixed()
       .required(t("Image is required."))
@@ -83,6 +110,10 @@ const EditMagazineDetails = () => {
       pricePaper: singleMagazine?.pricePaper,
       status: singleMagazine?.status,
       description: singleMagazine?.description,
+<<<<<<< HEAD
+=======
+      detailDescription: singleMagazine?.detailDescription,
+>>>>>>> raj_appideas
       image: singleMagazine?.image,
       stock: singleMagazine?.stock,
       magazineTitle: singleMagazine?.magazineTitle,
@@ -99,6 +130,10 @@ const EditMagazineDetails = () => {
       description,
       status,
       magazineTitle,
+<<<<<<< HEAD
+=======
+      detailDescription,
+>>>>>>> raj_appideas
     } = data;
     if (!isDirty) {
       return true;
@@ -113,6 +148,10 @@ const EditMagazineDetails = () => {
         stock,
         status,
         description,
+<<<<<<< HEAD
+=======
+        detailDescription,
+>>>>>>> raj_appideas
         image: magazineImage,
         id: state?._id,
         token,
@@ -122,6 +161,10 @@ const EditMagazineDetails = () => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
+<<<<<<< HEAD
+=======
+          toast.remove();
+>>>>>>> raj_appideas
           toast.success(` ${title} ${t("magazine edited Successfully")}.`, {
             duration: 3000,
           });
@@ -140,6 +183,7 @@ const EditMagazineDetails = () => {
     setmagazineImage(file);
   };
 
+<<<<<<< HEAD
   // file upload
   const handleFileUpload = (e) => {
     e.preventDefault();
@@ -161,6 +205,8 @@ const EditMagazineDetails = () => {
     return n.toFixed(n < 10 && l > 0 ? 1 : 0) + " " + units[l];
   }
 
+=======
+>>>>>>> raj_appideas
   const handleDeletemagazine = (id) => {
     if (window.confirm(t("Are you sure?"))) {
       dispatch(handleChangeDeleteID(id));
@@ -250,6 +296,7 @@ const EditMagazineDetails = () => {
                   {t("Magazine details")}
                 </p>
                 <div className="flex flex-wrap items-center justify-start md:gap-3 gap-1">
+<<<<<<< HEAD
                   {/* <button
             type="button"
             className="text-green-500 border border-green-400 font-medium text-center md:w-32 w-24 h-10 rounded-lg p-2 hover:bg-green-200 active:scale-95 transition"
@@ -258,6 +305,8 @@ const EditMagazineDetails = () => {
               {t("Download")}
             </a>
           </button> */}
+=======
+>>>>>>> raj_appideas
                   <button
                     className={`gray_button ${
                       (editMagazineLoading || deleteMagazineLoading) &&
@@ -308,7 +357,11 @@ const EditMagazineDetails = () => {
                     <div className="relative md:w-24 w-20 h-24 block">
                       {prevImage === null ? (
                         <img
+<<<<<<< HEAD
                           src={BaseUrl.concat(singleMagazine?.image)}
+=======
+                          src={PublicS3Url.concat(singleMagazine?.image)}
+>>>>>>> raj_appideas
                           alt=""
                           className="rounded-full object-contain object-center md:h-24 md:w-24 w-20 h-20 border"
                         />
@@ -357,7 +410,11 @@ const EditMagazineDetails = () => {
                     />
                     <span className="error">{errors?.title?.message}</span>
                   </div>
+<<<<<<< HEAD
                   {/* digital price */}
+=======
+                  {/*digital price */}
+>>>>>>> raj_appideas
                   <div className="w-full space-y-2">
                     <label htmlFor="digital_price" className="Label">
                       {t("Digital price")}
@@ -366,6 +423,10 @@ const EditMagazineDetails = () => {
                       type="number"
                       placeholder={t("Type here...")}
                       className="input_field"
+<<<<<<< HEAD
+=======
+                      step="0.0001"
+>>>>>>> raj_appideas
                       {...register("priceDigital")}
                     />
                     <span className="error">
@@ -381,10 +442,18 @@ const EditMagazineDetails = () => {
                       type="number"
                       placeholder={t("Type here...")}
                       className="input_field"
+<<<<<<< HEAD
+=======
+                      step="0.0001"
+>>>>>>> raj_appideas
                       {...register("pricePaper")}
                     />
                     <span className="error">{errors?.pricePaper?.message}</span>
                   </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> raj_appideas
                   {/* stock */}
                   <div className="w-full space-y-2">
                     <label htmlFor="stock" className="Label">
@@ -431,6 +500,7 @@ const EditMagazineDetails = () => {
                   </div>
                   {/* summary */}
                   <div className="w-full col-span-full space-y-2">
+<<<<<<< HEAD
                     <label htmlFor="summary" className="Label">
                       {t("summary")}
                     </label>
@@ -439,10 +509,42 @@ const EditMagazineDetails = () => {
                       {...register("description")}
                       className="input_field"
                     />
+=======
+                    <label htmlFor="description" className="Label">
+                      {t("description")}
+                    </label>
+                    <textarea
+                      {...register("description")}
+                      className="input_field"
+                    ></textarea>
+>>>>>>> raj_appideas
                     <span className="error">
                       {errors?.description?.message}
                     </span>
                   </div>
+<<<<<<< HEAD
+=======
+                  {/* summary */}
+                  <div className="w-full col-span-full space-y-2">
+                    <label htmlFor="summary" className="Label">
+                      {t("summary")}
+                    </label>
+                    <Controller
+                      control={control}
+                      name={"detailDescription"}
+                      render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <RichTextEditor
+                          onBlur={onBlur}
+                          value={value}
+                          setValue={setValue}
+                        />
+                      )}
+                    />
+                    <span className="error">
+                      {errors?.detailDescription?.message}
+                    </span>
+                  </div>
+>>>>>>> raj_appideas
                 </div>
               </div>
             </form>

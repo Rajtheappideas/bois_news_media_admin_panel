@@ -267,9 +267,13 @@ export const handleCreateSubsciption = createAsyncThunk(
       subscriber,
       subscription,
       subState,
+<<<<<<< HEAD
       prospectState,
       startDate,
       renewDate,
+=======
+      remainingIssues,
+>>>>>>> raj_appideas
       token,
       signal,
     },
@@ -282,9 +286,13 @@ export const handleCreateSubsciption = createAsyncThunk(
           subscriber,
           subscription,
           subState,
+<<<<<<< HEAD
           prospectState,
           startDate,
           renewDate,
+=======
+          remainingIssues,
+>>>>>>> raj_appideas
         },
         signal: signal.current.signal,
         headers: {
@@ -305,10 +313,15 @@ export const handleEditSubsciption = createAsyncThunk(
   async (
     {
       subState,
+<<<<<<< HEAD
       prospectState,
       startDate,
       renewDate,
       subscription,
+=======
+      subscription,
+      remainingIssues,
+>>>>>>> raj_appideas
       id,
       token,
       signal,
@@ -321,9 +334,13 @@ export const handleEditSubsciption = createAsyncThunk(
         data: {
           subscription,
           subState,
+<<<<<<< HEAD
           prospectState,
           startDate,
           renewDate,
+=======
+          remainingIssues
+>>>>>>> raj_appideas
         },
         signal: signal.current.signal,
         headers: {
@@ -405,11 +422,19 @@ const SubscriberSlice = createSlice({
       const findSubcription = state.subscribers.map((subscriber) =>
         subscriber._id === payload?.subscriberId
           ? {
+<<<<<<< HEAD
               ...subscriber,
               subscriptions: subscriber.subscriptions.filter(
                 (subscription) => subscription?._id !== payload?.id
               ),
             }
+=======
+            ...subscriber,
+            subscriptions: subscriber.subscriptions.filter(
+              (subscription) => subscription?._id !== payload?.id
+            ),
+          }
+>>>>>>> raj_appideas
           : subscriber
       );
       if (findSubcription) {
@@ -448,7 +473,11 @@ const SubscriberSlice = createSlice({
       }
     },
 
+<<<<<<< HEAD
     handleClearSingleSubscription: (state, {}) => {
+=======
+    handleClearSingleSubscription: (state, { }) => {
+>>>>>>> raj_appideas
       state.singleSubscription = null;
     },
 
@@ -462,7 +491,11 @@ const SubscriberSlice = createSlice({
   },
   extraReducers: (builder) => {
     // get all subscribers
+<<<<<<< HEAD
     builder.addCase(handleGetAllSubscribers.pending, (state, {}) => {
+=======
+    builder.addCase(handleGetAllSubscribers.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -481,7 +514,11 @@ const SubscriberSlice = createSlice({
     });
 
     // get subscriber by id
+<<<<<<< HEAD
     builder.addCase(handleGetSubscriberById.pending, (state, {}) => {
+=======
+    builder.addCase(handleGetSubscriberById.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.singleSucriberLoading = true;
       state.success = false;
       state.error = null;
@@ -499,7 +536,11 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // add new subscriber
+<<<<<<< HEAD
     builder.addCase(handleAddNewSubscriber.pending, (state, {}) => {
+=======
+    builder.addCase(handleAddNewSubscriber.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.addNewSubscriberLoading = true;
       state.success = false;
       state.error = null;
@@ -516,7 +557,11 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // create subscriptin
+<<<<<<< HEAD
     builder.addCase(handleCreateSubsciption.pending, (state, {}) => {
+=======
+    builder.addCase(handleCreateSubsciption.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -528,12 +573,21 @@ const SubscriberSlice = createSlice({
       state.subscribers = state.subscribers.map((subscriber) =>
         subscriber?._id === payload?.subscription?.subscriber
           ? {
+<<<<<<< HEAD
               ...subscriber,
               subscriptions: [
                 ...subscriber?.subscriptions,
                 payload?.subscription,
               ],
             }
+=======
+            ...subscriber,
+            subscriptions: [
+              ...subscriber?.subscriptions,
+              payload?.subscription,
+            ],
+          }
+>>>>>>> raj_appideas
           : subscriber
       );
       state.singleSucriber = {
@@ -550,7 +604,11 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // edit subscriptin
+<<<<<<< HEAD
     builder.addCase(handleEditSubsciption.pending, (state, {}) => {
+=======
+    builder.addCase(handleEditSubsciption.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.loading = true;
       state.success = false;
       state.error = null;
@@ -562,6 +620,7 @@ const SubscriberSlice = createSlice({
       state.subscribers = state.subscribers.map((subscriber) =>
         subscriber?._id === payload?.subscription?.subscriber
           ? {
+<<<<<<< HEAD
               ...subscriber,
               subscriptions: subscriber?.subscriptions.map((s) =>
                 s?._id === payload?.subscription?._id
@@ -569,6 +628,15 @@ const SubscriberSlice = createSlice({
                   : s
               ),
             }
+=======
+            ...subscriber,
+            subscriptions: subscriber?.subscriptions.map((s) =>
+              s?._id === payload?.subscription?._id
+                ? payload?.subscription
+                : s
+            ),
+          }
+>>>>>>> raj_appideas
           : subscriber
       );
       state.singleSucriber = {
@@ -584,7 +652,11 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // edit subscriber
+<<<<<<< HEAD
     builder.addCase(handleEditSubscriber.pending, (state, {}) => {
+=======
+    builder.addCase(handleEditSubscriber.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.editLoading = true;
       state.success = false;
       state.error = null;
@@ -605,7 +677,11 @@ const SubscriberSlice = createSlice({
       state.error = payload ?? null;
     });
     // delete subscirber
+<<<<<<< HEAD
     builder.addCase(handleDeleteSUBSCRIBER.pending, (state, {}) => {
+=======
+    builder.addCase(handleDeleteSUBSCRIBER.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.deleteLoading = true;
       state.success = false;
       state.error = null;
@@ -623,7 +699,11 @@ const SubscriberSlice = createSlice({
       state.deleteSubscriberID = null;
     });
     // delete subscription
+<<<<<<< HEAD
     builder.addCase(handleDeleteSUBSCRIPTION.pending, (state, {}) => {
+=======
+    builder.addCase(handleDeleteSUBSCRIPTION.pending, (state, { }) => {
+>>>>>>> raj_appideas
       state.deleteLoading = true;
       state.success = false;
       state.error = null;

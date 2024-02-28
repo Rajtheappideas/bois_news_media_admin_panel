@@ -12,12 +12,36 @@ import { useEffect } from "react";
 import useAbortApiCall from "../../hooks/useAbortApiCall";
 import toast from "react-hot-toast";
 import moment from "moment";
+<<<<<<< HEAD
+=======
+import { handleGetAllSubscription } from "../../redux/SubscriptionSlice";
+import Select from "react-select";
+import Animated from "react-select/animated";
+>>>>>>> raj_appideas
 
 const EditPromoCode = ({ setShowEditPromoCode }) => {
   const { createAndUpdateLoading, singlePromoCode } = useSelector(
     (state) => state.root.promoCode
   );
 
+<<<<<<< HEAD
+=======
+  const { subscriptions, loading } = useSelector(
+    (state) => state.root.subscriptions
+  );
+
+  const { subscribers } = useSelector((state) => state.root.subscribers);
+
+  const subscriberOptions = subscribers.map((subscriber) => {
+    return {
+      value: subscriber?._id,
+      label: subscriber?.fname.concat(subscriber?.lname),
+    };
+  });
+
+  const animatedComponents = Animated();
+
+>>>>>>> raj_appideas
   const { token } = useSelector((s) => s.root.auth);
 
   const { t } = useTranslation();
@@ -31,6 +55,13 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
       .required(t("code is required"))
       .min(2, t("minimum two character required")),
     expireDate: yup.date().required(t("date is required")),
+<<<<<<< HEAD
+=======
+    subscribers: yup.array(),
+    subscriptoin: yup.string(),
+    maxUsage: yup.string(),
+    totalMaxUsage: yup.string(),
+>>>>>>> raj_appideas
     discountPercentage: yup
       .number()
       .positive()
@@ -52,6 +83,11 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
   const {
     register,
     handleSubmit,
+<<<<<<< HEAD
+=======
+    setValue,
+    getValues,
+>>>>>>> raj_appideas
     formState: { errors, isDirty },
   } = useForm({
     shouldFocusError: true,
@@ -62,19 +98,46 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
       code: singlePromoCode?.code,
       discountPercentage: singlePromoCode?.discountPercentage,
       expireDate: moment(singlePromoCode?.expireDate).format("YYYY-MM-DD"),
+<<<<<<< HEAD
+=======
+      subscriptoin: singlePromoCode?.subscription,
+      maxUsage: singlePromoCode?.maxUsage,
+      totalMaxUsage: singlePromoCode?.totalMaxUsage,
+      subscribers: singlePromoCode?.subscribers,
+>>>>>>> raj_appideas
     },
   });
 
   const onSubmit = (data) => {
+<<<<<<< HEAD
     const { code, discountPercentage, expireDate } = data;
 
     if (!isDirty) return;
+=======
+    const {
+      code,
+      discountPercentage,
+      expireDate,
+      subscription,
+      maxUsage,
+      totalMaxUsage,
+      subscribers,
+    } = data;
+
+>>>>>>> raj_appideas
     const response = dispatch(
       handleEditPromoCode({
         code,
         id: singlePromoCode?._id,
         discountPercentage,
         expireDate,
+<<<<<<< HEAD
+=======
+        subscription,
+        maxUsage,
+        totalMaxUsage,
+        subscribers: subscribers.map((sub) => sub?.value),
+>>>>>>> raj_appideas
         token,
         signal: AbortControllerRef,
       })
@@ -98,6 +161,15 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
     };
   }, []);
 
+<<<<<<< HEAD
+=======
+  // fetch subscriptions
+  useEffect(() => {
+    dispatch(handleGetAllSubscription({ token, signal: AbortControllerRef }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+>>>>>>> raj_appideas
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -179,6 +251,79 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
             />
             <span className="error">{errors?.discountPercentage?.message}</span>
           </div>
+<<<<<<< HEAD
+=======
+          {/* subscriptoin */}
+          <div className="w-full space-y-2">
+            <label htmlFor="subscription" className="Label">
+              {t("subscription")}
+            </label>
+            <select
+              type="text"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("subscription")}
+            >
+              <option label="select subscription"></option>
+              {subscriptions.map((subscription) => (
+                <option
+                  selected={subscription?._id === singlePromoCode?.subscription}
+                  key={subscription?._id}
+                  value={subscription?._id}
+                >
+                  {subscription?.title}
+                </option>
+              ))}
+            </select>
+            <span className="error">{errors?.subscription?.message}</span>
+          </div>
+          {/* subscriber */}
+          <div className="w-full space-y-2">
+            <label htmlFor="Subscriber" className="Label">
+              {t("Subscriber")}
+            </label>
+            <Select
+              options={subscriberOptions}
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              onChange={(e) => {
+                setValue("subscribers", e);
+              }}
+              defaultValue={subscriberOptions.filter((sub) =>
+                getValues().subscribers.some((subs) => sub.value === subs)
+              )}
+            />
+
+            <span className="error">{errors?.subscribers?.message}</span>
+          </div>
+          {/* max usage */}
+          <div className="w-full space-y-2">
+            <label htmlFor="maxUsage" className="Label">
+              {t("Max Usage")}
+            </label>
+            <input
+              type="number"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("maxUsage")}
+            />
+            <span className="error">{errors?.maxUsage?.message}</span>
+          </div>
+          {/* total max usage */}
+          <div className="w-full space-y-2">
+            <label htmlFor="totalMaxUsage" className="Label">
+              {t("Total max usage")}
+            </label>
+            <input
+              type="number"
+              placeholder={t("Type here...")}
+              className="input_field"
+              {...register("totalMaxUsage")}
+            />
+            <span className="error">{errors?.totalMaxUsage?.message}</span>
+          </div>
+>>>>>>> raj_appideas
         </div>
       </div>
     </form>

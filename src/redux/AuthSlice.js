@@ -188,16 +188,29 @@ const AuthSlice = createSlice({
     handleLogout: (state) => {
       state.loading = true;
       state.user = null;
+<<<<<<< HEAD
       window.location.href = window.location.origin.concat("/sign-in");
       toast.success("Logout Successfully.", { duration: 3000 });
+=======
+      state.token = null;
+      window.location.href = window.location.origin.concat("/sign-in");
+      toast.success("Logout Successfully.", { duration: 3000 });
+      window.localStorage.clear()
+>>>>>>> raj_appideas
       state.loading = false;
     },
     handleStoreUserEmail: (state, { payload }) => {
       state.email = payload;
     },
+<<<<<<< HEAD
     handleChangeLoading:(state)=>{
       state.loading=false
     }
+=======
+    handleChangeLoading: (state) => {
+      state.loading = false;
+    },
+>>>>>>> raj_appideas
   },
   extraReducers: (builder) => {
     // register user
@@ -213,7 +226,11 @@ const AuthSlice = createSlice({
       state.error = null;
       state.role = payload?.user?.role;
       state.token = payload?.token;
+<<<<<<< HEAD
        state.verifyToken = null;
+=======
+      state.verifyToken = null;
+>>>>>>> raj_appideas
       state.email = null;
     });
     builder.addCase(handleRegisterUser.rejected, (state, { payload }) => {
@@ -223,7 +240,11 @@ const AuthSlice = createSlice({
       state.error = payload ?? null;
       state.role = null;
       state.token = null;
+<<<<<<< HEAD
        state.verifyToken = null;
+=======
+      state.verifyToken = null;
+>>>>>>> raj_appideas
       state.email = null;
     });
     // login user
@@ -249,7 +270,11 @@ const AuthSlice = createSlice({
       state.error = payload ?? null;
       state.role = null;
       state.token = null;
+<<<<<<< HEAD
        state.verifyToken = null;
+=======
+      state.verifyToken = null;
+>>>>>>> raj_appideas
       state.email = null;
     });
     // forgot password
@@ -261,7 +286,11 @@ const AuthSlice = createSlice({
     builder.addCase(handleForgotPassword.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.success = true;
+<<<<<<< HEAD
       state.user =null
+=======
+      state.user = null;
+>>>>>>> raj_appideas
       state.error = null;
       state.role = null;
       state.token = null;
@@ -385,6 +414,11 @@ const AuthSlice = createSlice({
   },
 });
 
+<<<<<<< HEAD
 export const { handleLogout, handleStoreUserEmail,handleChangeLoading } = AuthSlice.actions;
+=======
+export const { handleLogout, handleStoreUserEmail, handleChangeLoading } =
+  AuthSlice.actions;
+>>>>>>> raj_appideas
 
 export default AuthSlice.reducer;

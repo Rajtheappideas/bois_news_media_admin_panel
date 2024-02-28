@@ -6,7 +6,11 @@ import { BsChevronDown } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { handleLogout } from "../redux/AuthSlice";
 import { toast } from "react-hot-toast";
+<<<<<<< HEAD
 import BaseUrl from "../BaseUrl";
+=======
+import { PublicS3Url } from "../BaseUrl";
+>>>>>>> raj_appideas
 import {
   handleLogoutFromAllTabs,
   handleChangeUserLanguage,
@@ -83,9 +87,14 @@ const Header = () => {
 
   return (
     <div
+<<<<<<< HEAD
       className={`w-full ${
         stickyHeader && "sticky bg-white top-0 z-30 shadow-sm"
       } lg:p-5 p-3 transition flex flex-wrap items-center md:justify-between gap-2 justify-center`}
+=======
+      className={`w-full ${stickyHeader && "sticky bg-white top-0 z-30 shadow-sm"
+        } lg:p-5 p-3 transition flex flex-wrap items-center md:justify-between gap-2 justify-center`}
+>>>>>>> raj_appideas
     >
       {/* left side */}
       <div className="flex items-center flex-1 gap-x-2 w-full">
@@ -99,6 +108,7 @@ const Header = () => {
           {title === ""
             ? t("dashboard")
             : t(title) !== t("profile") &&
+<<<<<<< HEAD
               t(title) !== t("tax & shipping") &&
               t(title) !== t("promo codes") &&
               t(title) !== t("newsLetter") &&
@@ -110,6 +120,19 @@ const Header = () => {
                   <span>{t("management")}</span>
                 </>
               )}
+=======
+            t(title) !== t("tax & shipping") &&
+            t(title) !== t("promo codes") &&
+            t(title) !== t("newsLetter") &&
+            t(title) !== t("messages") &&
+            t(title) !== t("change-password") &&
+            title !== "" && (
+              <>
+                <br className="md:hidden inline-block" />{" "}
+                <span>{t("management")}</span>
+              </>
+            )}
+>>>>>>> raj_appideas
         </p>
       </div>
       {/* right side profile */}
@@ -118,9 +141,14 @@ const Header = () => {
         <button ref={languageRef}>
           <p
             onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+<<<<<<< HEAD
             className={`md:text-xl text-xs p-1 border hover:bg-gray-200 transition rounded-lg ${
               showLanguageDropdown && "bg-gray-200"
             }`}
+=======
+            className={`md:text-xl text-xs p-1 border hover:bg-gray-200 transition rounded-lg ${showLanguageDropdown && "bg-gray-200"
+              }`}
+>>>>>>> raj_appideas
           >
             {language === "en" ? (
               <img
@@ -141,17 +169,27 @@ const Header = () => {
             </span>
             <span>
               <FiChevronDown
+<<<<<<< HEAD
                 className={`inline-block md:ml-2 ml-0.5 mb-1 ${
                   showLanguageDropdown ? "rotate-180" : "rotate-0"
                 } transition duration-100`}
+=======
+                className={`inline-block md:ml-2 ml-0.5 mb-1 ${showLanguageDropdown ? "rotate-180" : "rotate-0"
+                  } transition duration-100`}
+>>>>>>> raj_appideas
               />
             </span>
           </p>
           {/* dropdown for langauge */}
           <div
+<<<<<<< HEAD
             className={`font-normal md:text-lg transition origin-top transform bg-white ${
               showLanguageDropdown ? "scale-100" : "scale-0"
             } absolute top-11 left-0 shadow-2xl rounded-md md:p-2 p-0.5 z-10`}
+=======
+            className={`font-normal md:text-lg transition origin-top transform bg-white ${showLanguageDropdown ? "scale-100" : "scale-0"
+              } absolute top-11 left-0 shadow-2xl rounded-md md:p-2 p-0.5 z-10`}
+>>>>>>> raj_appideas
           >
             <div
               onClick={() => {
@@ -197,7 +235,11 @@ const Header = () => {
             {user?.name}
             {user?.profile !== null && user?.profile !== undefined ? (
               <img
+<<<<<<< HEAD
                 src={BaseUrl.concat(user?.profile)}
+=======
+                src={PublicS3Url.concat(user?.profile)}
+>>>>>>> raj_appideas
                 alt={user?.name}
                 className="md:h-12 md:w-12 h-9 w-9 object-contain object-center border rounded-md text-sm bg-blend-multiply bg-transparent"
               />
@@ -205,16 +247,26 @@ const Header = () => {
               <FaUserAlt className="bg-gray-200 md:h-10 md:w-10 h-6 w-6 p-1 rounded-md inline-block" />
             )}
             <BsChevronDown
+<<<<<<< HEAD
               className={`md:inline-block hidden text-sm ml-1 ${
                 showProfileDropdown ? "rotate-180" : "rotate-0"
               } transition duration-300 `}
+=======
+              className={`md:inline-block hidden text-sm ml-1 ${showProfileDropdown ? "rotate-180" : "rotate-0"
+                } transition duration-300 `}
+>>>>>>> raj_appideas
             />
           </div>
           {/* dropdown for profile */}
           <div
+<<<<<<< HEAD
             className={`font-normal origin-top bg-white md:text-lg transition transform ${
               showProfileDropdown ? "scale-100" : "scale-0"
             } absolute md:top-11 top-8 md:left-16 left-5 shadow-2xl rounded-md p-2 z-10 md:min-w-[10rem] min-w-[7rem]`}
+=======
+            className={`font-normal origin-top bg-white md:text-lg transition transform ${showProfileDropdown ? "scale-100" : "scale-0"
+              } absolute md:top-11 top-8 md:left-16 left-5 shadow-2xl rounded-md p-2 z-10 md:min-w-[10rem] min-w-[7rem]`}
+>>>>>>> raj_appideas
           >
             <Link
               to="/profile"
@@ -245,9 +297,14 @@ const Header = () => {
                   dispatch(handleLogoutFromAllTabs());
                 }, 1000);
               }}
+<<<<<<< HEAD
               className={`text-red-500 text-left capitalize w-full p-1 rounded-md hover:font-semibold transition ${
                 loading && "cursor-not-allowed"
               } `}
+=======
+              className={`text-red-500 text-left capitalize w-full p-1 rounded-md hover:font-semibold transition ${loading && "cursor-not-allowed"
+                } `}
+>>>>>>> raj_appideas
             >
               {loading ? "..." : t("logout")}
             </button>

@@ -18,6 +18,16 @@ const Search = ({ data }) => {
     if (searchTerm === "") {
       toast.error(t("Enter a word"));
       searchRef.current.focus();
+<<<<<<< HEAD
+=======
+    } else {
+      dispatch(
+        handleSearch({
+          data,
+          value: searchTerm.trim().toLocaleLowerCase(),
+        })
+      );
+>>>>>>> raj_appideas
     }
   };
 
@@ -28,14 +38,24 @@ const Search = ({ data }) => {
         ref={searchRef}
         className="w-full shadow-md rounded-md outline-none pr-10 pl-3 p-3 placeholder:text-textColor"
         placeholder={t("Search...")}
+<<<<<<< HEAD
         onChange={(e) =>
+=======
+        value={searchTerm}
+        onChange={(e) => {
+>>>>>>> raj_appideas
           dispatch(
             handleSearch({
               data,
               value: e.target.value.trim().toLocaleLowerCase(),
             })
+<<<<<<< HEAD
           )
         }
+=======
+          );
+        }}
+>>>>>>> raj_appideas
       />
       <AiOutlineSearch
         role="button"

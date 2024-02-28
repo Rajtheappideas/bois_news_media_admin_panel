@@ -9,8 +9,15 @@ import {
   handleUpdateOrderStatus,
 } from "../../redux/OrderSlice";
 import { BsEye } from "react-icons/bs";
+<<<<<<< HEAD
 
 const SingleOrderList = ({ order, setshowOrderDetails }) => {
+=======
+import { FaFileInvoice } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+const SingleOrderList = ({ order, setshowOrderDetails, setShowAddOrder }) => {
+>>>>>>> raj_appideas
   const [orderStatus, setOrderStatus] = useState("On Hold");
 
   const { updateLoading } = useSelector((state) => state.root.orders);
@@ -18,8 +25,16 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
   const { token, role } = useSelector((state) => state.root.auth);
 
   const { AbortControllerRef } = useAbortApiCall();
+<<<<<<< HEAD
   const dispatch = useDispatch();
 
+=======
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+>>>>>>> raj_appideas
   const hanldeChangeOrderStatus = (id, status) => {
     if (role !== "admin") return;
     if (updateLoading) return;
@@ -30,7 +45,11 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
         id,
         token,
         signal: AbortControllerRef,
+<<<<<<< HEAD
       }),
+=======
+      })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -44,6 +63,17 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
     }
   };
 
+<<<<<<< HEAD
+=======
+  function handleGenerateInvoice() {
+    if (order?.invoiceGenerated) {
+      toast.remove();
+      return toast.error("Invoice already generated.");
+    }
+    return navigate(`/invoices`, { state: { orderId: order?.orderId } });
+  }
+
+>>>>>>> raj_appideas
   useEffect(() => {
     setOrderStatus(order?.status);
   }, []);
@@ -86,6 +116,7 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
       )}
 
       <td className="flex items-center justify-start p-4">
+<<<<<<< HEAD
         {/* <button
             type="button"
             className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
@@ -96,6 +127,18 @@ const SingleOrderList = ({ order, setshowOrderDetails }) => {
               className="inline-block mr-1"
             />
           </button> */}
+=======
+        <button
+          type="button"
+          className="hover:bg-blue-200 p-1 rounded-full h-10 w-10"
+          title="generate invoice"
+          onClick={() => {
+            handleGenerateInvoice();
+          }}
+        >
+          <FaFileInvoice color="blue" size={25} className="inline-block" />
+        </button>
+>>>>>>> raj_appideas
         <button
           onClick={() => {
             dispatch(handleFindSingleOrder(order?._id));

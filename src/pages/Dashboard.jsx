@@ -37,7 +37,11 @@ const Dashboard = () => {
   const { orders } = useSelector((state) => state.root.orders);
   const { magazines } = useSelector((state) => state.root.magazines);
   const { isSidebarOpen, countLoading, counts } = useSelector(
+<<<<<<< HEAD
     (state) => state.root.globalStates,
+=======
+    (state) => state.root.globalStates
+>>>>>>> raj_appideas
   );
   const { token, user } = useSelector((state) => state.root.auth);
 
@@ -51,7 +55,11 @@ const Dashboard = () => {
       return window.location.origin.concat("/sign-in");
     }
     const response = dispatch(
+<<<<<<< HEAD
       handleGetCount({ token, signal: AbortControllerRef }),
+=======
+      handleGetCount({ token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -67,7 +75,11 @@ const Dashboard = () => {
       });
     }
   };
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> raj_appideas
   useEffect(() => {
     handleGetContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,7 +126,10 @@ const Dashboard = () => {
                 <div className="text-2xl font-semibold">
                   {" "}
                   {countLoading ? "-" : counts?.subscribers}
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
                 </div>
               </div>
             </Link>
@@ -130,8 +145,12 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
+<<<<<<< HEAD
                 {countLoading ? "-" : counts?.prospects}
 
+=======
+                  {countLoading ? "-" : counts?.prospects}
+>>>>>>> raj_appideas
                 </div>
               </div>
             </Link>
@@ -148,8 +167,12 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
+<<<<<<< HEAD
                 {countLoading ? "-" : counts?.partners}
 
+=======
+                  {countLoading ? "-" : counts?.partners}
+>>>>>>> raj_appideas
                 </div>
               </div>
             </Link>
@@ -167,7 +190,10 @@ const Dashboard = () => {
                 <div className="text-2xl font-semibold">
                   {" "}
                   {countLoading ? "-" : counts?.magazines}
+<<<<<<< HEAD
 
+=======
+>>>>>>> raj_appideas
                 </div>
               </div>
             </Link>
@@ -183,8 +209,12 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="text-2xl font-semibold">
+<<<<<<< HEAD
                 {countLoading ? "-" : counts?.orders}
 
+=======
+                  {countLoading ? "-" : counts?.orders}
+>>>>>>> raj_appideas
                 </div>
               </div>
             </Link>

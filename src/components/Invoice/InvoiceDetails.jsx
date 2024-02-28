@@ -1,24 +1,18 @@
-<<<<<<< HEAD
-import React from "react";
-=======
 import React, { useEffect } from "react";
->>>>>>> raj_appideas
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { BiPrinter } from "react-icons/bi";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import Print from "react-to-print";
 import { useSelector, useDispatch } from "react-redux";
-import { handleFindSingleOrder } from "../../redux/OrderSlice";
+import { handleFindsingleInvoice } from "../../redux/OrderSlice";
 import moment from "moment";
-<<<<<<< HEAD
-=======
 import { FaFileInvoiceDollar } from "react-icons/fa";
 import { handleClearFilteredData } from "../../redux/GlobalStates";
->>>>>>> raj_appideas
+import { handleFindInvoice } from "../../redux/InvoiceSlice";
 
-const OrderDetails = ({ setshowOrderDetails }) => {
-  const { singleOrder, loading } = useSelector((s) => s.root.orders);
+const InvoiceDetails = ({ setShowInvoiceDetails }) => {
+  const { singleInvoice } = useSelector((s) => s.root.invoice);
 
   const dispatch = useDispatch();
 
@@ -26,25 +20,20 @@ const OrderDetails = ({ setshowOrderDetails }) => {
 
   const printComponentRef = useRef();
 
-<<<<<<< HEAD
-=======
   function getProductTitle(item) {
     return `${t(item?.itemType)} ${t(item?.support)} ${item?.title}`;
   }
 
->>>>>>> raj_appideas
+
   return (
-    <div className="w-full lg:space-y-5 space-y-3">
+    <div className="w-full lg:space-y-5 space-y-3 lg:p-5 p-3">
       {/* title + buttons */}
       <div className="w-full flex justify-between items-center md:flex-row flex-col gap-3">
         <p
           onClick={() => {
-            dispatch(handleFindSingleOrder(null));
-            setshowOrderDetails(false);
-<<<<<<< HEAD
-=======
+            dispatch(handleFindInvoice(null));
+            setShowInvoiceDetails(false);
             dispatch(handleClearFilteredData());
->>>>>>> raj_appideas
           }}
           className="font-semibold text-left lg:text-xl text-lg cursor-pointer"
         >
@@ -52,27 +41,17 @@ const OrderDetails = ({ setshowOrderDetails }) => {
             size={25}
             className="inline-block pb-1 mr-1"
           />
-          {t("Order Detail")}
+          {t("Invoice Detail")}
         </p>
-<<<<<<< HEAD
-        <div className="flex flex-wrap cursor-pointer gray_button items-center text-black justify-start md:gap-3 gap-1">
-          <Print
-            trigger={() => (
-              <button>
-                <BiPrinter
-                  size={25}
-                  color="white"
-                  className="inline-block mr-1"
-=======
         <div className="flex flex-wrap  items-center text-black justify-start md:gap-3 gap-1">
           {/* <button className="gray_button">
-            <FaFileInvoiceDollar
-              size={25}
-              color="white"
-              className="inline-block mr-1 "
-            />
-            {t("Generate invoice")}
-          </button> */}
+          <FaFileInvoiceDollar
+            size={25}
+            color="white"
+            className="inline-block mr-1 "
+          />
+          {t("Generate invoice")}
+        </button> */}
           <Print
             trigger={() => (
               <button className="gray_button">
@@ -80,7 +59,6 @@ const OrderDetails = ({ setshowOrderDetails }) => {
                   size={25}
                   color="white"
                   className="inline-block mr-1 "
->>>>>>> raj_appideas
                 />
                 {t("Print")}
               </button>
@@ -98,36 +76,34 @@ const OrderDetails = ({ setshowOrderDetails }) => {
         className="md:p-8 p-4 rounded-md shadow-md bg-white md:space-y-5 space-y-2"
       >
         <div>
-<<<<<<< HEAD
-          <p className="font-bold text-black md:text-4xl text-xl">
-            {t("Invoice")}
+          <p className="font-bold text-black md:text-2xl">
+            {t("Invoice ID")}:
+            <span className="ml-1 text-lg text-green-500">
+              {singleInvoice?.invoiceId}
+            </span>
           </p>
-=======
->>>>>>> raj_appideas
-          <p className="font-bold text-black md:text-lg">
-            {t("Status")}:
-            <span className="text-green-500 ml-1">{singleOrder?.status}</span>
+          <p className="font-bold text-black">
+            {t("Order ID")}:
+            <span className="ml-2  text-gray-400 font-medium">
+              {singleInvoice?.orderId}
+            </span>
           </p>
-<<<<<<< HEAD
+          <p className="font-bold text-black">
+            {t("Generated Date")}:
+            <span className="ml-2  text-gray-400 font-medium">
+              {moment(singleInvoice?.date).format("LLL")}
+            </span>
+          </p>
         </div>
         {/*invoice details */}
-        <div className="w-full grid xl:grid-cols-4 md:grid-cols-2 place-items-start items-start md:gap-5 gap-2">
-=======
-          <p className="font-bold text-black md:text-lg">
-            {t("Order No")}:
-            <span className="text-gray-600 ml-1">{singleOrder?.orderId}</span>
-          </p>
-        </div>
-        {/*invoice details */}
-        <div className="w-full grid xl:grid-cols-5 md:grid-cols-2 place-items-start items-start md:gap-5 gap-2">
->>>>>>> raj_appideas
+        <div className="w-full grid xl:grid-cols-3 md:grid-cols-2 place-items-start items-start md:gap-5 gap-2">
           {/* date */}
           <div className="w-full md:space-y-2">
             <label htmlFor="date" className="Label">
               {t("Date")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">
-              {moment(singleOrder?.date).format("lll")}
+              {moment(singleInvoice?.date).format("lll")}
             </p>
           </div>
           {/* Payment method */}
@@ -136,7 +112,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               {t("Payment method")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">
-              {singleOrder?.paymentMethod}
+              {singleInvoice?.paymentMethod}
             </p>
           </div>
           {/* Contact */}
@@ -145,54 +121,57 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               {t("Contact")}
             </label>
             <p className="text-textBlack font-medium md:text-lg">
-              {singleOrder?.subscriber?.fname} {singleOrder?.subscriber?.lname}{" "}
+              {singleInvoice?.subscriber?.fname}{" "}
+              {singleInvoice?.subscriber?.lname}{" "}
             </p>
-<<<<<<< HEAD
-            <p className="text-textBlack font-medium md:text-lg">
-=======
             <p className="text-textBlack break-words font-medium md:text-lg">
->>>>>>> raj_appideas
-              {singleOrder?.subscriber?.email}
+              {singleInvoice?.subscriber?.email}
             </p>
             <p className="text-textBlack font-medium md:text-lg">
-              {singleOrder?.subscriber?.phone}
+              {singleInvoice?.subscriber?.phone}
             </p>
           </div>
-<<<<<<< HEAD
-          {/* Address */}
-          <div className="w-full md:space-y-2">
-            <label htmlFor="Address" className="Label">
-              {t("Address")}
-=======
+          {/* <hr className="col-span-3 w-full" /> */}
           {/* Contact */}
-          {singleOrder?.VAT ? (
+          {singleInvoice?.VAT ? (
             <div className="w-full md:space-y-2">
               <label htmlFor="Contact" className="Label">
                 {t("Company")}
               </label>
               <p className="text-textBlack font-medium md:text-lg">
-                {singleOrder?.companyName ??
-                  singleOrder?.billingAddress?.companyName ??
-                  singleOrder?.shippingAddress?.companyName}
+                {singleInvoice?.companyName ??
+                  singleInvoice?.billingAddress?.companyName ??
+                  singleInvoice?.shippingAddress?.companyName}
               </p>
               <p className="text-textBlack font-medium md:text-lg">
-                VAT: {singleOrder?.VAT}
+                VAT: {singleInvoice?.VAT}
               </p>
             </div>
           ) : null}
-
-          {/* Address */}
+          {/* billing Address */}
           <div className="w-full md:space-y-2">
             <label htmlFor="Address" className="Label">
               {t("Billing Address")}
->>>>>>> raj_appideas
             </label>
             <p className="text-textBlack font-medium md:text-lg">
-              {singleOrder?.billingAddress?.zipCode}{" "}
-              {singleOrder?.billingAddress?.address1},<br />{" "}
-              {singleOrder?.billingAddress?.city},<br />{" "}
-              {singleOrder?.billingAddress?.province},<br />
-              {singleOrder?.billingAddress?.country}
+              {singleInvoice?.billingAddress?.zipCode}{" "}
+              {singleInvoice?.billingAddress?.address1},<br />{" "}
+              {singleInvoice?.billingAddress?.city},<br />{" "}
+              {singleInvoice?.billingAddress?.province},<br />
+              {singleInvoice?.billingAddress?.country}
+            </p>
+          </div>
+          {/* shipping Address */}
+          <div className="w-full md:space-y-2">
+            <label htmlFor="Address" className="Label">
+              {t("Shipping Address")}
+            </label>
+            <p className="text-textBlack font-medium md:text-lg">
+              {singleInvoice?.shippingAddress?.zipCode}{" "}
+              {singleInvoice?.shippingAddress?.address1},<br />{" "}
+              {singleInvoice?.shippingAddress?.city},<br />{" "}
+              {singleInvoice?.shippingAddress?.province},<br />
+              {singleInvoice?.shippingAddress?.country}
             </p>
           </div>
         </div>
@@ -211,20 +190,16 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               </tr>
             </thead>
             <tbody className="w-full">
-              {singleOrder?.items &&
-                singleOrder?.items.map((item, i) => (
+              {singleInvoice?.items &&
+                singleInvoice?.items.map((item, i) => (
                   <tr
                     key={item?._id}
                     className="border-b border-gray-200 w-full text-center"
                   >
                     <td className="p-4 whitespace-nowrap">{i + 1}</td>
-<<<<<<< HEAD
-                    <td className="p-4 whitespace-nowrap">{item?.title}</td>
-=======
                     <td className="p-4 whitespace-nowrap">
                       {getProductTitle(item)}
                     </td>
->>>>>>> raj_appideas
                     <td className="p-4 whitespace-nowrap">{item?.quantity}</td>
                     <td className="p-4 whitespace-nowrap">€ {item?.price}</td>
                     <td className="p-4 whitespace-nowrap">
@@ -238,14 +213,7 @@ const OrderDetails = ({ setshowOrderDetails }) => {
         <div className="border border-gray-200 w-full flex justify-between items-start rounded-md p-3">
           <div className="md:w-3/5 w-0" />
           <div className="md:w-2/5 w-full md:space-y-3 space-y-2">
-<<<<<<< HEAD
-            <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">{t("sub total")}</p>
-              <p className="w-1/2 text-right">
-                €&nbsp;
-                {Intl.NumberFormat("en-US", {
-=======
-            {singleOrder?.shippingAddress?.country.toLowerCase() ===
+            {singleInvoice?.shippingAddress?.country.toLowerCase() ===
               "france" && (
               <div className="w-full flex items-center justify-between">
                 <p className="w-1/2 font-semibold uppercase">
@@ -256,11 +224,11 @@ const OrderDetails = ({ setshowOrderDetails }) => {
                   {Intl.NumberFormat("fr-FR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                  }).format(parseFloat(singleOrder?.subtotal * 97.9) / 100)}
+                  }).format(parseFloat(singleInvoice?.subtotal * 97.9) / 100)}
                 </p>
               </div>
             )}
-            {singleOrder?.shippingAddress?.country.toLowerCase() ===
+            {singleInvoice?.shippingAddress?.country.toLowerCase() ===
               "france" && (
               <div className="w-full flex items-center justify-between">
                 <p className="w-1/2 font-semibold uppercase">{t("Tax")}</p>
@@ -272,53 +240,23 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               <p className="w-1/2 text-right">
                 €&nbsp;
                 {Intl.NumberFormat("fr-FR", {
->>>>>>> raj_appideas
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(parseFloat(singleOrder?.subtotal))}
+                }).format(parseFloat(singleInvoice?.subtotal))}
               </p>
             </div>
-<<<<<<< HEAD
-            <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">{"tax"}</p>
-              <p className="w-1/2 text-right">
-                {" "}
-                €&nbsp;
-                {Intl.NumberFormat("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }).format(parseFloat(singleOrder?.tax))}
-              </p>
-            </div>
-            <div className="w-full flex items-center justify-between">
-=======
             {/* <div className="w-full flex items-center justify-between">
->>>>>>> raj_appideas
-              <p className="w-1/2 font-semibold uppercase">
-                {t("shipping cost")}
-              </p>
-              <p className="w-1/2 text-right">
-                €&nbsp;
-<<<<<<< HEAD
-                {Intl.NumberFormat("en-US", {
-=======
-                {Intl.NumberFormat("fr-FR", {
->>>>>>> raj_appideas
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }).format(parseFloat(singleOrder?.shipping))}
-              </p>
-<<<<<<< HEAD
-            </div>
-
-            <div className="w-full flex items-center justify-between">
-              <p className="w-1/2 font-semibold uppercase">{"discount"}</p>
-              <p className="w-1/2 text-right">
-                {" "}
-                €&nbsp;-
-                {Intl.NumberFormat("en-US", {
-=======
-            </div> */}
+            <p className="w-1/2 font-semibold uppercase">
+              {t("shipping cost")}
+            </p>
+            <p className="w-1/2 text-right">
+              €&nbsp;
+              {Intl.NumberFormat("fr-FR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(parseFloat(singleInvoice?.shipping))}
+            </p>
+          </div> */}
 
             <div className="w-full flex items-center justify-between">
               <p className="w-1/2 font-semibold uppercase">{t("discount")}</p>
@@ -326,30 +264,25 @@ const OrderDetails = ({ setshowOrderDetails }) => {
                 {" "}
                 €&nbsp;-
                 {Intl.NumberFormat("fr-FR", {
->>>>>>> raj_appideas
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(parseFloat(singleOrder?.discount))}
+                }).format(parseFloat(singleInvoice?.discount))}
               </p>
             </div>
-            {singleOrder?.promoCode && (
+            {singleInvoice?.promoCode && (
               <div className="w-full flex items-center justify-between">
                 <p className="w-1/2 font-semibold ">
                   <span className="uppercase">{"promo code discount"} </span>
                   <span className="text-sm font-light">
-                    (code : {singleOrder?.promoCode})
+                    (code : {singleInvoice?.promoCode})
                   </span>
                 </p>
                 <p className="w-1/2 text-right">
                   €&nbsp;-
-<<<<<<< HEAD
-                  {Intl.NumberFormat("en-US", {
-=======
                   {Intl.NumberFormat("fr-FR", {
->>>>>>> raj_appideas
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                  }).format(parseFloat(singleOrder?.promoDiscount))}
+                  }).format(parseFloat(singleInvoice?.promoDiscount))}
                 </p>
               </div>
             )}
@@ -358,21 +291,23 @@ const OrderDetails = ({ setshowOrderDetails }) => {
               <p className="w-1/2 font-bold ">{t("Total Amount")}</p>
               <p className="w-1/2 text-right font-bold">
                 €&nbsp;
-<<<<<<< HEAD
-                {Intl.NumberFormat("en-US", {
-=======
                 {Intl.NumberFormat("fr-FR", {
->>>>>>> raj_appideas
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(parseFloat(singleOrder?.total))}
+                }).format(parseFloat(singleInvoice?.total))}
               </p>
             </div>
           </div>
         </div>
+        {singleInvoice?.shippingAddress?.country.toLowerCase() !== "france" && (
+          <div className="text-center font-semibold text-lg">
+            FACTURATION HORS TAXES | Livraison intracommunautaire - Art 262ter
+            du CGI
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default OrderDetails;
+export default InvoiceDetails;

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import EditProfile from "../components/Profile/EditProfile";
 import { useSelector } from "react-redux";
+<<<<<<< HEAD
 import BaseUrl from "../BaseUrl";
+=======
+import { PublicS3Url } from "../BaseUrl";
+>>>>>>> raj_appideas
 import { FaUserCircle } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
@@ -21,11 +25,18 @@ const Profile = () => {
       <Helmet title="Profile | Bois news media" />
 
       <div className="w-full flex items-start lg:gap-3 flex-row h-auto">
+<<<<<<< HEAD
         <Sidebar/>
         <section
           className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${
             isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
           }`}
+=======
+        <Sidebar />
+        <section
+          className={`h-full space-y-5 bg-[#FBFBFB] min-h-screen ${isSidebarOpen ? "xl:w-10/12 lg:w-4/5 w-full" : "lg:w-[90%] w-full"
+            }`}
+>>>>>>> raj_appideas
         >
           <Header />
           <div className="lg:p-5 p-3 ">
@@ -50,7 +61,11 @@ const Profile = () => {
                   <div className="relative md:w-24 w-20 block">
                     {user?.profile !== null && user?.profile !== undefined ? (
                       <img
+<<<<<<< HEAD
                         src={BaseUrl.concat(user?.profile)}
+=======
+                        src={PublicS3Url.concat(user?.profile)}
+>>>>>>> raj_appideas
                         alt="profile"
                         className="rounded-full object-contain object-center bg-cover bg-center inline-block border md:h-24 md:w-24 w-20 h-20"
                       />

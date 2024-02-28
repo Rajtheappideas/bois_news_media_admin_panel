@@ -22,10 +22,17 @@ const Orders = () => {
   const [showAddOrder, setShowAddOrder] = useState(false);
 
   const { orders, loading, filterType } = useSelector(
+<<<<<<< HEAD
     (state) => state.root.orders,
   );
   const { fileterdData, isSidebarOpen } = useSelector(
     (state) => state.root.globalStates,
+=======
+    (state) => state.root.orders
+  );
+  const { fileterdData, isSidebarOpen } = useSelector(
+    (state) => state.root.globalStates
+>>>>>>> raj_appideas
   );
   const { role, token } = useSelector((state) => state.root.auth);
 
@@ -67,7 +74,11 @@ const Orders = () => {
   // fetch orders
   useEffect(() => {
     const response = dispatch(
+<<<<<<< HEAD
       handleGetAllOrder({ token, signal: AbortControllerRef }),
+=======
+      handleGetAllOrder({ token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -140,7 +151,11 @@ const Orders = () => {
                     <thead className="w-full border-b border-gray-100 text-left">
                       <tr>
                         <th className="p-4 whitespace-nowrap">
+<<<<<<< HEAD
                           <span>Invoice Id</span>
+=======
+                          <span>Order Id</span>
+>>>>>>> raj_appideas
                         </th>
                         <th className="p-4">{t("Order date & time")}</th>
                         <th className="p-4">{t("Customer name")}</th>
@@ -160,6 +175,10 @@ const Orders = () => {
                           <SingleOrderList
                             key={order?._id}
                             order={order}
+<<<<<<< HEAD
+=======
+                            setShowAddOrder={setShowAddOrder}
+>>>>>>> raj_appideas
                             setshowOrderDetails={setshowOrderDetails}
                           />
                         ))
@@ -180,8 +199,13 @@ const Orders = () => {
                         ? orders?.length
                         : (pageNumber + 1) * ordersPerPage
                       : (pageNumber + 1) * ordersPerPage > fileterdData?.length
+<<<<<<< HEAD
                         ? fileterdData?.length
                         : (pageNumber + 1) * ordersPerPage}{" "}
+=======
+                      ? fileterdData?.length
+                      : (pageNumber + 1) * ordersPerPage}{" "}
+>>>>>>> raj_appideas
                     {t("from")}{" "}
                     {fileterdData?.length === 0
                       ? orders?.length

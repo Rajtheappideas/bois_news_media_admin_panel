@@ -20,7 +20,11 @@ export const handleGetNewsLetter = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
+<<<<<<< HEAD
   },
+=======
+  }
+>>>>>>> raj_appideas
 );
 
 export const handleGetCount = createAsyncThunk(
@@ -39,7 +43,11 @@ export const handleGetCount = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
+<<<<<<< HEAD
   },
+=======
+  }
+>>>>>>> raj_appideas
 );
 
 export const handleGetMessages = createAsyncThunk(
@@ -58,13 +66,21 @@ export const handleGetMessages = createAsyncThunk(
       toast.error(error?.response?.data?.message);
       return rejectWithValue(error?.response?.data);
     }
+<<<<<<< HEAD
   },
+=======
+  }
+>>>>>>> raj_appideas
 );
 
 const initialState = {
   searchTerm: "",
   fileterdData: [],
+<<<<<<< HEAD
   language: JSON.parse(window.localStorage.getItem("lang")) ?? "en",
+=======
+  language: JSON.parse(window.localStorage.getItem("lang")) ?? "fr",
+>>>>>>> raj_appideas
   newsLetters: [],
   messages: [],
   newsLetterLoading: false,
@@ -73,6 +89,62 @@ const initialState = {
   activeSidebarTab: "dashboard",
   counts: null,
   countLoading: false,
+<<<<<<< HEAD
+=======
+  eec_switzerland_overseas_territories: [
+    "Germany",
+    "Switzerland",
+    "Austria",
+    "Belgium",
+    "Bulgaria",
+    "Cyprus",
+    "Croatia",
+    "Denmark",
+    "Spain",
+    "Estonia",
+    "Finland",
+    "Greece",
+    "Hungary",
+    "Ireland",
+    "Italy",
+    "Latvia",
+    "Lithuania",
+    "Luxembourg",
+    "Malta",
+    "Netherlands",
+    "Poland",
+    "Portugal",
+    "Czech Republic",
+    "Romania",
+    "Slovakia",
+    "Slovenia",
+    "Sweden",
+    "Guadeloupe",
+    "Martinique",
+    "French Guiana",
+    "Reunion",
+    "Mayotte",
+    "Saint Pierre and Miquelon",
+    "Saint Barthelemy",
+    "Saint Martin",
+    "Wallis and Futuna",
+    "French Polynesia",
+    "New Caledonia",
+    "Clipperton Island",
+    "guadeloupe",
+    "martinique",
+    "french guiana",
+    "réunion",
+    "mayotte",
+    "saint pierre and miquelon",
+    "saint barthélemy",
+    "saint martin",
+    "wallis and futuna",
+    "french polynesia",
+    "new caledonia",
+    "clipperton island",
+  ],
+>>>>>>> raj_appideas
 };
 
 const logoutChannel = new BroadcastChannel("handleLogout");

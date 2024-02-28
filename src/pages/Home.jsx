@@ -58,7 +58,11 @@ const Home = () => {
       return navigate("/sign-in");
     }
     const response = dispatch(
+<<<<<<< HEAD
       handleGetAllUsers({ token, signal: AbortControllerRef }),
+=======
+      handleGetAllUsers({ token, signal: AbortControllerRef })
+>>>>>>> raj_appideas
     );
     if (response) {
       response.then((res) => {
@@ -131,11 +135,19 @@ const Home = () => {
             {activeComponent === t("change password") && <ChangePassword />}
             {activeComponent === t("messages") && <MessagesList />}
             {/* {activeComponent === t("newsLetter") && <NewsLetterList />} */}
+<<<<<<< HEAD
             {/* {activeComponent === t("tax & shipping") && (
               <TaxtAndShippingCharges />
             )} */}
             {/* {activeComponent === t("promo codes") && <PromoCode />}
           </div> */} 
+=======
+          {/* {activeComponent === t("tax & shipping") && (
+              <TaxtAndShippingCharges />
+            )} */}
+          {/* {activeComponent === t("promo codes") && <PromoCode />}
+          </div> */}
+>>>>>>> raj_appideas
         </section>
       </div>
     </>

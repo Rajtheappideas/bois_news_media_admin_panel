@@ -1,7 +1,11 @@
 import React from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { FaFileUpload } from "react-icons/fa";
+<<<<<<< HEAD
 import { useForm } from "react-hook-form";
+=======
+import { Controller, useForm } from "react-hook-form";
+>>>>>>> raj_appideas
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +16,10 @@ import { useEffect } from "react";
 import { handleAddNewMagazine } from "../../redux/MagazineSlice";
 import { BsCloudUploadFill } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
+<<<<<<< HEAD
+=======
+import RichTextEditor from "../RichTextEditor";
+>>>>>>> raj_appideas
 
 const AddnewMagazine = ({ setshowAddnewMagazine }) => {
   const [prevImage, setPrevImage] = useState(null);
@@ -33,6 +41,12 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     title: yup.string().required(t("title is required")),
     status: yup.string().required(t("status is required")),
     description: yup.string().required(t("description is required")),
+<<<<<<< HEAD
+=======
+    detailDescription: yup
+      .string()
+      .required(t("detail description is required")),
+>>>>>>> raj_appideas
     magazineTitle: yup.string().required(t("select magazine")),
     pdf: yup
       .mixed()
@@ -68,6 +82,11 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     handleSubmit,
     formState: { errors },
     getValues,
+<<<<<<< HEAD
+=======
+    setValue,
+    control,
+>>>>>>> raj_appideas
   } = useForm({
     shouldFocusError: true,
     reValidateMode: "onChange",
@@ -88,6 +107,10 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
       description,
       status,
       magazineTitle,
+<<<<<<< HEAD
+=======
+      detailDescription,
+>>>>>>> raj_appideas
     } = data;
     const response = dispatch(
       handleAddNewMagazine({
@@ -99,6 +122,10 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
         stock,
         status,
         description,
+<<<<<<< HEAD
+=======
+        detailDescription,
+>>>>>>> raj_appideas
         image: magazineImage,
         token,
         signal: AbortControllerRef,
@@ -107,6 +134,10 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
     if (response) {
       response.then((res) => {
         if (res?.payload?.status === "success") {
+<<<<<<< HEAD
+=======
+          toast.remove();
+>>>>>>> raj_appideas
           toast.success(` ${title} ${t("magazine added Successfully")}.`, {
             duration: 3000,
           });
@@ -289,28 +320,50 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
             />
             <span className="error">{errors?.title?.message}</span>
           </div>
+<<<<<<< HEAD
           {/* digital price */}
           <div className="w-full space-y-2">
             <label htmlFor="digital_price" className="Label">
               {t("digital price")}
+=======
+          {/*digital price */}
+          <div className="w-full space-y-2">
+            <label htmlFor="digital_price" className="Label">
+              {t("Digital price")}
+>>>>>>> raj_appideas
             </label>
             <input
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
+<<<<<<< HEAD
+=======
+              step="0.0001"
+>>>>>>> raj_appideas
               {...register("priceDigital")}
             />
             <span className="error">{errors?.priceDigital?.message}</span>
           </div>
+<<<<<<< HEAD
           {/* paper price */}
           <div className="w-full space-y-2">
             <label htmlFor="paper_price" className="Label">
               {t("paper price")}
+=======
+          {/*paper price */}
+          <div className="w-full space-y-2">
+            <label htmlFor="paper_price" className="Label">
+              {t("Paper price")}
+>>>>>>> raj_appideas
             </label>
             <input
               type="number"
               placeholder={t("Type here...")}
               className="input_field"
+<<<<<<< HEAD
+=======
+              step="0.0001"
+>>>>>>> raj_appideas
               {...register("pricePaper")}
             />
             <span className="error">{errors?.pricePaper?.message}</span>
@@ -354,17 +407,43 @@ const AddnewMagazine = ({ setshowAddnewMagazine }) => {
             </select>
             <span className="error">{errors?.magazineTitle?.message}</span>
           </div>
+<<<<<<< HEAD
+=======
+          {/* description */}
+          <div className="w-full col-span-full space-y-2">
+            <label htmlFor="description" className="Label">
+              {t("description")}
+            </label>
+            <textarea {...register("description")} className="input_field" />
+            <span className="error">{errors?.description?.message}</span>
+          </div>
+>>>>>>> raj_appideas
           {/* summary */}
           <div className="w-full col-span-full space-y-2">
             <label htmlFor="summary" className="Label">
               {t("summary")}
             </label>
+<<<<<<< HEAD
             <textarea
               placeholder={t("Type here...")}
               {...register("description")}
               className="input_field"
             />
             <span className="error">{errors?.description?.message}</span>
+=======
+            <Controller
+              control={control}
+              name={"detailDescription"}
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <RichTextEditor
+                  onBlur={onBlur}
+                  value={value}
+                  setValue={setValue}
+                />
+              )}
+            />
+            <span className="error">{errors?.detailDescription?.message}</span>
+>>>>>>> raj_appideas
           </div>
         </div>
       </div>
