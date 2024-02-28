@@ -81,32 +81,73 @@ const Invoices = () => {
     const fileExtension = ".xlsx";
     let products = data.map(
       ({
-        order,
         subscriber,
         invoiceId,
         total,
-        subtotal,
         items,
-        email,
-        VAT,
-        companyName,
-        paymentMethod,
-        date,
+        promoDiscount,
         discount,
+        billingAddress: { country },
+        shippingArea,
+        orderId,
+        date,
+        promoCode,
       }) => ({
         invoiceId,
-        orderId: order,
-        subscriberName: `${subscriber?.fname} ${subscriber?.lname}`,
-        subscriberEmail: subscriber?.email,
-        email,
-        companyName,
-        paymentMethod,
+        orderId,
         date: moment(date).format("LLL"),
-        subtotal,
+        subscriberName: `${subscriber?.fname} ${subscriber?.lname}`,
+        CustomerIdentificationNumber: subscriber?.userId,
+        subscriberEmail: subscriber?.email,
+        total: `${total}€`,
+        country,
+        shippingArea,
+        TypeOfDiscount: items.filter(
+          (item) => item?.itemType === "Subscription"
+        ).length,
         discount,
-        total,
-        items: items.map((item) => item),
-        VAT,
+        promoCode,
+        promoDiscount: promoDiscount ? `${promoDiscount}€` : 0,
+        BMSubscription: items.filter(
+          (item) =>
+            item?.itemType === "Subscription" &&
+            item?.magazineTitle === "boismag"
+        ).length,
+        AGSubscription: items.filter(
+          (item) =>
+            item?.itemType === "Subscription" &&
+            item?.magazineTitle === "agenceur"
+        ).length,
+        ABSubscription: items.filter(
+          (item) =>
+            item?.itemType === "Subscription" &&
+            item?.magazineTitle === "artisans_and_bois"
+        ).length,
+        TMSubscription: items.filter(
+          (item) =>
+            item?.itemType === "Subscription" &&
+            item?.magazineTitle === "toiture"
+        ).length,
+        BMMagazine: items.filter(
+          (item) =>
+            item?.itemType === "Magazine" &&
+            item?.magazineTitle === "boismag"
+        ).length,
+        AGMagazine: items.filter(
+          (item) =>
+            item?.itemType === "Magazine" &&
+            item?.magazineTitle === "agenceur"
+        ).length,
+        ABMagazine: items.filter(
+          (item) =>
+            item?.itemType === "Magazine" &&
+            item?.magazineTitle === "artisans_and_bois"
+        ).length,
+        TMMagazine: items.filter(
+          (item) =>
+            item?.itemType === "Magazine" &&
+            item?.magazineTitle === "toiture"
+        ).length,
       })
     );
 
@@ -116,19 +157,27 @@ const Invoices = () => {
         ws,
         [
           [
-            "invoiceId",
-            "order",
-            "subscriberName",
-            "subscriberEmail",
-            "email",
-            "companyName",
-            "paymentMethod",
-            "date",
-            "subtotal",
-            "discount",
-            "total",
-            "items",
-            "VAT",
+            "Invoice Number",
+            "Order Number",
+            "Date of invoice",
+            "Customer Name",
+            "Customer identification number",
+            "Contact mail",
+            "Total value of invoice",
+            "Country",
+            "Geographical Area",
+            "Type of discount for multiples 2/3/4 titles",
+            "Discount value",
+            "Promotional code",
+            "Promotional discount",
+            "BM Subscription",
+            "AG Subscription",
+            "AB Subscription",
+            "TM Subscription",
+            "BM Magazine",
+            "AG Magazine",
+            "AB Magazine",
+            "TM Magazine",
           ],
         ],
         {
@@ -159,7 +208,7 @@ const Invoices = () => {
     let modifyEndDate = endDate.splice(endDate.length - 1, 1);
     modifyStartDate = modifyStartDate.concat(startDate).join("-");
     modifyEndDate = modifyEndDate.concat(endDate).join("-");
-    const data = invoices.map((i) => {
+    const data = invoices.filter((i) => {
       if (moment(i.date).isBetween(modifyStartDate, modifyEndDate, "date")) {
         return i;
       } else if (
@@ -228,7 +277,7 @@ const Invoices = () => {
       document.removeEventListener("click", handleClickOutside, true);
     };
   }, [handleClickOutside]);
-  
+
   function handleClickOutside() {
     setShowDateModal(false);
     setSelectedDate([]);
@@ -286,7 +335,7 @@ const Invoices = () => {
                           setSelectedDate(e);
                           ExportDataInBetweenRange(e);
                         }}
-                        minDate={new Date(invoices[0]?.date)}
+                        minDate={new Date(invoices[invoices?.length - 1]?.date)}
                         value={selectedDate}
                         className={`absolute top-10 md:right-0 -right-10 md:min-w-[25vw] min-w-fit ${
                           showDateModal ? "scale-100" : "scale-0"

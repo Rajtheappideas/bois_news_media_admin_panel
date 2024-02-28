@@ -46,6 +46,7 @@ export const handleCreateAndEditInvoice = createAsyncThunk(
     {
       VAT,
       orderId,
+      order,
       subscriberId,
       items,
       companyName,
@@ -85,7 +86,8 @@ export const handleCreateAndEditInvoice = createAsyncThunk(
             companyName,
             purchaseOrder,
             paymentMethod,
-            order: orderId,
+            order,
+            orderId,
             subscriber: subscriberId,
             items,
           },

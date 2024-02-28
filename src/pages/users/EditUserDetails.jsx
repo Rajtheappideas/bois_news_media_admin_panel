@@ -135,7 +135,7 @@ const EditUserDetails = () => {
         city,
         zipCode,
         country,
-        id: singleUser?.state?._id,
+        id: singleUser?._id,
         token,
         signal: AbortControllerRef,
       })

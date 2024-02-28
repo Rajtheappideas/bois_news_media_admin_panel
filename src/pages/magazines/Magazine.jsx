@@ -338,7 +338,6 @@ const Magazine = () => {
                                       <DownloadButton filePath={magazine?.paperSubscribers} label="Routing file (paper subscribers)" />
                                     </li>
                                     <hr />
-
                                     <li className="hover:bg-gray-200 transition break-words whitespace-normal duration-100 cursor-pointer p-1">
                                       <DownloadButton filePath={magazine?.paperProspectsPartners} label="Routing file (paper partners &
                                         prospects)" />

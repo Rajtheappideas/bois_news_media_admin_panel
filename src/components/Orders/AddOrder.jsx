@@ -105,12 +105,6 @@ const AddOrder = ({ setShowAddOrder }) => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      abortApiCall();
-    };
-  }, []);
-
   const handleSearchSubscriber = (e) => {
     if (!searchRef.current?.value || !e) {
       setSearchResult([]);
@@ -180,6 +174,9 @@ const AddOrder = ({ setShowAddOrder }) => {
         }
       });
     }
+    return () => {
+      abortApiCall();
+    };
   }, []);
 
   useEffect(() => {
@@ -530,7 +527,7 @@ const AddOrder = ({ setShowAddOrder }) => {
                 {items?.length > 0 &&
                   items.map((item, i) => (
                     <tr
-                      key={item?._id}
+                      key={i}
                       className="border-b border-gray-200 w-full text-center"
                     >
                       <td className="p-4 whitespace-nowrap">{i + 1}</td>

@@ -69,7 +69,8 @@ const AddInvoice = ({ setShowAddInvoice, orderId, setOrderId }) => {
     );
     const response = dispatch(
       handleCreateAndEditInvoice({
-        orderId: findOrder?._id,
+        orderId: findOrder?.orderId,
+        order: findOrder?._id,
         subscriberId: selectedOrder?.subscriber?._id,
         VAT,
         items: selectedOrder?.items,
@@ -227,9 +228,9 @@ const AddInvoice = ({ setShowAddInvoice, orderId, setOrderId }) => {
                   searchResult.length > 0 ? "scale-100" : "scale-0"
                 } transition-all duration-300 top-12 w-full max-h-80 overflow-y-scroll scrollbar left-0 bg-white z-10 shadow-md rounded-lg space-y-2`}
               >
-                {searchResult.map((order) => (
+                {searchResult.map((order, i) => (
                   <p
-                    key={searchResult?._id}
+                    key={i}
                     className="cursor-pointer hover:bg-gray-100 p-3"
                     onClick={() => handleChangeOrder(order?._id, "search")}
                   >

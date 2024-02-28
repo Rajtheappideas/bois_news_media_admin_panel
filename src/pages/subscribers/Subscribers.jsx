@@ -256,7 +256,7 @@ const Subscribers = () => {
                             </td>
 
                             <td className="text-left p-4 pl-10 whitespace-nowrap">
-                              {subscriber?.title !== ""
+                              {subscriber?.title
                                 ? subscriber?.title
                                 : "-"}
                             </td>

@@ -191,6 +191,7 @@ const AuthSlice = createSlice({
       state.token = null;
       window.location.href = window.location.origin.concat("/sign-in");
       toast.success("Logout Successfully.", { duration: 3000 });
+      window.localStorage.clear()
       state.loading = false;
     },
     handleStoreUserEmail: (state, { payload }) => {

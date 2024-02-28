@@ -274,7 +274,7 @@ const Prospect = () => {
                                   onClick={() =>
                                     handleDeleteprospect(
                                       prospect?._id,
-                                      prospect?.name,
+                                      prospect?.fname.concat(prospect?.lname),
                                     )
                                   }
                                   disabled={
