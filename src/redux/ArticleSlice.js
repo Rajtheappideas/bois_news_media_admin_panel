@@ -51,6 +51,7 @@ export const handleAddArticle = createAsyncThunk(
       website,
       category,
       tags,
+      signal,
     },
     { rejectWithValue }
   ) => {
@@ -66,6 +67,7 @@ export const handleAddArticle = createAsyncThunk(
     for (const key in tags) {
       formData.append("tags", tags[key]);
     }
+    signal.current = new AbortController();
     try {
       const { data } = await PostUrl("article", {
         data: formData,
@@ -74,6 +76,7 @@ export const handleAddArticle = createAsyncThunk(
           "Accept-Language": lang,
           "Content-Type": "multipart/form-data",
         },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -101,6 +104,7 @@ export const handleEditArticle = createAsyncThunk(
       category,
       id,
       tags,
+      signal,
     },
     { rejectWithValue }
   ) => {
@@ -116,6 +120,7 @@ export const handleEditArticle = createAsyncThunk(
     for (const key in tags) {
       formData.append("tags", tags[key]);
     }
+    signal.current = new AbortController();
     try {
       const { data } = await PostUrl(`article/${id}`, {
         data: formData,
@@ -124,6 +129,7 @@ export const handleEditArticle = createAsyncThunk(
           "Accept-Language": lang,
           "Content-Type": "multipart/form-data",
         },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -137,14 +143,16 @@ export const handleEditArticle = createAsyncThunk(
 
 export const handleDeleteArticle = createAsyncThunk(
   "article/handleDeleteArticle",
-  async ({ token, id }, { rejectWithValue }) => {
+  async ({ token, id, signal }, { rejectWithValue }) => {
+    signal.current = new AbortController();
+
     try {
       const { data } = await GetUrl(`article/delete/${id}`, {
         headers: {
           Authorization: token,
-          "Accept-Language": lang,
           "Content-Type": "multipart/form-data",
         },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -158,7 +166,7 @@ export const handleDeleteArticle = createAsyncThunk(
 
 const initialState = {
   articleLoading: false,
-  aritcles: [],
+  articles: [],
   removeLoading: false,
   addAndEditLoading: false,
   singleArticle: null,
@@ -167,7 +175,11 @@ const initialState = {
 const ArticleSlice = createSlice({
   name: "article",
   initialState,
-  reducers: {},
+  reducers: {
+    handleChangeSingleArticle: (state, { payload }) => {
+      state.singleArticle = payload;
+    },
+  },
   extraReducers: (buidler) => {
     // get all articles
     buidler
@@ -208,7 +220,7 @@ const ArticleSlice = createSlice({
       })
       .addCase(handleAddArticle.fulfilled, (state, { payload }) => {
         state.addAndEditLoading = false;
-        state.aritcles = [payload?.article, ...state?.aritcles];
+        state.articles = [payload?.article, ...state?.articles];
         state.error = null;
       })
       .addCase(handleAddArticle.rejected, (state, { payload }) => {
@@ -223,7 +235,7 @@ const ArticleSlice = createSlice({
       })
       .addCase(handleEditArticle.fulfilled, (state, { payload, meta }) => {
         state.addAndEditLoading = false;
-        state.aritcles = state.aritcles.map((article) => {
+        state.articles = state.articles.map((article) => {
           if (article?._id === meta.arg.id) {
             return payload?.article;
           } else {
@@ -244,7 +256,7 @@ const ArticleSlice = createSlice({
       })
       .addCase(handleDeleteArticle.fulfilled, (state, { payload, meta }) => {
         state.removeLoading = false;
-        state.aritcles = state.aritcles.filter((article) => {
+        state.articles = state.articles.filter((article) => {
           return article?._id !== meta.arg.id;
         });
         state.error = null;
@@ -256,6 +268,6 @@ const ArticleSlice = createSlice({
   },
 });
 
-export const {} = ArticleSlice.actions;
+export const { handleChangeSingleArticle } = ArticleSlice.actions;
 
 export default ArticleSlice.reducer;

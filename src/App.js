@@ -17,7 +17,6 @@ import {
 } from "./redux/GlobalStates";
 import { useTranslation } from "react-i18next";
 import useAbortApiCall from "./hooks/useAbortApiCall";
-import EditInvoice from "./pages/invoices/EditInvoice";
 
 const SignIn = lazy(() => import("./pages/SignIn"));
 const SignUp = lazy(() => import("./pages/SignUp"));
@@ -63,6 +62,16 @@ const Invoices = lazy(() => import("./pages/invoices/Invoices"));
 const PromoCode = lazy(() => import("./pages/PromoCode"));
 const MessagesList = lazy(() => import("./pages/MessagesList"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
+const EditInvoice = lazy(() => import("./pages/invoices/EditInvoice"));
+const Category = lazy(() => import("./pages/Category/Category"));
+const CategoryDetails = lazy(() => import("./pages/Category/CategoryDetails"));
+const EditCategory = lazy(() => import("./pages/Category/EditCategory"));
+const Tag = lazy(() => import("./pages/Tag/Tag"));
+const EditTag = lazy(() => import("./pages/Tag/EditTag"));
+const TagDetails = lazy(() => import("./pages/Tag/TagDetails"));
+const Articles = lazy(() => import("./pages/Articles/Articles"));
+const EditArticle = lazy(() => import("./pages/Articles/EditArticle"));
+const ArticleDetails = lazy(() => import("./pages/Articles/ArticleDetails"));
 
 function App() {
   const { token, user } = useSelector((state) => state.root.auth);
@@ -97,6 +106,15 @@ function App() {
     { path: "/invoices", page: Invoices },
     { path: "/invoice/:id", page: EditInvoice },
     { path: "/change-password", page: ChangePassword },
+    { path: "/category", page: Category },
+    { path: "/category/:id", page: CategoryDetails },
+    { path: "/category/edit/:id", page: EditCategory },
+    { path: "/tags", page: Tag },
+    { path: "/tag/:id", page: TagDetails },
+    { path: "/tag/edit/:id", page: EditTag },
+    { path: "/articles", page: Articles },
+    { path: "/article/:id", page: ArticleDetails },
+    { path: "/article/edit/:id", page: EditArticle },
   ];
 
   useEffect(() => {

@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from "react";
-import { BiHome, BiMessageSquareDots } from "react-icons/bi";
+import { BiHome, BiMessageSquareDots, BiCategory } from "react-icons/bi";
 import { MdSavedSearch } from "react-icons/md";
 import { FaFileInvoiceDollar, FaRegHandshake, FaUserAlt } from "react-icons/fa";
 import { TbUserDollar } from "react-icons/tb";
 import { CgNotes } from "react-icons/cg";
 import { GiWhiteBook } from "react-icons/gi";
 import { BsCart3 } from "react-icons/bs";
-import { RiCoupon3Line } from "react-icons/ri";
+import { RiCoupon3Line, RiArticleLine } from "react-icons/ri";
 import { HiOutlineXMark } from "react-icons/hi2";
+import { IoPricetagsOutline  } from "react-icons/io5";
 import { AiOutlineUser, AiOutlineUsergroupAdd } from "react-icons/ai";
 import { PublicS3Url } from "../BaseUrl";
 import { useDispatch, useSelector } from "react-redux";
@@ -70,6 +71,9 @@ const Sidebar = () => {
     //   url: "tax-shipping",
     // },
     { title: t("promo-codes"), icon: RiCoupon3Line, url: "promo-codes" },
+    { title: t("category"), icon: BiCategory, url: "category" },
+    { title: t("tags"), icon: IoPricetagsOutline, url: "tags" },
+    { title: t("articles"), icon: RiArticleLine, url: "articles" },
     { title: t("messages"), icon: BiMessageSquareDots, url: "messages" },
     // { title: t("newsLetter"), icon: SlEnvolopeLetter },
     // { title: "settings", icon: LuSettings2 },

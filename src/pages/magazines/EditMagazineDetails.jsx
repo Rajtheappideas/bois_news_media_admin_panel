@@ -120,7 +120,7 @@ const EditMagazineDetails = () => {
         status,
         description,
         detailDescription,
-        image: magazineImage,
+        image: magazineImage ? magazineImage : singleMagazine?.image,
         id: state?._id,
         token,
         signal: AbortControllerRef,

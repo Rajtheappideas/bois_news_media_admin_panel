@@ -39,9 +39,10 @@ export const handleGetCategoryById = createAsyncThunk(
 export const handleAddCategory = createAsyncThunk(
   "categoryandtag/handleAddCategory",
   async (
-    { token, lang, frname, enname, image, website },
+    { token, lang, frname, enname, image, website, signal },
     { rejectWithValue }
   ) => {
+    signal.current = new AbortController();
     const formData = new FormData();
     formData.append("en[name]", enname);
     formData.append("fr[name]", frname);
@@ -55,6 +56,7 @@ export const handleAddCategory = createAsyncThunk(
           "Accept-Language": lang,
           "Content-Type": "multipart/form-data",
         },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -69,9 +71,10 @@ export const handleAddCategory = createAsyncThunk(
 export const handleEditCategory = createAsyncThunk(
   "categoryandtag/handleEditCategory",
   async (
-    { token, lang, frname, enname, id, image, website },
+    { token, lang, frname, enname, id, image, website, signal },
     { rejectWithValue }
   ) => {
+    signal.current = new AbortController();
     const formData = new FormData();
     formData.append("en[name]", enname);
     formData.append("fr[name]", frname);
@@ -85,6 +88,7 @@ export const handleEditCategory = createAsyncThunk(
           "Accept-Language": lang,
           "Content-Type": "multipart/form-data",
         },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -98,15 +102,16 @@ export const handleEditCategory = createAsyncThunk(
 
 export const handleDeleteCategory = createAsyncThunk(
   "categoryandtag/handleDeleteCategory",
-  async ({ token, lang, id }, { rejectWithValue }) => {
+  async ({ token, lang, id, signal }, { rejectWithValue }) => {
+    signal.current = new AbortController();
     try {
       const { data } = await GetUrl(`category/delete/${id}`, {
-        data: formData,
         headers: {
           Authorization: token,
           "Accept-Language": lang,
           "Content-Type": "multipart/form-data",
         },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -154,11 +159,13 @@ export const handleGetTagById = createAsyncThunk(
 
 export const handleAddTag = createAsyncThunk(
   "categoryandtag/handleAddTag",
-  async ({ token, lang, name, website }, { rejectWithValue }) => {
+  async ({ token, lang, name, website, signal }, { rejectWithValue }) => {
+    signal.current = new AbortController();
     try {
       const { data } = await PostUrl("tag", {
         data: { name, website },
         headers: { Authorization: token, "Accept-Language": lang },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -172,11 +179,13 @@ export const handleAddTag = createAsyncThunk(
 
 export const handleEditTag = createAsyncThunk(
   "categoryandtag/handleEditTag",
-  async ({ token, lang, id, name, website }, { rejectWithValue }) => {
+  async ({ token, lang, id, name, website, signal }, { rejectWithValue }) => {
+    signal.current = new AbortController();
     try {
       const { data } = await PostUrl(`tag/${id}`, {
         data: { name, website },
         headers: { Authorization: token, "Accept-Language": lang },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -190,10 +199,12 @@ export const handleEditTag = createAsyncThunk(
 
 export const handleDeleteTag = createAsyncThunk(
   "categoryandtag/handleDeleteTag",
-  async ({ token, id }, { rejectWithValue }) => {
+  async ({ token, id, signal }, { rejectWithValue }) => {
+    signal.current = new AbortController();
     try {
       const { data } = await GetUrl(`tag/delete/${id}`, {
         headers: { Authorization: token },
+        signal: signal.current.signal,
       });
       return data;
     } catch (error) {
@@ -222,7 +233,14 @@ const initialState = {
 const CategoryAndTagsSlice = createSlice({
   name: "categoryandtag",
   initialState,
-  reducers: {},
+  reducers: {
+    handleChangeSingleCategory: (state, { payload }) => {
+      state.singleCategory = payload;
+    },
+    handleChangeSingleTag: (state, { payload }) => {
+      state.singelTag = payload;
+    },
+  },
   extraReducers: (buidler) => {
     // get all categories
     buidler
@@ -396,6 +414,7 @@ const CategoryAndTagsSlice = createSlice({
   },
 });
 
-export const {} = CategoryAndTagsSlice.actions;
+export const { handleChangeSingleCategory, handleChangeSingleTag } =
+  CategoryAndTagsSlice.actions;
 
 export default CategoryAndTagsSlice.reducer;

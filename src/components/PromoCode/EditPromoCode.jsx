@@ -113,7 +113,13 @@ const EditPromoCode = ({ setShowEditPromoCode }) => {
         subscription,
         maxUsage,
         totalMaxUsage,
-        subscribers: subscribers.map((sub) => sub?.value),
+        subscribers: subscribers.map((sub) => {
+          if (sub.hasOwnProperty("value")) {
+            return sub?.value;
+          } else {
+            return sub;
+          }
+        }),
         token,
         signal: AbortControllerRef,
       })
