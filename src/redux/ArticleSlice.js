@@ -24,7 +24,6 @@ export const handleGetArticleById = createAsyncThunk(
   async ({ token, lang, id }, { rejectWithValue }) => {
     try {
       const { data } = await GetUrl(`article/${id}`, {
-        data: formData,
         headers: { Authorization: token, "Accept-Language": lang },
       });
       return data;
@@ -141,7 +140,6 @@ export const handleDeleteArticle = createAsyncThunk(
   async ({ token, id }, { rejectWithValue }) => {
     try {
       const { data } = await GetUrl(`article/delete/${id}`, {
-        data: formData,
         headers: {
           Authorization: token,
           "Accept-Language": lang,

@@ -24,7 +24,6 @@ export const handleGetCategoryById = createAsyncThunk(
   async ({ token, lang, id }, { rejectWithValue }) => {
     try {
       const { data } = await GetUrl(`category/${id}`, {
-        data: formData,
         headers: { Authorization: token, "Accept-Language": lang },
       });
       return data;
@@ -99,7 +98,7 @@ export const handleEditCategory = createAsyncThunk(
 
 export const handleDeleteCategory = createAsyncThunk(
   "categoryandtag/handleDeleteCategory",
-  async ({ token, id }, { rejectWithValue }) => {
+  async ({ token, lang, id }, { rejectWithValue }) => {
     try {
       const { data } = await GetUrl(`category/delete/${id}`, {
         data: formData,
@@ -141,7 +140,6 @@ export const handleGetTagById = createAsyncThunk(
   async ({ token, lang, id }, { rejectWithValue }) => {
     try {
       const { data } = await GetUrl(`tag/${id}`, {
-        data: formData,
         headers: { Authorization: token, "Accept-Language": lang },
       });
       return data;
@@ -195,8 +193,7 @@ export const handleDeleteTag = createAsyncThunk(
   async ({ token, id }, { rejectWithValue }) => {
     try {
       const { data } = await GetUrl(`tag/delete/${id}`, {
-        data: formData,
-        headers: { Authorization: token, "Accept-Language": lang },
+        headers: { Authorization: token },
       });
       return data;
     } catch (error) {
