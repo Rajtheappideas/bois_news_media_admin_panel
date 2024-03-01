@@ -71,7 +71,18 @@ export const handleAddCategory = createAsyncThunk(
 export const handleEditCategory = createAsyncThunk(
   "categoryandtag/handleEditCategory",
   async (
-    { token, lang, frname, enname, id, image, website, signal },
+    {
+      token,
+      lang,
+      showOnNavbar,
+      showOnHomePage,
+      frname,
+      enname,
+      id,
+      image,
+      website,
+      signal,
+    },
     { rejectWithValue }
   ) => {
     signal.current = new AbortController();
@@ -80,6 +91,8 @@ export const handleEditCategory = createAsyncThunk(
     formData.append("fr[name]", frname);
     formData.append("image", image);
     formData.append("website", website);
+    formData.append("showOnNavbar", showOnNavbar);
+    formData.append("showOnHomePage", showOnHomePage);
     try {
       const { data } = await PostUrl(`category/${id}`, {
         data: formData,

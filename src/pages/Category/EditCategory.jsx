@@ -86,9 +86,11 @@ const EditCategory = () => {
         lang: language,
         frname,
         enname,
-        image: categoryImage?categoryImage:singleCategory?.image,
+        image: categoryImage ? categoryImage : singleCategory?.image,
         website,
         id: singleCategory?._id,
+        showOnHomePage: singleCategory?.showOnHomePage,
+        showOnNavbar: singleCategory?.showOnNavbar,
         signal: AbortControllerRef,
       })
     );

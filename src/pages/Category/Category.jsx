@@ -13,6 +13,7 @@ import ReactPaginate from "react-paginate";
 import {
   handleChangeSingleCategory,
   handleDeleteCategory,
+  handleEditCategory,
   handleGetCategories,
 } from "../../redux/CategoryAndTagsSlice";
 import { handleLogout } from "../../redux/AuthSlice";
@@ -84,6 +85,59 @@ const Category = () => {
     }
   };
 
+  const handleEditCategoryUsingSwitch = (category, name) => {
+    toast.loading("Editing...", { id: "loading" });
+    const response = dispatch(
+      handleEditCategory({
+        token,
+        lang: language,
+        frname: category?.fr?.name,
+        enname: category?.en?.name,
+        image: category?.image,
+        website: category?.website,
+        id: category?._id,
+        showOnHomePage:
+          name === "new_post"
+            ? !category?.showOnHomePage
+            : category?.showOnHomePage,
+        showOnNavbar:
+          name === "navbar" ? !category?.showOnNavbar : category?.showOnNavbar,
+        signal: AbortControllerRef,
+      })
+    );
+    if (response) {
+      response.then((res) => {
+        toast.remove("loading")
+        if (res?.payload?.status === "success") {
+          if (name === "new_post")
+            return toast.success(
+              `${t(
+                `category ${
+                  category?.showOnHomePage ? "removed from" : "added to"
+                } new post successfully.`
+              )}`,
+              {
+                duration: 2000,
+              }
+            );
+          else
+            return toast.success(
+              `${t(
+                `category ${
+                  category?.showOnNavbar ? "removed from" : "added to"
+                } navbar successfully.`
+              )}`,
+              {
+                duration: 2000,
+              }
+            );
+        } else if (res?.payload?.status === "error") {
+          toast.error(res?.payload?.message);
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     const response = dispatch(handleGetCategories({ token, lang: language }));
     if (response) {
@@ -151,6 +205,12 @@ const Category = () => {
                         English {t("Name")}
                       </th>
                       <th className="p-4 pl-10 text-center">{t("Website")}</th>
+                      <th className="p-4 pl-10 text-center capitalize">
+                        {t("navbar(article-site)")}
+                      </th>
+                      <th className="p-4 pl-10 text-center capitalize">
+                        {t("new posts(article-site)")}
+                      </th>
                       <th className="p-4 pl-10 text-center">{t("Actions")}</th>
                     </tr>
                   </thead>
@@ -174,13 +234,51 @@ const Category = () => {
                           <td className="text-center p-4 pl-10 whitespace-nowrap">
                             {category?.website}
                           </td>
+                          <td className="text-center p-4 pl-10 whitespace-nowrap">
+                            <label className="inline-flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                value=""
+                                checked={category?.showOnNavbar}
+                                className="sr-only peer"
+                                name="navbar"
+                                onChange={(e) =>
+                                  handleEditCategoryUsingSwitch(
+                                    category,
+                                    e.target.name
+                                  )
+                                }
+                              />
+                              <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                          </td>
+                          <td className="text-center p-4 pl-10 whitespace-nowrap">
+                            <label className="inline-flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={category?.showOnHomePage}
+                                value=""
+                                name="new_post"
+                                className="sr-only peer"
+                                onChange={(e) =>
+                                  handleEditCategoryUsingSwitch(
+                                    category,
+                                    e.target.name
+                                  )
+                                }
+                              />
+                              <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                          </td>
 
                           <td className="flex items-center justify-center p-4 pl-10">
                             {(role === "admin" || role === "editor") && (
                               <button
                                 onClick={() => {
                                   navigate(`/category/edit/${category?._id}`);
-                                  dispatch(handleChangeSingleCategory(category))
+                                  dispatch(
+                                    handleChangeSingleCategory(category)
+                                  );
                                 }}
                                 type="button"
                                 className="hover:bg-gray-200 p-1 rounded-full h-10 w-10"
