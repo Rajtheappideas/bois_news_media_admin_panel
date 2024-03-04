@@ -72,6 +72,12 @@ const TagDetails = lazy(() => import("./pages/Tag/TagDetails"));
 const Articles = lazy(() => import("./pages/Articles/Articles"));
 const EditArticle = lazy(() => import("./pages/Articles/EditArticle"));
 const ArticleDetails = lazy(() => import("./pages/Articles/ArticleDetails"));
+const Images = lazy(() => import("./pages/Images/Images"));
+const ImageDetails = lazy(() => import("./pages/Images/ImageDetails"));
+const EditImageDetails = lazy(() => import("./pages/Images/EditImageDetails"));
+const HomeArticleSite = lazy(() =>
+  import("./pages/HomeArticleSite/HomeArticleSite")
+);
 
 function App() {
   const { token, user } = useSelector((state) => state.root.auth);
@@ -115,6 +121,10 @@ function App() {
     { path: "/articles", page: Articles },
     { path: "/article/:id", page: ArticleDetails },
     { path: "/article/edit/:id", page: EditArticle },
+    { path: "/images", page: Images },
+    { path: "/image/edit/:id", page: EditImageDetails },
+    { path: "/image/:id", page: ImageDetails },
+    { path: "/home-article-site", page: HomeArticleSite },
   ];
 
   useEffect(() => {

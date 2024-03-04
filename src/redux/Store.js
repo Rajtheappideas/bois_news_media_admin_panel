@@ -16,6 +16,7 @@ import PromoCodeSlice from "./PromoCodeSlice";
 import InvoiceSlice from "./InvoiceSlice";
 import CategoryAndTagsSlice from "./CategoryAndTagsSlice";
 import ArticleSlice from "./ArticleSlice";
+import ImageSlice from "./ImageSlice";
 
 const globalStatesPersistConfig = {
   key: "globalStates",
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
   invoice: InvoiceSlice,
   categoryandtag: CategoryAndTagsSlice,
   article: ArticleSlice,
+  image: ImageSlice,
 });
 
 // const persisteRoot = persistReducer(rootPersistConfig, rootReducer);
