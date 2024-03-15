@@ -123,7 +123,7 @@ const ImageDetails = () => {
                     <label htmlFor="url" className="Label">
                       {t("url")}
                     </label>
-                    <p className="font-semibold">{singleImage?.url}</p>
+                    <p className="font-semibold">{singleImage?.url || "-"}</p>
                   </div>
                   {/* website */}
                   <div className="w-full space-y-2">
