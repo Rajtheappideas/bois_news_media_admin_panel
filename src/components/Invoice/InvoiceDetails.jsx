@@ -13,6 +13,9 @@ import { handleFindInvoice } from "../../redux/InvoiceSlice";
 
 const InvoiceDetails = ({ setShowInvoiceDetails }) => {
   const { singleInvoice } = useSelector((s) => s.root.invoice);
+  const { eec_switzerland_overseas_territories } = useSelector(
+    (s) => s.root.globalStates
+  );
 
   const dispatch = useDispatch();
 
@@ -24,6 +27,9 @@ const InvoiceDetails = ({ setShowInvoiceDetails }) => {
     return `${t(item?.itemType)} ${t(item?.support)} ${item?.title}`;
   }
 
+  const lowerCaseCountries = eec_switzerland_overseas_territories.map((c) =>
+    c.toLowerCase()
+  );
 
   return (
     <div className="w-full lg:space-y-5 space-y-3 lg:p-5 p-3">
@@ -231,8 +237,16 @@ const InvoiceDetails = ({ setShowInvoiceDetails }) => {
             {singleInvoice?.shippingAddress?.country.toLowerCase() ===
               "france" && (
               <div className="w-full flex items-center justify-between">
-                <p className="w-1/2 font-semibold uppercase">{t("Tax")}</p>
-                <p className="w-1/2 text-right">€&nbsp; 2.1 %</p>
+                <p className="w-1/2 font-semibold uppercase">
+                  {t("Tax")} ( 2.1 %)
+                </p>
+                <p className="w-1/2 text-right">
+                  €&nbsp; 
+                  {Intl.NumberFormat("fr-FR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(parseFloat(singleInvoice?.subtotal * 2.1) / 100)}
+                </p>
               </div>
             )}
             <div className="w-full flex items-center justify-between">
@@ -299,12 +313,23 @@ const InvoiceDetails = ({ setShowInvoiceDetails }) => {
             </div>
           </div>
         </div>
-        {singleInvoice?.shippingAddress?.country.toLowerCase() !== "france" && (
+        {/* for EEC countries + Switzerland */}
+        {lowerCaseCountries.includes(
+          singleInvoice?.shippingAddress?.country.toLowerCase()
+        ) && (
           <div className="text-center font-semibold text-lg">
-            FACTURATION HORS TAXES | Livraison intracommunautaire - Art 262ter
-            du CGI
+            Auto-liquidation- Exoneration de TVA , Article 262 ter, I du CGI
           </div>
         )}
+        {/* For Rest of the Word and "French Overseas territories*/}
+        {singleInvoice?.shippingAddress?.country.toLowerCase() !== "france" &&
+          !lowerCaseCountries.includes(
+            singleInvoice?.shippingAddress?.country.toLowerCase()
+          ) && (
+            <div className="text-center font-semibold text-lg">
+              TVA non applicable – article 262, I et II du CGI
+            </div>
+          )}
       </div>
     </div>
   );

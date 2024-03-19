@@ -205,8 +205,16 @@ const OrderDetails = ({ setshowOrderDetails }) => {
             {singleOrder?.shippingAddress?.country.toLowerCase() ===
               "france" && (
               <div className="w-full flex items-center justify-between">
-                <p className="w-1/2 font-semibold uppercase">{t("Tax")}</p>
-                <p className="w-1/2 text-right">€&nbsp; 2.1 %</p>
+                <p className="w-1/2 font-semibold uppercase">
+                  {t("Tax")} (2.1 %)
+                </p>
+                <p className="w-1/2 text-right">
+                  €&nbsp; €&nbsp;
+                  {Intl.NumberFormat("fr-FR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(parseFloat(singleOrder?.subtotal * 2.1) / 100)}
+                </p>
               </div>
             )}
             <div className="w-full flex items-center justify-between">

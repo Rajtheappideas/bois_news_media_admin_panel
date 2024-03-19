@@ -67,6 +67,16 @@ const AddInvoice = ({ setShowAddInvoice, orderId, setOrderId }) => {
     const findOrder = orders.find(
       (order) => order?.orderId === selectedOrder?.orderId
     );
+
+    // const itemsToSend = selectedOrder?.items.map((item) => {
+    //   return {
+    //     itemType: item?.itemType,
+    //     itemId: item?._id,
+    //     support: item?.support,
+    //     quantity: item?.quantity,
+    //   };
+    // });
+
     const response = dispatch(
       handleCreateAndEditInvoice({
         orderId: findOrder?.orderId,

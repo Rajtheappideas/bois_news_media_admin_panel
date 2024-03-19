@@ -78,6 +78,12 @@ const EditImageDetails = lazy(() => import("./pages/Images/EditImageDetails"));
 const HomeArticleSite = lazy(() =>
   import("./pages/HomeArticleSite/HomeArticleSite")
 );
+const AddHomePageContent = lazy(() =>
+  import("./pages/HomeArticleSite/AddHomePageContent")
+);
+const EditHomePageContent = lazy(() =>
+  import("./pages/HomeArticleSite/EditHomePageContent")
+);
 
 function App() {
   const { token, user } = useSelector((state) => state.root.auth);
@@ -125,6 +131,8 @@ function App() {
     { path: "/image/edit/:id", page: EditImageDetails },
     { path: "/image/:id", page: ImageDetails },
     { path: "/home-article-site", page: HomeArticleSite },
+    { path: "/home-article-site/add", page: AddHomePageContent },
+    { path: "/home-article-site/edit/:id", page: EditHomePageContent },
   ];
 
   useEffect(() => {
